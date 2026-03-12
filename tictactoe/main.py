@@ -88,7 +88,7 @@ class TicTacToe(ShowBase):
 
                         self.current_player = 2 if self.current_player == 1 else 1
 
-        self.status.setText(f"Current: Player {self.current_player}")
+        self.status.setText(f"Current: Player {self.current_player}")   
 
     def reset_game(self):
         for cell in self.used:
