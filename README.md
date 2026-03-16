@@ -1,1 +1,1 @@
-This is online wersion of Neuroshima hex!
+This is online wersion of Neuroshima hex! 67
