@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Ustawienie zmiennej dla ścieżki pliku logów -->
+    <property name="LOG_FILE" value="logs/websocket.log"/>
+    <property name="LOG_ARCHIVE_DIR" value="logs/archive"/>
+
+    <!-- Appender do konsoli -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Format logów: timestamp, poziom, nazwa klasy, wiadomość -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Appender do pliku logów z rolowaniem -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+
+        <!-- Polityka rolowania plików logów - co dzień lub gdy plik osiągnie 10MB -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- Nazwa archiwizowanych plików -->
+            <fileNamePattern>${LOG_ARCHIVE_DIR}/websocket-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!-- Maksymalny rozmiar pliku -->
+            <maxFileSize>10MB</maxFileSize>
+            <!-- Maksymalna historia - trzymaj logi przez 30 dni -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <!-- Format logów: timestamp, poziom, nazwa klasy, wiadomość, stack trace jeśli istnieje -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%ex</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logger dla WebSocket komponentów -->
+    <logger name="org.example" level="INFO"/>
+
+    <!-- Root logger - ustawia domyślny poziom dla wszystkich logów -->
+    <root level="INFO">
+        <!-- Wysyłaj logi zarówno do konsoli jak i do pliku -->
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>
+

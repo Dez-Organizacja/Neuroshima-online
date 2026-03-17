@@ -47,7 +47,7 @@ public class Controller {
         return response;
     }
 
-    @PostMapping("/api/login/")
+    @PostMapping("/api/register/")
     public void registerUser(@RequestBody Map<String, String> request) {
         String username = request.get("username");
         String password = request.get("password");

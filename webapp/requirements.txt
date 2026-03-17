@@ -1,0 +1,5 @@
+# Wymagania dla WebSocket Client (Python)
+# Instalacja: pip install -r requirements.txt
+
+websocket-client>=1.0.0
+

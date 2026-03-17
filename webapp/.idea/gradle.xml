@@ -8,7 +8,7 @@
         <option name="gradleHome" value="" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
+            <option value="/opt/storage/cpp/projekty/Neuroshima/webapp" />
           </set>
         </option>
       </GradleProjectSettings>
