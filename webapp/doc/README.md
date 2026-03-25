@@ -1,609 +1,289 @@
 # Dokumentacja Aplikacji WebSocket - Neuroshima
 
-## Spis treści
-1. [Przegląd](#przegląd)
-2. [Architektura](#architektura)
-3. [Wymagania](#wymagania)
-4. [Instalacja i konfiguracja](#instalacja-i-konfiguracja)
-5. [Uruchamianie serwera](#uruchamianie-serwera)
-6. [Uruchamianie klienta](#uruchamianie-klienta)
-7. [Format komunikatów JSON](#format-komunikatów-json)
-8. [Testowanie](#testowanie)
-9. [Logowanie](#logowanie)
-10. [Rozwiązywanie problemów](#rozwiązywanie-problemów)
+## Spis tresci
+1. Przeglad
+2. Architektura
+3. Instalacja
+4. Uruchamianie
+5. Protokol komunikatow
+6. Klient Python
+7. Testowanie
+8. Logowanie
+9. Troubleshooting
 
 ---
 
-## Przegląd
+## 1. Przeglad
 
-Aplikacja WebSocket to system komunikacji czasu rzeczywistego oparty na Spring Boot. Składa się z:
-- **Serwera WebSocket** napisanego w Javie z Spring Boot
-- **Klienta WebSocket** napisanego w Pythonie
-- **Systemu logowania** z użyciem SLF4J i Logback
+Aplikacja sklada sie z:
+- serwera WebSocket w Spring Boot
+- klienta Python
+- prostego endpointu REST do statystyk polaczen
 
-### Cechy
-- ✅ Obsługa wielu klientów jednocześnie
-- ✅ Echo wiadomości
-- ✅ Komunikaty w formacie JSON
-- ✅ Logowanie do pliku i konsoli
-- ✅ Bezpieczne zamykanie połączeń
-- ✅ Tryb interaktywny dla klienta
+Aktualny protokol biznesowy opiera sie o trzy komunikaty:
+- `STARTNEWGAME` (request/response)
+- `ENDTURN` (request/response)
+- `ENDGAME` (request/response)
 
----
-
-## Architektura
-
-```
-┌─────────────────────────────────────┐
-│      Spring Boot Server             │
-│  ┌──────────────────────────────┐  │
-│  │  WebSocketConfig             │  │
-│  │  - Rejestracja handlera      │  │
-│  │  - Konfiguracja ścieżki      │  │
-│  └──────────────────────────────┘  │
-│               │                      │
-│  ┌──────────────────────────────┐  │
-│  │  WebSocketHandler            │  │
-│  │  - Obsługa połączeń          │  │
-│  │  - Przetwarzanie wiadomości  │  │
-│  │  - Broadcast do klientów     │  │
-│  └──────────────────────────────┘  │
-│               │                      │
-│  ┌──────────────────────────────┐  │
-│  │  WebSocketMessage (DTO)      │  │
-│  │  - type, timestamp           │  │
-│  │  - clientId, message         │  │
-│  └──────────────────────────────┘  │
-│               │                      │
-│  ┌──────────────────────────────┐  │
-│  │  Logback (logging)           │  │
-│  │  - logs/websocket.log        │  │
-│  └──────────────────────────────┘  │
-└─────────────────────────────────────┘
-           WebSocket (ws://)
-              │
-              ├─────────────────┐
-              │                 │
-        ┌─────────────┐   ┌──────────────┐
-        │ Python      │   │ Python       │
-        │ Client 1    │   │ Client 2     │
-        └─────────────┘   └──────────────┘
-```
+Wiadomosci `ENDTURN` i `ENDGAME` musza zawierac `gameId`.
 
 ---
 
-## Wymagania
+## 2. Architektura
 
-### Serwer
-- Java 17 lub nowsze
-- Gradle (do budowania)
-- Spring Boot 3.0.0
+### Java backend
 
-### Klient
-- Python 3.7 lub nowsze
-- Biblioteka `websocket-client`
+Kod backendu znajduje sie w pakiecie `pl.staszic.neu`.
 
----
+Najwazniejsze klasy:
+- `src/main/java/pl/staszic/neu/Main.java`
+- `src/main/java/pl/staszic/neu/WebSocketConfig.java`
+- `src/main/java/pl/staszic/neu/WebSocketHandler.java`
+- `src/main/java/pl/staszic/neu/WebSocketController.java`
 
-## Instalacja i konfiguracja
+Hierarchia komunikatow:
+- `src/main/java/pl/staszic/neu/messages/WebSocketMessage.java`
+- `src/main/java/pl/staszic/neu/messages/GameScopedWebSocketMessage.java`
+- `src/main/java/pl/staszic/neu/messages/StartNewGameRequest.java`
+- `src/main/java/pl/staszic/neu/messages/StartNewGameResponse.java`
+- `src/main/java/pl/staszic/neu/messages/EndTurnRequest.java`
+- `src/main/java/pl/staszic/neu/messages/EndTurnResponse.java`
+- `src/main/java/pl/staszic/neu/messages/EndGameRequest.java`
+- `src/main/java/pl/staszic/neu/messages/EndGameResponse.java`
 
-### 1. Przygotowanie serwera
+### Python client
 
-#### a) Zainstaluj wymagane pakiety
-```bash
-# Gradle jest już dostępny w projekcie (./gradlew)
-# Zweryfikuj zainstalowanie Java
-java -version
-```
-
-#### b) Struktura projektu Java
-```
-src/main/java/org/example/
-├── Main.java                    # Punkt wejścia
-├── WebSocketConfig.java         # Konfiguracja WebSocket
-├── WebSocketHandler.java        # Handler obsługujący zdarzenia
-├── WebSocketMessage.java        # DTO dla komunikatów JSON
-├── WebSocketController.java     # REST endpoint dla statystyk
-└── MathService.java             # Dodatkowa usługa
-
-src/main/resources/
-├── logback.xml                  # Konfiguracja logowania
-└── static/
-    └── (index.html został usunięty - używamy klienta w Pythonie)
-```
-
-#### c) Konfiguracja logowania (logback.xml)
-Logowanie jest już skonfigurowane do:
-- **Konsoli**: INFO level
-- **Pliku**: `logs/websocket.log` (DEBUG level)
-- **Archiwizacji**: Codziennie lub przy 10MB
-
-```xml
-<!-- Format logów -->
-%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
-```
-
-### 2. Przygotowanie klienta
-
-#### a) Zainstaluj biblioteki Pythona
-```bash
-cd client
-pip install websocket-client
-```
-
-#### b) Struktura klienta
-```
-client/
-├── websocket_client.py          # Główny klient (zaktualizowany)
-├── websocket_client.py          # Alternatywny skrypt
-├── test.json                    # Dane testowe
-└── client.log                   # Logi klienta (generowany)
-```
+- `client/websocket_client.py` - glowny klient CLI
+- `client/game_messages_example.py` - przyklad klas request/response
+- `client/test.py` - smoke test protokolu
 
 ---
 
-## Uruchamianie serwera
+## 3. Instalacja
 
-### Metoda 1: Zabudowanie i uruchomienie
+### Wymagania
+- Java 17+
+- Python 3.10+
+
+### Python dependencies
+
+Dla Linuxa (PEP 668) zalecane jest virtualenv:
 
 ```bash
 cd /home/dawid/cpp/projekty/Neuroshima/webapp
-
-# Zabuduj projekt
-./gradlew build
-
-# Uruchom serwer
-./gradlew bootRun
+python -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
 ```
-
-### Metoda 2: Uruchomienie z JAR
-
-```bash
-./gradlew bootJar
-java -jar build/libs/webapp-1.0-SNAPSHOT.jar
-```
-
-### Potwierdzenie uruchomienia
-
-Serwer powinien wyświetlić:
-```
-Started Main in X.XXX seconds (JVM running for Y.YYY)
-```
-
-Serwer nasłuchuje na:
-- **WebSocket URL**: `ws://localhost:8080/ws/chat`
-- **REST Endpoint**: `http://localhost:8080/api/websocket/stats`
 
 ---
 
-## Uruchamianie klienta
+## 4. Uruchamianie
 
-### Uruchomienie podstawowe
+### Start serwera
 
-```bash
-cd client
-python websocket_client.py
-```
-
-### Parametry uruchomienia
-
-```bash
-# Połączenie z domyślnym serwerem
-python websocket_client.py
-
-# Zmiana serwera
-python websocket_client.py --server ws://192.168.1.100:8080/ws/chat
-
-# Zmiana nazwy klienta
-python websocket_client.py --name "MojKlient"
-
-# Zmiana pliku logów
-python websocket_client.py --log moje_logi.log
-
-# Kombinacja wszystkich opcji
-python websocket_client.py \
-    --server ws://localhost:8080/ws/chat \
-    --name "Bot-1" \
-    --log bot1.log
-```
-
-### Interfejs klienta
-
-Po uruchomieniu zobaczysz:
-```
-[14:25:30] ⚙️ Połączono jako: PythonClient
-[14:25:30] ⚙️ Dostępne komendy: /status, /exit, lub wpisz wiadomość
-> 
-```
-
-### Komendy dostępne w kliencie
-
-| Komenda | Opis |
-|---------|------|
-| `/status` | Wyświetla status połączenia i ID klienta |
-| `/exit` | Rozłącza się z serwerem i kończy aplikację |
-| `/help` | Wyświetla pomoc |
-| `[tekst]` | Wysyła wiadomość do serwera (np. `Cześć`) |
-
----
-
-## Format komunikatów JSON
-
-### 1. Wiadomość połączenia (server → client)
-Wysyłana automatycznie po nawiązaniu połączenia:
-
-```json
-{
-  "type": "connection",
-  "timestamp": "2026-03-17T14:25:30.123456",
-  "clientId": "550e8400-e29b-41d4-a716-446655440000",
-  "message": null
-}
-```
-
-### 2. Wiadomość tekstu (client → server)
-Wysyłana przez klienta:
-
-```json
-{
-  "type": "message",
-  "timestamp": "2026-03-17T14:25:35.654321",
-  "clientId": "550e8400-e29b-41d4-a716-446655440000",
-  "message": "Cześć serwer!"
-}
-```
-
-### 3. Wiadomość Echo (server → client)
-Server odsyła wiadomość z typem `echo`:
-
-```json
-{
-  "type": "echo",
-  "timestamp": "2026-03-17T14:25:35.789012",
-  "clientId": "550e8400-e29b-41d4-a716-446655440000",
-  "message": "Cześć serwer!"
-}
-```
-
-### 4. Wiadomość rozłączenia (server → client)
-Wysyłana gdy klient się rozłącza:
-
-```json
-{
-  "type": "disconnection",
-  "timestamp": "2026-03-17T14:25:40.345678",
-  "clientId": "550e8400-e29b-41d4-a716-446655440000",
-  "message": "Client disconnected with status: 1000"
-}
-```
-
-### Pola JSON
-
-| Pole | Typ | Wymagane | Opis |
-|------|-----|----------|------|
-| `type` | String | ✓ | Typ komunikatu: `connection`, `message`, `echo`, `disconnection` |
-| `timestamp` | String (ISO-8601) | ✓ | Czas wysłania w formacie `YYYY-MM-DDTHH:MM:SS.ffffff` |
-| `clientId` | String (UUID) | ✓ | Unikalny identyfikator klienta |
-| `message` | String | ✗ | Treść wiadomości (opcjonalne, zależy od typu) |
-
----
-
-## Testowanie
-
-### Test 1: Połączenie i Echo
-
-#### Krok 1: Uruchom serwer
 ```bash
 cd /home/dawid/cpp/projekty/Neuroshima/webapp
 ./gradlew bootRun
 ```
 
-#### Krok 2: Uruchom klienta w nowym terminalu
+Serwer udostepnia:
+- WebSocket: `ws://localhost:8080/ws/chat`
+- REST stats: `http://localhost:8080/api/websocket/stats`
+
+### Start klienta
+
 ```bash
 cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-python websocket_client.py
+../.venv/bin/python websocket_client.py
 ```
 
-#### Oczekiwany wynik
-```
-[14:25:30] ⚙️ Połączono jako: PythonClient
-[14:25:30] ⚙️ Dostępne komendy: /status, /exit, lub wpisz wiadomość
-[14:25:31] ✅ Połączono! ID klienta: 550e8400...
-> 
-```
+Przyklad z parametrami:
 
-### Test 2: Wysyłanie wiadomości
-
-#### W terminalu klienta
-```
-> Cześć serwer!
-[14:25:35] 📤 Ty: Cześć serwer!
-[14:25:35] 📥 Echo: Cześć serwer!
->
-```
-
-### Test 3: Status klienta
-
-#### W terminalu klienta
-```
-> /status
-[14:25:40] ℹ️ Status: Połączono ✅ | ID: 550e8400...
->
-```
-
-### Test 4: Wiele klientów
-
-#### Terminal 1
 ```bash
-python websocket_client.py --name "Klient-1"
+cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
+../.venv/bin/python websocket_client.py --server ws://localhost:8080/ws/chat --player "Anna" --scenario "Moloch" --turn 1 --reason "Victory points"
 ```
 
-#### Terminal 2 (nowy)
-```bash
-python websocket_client.py --name "Klient-2"
-```
+---
 
-#### Terminal 3 (nowy)
-```bash
-# Sprawdź statystyki
-curl http://localhost:8080/api/websocket/stats
-```
+## 5. Protokol komunikatow
 
-Oczekiwany wynik:
+Wspolne pola (baza):
+- `messageType`
+- `timestamp`
+- `clientId`
+
+Wiadomosci game-scoped dodatkowo maja:
+- `gameId`
+
+### 5.1 CONNECTION (server -> client)
+
 ```json
 {
-  "activeConnections": 2,
-  "status": "OK"
+  "messageType": "CONNECTION",
+  "timestamp": "2026-03-25T17:05:38.833822698",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "message": "Connected"
 }
 ```
 
-### Test 5: Python Script do testowania
+### 5.2 STARTNEWGAME_REQUEST (client -> server)
 
-Utwórz plik `test_websocket.py`:
-
-```python
-#!/usr/bin/env python3
-import json
-import websocket
-import time
-import threading
-
-def test_multiple_messages():
-    """Testuje wysyłanie wielu wiadomości"""
-    url = "ws://localhost:8080/ws/chat"
-    
-    def on_message(ws, msg):
-        data = json.loads(msg)
-        print(f"[{data['type']}] {data.get('message', '')}")
-    
-    ws = websocket.WebSocketApp(url, on_message=on_message)
-    
-    def send_messages():
-        time.sleep(1)
-        for i in range(5):
-            msg = {"message": f"Test {i+1}"}
-            ws.send(json.dumps(msg))
-            time.sleep(0.5)
-        ws.close()
-    
-    threading.Thread(target=send_messages, daemon=True).start()
-    ws.run_forever()
-
-if __name__ == "__main__":
-    test_multiple_messages()
-```
-
-Uruchomienie:
-```bash
-python test_websocket.py
-```
-
----
-
-## Logowanie
-
-### Lokalizacja logów
-
-- **Serwer**: `logs/websocket.log`
-- **Klient**: `client/client.log` (przy uruchomieniu)
-
-### Konfiguracja logowania serwera (logback.xml)
-
-```xml
-<!-- Wysyłaj do konsoli (INFO) -->
-<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender"/>
-
-<!-- Wysyłaj do pliku (DEBUG) z archiwizacją -->
-<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-  <file>${LOG_FILE}</file>
-  <!-- Roluj codziennie lub przy 10MB -->
-  <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-    <fileNamePattern>${LOG_ARCHIVE_DIR}/websocket-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-    <maxFileSize>10MB</maxFileSize>
-    <maxHistory>30</maxHistory>
-  </rollingPolicy>
-</appender>
-```
-
-### Przykład logów serwera
-
-```
-2026-03-17 14:25:30.123 [main] INFO  org.example.Main - Started Main in 3.456 seconds
-2026-03-17 14:25:31.234 [nioEventLoopGroup-1-1] INFO  org.example.WebSocketHandler - New client connected: {"type":"connection","timestamp":"2026-03-17T14:25:31.234567","clientId":"550e8400-e29b-41d4-a716-446655440000","message":null}
-2026-03-17 14:25:35.678 [nioEventLoopGroup-1-1] INFO  org.example.WebSocketHandler - Message received: {"type":"message","timestamp":"2026-03-17T14:25:35.678901","clientId":"550e8400-e29b-41d4-a716-446655440000","message":"Cześć serwer!"}
-2026-03-17 14:25:35.789 [nioEventLoopGroup-1-1] INFO  org.example.WebSocketHandler - Sending echo: {"type":"echo","timestamp":"2026-03-17T14:25:35.789012","clientId":"550e8400-e29b-41d4-a716-446655440000","message":"Cześć serwer!"}
-```
-
-### Przykład logów klienta
-
-```
-2026-03-17 14:25:30 [INFO] WebSocket Client uruchomiony
-2026-03-17 14:25:30 [INFO] Serwer: ws://localhost:8080/ws/chat
-2026-03-17 14:25:31 [INFO] Połączenie z serwerem nawiązane
-2026-03-17 14:25:31 [INFO] ✅ Połączono! ID klienta: 550e8400...
-2026-03-17 14:25:35 [INFO] Wysłano wiadomość: {"type":"message",...}
-2026-03-17 14:25:35 [DEBUG] Otrzymana wiadomość: {"type":"echo",...}
-```
-
----
-
-## Rozwiązywanie problemów
-
-### Problem: "Nie można nawiązać połączenia"
-
-**Przyczyna**: Serwer nie działa
-
-**Rozwiązanie**:
-```bash
-# Sprawdź czy serwer działa
-curl http://localhost:8080/api/websocket/stats
-
-# Jeśli nie działa, uruchom go
-./gradlew bootRun
-```
-
-### Problem: "ModuleNotFoundError: No module named 'websocket'"
-
-**Przyczyna**: Brakuje biblioteki websocket-client
-
-**Rozwiązanie**:
-```bash
-pip install websocket-client
-# lub
-pip3 install websocket-client
-```
-
-### Problem: "Connection refused"
-
-**Przyczyna**: Serwer słucha na innym porcie/host
-
-**Rozwiązanie**:
-```bash
-# Sprawdź czy serwer jest dostępny
-netstat -tlnp | grep 8080  # Linux/Mac
-netstat -ano | grep 8080   # Windows
-
-# Zmień serwer w kliencie
-python websocket_client.py --server ws://moj-serwer.com:8080/ws/chat
-```
-
-### Problem: "Timeout - nie udało się nawiązać połączenia"
-
-**Przyczyna**: Serwer nie odpowiada w ciągu 5 sekund
-
-**Rozwiązanie**:
-```bash
-# Zwiększ timeout edytując websocket_client.py
-# Zmień linię: for _ in range(50):  # 5 sekund
-#     na: for _ in range(150):      # 15 sekund
-```
-
-### Problem: "Port 8080 już w użyciu"
-
-**Przyczyna**: Inny proces nasłuchuje na porcie 8080
-
-**Rozwiązanie**:
-```bash
-# Maciej/Linux - zabij proces
-lsof -i :8080
-kill -9 <PID>
-
-# Lub użyj innego portu w application.properties
-# server.port=8081
-```
-
----
-
-## Struktura katalogów
-
-```
-webapp/
-├── build.gradle.kts             # Konfiguracja Gradle
-├── settings.gradle.kts
-├── gradlew / gradlew.bat
-├── gradle/
-│   └── wrapper/
-├── src/
-│   └── main/
-│       ├── java/org/example/
-│       │   ├── Main.java
-│       │   ├── WebSocketConfig.java
-│       │   ├── WebSocketHandler.java
-│       │   ├── WebSocketMessage.java
-│       │   ├── WebSocketController.java
-│       │   └── MathService.java
-│       └── resources/
-│           ├── logback.xml
-│           └── static/
-│               └── (puste - klient w Pythonie)
-├── client/
-│   ├── websocket_client.py        # Główny klient
-│   ├── client.log                 # Logi (generowany)
-│   └── test.json
-├── doc/
-│   ├── prompt-websocket.txt       # Wymagania
-│   └── README.md                  # Ta dokumentacja
-└── logs/
-    └── websocket.log              # Logi serwera
-```
-
----
-
-## Sekcja zaawansowana
-
-### Rozszerz WebSocket Handler
-
-Aby dodać nowe funkcjonalności, edytuj `WebSocketHandler.java`:
-
-```java
-private void broadcastMessage(WebSocketMessage message, String excludeClientId) {
-    // Ten kod wysyła wiadomość do wszystkich klientów
-    // Możesz dodać filtrowanie, transformację itp.
+```json
+{
+  "messageType": "STARTNEWGAME_REQUEST",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "playerName": "Anna",
+  "scenario": "Moloch"
 }
 ```
 
-### Dodaj nowe typy komunikatów
+### 5.3 STARTNEWGAME_RESPONSE (server -> client)
 
-W `WebSocketMessage.java`:
-
-```java
-public enum MessageType {
-    CONNECTION("connection"),
-    DISCONNECTION("disconnection"),
-    MESSAGE("message"),
-    ECHO("echo"),
-    ERROR("error"),              // Nowy typ
-    NOTIFICATION("notification") // Nowy typ
+```json
+{
+  "messageType": "STARTNEWGAME_RESPONSE",
+  "timestamp": "2026-03-25T17:05:38.865660438",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "createdGameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
+  "serverStatus": "STARTED scenario=Moloch player=Anna"
 }
 ```
 
-### Metrics i monitoring
+### 5.4 ENDTURN_REQUEST (client -> server)
 
-Użyj endpoint REST:
+```json
+{
+  "messageType": "ENDTURN_REQUEST",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
+  "playerId": "Anna",
+  "turnNumber": 1
+}
+```
+
+### 5.5 ENDTURN_RESPONSE (server -> client)
+
+```json
+{
+  "messageType": "ENDTURN_RESPONSE",
+  "timestamp": "2026-03-25T17:05:38.870845967",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
+  "accepted": true,
+  "nextPlayerId": "Anna_next"
+}
+```
+
+### 5.6 ENDGAME_REQUEST (client -> server)
+
+```json
+{
+  "messageType": "ENDGAME_REQUEST",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
+  "winnerId": "Anna",
+  "reason": "Victory points"
+}
+```
+
+### 5.7 ENDGAME_RESPONSE (server -> client)
+
+```json
+{
+  "messageType": "ENDGAME_RESPONSE",
+  "timestamp": "2026-03-25T17:05:38.872774487",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
+  "ended": true,
+  "summary": "Game ended. Winner=Anna, reason=Victory points"
+}
+```
+
+---
+
+## 6. Klient Python
+
+Parametry `client/websocket_client.py`:
+- `--server` (domyslnie: `ws://localhost:8080/ws/chat`)
+- `--player` (domyslnie: `Anna`)
+- `--scenario` (domyslnie: `Moloch`)
+- `--turn` (domyslnie: `1`)
+- `--reason` (domyslnie: `Victory points`)
+
+Przyklad:
+
+```bash
+cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
+../.venv/bin/python websocket_client.py --player "Bot-1" --scenario "Moloch" --turn 2 --reason "Smoke"
+```
+
+---
+
+## 7. Testowanie
+
+### Smoke test protokolu
+
+```bash
+cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
+../.venv/bin/python test.py
+```
+
+### Przyklad klas komunikatow
+
+```bash
+cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
+../.venv/bin/python game_messages_example.py
+```
+
+### Build Java
+
+```bash
+cd /home/dawid/cpp/projekty/Neuroshima/webapp
+./gradlew test
+```
+
+---
+
+## 8. Logowanie
+
+- konfiguracja: `src/main/resources/logback.xml`
+- log serwera: `logs/websocket.log`
+- logger aplikacji: `pl.staszic.neu`
+
+Podglad logow:
+
+```bash
+cd /home/dawid/cpp/projekty/Neuroshima/webapp
+tail -f logs/websocket.log
+```
+
+---
+
+## 9. Troubleshooting
+
+### Problem: `ModuleNotFoundError: websocket`
+
+Zainstaluj zaleznosci w virtualenv:
+
+```bash
+cd /home/dawid/cpp/projekty/Neuroshima/webapp
+.venv/bin/python -m pip install -r requirements.txt
+```
+
+### Problem: brak polaczenia z serwerem
+
+1. uruchom backend (`./gradlew bootRun`)
+2. sprawdz endpoint statystyk:
+
 ```bash
 curl http://localhost:8080/api/websocket/stats
 ```
 
+### Problem: zajety port 8080
+
+Zmien port w konfiguracji Spring (`server.port`) lub zatrzymaj proces, ktory go uzywa.
+
 ---
 
-## Podsumowanie
-
-Aplikacja WebSocket jest w pełni funkcjonalna i gotowa do użytku:
-- ✅ Serwer WebSocket w Javie
-- ✅ Klient w Pythonie
-- ✅ Komunikaty JSON
-- ✅ Logowanie
-- ✅ Obsługa wielu klientów
-- ✅ Dokumentacja
-
-Aby zacząć, wykonaj:
-```bash
-# Terminal 1 - Serwer
-./gradlew bootRun
-
-# Terminal 2 - Klient
-cd client && python websocket_client.py
-```
-
-Powodzenia! 🚀
-
+Dokumentacja jest zgodna z aktualnym stanem kodu na 2026-03-25.

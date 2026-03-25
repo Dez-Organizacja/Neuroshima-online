@@ -44,10 +44,10 @@ python websocket_client.py
 ### Krok 3: Testuj!
 
 ```
-> Cześć serwer!
-[14:25:35] 📤 Ty: Cześć serwer!
-[14:25:35] 📥 Echo: Cześć serwer!
->
+CONNECTED {...}
+RESPONSE {"messageType":"STARTNEWGAME_RESPONSE", ...}
+RESPONSE {"messageType":"ENDTURN_RESPONSE", ...}
+RESPONSE {"messageType":"ENDGAME_RESPONSE", ...}
 ```
 
 ---
@@ -64,17 +64,16 @@ python websocket_client.py
 - ✅ REST API dla statystyk
 
 ### Klient
-- ✅ Interaktywny tryb
-- ✅ Komendy (`/status`, `/exit`, `/help`)
-- ✅ Logowanie
-- ✅ Parametry wiersza poleceń
-- ✅ Automatyczne reconnect
+- ✅ Klient Python dla protokołu gry
+- ✅ Przykład klas komunikatów (`client/game_messages_example.py`)
+- ✅ Parametry uruchomienia (`--server`, `--player`, `--scenario`, `--turn`, `--reason`)
 
 ### Komunikacja
 - ✅ Wiadomości w JSON
-- ✅ Typy: connection, message, echo, disconnection
+- ✅ Typy: `STARTNEWGAME`, `ENDTURN`, `ENDGAME` (request/response)
 - ✅ Timestamp (ISO-8601)
 - ✅ Client ID (UUID)
+- ✅ `gameId` wymagane dla `ENDTURN` i `ENDGAME`
 
 ---
 
@@ -125,13 +124,18 @@ cd client
 python websocket_client.py
 
 # Z parametrami
-python websocket_client.py --server ws://192.168.1.100:8080/ws/chat --name "Bot-1"
+python websocket_client.py --server ws://192.168.1.100:8080/ws/chat --player "Bot-1"
+
+# Przykład klas request/response
+python game_messages_example.py
 ```
 
 Parametry:
 - `--server` - URL serwera (default: ws://localhost:8080/ws/chat)
-- `--name` - Nazwa klienta (default: PythonClient)
-- `--log` - Plik logów (default: client.log)
+- `--player` - Nazwa gracza (default: Anna)
+- `--scenario` - Scenariusz (default: Moloch)
+- `--turn` - Numer tury (default: 1)
+- `--reason` - Powod zakonczenia gry
 
 ---
 
@@ -141,10 +145,7 @@ Parametry:
 
 ```bash
 cd client
-python test.py                 # Wszystkie testy
-python test.py connection      # Test połączenia
-python test.py echo            # Test echo
-python test.py broadcast       # Test broadcast
+python test.py
 ```
 
 ### Test manualny
@@ -153,11 +154,8 @@ python test.py broadcast       # Test broadcast
 # Terminal 1: Serwer
 ./gradlew bootRun
 
-# Terminal 2: Klient 1
-cd client && python websocket_client.py --name "Klient-1"
-
-# Terminal 3: Klient 2
-cd client && python websocket_client.py --name "Klient-2"
+# Terminal 2: Klient Python
+cd client && python websocket_client.py --player "Klient-1"
 
 # Terminal 4: Sprawdź statystyki
 curl http://localhost:8080/api/websocket/stats
@@ -171,30 +169,33 @@ curl http://localhost:8080/api/websocket/stats
 ### Połączenie
 ```json
 {
-  "type": "connection",
+  "messageType": "CONNECTION",
   "timestamp": "2026-03-17T14:25:30.123456",
   "clientId": "550e8400-e29b-41d4-a716-446655440000",
-  "message": null
+  "message": "Connected"
 }
 ```
 
-### Wiadomość
+### STARTNEWGAME_REQUEST
 ```json
 {
-  "type": "message",
+  "messageType": "STARTNEWGAME_REQUEST",
   "timestamp": "2026-03-17T14:25:35.654321",
   "clientId": "550e8400-e29b-41d4-a716-446655440000",
-  "message": "Cześć serwer!"
+  "playerName": "Anna",
+  "scenario": "Moloch"
 }
 ```
 
-### Echo
+### ENDTURN_REQUEST
 ```json
 {
-  "type": "echo",
+  "messageType": "ENDTURN_REQUEST",
   "timestamp": "2026-03-17T14:25:35.789012",
   "clientId": "550e8400-e29b-41d4-a716-446655440000",
-  "message": "Cześć serwer!"
+  "gameId": "5d4a3a11-e294-461c-a763-2588fa854152",
+  "playerId": "Anna",
+  "turnNumber": 1
 }
 ```
 
@@ -209,8 +210,8 @@ Plik: `logs/websocket.log`
 Konfiguracja: `src/main/resources/logback.xml`
 
 ```
-2026-03-17 14:25:30.123 [main] INFO org.example.Main - Starting Main
-2026-03-17 14:25:31.234 [thread-1] INFO org.example.WebSocketHandler - New client connected
+2026-03-17 14:25:30.123 [main] INFO pl.staszic.neu.Main - Starting Main
+2026-03-17 14:25:31.234 [thread-1] INFO pl.staszic.neu.WebSocketHandler - New client connected
 ```
 
 ### Klient
@@ -235,19 +236,27 @@ webapp/
 ├── requirements.txt                   ← Python dependencies
 ├── build.gradle.kts                   ← Gradle config
 ├── src/main/
-│   ├── java/org/example/
+│   ├── java/pl/staszic/neu/
 │   │   ├── Main.java                  ← Entry point
 │   │   ├── WebSocketConfig.java       ← WebSocket config
-│   │   ├── WebSocketHandler.java      ← Handler (290+ lines)
-│   │   ├── WebSocketMessage.java      ← JSON DTO
+│   │   ├── WebSocketHandler.java      ← Handler protokolu gry
 │   │   ├── WebSocketController.java   ← REST endpoint
-│   │   └── MathService.java
+│   │   ├── MathService.java
+│   │   └── messages/
+│   │       ├── WebSocketMessage.java
+│   │       ├── StartNewGameRequest.java
+│   │       ├── StartNewGameResponse.java
+│   │       ├── EndTurnRequest.java
+│   │       ├── EndTurnResponse.java
+│   │       ├── EndGameRequest.java
+│   │       └── EndGameResponse.java
 │   └── resources/
 │       ├── logback.xml                ← Logging config
 │       └── static/                    ← (pusty - klient w Pythonie)
 ├── client/
-│   ├── websocket_client.py            ← Main client (444+ lines)
-│   ├── test.py                        ← Tests (400+ lines)
+│   ├── websocket_client.py            ← Main client
+│   ├── game_messages_example.py       ← Example request/response classes
+│   ├── test.py                        ← Protocol smoke test
 │   ├── test.json
 │   └── client.log                     ← Generated
 ├── doc/
@@ -266,9 +275,8 @@ Wszystkie wymagania z `doc/prompt-websocket.txt` zostały spełnione:
 
 - ✅ Serwer WebSocket
 - ✅ Klient WebSocket w Pythonie
-- ✅ Echo wiadomości
-- ✅ Obsługa wielu klientów
-- ✅ Możliwość rozłączenia
+- ✅ STARTNEWGAME / ENDTURN / ENDGAME (Request i Response)
+- ✅ Dziedziczenie komunikatów i `gameId` poza STARTNEWGAME
 - ✅ Logowanie
 - ✅ Format JSON
 - ✅ Komentarze w kodzie
@@ -333,8 +341,8 @@ Kod jest dobrze skomentowany:
 - `logback.xml` - Konfiguracja logowania
 
 **Python:**
-- `websocket_client.py` - Klient z logowaniem
-- `test.py` - Testy automatyczne
+- `websocket_client.py` - Klient sekwencyjny dla START/ENDTURN/ENDGAME
+- `test.py` - Test smoke nowego protokołu
 
 ---
 
@@ -351,18 +359,18 @@ Kod jest dobrze skomentowany:
 
 ```
 Java:
-  - WebSocketHandler.java: 185 linii
-  - Inne klasy: 150+ linii
+  - WebSocketHandler.java: obsluga request/response
+  - Komunikaty: baza + klasy STARTNEWGAME/ENDTURN/ENDGAME
   - Logback.xml: 46 linii
 
 Python:
-  - websocket_client.py: 444 linii
-  - test.py: 400+ linii
+  - websocket_client.py: klient CLI dla protokolu gry
+  - test.py: prosty test end-to-end
 
 Dokumentacja:
-  - README.md: 400+ linii
-  - QUICKSTART.md: 150+ linii
-  - IMPLEMENTATION_SUMMARY.md: 300+ linii
+  - README.md
+  - QUICKSTART.md
+  - IMPLEMENTATION_SUMMARY.md
 ```
 
 ---
@@ -392,7 +400,7 @@ Część projektu Neuroshima - 2026
 
 ```bash
 # W jednej linijce:
-./gradlew bootRun & sleep 2 && cd client && python websocket_client.py
+./gradlew bootRun & sleep 2 && cd client && python websocket_client.py --player "Bot-1"
 ```
 
 ---

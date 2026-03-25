@@ -1,138 +1,77 @@
-# WebSocket - Szybki Start 🚀
+# WebSocket - Szybki Start
 
-Przewodnik do uruchomienia serwera WebSocket i klienta w 5 minut.
+Ten przewodnik uruchamia aktualną wersję projektu:
+- backend Java w pakiecie `pl.staszic.neu`
+- protokół `STARTNEWGAME` / `ENDTURN` / `ENDGAME`
+- klient wyłącznie w Pythonie
 
-## Wymagania wstępne
+## 1) Wymagania
 
 - Java 17+
-- Python 3.7+
-- Terminal / Command Prompt
+- Python 3.10+
 
-## Instalacja (jedna jedyna raz)
+## 2) Instalacja zależności Python
 
-### 1. Python libraries
+Na Linuxie (PEP 668) najbezpieczniej użyć lokalnego środowiska virtualenv:
+
 ```bash
 cd /home/dawid/cpp/projekty/Neuroshima/webapp
-pip install websocket-client
-# LUB
-pip install -r requirements.txt
+python -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
 ```
 
-## Uruchomienie
+## 3) Uruchom serwer
 
-### Terminal 1: Serwer WebSocket
 ```bash
 cd /home/dawid/cpp/projekty/Neuroshima/webapp
 ./gradlew bootRun
 ```
 
-Czekaj aż zobaczysz:
-```
-Started Main in X.XXX seconds
-```
+Serwer nasłuchuje na:
+- `ws://localhost:8080/ws/chat`
+- `http://localhost:8080/api/websocket/stats`
 
-### Terminal 2: Klient WebSocket
+## 4) Uruchom klienta Python
+
+W nowym terminalu:
+
 ```bash
 cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-python websocket_client.py
+../.venv/bin/python websocket_client.py
 ```
 
-Powinieneś zobaczyć:
-```
-[14:25:30] ⚙️ Połączono jako: PythonClient
-[14:25:30] ⚙️ Dostępne komendy: /status, /exit, lub wpisz wiadomość
-[14:25:31] ✅ Połączono! ID klienta: 550e8400...
->
-```
+Domyślny scenariusz klienta:
+1. wysyła `STARTNEWGAME_REQUEST`
+2. wysyła `ENDTURN_REQUEST`
+3. wysyła `ENDGAME_REQUEST`
 
-## Testowanie
+Przykład z parametrami:
 
-### Wyślij wiadomość
-```
-> Cześć serwer!
-[14:25:35] 📤 Ty: Cześć serwer!
-[14:25:35] 📥 Echo: Cześć serwer!
->
-```
-
-### Sprawdź status
-```
-> /status
-[14:25:40] ℹ️ Status: Połączono ✅ | ID: 550e8400...
->
-```
-
-### Wyjdź
-```
-> /exit
-[14:25:45] ⚙️ Wychodzę...
-```
-
-## Zaawansowane
-
-### Uruchom automatyczne testy
 ```bash
-cd client
-python test.py              # Wszystkie testy
-python test.py connection   # Konkretny test
-python test.py echo
-python test.py broadcast
+../.venv/bin/python websocket_client.py --server ws://localhost:8080/ws/chat --player "Bot-1" --scenario "Moloch" --turn 2 --reason "Smoke test"
 ```
 
-### Łącz się z innym serwerem
+## 5) Szybki test protokołu
+
 ```bash
-python websocket_client.py --server ws://192.168.1.100:8080/ws/chat
+cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
+../.venv/bin/python test.py
 ```
 
-### Zmień nazwę klienta
+## 6) Sprawdzenie logów
+
 ```bash
-python websocket_client.py --name "MojKlient"
+cd /home/dawid/cpp/projekty/Neuroshima/webapp
+tail -f logs/websocket.log
 ```
 
-## Logi
+## 7) Najczęstsze problemy
 
-### Serwer
-```bash
-tail -f logs/websocket.log    # Linux/Mac
-type logs/websocket.log       # Windows (ostatnich 100 linii)
-```
+- `ModuleNotFoundError: websocket`: zainstaluj zależności przez `.venv/bin/python -m pip install -r requirements.txt`
+- brak połączenia: upewnij się, że serwer działa (`./gradlew bootRun`)
+- zajęty port 8080: zmień `server.port` w `application.properties`
 
-### Klient
-```bash
-tail -f client/client.log     # Linux/Mac
-```
+## Następny krok
 
-## Rozwiązanie problemów
-
-| Problem | Rozwiązanie |
-|---------|-------------|
-| "Nie można nawiązać połączenia" | Sprawdź czy serwer działa: `curl http://localhost:8080/api/websocket/stats` |
-| "ModuleNotFoundError: websocket" | Zainstaluj: `pip install websocket-client` |
-| "Port 8080 już w użyciu" | Zmień port w `application.properties` |
-
-## Struktura
-
-```
-┌─────────────────────────┐
-│   Java WebSocket Server │
-│   ws://localhost:8080   │
-└─────────────────────────┘
-           ↕ (WebSocket)
-┌─────────────────────────┐
-│   Python WebSocket Client│
-│   > Ty: Cześć!         │
-│ ← Echo: Cześć!         │
-└─────────────────────────┘
-```
-
-## Następne kroki
-
-Przeczytaj pełną dokumentację: `doc/README.md`
-
----
-
-**Potrzebujesz pomocy?** Sprawdź logi!
-
-Serwer: `logs/websocket.log`
-Klient: `client/client.log`
+Pełna dokumentacja: `doc/README.md`
 

@@ -9,7 +9,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-group = "org.example"
+group = "pl.staszic.neu"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -30,7 +30,7 @@ tasks.test {
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
-    mainClass.set("org.example.Main")
+    mainClass.set("pl.staszic.neu.Main")
 }
 
 tasks.test {

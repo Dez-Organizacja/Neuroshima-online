@@ -1,264 +1,96 @@
 # Podsumowanie Implementacji WebSocket
 
-## Ukończone zadania ✅
+## Zakres aktualizacji (2026-03-25)
 
-### 1. Serwer WebSocket (Java/Spring Boot)
+W tej iteracji projekt zostal zaktualizowany do modelu komunikatow gry oraz nowego pakietu Java.
 
-#### Pliki stworzone/zmodyfikowane:
-- ✅ `WebSocketConfig.java` - Konfiguracja WebSocket (rejestracja handlera)
-- ✅ `WebSocketHandler.java` - Handler obsługujący zdarzenia WebSocket
-- ✅ `WebSocketMessage.java` - DTO dla komunikatów JSON
-- ✅ `WebSocketController.java` - REST endpoint dla statystyk
-- ✅ `logback.xml` - Konfiguracja logowania SLF4J
-- ✅ `Main.java` - Spring Boot entry point
+## Co zostalo wykonane
 
-#### Funkcjonalności:
-- ✅ Serwer nasłuchuje na `ws://localhost:8080/ws/chat`
-- ✅ Generuje unikalny ID dla każdego klienta (UUID)
-- ✅ Obsługuje wiele klientów jednocześnie (ConcurrentHashMap)
-- ✅ Echo wiadomości do wysyłającego klienta
-- ✅ Broadcast do innych klientów
-- ✅ Logowanie wszystkich zdarzeń (konsola + plik)
-- ✅ Graceful handling rozłączeń
-- ✅ REST endpoint `/api/websocket/stats` dla statystyk
+### 1. Migracja pakietu Java
 
-### 2. Klient Python
+Zmieniono pakiet aplikacji z `org.example` na `pl.staszic.neu`.
 
-#### Pliki stworzone/zmodyfikowane:
-- ✅ `client/websocket_client.py` - Główny klient WebSocket
-  - Tryb interaktywny
-  - Obsługa komend (`/status`, `/exit`, `/help`)
-  - Logowanie do pliku
-  - Wsparcie dla parametrów wiersza poleceń
-  - Obsługa błędów i timeoutów
-  
-- ✅ `client/test.py` - Testy automatyczne
-  - Test połączenia
-  - Test echo
-  - Test wielu wiadomości
-  - Test broadcast
-  - Test formatu JSON
+Zaktualizowane elementy:
+- `build.gradle.kts`
+  - `group = "pl.staszic.neu"`
+  - `mainClass = "pl.staszic.neu.Main"`
+- kod backendu przeniesiony do `src/main/java/pl/staszic/neu/`
+- logger w `src/main/resources/logback.xml` ustawiony na `pl.staszic.neu`
 
-- ✅ `requirements.txt` - Zależności Pythona
+### 2. Nowy model komunikatow WebSocket
 
-#### Parametry klienta:
-```bash
---server WS_URL        # Zmiana serwera
---name CLIENT_NAME     # Zmiana nazwy
---log LOG_FILE        # Zmiana pliku logów
-```
+Wprowadzono dziedziczenie komunikatow:
+- baza: `WebSocketMessage`
+- baza game-scoped: `GameScopedWebSocketMessage` (z `gameId`)
 
-### 3. Komunikaty JSON
+Dodane pary request/response:
+- `STARTNEWGAME`
+- `ENDTURN`
+- `ENDGAME`
 
-#### Format wiadomości:
-```json
-{
-  "type": "connection|message|echo|disconnection",
-  "timestamp": "ISO-8601",
-  "clientId": "UUID",
-  "message": "treść (opcjonalne)"
-}
-```
+Kluczowa zasada protokolu:
+- `gameId` jest wymagane dla `ENDTURN` i `ENDGAME`
 
-#### Typy komunikatów:
-1. **connection** - Potwierdzenie połączenia (server → client)
-2. **message** - Wiadomość tekstowa (client → server)
-3. **echo** - Echo wiadomości (server → client)
-4. **disconnection** - Potwierdzenie rozłączenia (server → client)
+### 3. Aktualizacja `WebSocketHandler`
 
-### 4. Logowanie
+`src/main/java/pl/staszic/neu/WebSocketHandler.java`:
+- routing po `messageType`
+- walidacja `gameId`
+- obsluga odpowiedzi `*_RESPONSE`
+- obsluga bledow przez komunikat `ERROR`
 
-#### Serwer (Logback):
-- 📄 Plik: `logs/websocket.log`
-- 📊 Level: INFO (konsola), DEBUG (plik)
-- 📦 Archiwizacja: Codziennie lub przy 10MB
-- 🔄 Historia: 30 dni
+### 4. Klient Python (only)
 
-Przykładowe logi:
-```
-2026-03-17 14:25:30.123 [main] INFO org.example.Main - Started Main
-2026-03-17 14:25:31.234 [thread-1] INFO org.example.WebSocketHandler - New client connected
-```
+Utrzymano klienta tylko w Pythonie i dostosowano go do nowego protokolu:
+- `client/websocket_client.py` - glowny klient CLI
+- `client/game_messages_example.py` - przyklad klas komunikatow i przeplywu
+- `client/test.py` - smoke test nowego protokolu
 
-#### Klient (Python logging):
-- 📄 Plik: `client/client.log`
-- 📊 Level: INFO (konsola), DEBUG (plik)
-- ✨ Kolorowe emojis w konsoli
+Aktualne parametry klienta:
+- `--server`
+- `--player`
+- `--scenario`
+- `--turn`
+- `--reason`
 
 ### 5. Dokumentacja
 
-#### Pliki dokumentacji:
-- ✅ `doc/README.md` - Pełna dokumentacja
-  - Przegląd architektury
-  - Instrukcje instalacji
-  - Przewodnik uruchamiania
-  - Format komunikatów JSON
-  - Testowanie
-  - Rozwiązywanie problemów
-  
-- ✅ `QUICKSTART.md` - Szybki start
-  - 5-minutowy przewodnik
-  - Podstawowe komendy
-  - Testowanie
-  - Troubleshooting
+Odświeżono dokumentację do bieżącego stanu:
+- `README.md`
+- `QUICKSTART.md`
+- `doc/INDEX.md`
+- `doc/README.md`
+- ten plik: `IMPLEMENTATION_SUMMARY.md`
 
-### 6. Testy
+## Szybka weryfikacja
 
-#### Dostępne testy:
-```bash
-python test.py              # Wszystkie testy
-python test.py connection   # Test połączenia
-python test.py echo         # Test echo
-python test.py multiple     # Test wielu wiadomości
-python test.py broadcast    # Test broadcast
-python test.py json         # Test formatu JSON
+Na obecnym stanie projektu wykonywano:
+- `./gradlew test`
+- `python -m py_compile` dla klientów Python
+- uruchomienie sekwencji `STARTNEWGAME -> ENDTURN -> ENDGAME` na dzialajacym serwerze
+
+## Aktualna struktura (skrocona)
+
+```text
+src/main/java/pl/staszic/neu/
+├── Main.java
+├── WebSocketConfig.java
+├── WebSocketController.java
+├── WebSocketHandler.java
+└── messages/
+    ├── WebSocketMessage.java
+    ├── GameScopedWebSocketMessage.java
+    ├── StartNewGameRequest.java
+    ├── StartNewGameResponse.java
+    ├── EndTurnRequest.java
+    ├── EndTurnResponse.java
+    ├── EndGameRequest.java
+    └── EndGameResponse.java
 ```
 
-### 7. Usunięte komponenty
+## Status
 
-- ✅ Usunięty `index.html` (klient HTML)
-- ✅ Folder `static/` jest pusty
-- ✅ Cały kod skoncentrowany na kliencie Python
-
----
-
-## Struktura projektu
-
-```
-webapp/
-├── QUICKSTART.md               # Szybki start (5 min)
-├── requirements.txt            # Zależności Python
-├── build.gradle.kts            # Konfiguracja Gradle
-├── src/main/
-│   ├── java/org/example/
-│   │   ├── Main.java                    ✅
-│   │   ├── WebSocketConfig.java         ✅
-│   │   ├── WebSocketHandler.java        ✅ (290 linii)
-│   │   ├── WebSocketMessage.java        ✅
-│   │   ├── WebSocketController.java     ✅
-│   │   └── MathService.java
-│   └── resources/
-│       ├── logback.xml                  ✅ (46 linii)
-│       └── static/                      ✅ (pusty - HTML usunięty)
-├── client/
-│   ├── websocket_client.py              ✅ (444 linii)
-│   ├── test.py                          ✅ (400+ linii)
-│   ├── test.json
-│   └── client.log                       (generowany)
-├── doc/
-│   ├── README.md                        ✅ (Pełna dokumentacja)
-│   └── prompt-websocket.txt
-└── logs/
-    └── websocket.log                    (generowany przez serwer)
-```
-
----
-
-## Weryfikacja kodu
-
-### ✅ Kompilacja Java
-```
-BUILD SUCCESSFUL in 4s
-```
-
-### ✅ Uruchomienie serwera
-```
-Started Main in 0.535 seconds
-Tomcat started on port(s): 8080
-```
-
-### ✅ Składnia Python
-```
-✅ websocket_client.py - OK
-✅ test.py - OK
-```
-
----
-
-## Instrukcje uruchamiania
-
-### Serwer
-```bash
-cd /home/dawid/cpp/projekty/Neuroshima/webapp
-./gradlew bootRun
-```
-
-### Klient
-```bash
-cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-python websocket_client.py
-```
-
-### Testy
-```bash
-cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-python test.py
-```
-
----
-
-## Wymagania spełnione z prompt-websocket.txt
-
-| Wymaganie | Status | Lokalizacja |
-|-----------|--------|-------------|
-| Serwer WebSocket | ✅ | WebSocketHandler.java |
-| Klient WebSocket Python | ✅ | client/websocket_client.py |
-| Echo wiadomości | ✅ | WebSocketHandler.java (linia 83-93) |
-| Obsługa wielu klientów | ✅ | WebSocketHandler.java (ConcurrentHashMap) |
-| Możliwość rozłączenia | ✅ | WebSocketHandler.java (afterConnectionClosed) |
-| Logowanie | ✅ | logback.xml + Python logging |
-| Folder client | ✅ | /client/ |
-| Format JSON | ✅ | WebSocketMessage.java |
-| Komentarze w kodzie | ✅ | Wszędzie |
-| Dokumentacja | ✅ | doc/README.md + QUICKSTART.md |
-
----
-
-## Funkcje zaawansowane
-
-### Klient Python
-- 🔌 Automatyczne reconnect (timeout 5 sekund)
-- 📝 Logowanie do pliku i konsoli
-- 🎨 Kolorowe emojis w konsoli
-- ⚙️ Obsługa parametrów wiersza poleceń
-- 🛡️ Obsługa błędów i wyjątków
-- 🧵 Multithreading (WebSocket w osobnym wątku)
-
-### Serwer Java
-- 🔄 Pełna obsługa WebSocket lifecycle
-- 📊 Statystyki połączeń (REST endpoint)
-- 🔐 Unikalny UUID dla każdego klienta
-- 📤 Broadcast do wszystkich klientów
-- 🗂️ Zarządzanie sesjami (ConcurrentHashMap)
-- 📝 Zaawansowana konfiguracja logowania
-
----
-
-## Co dalej?
-
-### Możliwości rozszerzenia:
-1. Obsługa room'ów/channels
-2. Autentykacja użytkowników
-3. Baza danych dla historii wiadomości
-4. Frontend web (React/Vue)
-5. Metrics i monitoring (Prometheus)
-6. Docker containerization
-7. Load balancing
-8. Rate limiting
-
----
-
-## Podsumowanie
-
-✨ **Aplikacja WebSocket jest w pełni funkcjonalna!**
-
-- **290+ linii** kodu Java (serwer)
-- **444 linii** kodu Python (klient)
-- **400+ linii** testów
-- **400+ linii** dokumentacji
-- ✅ Wszystkie wymagania spełnione
-- ✅ Kod przetestowany i działający
-- ✅ Dokumentacja kompletna
-
-**Gotowe do użytku! 🚀**
-
+- backend: zgodny z pakietem `pl.staszic.neu`
+- websocket: zgodny z protokołem request/response gry
+- klient: wyłącznie Python
+- dokumentacja: zsynchronizowana z aktualnym kodem

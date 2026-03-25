@@ -33,7 +33,7 @@
     </appender>
 
     <!-- Logger dla WebSocket komponentów -->
-    <logger name="org.example" level="INFO"/>
+    <logger name="pl.staszic.neu" level="INFO"/>
 
     <!-- Root logger - ustawia domyślny poziom dla wszystkich logów -->
     <root level="INFO">

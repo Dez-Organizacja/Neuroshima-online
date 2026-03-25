@@ -1,4 +1,4 @@
-package org.example;
+package pl.staszic.neu;
 
 import org.springframework.stereotype.Service;
 
