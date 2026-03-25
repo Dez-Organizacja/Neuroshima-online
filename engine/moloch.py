@@ -3,7 +3,7 @@ import json
 wlasciwosci = {
     "bloker": {
         "hp": 3,
-        "tarcza": [0]},
+        "pancerz": [0]},
     "cyborg": {
         "hp": 1,
         "strzal": [[0, 1]],
@@ -15,7 +15,7 @@ wlasciwosci = {
     "juggernaut": {
         "hp": 2,
         "strzal" : [[2, 1]],
-        "tarcza": [0, 2, 4],
+        "pancerz": [0, 2, 4],
         "atak": [[0, 2]],
         "inicjatywa": [1]},
     "klaun": {
@@ -34,19 +34,19 @@ wlasciwosci = {
         "leczenie": [0, 2, 4]},
     "mozg": {
         "hp": 1,
-        "dodatkowy_strzal": [0, 2, 4],
-        "dodatkowy_atak": [0, 2, 4],},
+        "wzmocniony_strzal": [0, 2, 4],
+        "wzmocniony_atak": [0, 2, 4]},
     "obronca": {
         "hp": 2,
         "strzal": [0, 1, 5],
         "inicjatywa": [1]},
     "oficer": {
         "hp": 1,
-        "dodatkowy_strzal": [1, 3, 5]},
+        "wzmocniony_strzal": [1, 3, 5]},
     "opancerzonylowca": {
         "hp": 2,
         "atak": [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
-        "tarcza": [0, 5],
+        "pancerz": [0, 5],
         "inicjatywa": [2]},
     "opancerzonywartownik": {
         "hp": 1,
@@ -61,7 +61,7 @@ wlasciwosci = {
         "siec": [0, 5]},
     "sztab": {
         "hp": 20,
-        "dodatkowy_atak": [0, 1, 2, 3, 4, 5],
+        "wzmocniony_atak": [0, 1, 2, 3, 4, 5],
         "atak": [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
         "inicjatywa": [0]},
     "szturmowiec": {
@@ -70,7 +70,7 @@ wlasciwosci = {
         "inicjatywa": [1, 2]},
     "wartownik": {
         "hp": 1,
-        "tarcza": [0],
+        "pancerz": [0],
         "atak": [[0, 1], [5, 1]],
         "inicjatywa": [2]},
     "zwiadowca": {

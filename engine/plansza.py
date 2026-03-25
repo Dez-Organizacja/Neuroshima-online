@@ -1,10 +1,11 @@
+from copy import deepcopy
 import moloch
 import borgo
 import json
 
 frakcje = {
-    "moloch": moloch.wlasciwosci,
-    "borgo": borgo.wlasciwosci,
+    "moloch": deepcopy(moloch.wlasciwosci),
+    "borgo": deepcopy(borgo.wlasciwosci),
     # "hegemonia": hegemonia.wlasciwosci,
     # "posterunek": posterunek.wlasciwosci,
 }
@@ -35,18 +36,18 @@ class Zeton:
     def dostan_rane(self, obrazenia, kierunek, jaki_atak):
         # kierunek -> skad przychodzi atak
 
-        if "tarcza" in self.wlasciwosci and kierunek in self["tarcza"] and jaki_atak == "strzal":
+        if "pancerz" in self.wlasciwosci and kierunek in self["pancerz"] and jaki_atak == "strzal":
             obrazenia -= 1
 
-        if obrazenia > 0:
-            self.wlasciwosci["hp"] -= obrazenia
-            if self["hp"] <= 0:
-                board[self.x][self.y] = None       
+        self.wlasciwosci["hp"] -= obrazenia
 
     def koniec_inicjatywy(self):
         if self["hp"] <= 0:
             # wywolaj_medyka()
             board[self.x][self.y] = None
+
+    def czy_w_planszy(x, y):
+        return (0 <= x < 5 and 0 <= y < 9)
     
     def aktywuj(self, nr_inicjatywy):
         if "inicjatywa" in self.wlasciwosci and nr_inicjatywy in self["inicjatywa"]:
@@ -58,9 +59,10 @@ class Zeton:
                     nowyx = self.x + roza[atak_obr][0]
                     nowyy = self.y + roza[atak_obr][1]
                     
-                    if 0 <= nowyx < 5 and 0 <= nowyy < 9 and board[nowyx][nowyy] is not None:
+                    if self.czy_w_planszy(nowyx, nowyy) and board[nowyx][nowyy] is not None:
                         # print("nowyx, nowyy: ", nowyx, nowyy)
-                        board[nowyx][nowyy].dostan_rane(sila, (atak_obr + 3) % 6, "atak")
+                        if board[nowyx][nowyy].frakcja != self.frakcja:
+                            board[nowyx][nowyy].dostan_rane(sila, (atak_obr + 3) % 6, "atak")
 
             if ("strzal" in self.wlasciwosci):
                 # print(self.frakcja, self.nazwa, nr_inicjatywy)
@@ -70,7 +72,7 @@ class Zeton:
                     nowyx = self.x + roza[strzal_obr][0]
                     nowyy = self.y + roza[strzal_obr][1]
                     
-                    while 0 <= nowyx < 5 and 0 <= nowyy < 9:
+                    while self.czy_w_planszy(nowyx, nowyy):
                         # print("nowyx, nowyy: ", nowyx, nowyy)
 
                         if board[nowyx][nowyy] is not None:

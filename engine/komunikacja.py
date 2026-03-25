@@ -18,7 +18,7 @@ def postaw_zeton():
     # return json.dumps(board_to_json());
     return json.dumps({'status': 'success'})
 
-@app.route('/api/neuroshima/bitwa', methods=['GET'])
+@app.route('/api/neuroshima/bitwa', methods=['POST'])
 def bitwa():
     for inicjatywa in range(9, -1, -1):
         for i in range(5):

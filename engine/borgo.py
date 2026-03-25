@@ -3,7 +3,7 @@ import json
 wlasciwosci = {
     "bloker": {
         "hp": 3,
-        "tarcza": [0]},
+        "pancerz": [0]},
     "sztab": {
         "hp": 20,
         "dodatkowy_atak": [0, 1, 2, 3, 4, 5],

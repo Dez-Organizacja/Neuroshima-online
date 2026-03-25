@@ -26,6 +26,17 @@ response = requests.post(f"{base_url}/postaw", json=post_data)
 print("POST response:", response.json())
 
 post_data = {
+    "x": 1,
+    "y": 3,
+    "frakcja": "moloch",
+    "nazwa": "rozprowacz",
+    "rotacja": 2
+}
+
+response = requests.post(f"{base_url}/postaw", json=post_data)
+print("POST response:", response.json())
+
+post_data = {
     "x": 4,
     "y": 2,
     "frakcja": "moloch",
@@ -40,7 +51,7 @@ response = requests.get(f"{base_url}/get_board")
 print("GET response:", response.json())
 
 print("---------------------------------------------------------------\n\n\n\n\n")
-response = requests.get(f"{base_url}/bitwa")
+response = requests.post(f"{base_url}/bitwa")
 print("GET response:", response.json())
 
 response = requests.get(f"{base_url}/get_board")
