@@ -153,6 +153,8 @@ class TicTacToe(ShowBase):
         if self.check_draw():
             return True
 
+        return False
+
     def end_game(self):
         if not self.winner == 0:
             self.status.setText(f"Player {self.current_player} wins! Press R to reset.")
