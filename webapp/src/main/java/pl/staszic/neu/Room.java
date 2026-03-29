@@ -1,4 +1,4 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu;
 
 import java.util.Objects;
 

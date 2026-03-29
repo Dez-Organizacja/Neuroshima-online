@@ -81,6 +81,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             logger.info("Message received from {}: {}", clientId, message.getPayload());
 
             switch (messageType) {
+                case ActionRequest.TYPE -> handleActionRequest(session, clientId, rootNode);
                 case JoinRoomRequest.TYPE -> handleJoinRoom(session, clientId, rootNode);
                 case LeaveRoomRequest.TYPE -> handleLeaveRoom(session, clientId, rootNode);
                 case CreateNewRoomRequest.TYPE -> handleCreateNewRoom(session, clientId, rootNode);
@@ -346,6 +347,22 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
         logger.info("Game started: {}", objectMapper.writeValueAsString(response));
+    }
+
+    private void handleActionRequest(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
+        ActionRequest request = objectMapper.treeToValue(rootNode, ActionRequest.class);
+        request.setClientId(clientId);
+
+        if (isBlank(request.getPlayerId())) {
+            sendError(session, clientId, "ACTION_REQUEST requires gameId");
+            return;
+        }
+        if (!activeGames.containsKey(request.getGameId())) {
+            sendError(session, clientId, "Unknown gameId: " + request.getGameId());
+            return;
+        }
+
+        logger.info("Action processed: {}", objectMapper.writeValueAsString(request));
     }
 
     private void handleEndGame(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
