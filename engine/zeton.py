@@ -8,15 +8,27 @@ class Zeton:
             self.x = x
             self.y = y
             self.rotacja = rotacja
-            self.hp = self["hp"] - rany
+            self.rany = rany
+            self.hp = self["hp"]
 
         def __getitem__(self, key):
             # pozwala robis self["xd"] zamiast self.wlasciwosci["xd"]
             return self.wlasciwosci.get(key)
         
-        
+        def zeton_to_json(self):
+            json = {
+                "frakcja": self.frakcja,
+                "nazwa": self.nazwa,
+                "rotacja": self.rotacja,
+                "rany": self.rany
+            }
+            return json
+
         def czy_w_planszy(self, x, y):
             return (0 <= x < 5 and 0 <= y < 9)
+
+        def obruc(self, rotacja):
+            self.rotacja = (self.rotacja + rotacja + 6) % 6
 
         def dostan_rane(self, obrazenia, kierunek, jaki_atak):
             # kierunek -> skad przychodzi atak
@@ -25,10 +37,10 @@ class Zeton:
             if "pancerz" in self.wlasciwosci and kierunek2 in self["pancerz"] and jaki_atak == "strzal":
                 obrazenia -= 1
 
-            self.hp -= obrazenia
+            self.rany += obrazenia
 
         def koniec_inicjatywy(self):
-            if self.hp <= 0:
+            if self.hp <= self.rany:
                 # wywolaj_medyka()
                 self.board[self.x][self.y] = None
 
