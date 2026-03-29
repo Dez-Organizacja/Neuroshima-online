@@ -30,6 +30,54 @@ class MyApp(ShowBase):
     #     node.setTransparency(TransparencyAttrib.MAlpha)
     #     node.setHpr(0, 0, obj.rotacja)
     #     return node
+
+    # def robhexa(self, x, z, sz):
+    #     lines = LineSegs()
+    #     lines.setThickness(sz)
+    #     pier = math.sqrt(3)
+    #     # lines.moveTo(0, 0, 0) 
+    #     szer = (self.a*pier)/2
+    #     z += self.a
+    #     lines.moveTo(x, 0, z)
+    #     x += szer
+    #     z -= self.a/2
+    #     lines.drawTo(x, 0, z)
+    #     z -= self.a
+    #     lines.drawTo(x, 0, z)
+    #     z -= self.a/2
+    #     x -= szer
+    #     lines.drawTo(x, 0, z)
+    #     x -= szer
+    #     z += self.a/2
+    #     lines.drawTo(x, 0, z)
+    #     z+=self.a
+    #     lines.drawTo(x, 0, z)
+    #     x+=szer
+    #     z+=self.a/2
+    #     lines.drawTo(x, 0, z)
+    #     node = lines.create()
+    #     pole = aspect2d.attachNewNode(node)
+    #     pole.setBin("fixed", 10)
+    #     pole.setDepthTest(False)
+    #     pole.setDepthWrite(False)
+    #     return pole
+    
+    # def plansza(self, sz):
+    #     lista = []
+    #     pier = math.sqrt(3)
+    #     for i in range(-3, 4, 3):
+    #         for j in range(-1, 2, 1):
+    #             lista.append([i*self.a, j*self.a*pier])
+    #     lista.append([0, 2*self.a*pier])
+    #     lista.append([0, (-2)*self.a*pier])
+    #     for i in range(-1, 2, 2):
+    #         for j in range(-2, 2, 1):
+    #             if(j == 0):
+    #                 j+=1
+    #             lista.append([self.a*i*(3/2), self.a*pier*j+((pier*self.a)/2)])
+    #     for i in range(len(lista)):
+    #         self.pola.append(self.robhexa(lista[i][1], lista[i][0], sz))
+    
     def __init__(self):
         super().__init__()
 
