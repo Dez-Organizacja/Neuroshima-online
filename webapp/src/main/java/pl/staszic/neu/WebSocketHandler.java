@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -81,6 +82,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             logger.info("Message received from {}: {}", clientId, message.getPayload());
 
             switch (messageType) {
+                case GetRoomStatusRequest.TYPE -> handleGetRoomStatus(session, clientId, rootNode);
                 case ActionRequest.TYPE -> handleActionRequest(session, clientId, rootNode);
                 case JoinRoomRequest.TYPE -> handleJoinRoom(session, clientId, rootNode);
                 case LeaveRoomRequest.TYPE -> handleLeaveRoom(session, clientId, rootNode);
@@ -295,6 +297,36 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
         logger.info("Room left: {}", objectMapper.writeValueAsString(response));
+    }
+
+    private void handleGetRoomStatus(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
+        GetRoomStatusRequest request = objectMapper.treeToValue(rootNode, GetRoomStatusRequest.class);
+        request.setClientId(clientId);
+
+        if (isBlank(request.getRoomId())) {
+            sendError(session, clientId, "Room id is null or empty");
+            return;
+        }
+
+        Room room = activeRooms.get(request.getRoomId());
+
+        if(room == null) {
+            sendError(session, clientId, "Room does not exist");
+            return;
+        }
+
+        GetRoomStatusResponse response = new GetRoomStatusResponse();
+        response.setClientId(clientId);
+        response.setRoomId(request.getRoomId());
+        response.setGameId(room.getGameId());
+
+        Set<String> playerIds = room.getPlayerIds();
+        response.setPlayersInRoom(playerIds);
+
+        response.setServerStatus("STATUS for room=" + request.getRoomId() + ": players=" + room.getPlayerIds() + " activeGame=" + room.hasActiveGame());
+
+        session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
+        logger.info("Room status: {}", objectMapper.writeValueAsString(response));
     }
 
     private void handleStartNewGame(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {

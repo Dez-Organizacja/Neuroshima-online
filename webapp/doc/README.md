@@ -5,7 +5,7 @@
 2. Architektura
 3. Instalacja
 4. Uruchamianie
-5. Protokol komunikatow
+5. Protokol komunikatow (pelny)
 6. Klient Python
 7. Testowanie
 8. Logowanie
@@ -18,16 +18,17 @@
 Aplikacja sklada sie z:
 - serwera WebSocket w Spring Boot
 - klienta Python
-- prostego endpointu REST do statystyk polaczen
+- endpointu REST do statystyk polaczen
 
-Aktualny protokol biznesowy opiera sie o komunikaty pokoj+gra:
+Backend obsluguje protokol pokoj + gra:
 - `CREATENEWROOM` (request/response)
+- `JOINROOM` (request/response)
+- `LEAVEROOM` (request/response)
 - `STARTNEWGAME` (request/response)
+- `ACTION` (request)
 - `ENDTURN` (request/response)
 - `ENDGAME` (request/response)
-
-`STARTNEWGAME_REQUEST` musi zawierac `roomId` i `playerId`.
-Wiadomosci `ENDTURN` i `ENDGAME` musza zawierac `gameId`.
+- `ERROR` (server -> client)
 
 ---
 
@@ -46,8 +47,15 @@ Najwazniejsze klasy:
 Hierarchia komunikatow:
 - `src/main/java/pl/staszic/neu/messages/WebSocketMessage.java`
 - `src/main/java/pl/staszic/neu/messages/GameScopedWebSocketMessage.java`
+- `src/main/java/pl/staszic/neu/messages/CreateNewRoomRequest.java`
+- `src/main/java/pl/staszic/neu/messages/CreateNewRoomResponse.java`
+- `src/main/java/pl/staszic/neu/messages/JoinRoomRequest.java`
+- `src/main/java/pl/staszic/neu/messages/JoinRoomResponse.java`
+- `src/main/java/pl/staszic/neu/messages/LeaveRoomRequest.java`
+- `src/main/java/pl/staszic/neu/messages/LeaveRoomResponse.java`
 - `src/main/java/pl/staszic/neu/messages/StartNewGameRequest.java`
 - `src/main/java/pl/staszic/neu/messages/StartNewGameResponse.java`
+- `src/main/java/pl/staszic/neu/messages/ActionRequest.java`
 - `src/main/java/pl/staszic/neu/messages/EndTurnRequest.java`
 - `src/main/java/pl/staszic/neu/messages/EndTurnResponse.java`
 - `src/main/java/pl/staszic/neu/messages/EndGameRequest.java`
@@ -56,8 +64,6 @@ Hierarchia komunikatow:
 ### Python client
 
 - `client/websocket_client.py` - jedyna implementacja klienta WebSocket
-- `client/test.py` - smoke test wykorzystujacy `websocket_client.py`
-- `client/game_messages_example.py` - generator przykladowych payloadow JSON (bez laczenia z serwerem)
 
 ---
 
@@ -96,29 +102,66 @@ Serwer udostepnia:
 
 ```bash
 cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-../.venv/bin/python websocket_client.py
+../.venv/bin/python websocket_client.py --server ws://localhost:8080/ws/chat
 ```
 
-Przyklad z parametrami:
+Tryb verbose:
 
 ```bash
 cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-../.venv/bin/python websocket_client.py --server ws://localhost:8080/ws/chat --player "Anna" --room room-1 --scenario "Moloch" --turn 1 --reason "Victory points"
+../.venv/bin/python websocket_client.py --server ws://localhost:8080/ws/chat --verbose
 ```
 
 ---
 
-## 5. Protokol komunikatow
+## 5. Protokol komunikatow (pelny)
 
-Wspolne pola (baza):
+### 5.1 Pola wspolne
+
+Wspolne pola (`WebSocketMessage`):
 - `messageType`
 - `timestamp`
 - `clientId`
 
-Wiadomosci game-scoped dodatkowo maja:
+Wiadomosci game-scoped (`GameScopedWebSocketMessage`) dodatkowo:
 - `gameId`
 
-### 5.1 CREATENEWROOM_REQUEST (client -> server)
+### 5.2 Typy komunikatow
+
+`client -> server`:
+- `CREATENEWROOM_REQUEST`
+- `JOINROOM_REQUEST`
+- `LEAVEROOM_REQUEST`
+- `STARTNEWGAME_REQUEST`
+- `ACTION_REQUEST`
+- `ENDTURN_REQUEST`
+- `ENDGAME_REQUEST`
+
+`server -> client`:
+- `CONNECTION`
+- `CREATENEWROOM_RESPONSE`
+- `JOINROOM_RESPONSE`
+- `LEAVEROOM_RESPONSE`
+- `STARTNEWGAME_RESPONSE`
+- `ENDTURN_RESPONSE`
+- `ENDGAME_RESPONSE`
+- `ERROR`
+
+`DISCONNECTION` jest logowane po stronie serwera przy zamykaniu sesji.
+
+### 5.3 Walidacja requestow
+
+- `CREATENEWROOM_REQUEST`: wymagane `roomId`; pokoj nie moze istniec; klient nie moze byc juz w pokoju.
+- `JOINROOM_REQUEST`: wymagane `roomId`; pokoj musi istniec; klient nie moze byc juz w pokoju.
+- `LEAVEROOM_REQUEST`: wymagane `roomId`; klient musi byc w pokoju; pokoj musi istniec.
+- `STARTNEWGAME_REQUEST`: wymagane `roomId` i `playerId`; klient musi nalezec do pokoju; pokoj nie moze miec aktywnej gry.
+- `ACTION_REQUEST`: wymagane `playerId`; `gameId` musi istniec; `actionData` przyjmuje JSON.
+- `ENDTURN_REQUEST`: wymagane `gameId`; `gameId` musi istniec.
+- `ENDGAME_REQUEST`: wymagane `gameId`; `gameId` musi istniec.
+
+### 5.4 Formaty JSON - requesty
+
+#### CREATENEWROOM_REQUEST
 
 ```json
 {
@@ -129,30 +172,29 @@ Wiadomosci game-scoped dodatkowo maja:
 }
 ```
 
-### 5.2 CONNECTION (server -> client)
+#### JOINROOM_REQUEST
 
 ```json
 {
-  "messageType": "CONNECTION",
-  "timestamp": "2026-03-25T17:05:38.833822698",
+  "messageType": "JOINROOM_REQUEST",
   "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
-  "message": "Connected"
+  "roomId": "room-1",
+  "playerName": "Bob"
 }
 ```
 
-### 5.3 CREATENEWROOM_RESPONSE (server -> client)
+#### LEAVEROOM_REQUEST
 
 ```json
 {
-  "messageType": "CREATENEWROOM_RESPONSE",
-  "timestamp": "2026-03-25T17:05:38.860000000",
+  "messageType": "LEAVEROOM_REQUEST",
   "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
-  "createdRoomId": "room-1",
-  "serverStatus": "STARTED room=room-1 player=Anna"
+  "roomId": "room-1",
+  "playerName": "Bob"
 }
 ```
 
-### 5.4 STARTNEWGAME_REQUEST (client -> server)
+#### STARTNEWGAME_REQUEST
 
 ```json
 {
@@ -165,7 +207,97 @@ Wiadomosci game-scoped dodatkowo maja:
 }
 ```
 
-### 5.5 STARTNEWGAME_RESPONSE (server -> client)
+#### ACTION_REQUEST
+
+```json
+{
+  "messageType": "ACTION_REQUEST",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
+  "playerId": "Anna",
+  "actionData": {
+    "action": "MOVE",
+    "unitId": "u-12",
+    "to": {
+      "x": 3,
+      "y": 5
+    }
+  }
+}
+```
+
+#### ENDTURN_REQUEST
+
+```json
+{
+  "messageType": "ENDTURN_REQUEST",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
+  "playerId": "Anna",
+  "turnNumber": 1
+}
+```
+
+#### ENDGAME_REQUEST
+
+```json
+{
+  "messageType": "ENDGAME_REQUEST",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
+  "winnerId": "Anna",
+  "reason": "Victory points"
+}
+```
+
+### 5.5 Formaty JSON - odpowiedzi i zdarzenia
+
+#### CONNECTION
+
+```json
+{
+  "messageType": "CONNECTION",
+  "timestamp": "2026-03-25T17:05:38.833822698",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "message": "Connected"
+}
+```
+
+#### CREATENEWROOM_RESPONSE
+
+```json
+{
+  "messageType": "CREATENEWROOM_RESPONSE",
+  "timestamp": "2026-03-25T17:05:38.860000000",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "createdRoomId": "room-1",
+  "serverStatus": "STARTED room=room-1 player=Anna"
+}
+```
+
+#### JOINROOM_RESPONSE
+
+```json
+{
+  "messageType": "JOINROOM_RESPONSE",
+  "timestamp": "2026-03-25T17:05:38.861000000",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "serverStatus": "JOINED room=room-1 player=Bob"
+}
+```
+
+#### LEAVEROOM_RESPONSE
+
+```json
+{
+  "messageType": "LEAVEROOM_RESPONSE",
+  "timestamp": "2026-03-25T17:05:38.862000000",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "serverStatus": "LEFT room=room-1 player=Bob"
+}
+```
+
+#### STARTNEWGAME_RESPONSE
 
 ```json
 {
@@ -179,19 +311,7 @@ Wiadomosci game-scoped dodatkowo maja:
 }
 ```
 
-### 5.6 ENDTURN_REQUEST (client -> server)
-
-```json
-{
-  "messageType": "ENDTURN_REQUEST",
-  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
-  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
-  "playerId": "Anna",
-  "turnNumber": 1
-}
-```
-
-### 5.7 ENDTURN_RESPONSE (server -> client)
+#### ENDTURN_RESPONSE
 
 ```json
 {
@@ -204,19 +324,7 @@ Wiadomosci game-scoped dodatkowo maja:
 }
 ```
 
-### 5.8 ENDGAME_REQUEST (client -> server)
-
-```json
-{
-  "messageType": "ENDGAME_REQUEST",
-  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
-  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
-  "winnerId": "Anna",
-  "reason": "Victory points"
-}
-```
-
-### 5.9 ENDGAME_RESPONSE (server -> client)
+#### ENDGAME_RESPONSE
 
 ```json
 {
@@ -229,46 +337,30 @@ Wiadomosci game-scoped dodatkowo maja:
 }
 ```
 
+#### ERROR
+
+```json
+{
+  "messageType": "ERROR",
+  "timestamp": "2026-03-25T17:05:39.000000000",
+  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
+  "error": "Unsupported messageType: FOO_REQUEST"
+}
+```
+
 ---
 
 ## 6. Klient Python
 
 Implementacja klienta WebSocket znajduje sie tylko w `client/websocket_client.py`.
 
-Parametry `client/websocket_client.py`:
+Parametry:
 - `--server` (domyslnie: `ws://localhost:8080/ws/chat`)
-- `--player` (domyslnie: `Anna`)
-- `--room` (domyslnie: `room-1`)
-- `--scenario` (domyslnie: `Moloch`)
-- `--turn` (domyslnie: `1`)
-- `--reason` (domyslnie: `Victory points`)
-
-Przyklad:
-
-```bash
-cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-../.venv/bin/python websocket_client.py --player "Bot-1" --room room-2 --scenario "Moloch" --turn 2 --reason "Smoke"
-```
+- `-v`, `--verbose` (bardziej szczegolowe logowanie)
 
 ---
 
 ## 7. Testowanie
-
-### Smoke test protokolu
-
-```bash
-cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-../.venv/bin/python test.py
-```
-
-### Przyklad klas komunikatow
-
-```bash
-cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-../.venv/bin/python game_messages_example.py
-```
-
-Skrypt wypisuje przykladowe payloady JSON i nie nawiazuje polaczenia WebSocket.
 
 ### Build Java
 
@@ -317,7 +409,3 @@ curl http://localhost:8080/api/websocket/stats
 ### Problem: zajety port 8080
 
 Zmien port w konfiguracji Spring (`server.port`) lub zatrzymaj proces, ktory go uzywa.
-
----
-
-Dokumentacja jest zgodna z aktualnym stanem kodu na 2026-03-28.

@@ -29,54 +29,64 @@ cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
 python websocket_client.py
 ```
 
-Domyślny flow klienta:
-1. `CREATENEWROOM_REQUEST`
-2. `STARTNEWGAME_REQUEST`
-3. `ENDTURN_REQUEST`
-4. `ENDGAME_REQUEST`
+Domyślnie klient tylko łączy się z serwerem WebSocket i utrzymuje połączenie.
 
 ---
 
 ## Aktualny protokol
 
-Backend działa w pakiecie `pl.staszic.neu` i obsługuje komunikaty JSON:
+Backend działa w pakiecie `pl.staszic.neu` i obsługuje poniższe typy komunikatów JSON.
 
-- `CREATENEWROOM_REQUEST` / `CREATENEWROOM_RESPONSE`
-- `STARTNEWGAME_REQUEST` / `STARTNEWGAME_RESPONSE`
-- `ENDTURN_REQUEST` / `ENDTURN_RESPONSE`
-- `ENDGAME_REQUEST` / `ENDGAME_RESPONSE`
+Typy `client -> server`:
+- `CREATENEWROOM_REQUEST`
+- `JOINROOM_REQUEST`
+- `LEAVEROOM_REQUEST`
+- `STARTNEWGAME_REQUEST`
+- `ACTION_REQUEST`
+- `ENDTURN_REQUEST`
+- `ENDGAME_REQUEST`
 
-Wymagane pola:
+Typy `server -> client`:
+- `CONNECTION`
+- `DISCONNECTION` (zdarzenie logowane po stronie serwera)
+- `CREATENEWROOM_RESPONSE`
+- `JOINROOM_RESPONSE`
+- `LEAVEROOM_RESPONSE`
+- `STARTNEWGAME_RESPONSE`
+- `ENDTURN_RESPONSE`
+- `ENDGAME_RESPONSE`
+- `ERROR`
 
-- `STARTNEWGAME_REQUEST`: `roomId`, `playerId`
-- `ENDTURN_REQUEST`: `gameId`
-- `ENDGAME_REQUEST`: `gameId`
+Wspólne pola:
+- `messageType`, `timestamp`, `clientId`
+- wiadomości game-scoped: dodatkowo `gameId`
 
-Przykład `STARTNEWGAME_REQUEST`:
+Walidacja po stronie serwera:
+- `CREATENEWROOM_REQUEST`: wymagane `roomId`, klient nie może być już w pokoju
+- `JOINROOM_REQUEST`: wymagane `roomId`, pokój musi istnieć
+- `LEAVEROOM_REQUEST`: wymagane `roomId`, klient musi należeć do pokoju
+- `STARTNEWGAME_REQUEST`: wymagane `roomId`, `playerId`, klient musi być członkiem pokoju
+- `ACTION_REQUEST`: wymagane `playerId`, `gameId` musi istnieć; `actionData` może być JSON-em
+- `ENDTURN_REQUEST`: wymagane `gameId`, `gameId` musi istnieć
+- `ENDGAME_REQUEST`: wymagane `gameId`, `gameId` musi istnieć
+
+Przykład `ACTION_REQUEST`:
 
 ```json
 {
-  "messageType": "STARTNEWGAME_REQUEST",
+  "messageType": "ACTION_REQUEST",
   "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
-  "roomId": "room-1",
+  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
   "playerId": "Anna",
-  "playerName": "Anna",
-  "scenario": "Moloch"
+  "actionData": {
+    "action": "MOVE",
+    "unitId": "u-12",
+    "to": { "x": 3, "y": 5 }
+  }
 }
 ```
 
-Przykład `STARTNEWGAME_RESPONSE`:
-
-```json
-{
-  "messageType": "STARTNEWGAME_RESPONSE",
-  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
-  "roomId": "room-1",
-  "playerId": "Anna",
-  "createdGameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
-  "serverStatus": "STARTED room=room-1 game=8ef7dcb4-db11-4ddb-a8fc-2440391462bf player=Anna"
-}
-```
+Pełna specyfikacja wszystkich formatów jest w `doc/README.md`.
 
 ---
 
@@ -113,35 +123,17 @@ Jedyna implementacja klienta WebSocket jest w pliku `client/websocket_client.py`
 
 ```bash
 cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-../.venv/bin/python websocket_client.py --server ws://localhost:8080/ws/chat --player "Bot-1" --room room-2 --scenario "Moloch" --turn 2 --reason "Smoke"
+../.venv/bin/python websocket_client.py --server ws://localhost:8080/ws/chat --verbose
 ```
 
 Parametry `websocket_client.py`:
 
 - `--server` (domyślnie `ws://localhost:8080/ws/chat`)
-- `--player` (domyślnie `Anna`)
-- `--room` (domyślnie `room-1`)
-- `--scenario` (domyślnie `Moloch`)
-- `--turn` (domyślnie `1`)
-- `--reason` (domyślnie `Victory points`)
+- `-v, --verbose` (włącza bardziej szczegółowe logi)
 
 ---
 
 ## Testowanie
-
-Smoke test (wykorzystuje klasy z `client/websocket_client.py`):
-
-```bash
-cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-../.venv/bin/python test.py
-```
-
-Generator przykładowych payloadów JSON (bez połączenia WebSocket):
-
-```bash
-cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
-../.venv/bin/python game_messages_example.py
-```
 
 Build Java:
 
@@ -170,15 +162,19 @@ webapp/
 │       ├── Room.java
 │       ├── CreateNewRoomRequest.java
 │       ├── CreateNewRoomResponse.java
+│       ├── JoinRoomRequest.java
+│       ├── JoinRoomResponse.java
+│       ├── LeaveRoomRequest.java
+│       ├── LeaveRoomResponse.java
 │       ├── StartNewGameRequest.java
 │       ├── StartNewGameResponse.java
+│       ├── ActionRequest.java
 │       ├── EndTurnRequest.java
 │       ├── EndTurnResponse.java
 │       ├── EndGameRequest.java
 │       └── EndGameResponse.java
 ├── client/
 │   ├── websocket_client.py
-│   ├── game_messages_example.py
 │   └── test.py
 └── doc/
     ├── INDEX.md
@@ -224,8 +220,8 @@ Kod jest dobrze skomentowany:
 - `logback.xml` - Konfiguracja logowania
 
 **Python:**
-- `websocket_client.py` - Klient sekwencyjny dla START/ENDTURN/ENDGAME
-- `test.py` - Test smoke nowego protokołu
+- `websocket_client.py` - Klient utrzymujący połączenie WebSocket
+- `test.py` - Test smoke
 
 ---
 
@@ -247,7 +243,7 @@ Java:
   - Logback.xml: 46 linii
 
 Python:
-  - websocket_client.py: klient CLI dla protokolu gry
+  - websocket_client.py: klient CLI utrzymujący połączenie
   - test.py: prosty test end-to-end
 
 Dokumentacja:
@@ -255,17 +251,6 @@ Dokumentacja:
   - QUICKSTART.md
   - IMPLEMENTATION_SUMMARY.md
 ```
-
----
-
-## ✅ Status
-
-- ✅ Kod skompilowany bez błędów
-- ✅ Serwer startuje
-- ✅ Klient działa
-- ✅ Testy przechodzą
-- ✅ Dokumentacja kompletna
-- ✅ Gotowe do produkcji
 
 ---
 
@@ -283,7 +268,7 @@ Część projektu Neuroshima - 2026
 
 ```bash
 # W jednej linijce:
-./gradlew bootRun & sleep 2 && cd client && python websocket_client.py --player "Bot-1"
+./gradlew bootRun & sleep 2 && cd client && python websocket_client.py --server ws://localhost:8080/ws/chat
 ```
 
 ---

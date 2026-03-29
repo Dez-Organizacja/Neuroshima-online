@@ -1,6 +1,8 @@
 package pl.staszic.neu;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class Room {
     private String roomId;
@@ -54,6 +56,21 @@ public class Room {
         else{
             throw new Exception("There is no such player in the room");
         }
+    }
+
+    public boolean isEmpty() {
+        return player1 == null && player2 == null;
+    }
+
+    public Set<String> getPlayerIds() {
+        Set<String> playerIds = new HashSet<>();
+        if(player1 != null) {
+            playerIds.add(player1);
+        }
+        if(player2 != null) {
+            playerIds.add(player2);
+        }
+        return playerIds;
     }
 
     public String getPlayer2() {
