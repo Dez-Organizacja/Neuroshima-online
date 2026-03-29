@@ -64,6 +64,7 @@ Hierarchia komunikatow:
 ### Python client
 
 - `client/websocket_client.py` - jedyna implementacja klienta WebSocket
+- szczegolowy opis request/response i flow: `doc/client/README.md`
 
 ---
 
@@ -368,6 +369,19 @@ Parametry:
 cd /home/dawid/cpp/projekty/Neuroshima/webapp
 ./gradlew test
 ```
+
+### Build dokumentacji PDF (asciidoc2pdf)
+
+Wymagane jest narzedzie `asciidoc2pdf` (np. z pakietu `asciidoc3`).
+
+```bash
+cd /home/dawid/cpp/projekty/Neuroshima/webapp
+./gradlew docsPdf
+```
+
+Wynik:
+- `build/docs/asciidoc/` - pliki tymczasowe `.adoc`
+- `build/docs/pdf/` - pliki wynikowe `.pdf`
 
 ---
 

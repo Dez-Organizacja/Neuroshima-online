@@ -87,6 +87,7 @@ Przykład `ACTION_REQUEST`:
 ```
 
 Pełna specyfikacja wszystkich formatów jest w `doc/README.md`.
+Dla klienta Python: `doc/client/README.md`.
 
 ---
 
@@ -142,6 +143,13 @@ cd /home/dawid/cpp/projekty/Neuroshima/webapp
 ./gradlew test
 ```
 
+Build dokumentacji PDF (wymaga `asciidoc2pdf`):
+
+```bash
+cd /home/dawid/cpp/projekty/Neuroshima/webapp
+./gradlew docsPdf
+```
+
 ---
 
 ## Struktura projektu
@@ -187,6 +195,7 @@ webapp/
 
 - Szybki przewodnik: `QUICKSTART.md`
 - Pełna dokumentacja: `doc/README.md`
+- Dokumentacja klienta: `doc/client/README.md`
 - Indeks dokumentacji: `doc/INDEX.md`
 
 ---

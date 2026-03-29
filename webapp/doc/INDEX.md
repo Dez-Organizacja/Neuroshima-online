@@ -6,6 +6,7 @@ Punkt wejscia do dokumentacji projektu WebSocket Neuroshima.
 
 - szybki start: `QUICKSTART.md`
 - pelny opis protokolu: `doc/README.md`
+- dokumentacja klienta Python: `doc/client/README.md`
 - przeglad zmian: `IMPLEMENTATION_SUMMARY.md`
 - glowny opis repo: `README.md`
 
@@ -91,3 +92,6 @@ Najczestsze problemy:
 - `Timeout` -> serwer jest niedostepny, sprawdz logi w `logs/websocket.log`
 
 Szczegoly: `doc/README.md`
+
+Dokumentacja klienta: `doc/client/README.md`
+
