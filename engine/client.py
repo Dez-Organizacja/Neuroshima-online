@@ -3,9 +3,11 @@ import json
 
 base_url = "http://127.0.0.1:5000/api/neuroshima"
 
-def zapytaj(actions, post_data):
-    if(len(actions) > 0):
-        post_data["user_actions"].append(actions)
+def zapytaj(action, post_data):
+    if(action is not None):
+        post_data["user_actions"].append(action)
+    # if(len(action) > 0):
+    #     post_data["user_actions"].append(actions)
 
     post_data = requests.post(f"{base_url}/click", json=post_data).json()
     print("POST response:", post_data)
@@ -17,26 +19,26 @@ post_data = {
     "frakcje" : {"player1": "moloch", "player2": "borgo"},
 }
 
-post_data = zapytaj([], post_data)
+post_data = zapytaj(None, post_data)
 
-post_data = zapytaj(["hand", 0], post_data)
-post_data = zapytaj(["board", 2, 0], post_data)
+post_data = zapytaj({"type" : "hand", "slot" : 0}, post_data)
+post_data = zapytaj({"type" : "board", "x" : 2, "y" : 0}, post_data)
 
 # post_data = zapytaj([-1], post_data)
 # post_data = zapytaj([1], post_data)
 # post_data = zapytaj([1], post_data)
-# post_data = zapytaj(["hand", 0], post_data)
-post_data = zapytaj(["done"], post_data)
-# post_data = zapytaj(["hand", 0], post_data)
-post_data = zapytaj(["done"], post_data)
+# post_data = zapytaj({"type" : "hand", "slot" : 0}, post_data)
+post_data = zapytaj({"type" : "done"}, post_data)
+# post_data = zapytaj({"type" : "hand", "slot" : 0}, post_data)
+# post_data = zapytaj({"type" : "done"}, post_data)
 
-post_data = zapytaj(["hand", 0], post_data)
-post_data = zapytaj(["board", 2, 0], post_data)
-post_data = zapytaj(["hand", 0], post_data)
-post_data = zapytaj(["board", 2, 4], post_data)
-post_data = zapytaj(["left"], post_data)
-post_data = zapytaj(["done"], post_data)
-post_data = zapytaj(["done"], post_data)
+post_data = zapytaj({"type" : "hand", "slot" : 0}, post_data)
+post_data = zapytaj({"type" : "board", "x" : 2, "y" : 0}, post_data)
+post_data = zapytaj({"type" : "hand", "slot" : 0}, post_data)
+post_data = zapytaj({"type" : "board", "x" : 2, "y" : 4}, post_data)
+post_data = zapytaj({"type" : "rotate", "x" : 2, "y" : 4, "rotation" : -1}, post_data)
+# post_data = zapytaj({"type" : "done"}, post_data)
+post_data = zapytaj({"type" : "done"}, post_data)
 
 # response = requests.post(f"{base_url}/get_state", json=post_data)
 # print("POST response:", response.json())

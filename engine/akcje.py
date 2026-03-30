@@ -1,15 +1,15 @@
 from copy import deepcopy
 
-def dobierz(hand, pile, frakcja, nazwa):
+def dobierz(hand, pile, nazwa):
     hand.append(nazwa)
     pile.remove(nazwa)
 
 def odrzuc(hand, zeton):
     hand.remove(zeton)
 
-def dociag(hand, pile, frakcja):
+def dociag(hand, pile):
     while(len(hand) < 3 and len(pile) > 0):
-            dobierz(hand, pile, frakcja, pile[-1])
+            dobierz(hand, pile, pile[-1])
 
 # def bitwa(board):
 
@@ -48,10 +48,10 @@ def poczatek_tury(game):
 
     game.current_frakcja = frakcja
     if(typ == "wystaw_sztab"):
-        dobierz(game.hand[frakcja], game.pile[frakcja], frakcja, "sztab")
+        dobierz(game.hand[frakcja], game.pile[frakcja], "sztab")
 
     else:
-        dociag(game.hand[frakcja], game.pile[frakcja], frakcja)
+        dociag(game.hand[frakcja], game.pile[frakcja])
 
     if(len(game.pile[frakcja]) == 0):
         game.next_turns.append({"frakcja" : "bitwa", "typ" : "ostatnia"})
@@ -76,7 +76,6 @@ def koniec_tury(game):
         invalid_move(game.user_actions)
         return
     
-    game.user_actions.clear()
     game.next_turns.pop(0)
     game.next_turns.append({"frakcja" : frakcja, "typ" : "tura"})
     game.current_frakcja = None
@@ -90,35 +89,12 @@ def get_first(actions):
     if(actions is None or len(actions) == 0):
         return None
     
-    action = actions[0]
-    actions.pop(0)
-    return action
+    return actions.pop(0)
 
-def obracanie(actions, board, x, y):
-    # print("obracanie")
-    action = get_first(actions)
-    if(action == "empty"):
-        return
-    
-    click = get_first(action)
-    if(click == "empty"):
-        return
+def wstawianie(board, hand, action, zeton, frakcja):
+    x = action["x"]
+    y = action["y"]
 
-    if(click == "left"):
-        board.rotate(x, y, -1)
-        return
-
-    elif(click == "right"):
-        board.rotate(x, y, 1)
-        return
-
-    else:
-        return "done"
-
-def wstawianie(user_actions, board, hand, action, zeton, frakcja):
-    x = get_first(action)
-    y = get_first(action)
-    
     if(not board.on_board(x, y)):
         return False
 
@@ -126,8 +102,6 @@ def wstawianie(user_actions, board, hand, action, zeton, frakcja):
         return False
     
     postaw_zeton(board, hand, frakcja, zeton, x, y)
-    user_actions.clear()
-    user_actions.append(["rotate", x, y])
     return True
 
 def from_hand(game, action, zeton):
@@ -135,46 +109,44 @@ def from_hand(game, action, zeton):
     if(zeton is None):
         return False
 
-    click = get_first(action)
-    
-    if(click == "board"):
-        status = wstawianie(game.user_actions, game.board, hand, action, zeton, game.current_frakcja)
+    if(action["type"] == "board"):
+        status = wstawianie(game.board, hand, action, zeton, game.current_frakcja)
         return status
 
-    elif(click == "odrzuc"):
+    elif(action["type"] == "odrzuc"):
         odrzuc(hand, zeton)
-        game.user_actions.clear()
+        # game.user_actions.clear()
         return True
     
     else:
         return False
     
+    
 def co_zrobic(game):
+    print("USER ACTIONS:", game.user_actions)
     actions = deepcopy(game.user_actions)
     action = get_first(actions)
-    click = get_first(action)
 
-    if(click is None):
+    if(action is None):
         return
 
-    if(click == "done"):
+    if(action["type"] == "done"):
         koniec_tury(game)
+        game.user_actions.clear()
         poczatek_tury(game)
         return
     
-    elif(click == "rotate"):
-        x = get_first(action)
-        y = get_first(action)
-    
-        response = obracanie(actions, game.board, x, y)
+    elif(action["type"] == "rotate"):
+        x = action["x"]
+        y = action["y"]
+        rotation = action["rotation"]
+        game.board.rotate(x, y, rotation)
         game.user_actions.clear()
-        if(response != "done"):
-            game.user_actions.append(["rotate", x, y])
+        return
         
-
-    elif(click == "hand"):
+    elif(action["type"] == "hand"):
         hand = game.hand[game.current_frakcja]
-        zeton = get_from_hand(hand, get_first(action))
+        zeton = get_from_hand(hand, action["slot"])
         action = get_first(actions)
         if(action is None):
             return
@@ -182,6 +154,9 @@ def co_zrobic(game):
         status = from_hand(game, action, zeton)
         if(status == False):
             invalid_move(game.user_actions)
+            return
+        else:
+            game.user_actions.clear()
             return
         
     else:

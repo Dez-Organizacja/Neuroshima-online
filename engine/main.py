@@ -8,6 +8,7 @@ class Game:
         self.board = Board()
         self.faza = data["faza"]
         self.game_over = 0
+        self.available_actions = {}
         if(self.faza == "poczatek"):
             self.start_game(data["frakcje"]["player1"], data["frakcje"]["player2"])
 
@@ -18,7 +19,9 @@ class Game:
             self.board.import_board(data["board"])
             self.pile = data["pile"]
             self.hand = data["hand"]
-            akcje.co_zrobic(self)
+            status = akcje.co_zrobic(self)
+            if(status == True):
+                self.user_actions.clear()
 
     def start_game(self, frakcja1, frakcja2):
         self.current_frakcja = None

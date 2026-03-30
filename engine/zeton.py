@@ -9,7 +9,6 @@ class Zeton:
             self.y = y
             self.rotacja = rotacja
             self.rany = rany
-            self.hp = self["hp"]
 
         def __getitem__(self, key):
             # pozwala robis self["xd"] zamiast self.wlasciwosci["xd"]
@@ -28,7 +27,7 @@ class Zeton:
             return (0 <= x < 5 and 0 <= y < 9)
 
         def rotate(self, rotacja):
-            self.rotacja = (self.rotacja + rotacja + 6) % 6
+            self.rotacja = rotacja
 
         def dostan_rane(self, obrazenia, kierunek, jaki_atak):
             # kierunek -> skad przychodzi atak
@@ -40,7 +39,7 @@ class Zeton:
             self.rany += obrazenia
 
         def koniec_inicjatywy(self):
-            if self.hp <= self.rany:
+            if self["hp"] <= self.rany:
                 # wywolaj_medyka()
                 self.board[self.x][self.y] = None
 
