@@ -82,6 +82,12 @@ class MyApp(ShowBase):
             ter
     def __init__(self):
         super().__init__()
+
+        self.music = self.loader.loadMusic("soundtracks/dziubdziub.mp3") #audio
+        self.music.setLoop(True) #zakomentuj jak nie chcesz
+        self.music.setVolume(0.0) #dodaj glosnosc jak chcesz super muzyke
+        self.music.play()
+
         # self.setBackgroundColor(0, 0, 0)
         self.a = 0.2
         # self.robhexa(0, 0, 2, 1)
