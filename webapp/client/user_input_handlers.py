@@ -66,7 +66,7 @@ def on_user_input(client: "WebSocketGameClient", user_text: str) -> None:
         except Exception as e:
             logger.info(f"nie wyszedles z pokoju: {e}")
 
-    elif (typ == "GETROOMSTATUS"):
+    elif (typ == "ROOMSTATUS"):
         if len(wejscie) < 2:
             logger.warning("Uzycie: GETROOMSTATUS <roomId>")
 
