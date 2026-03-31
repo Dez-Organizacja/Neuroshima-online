@@ -56,13 +56,6 @@ Pola:
 - `playerId` (`String`)
 - `actionData` (`JSON`, dowolny obiekt)
 
-#### `EndTurnRequest` (`ENDTURN_REQUEST`)
-Dziedziczy po `GameScopedWebSocketMessage`.
-Pola:
-- `gameId` (`String`)
-- `playerId` (`String`)
-- `turnNumber` (`int`)
-
 #### `EndGameRequest` (`ENDGAME_REQUEST`)
 Dziedziczy po `GameScopedWebSocketMessage`.
 Pola:
@@ -98,13 +91,6 @@ Pola:
 - `roomId` (`String`)
 - `playerId` (`String`)
 - `serverStatus` (`String`)
-
-#### `EndTurnResponse` (`ENDTURN_RESPONSE`)
-Dziedziczy po `GameScopedWebSocketMessage`.
-Pola:
-- `gameId` (`String`)
-- `accepted` (`boolean`)
-- `nextPlayerId` (`String`)
 
 #### `EndGameResponse` (`ENDGAME_RESPONSE`)
 Dziedziczy po `GameScopedWebSocketMessage`.
@@ -143,7 +129,7 @@ Pola:
 4. (drugi klient) `JOINROOM_RESPONSE`
 5. `STARTNEWGAME_REQUEST`
 6. `STARTNEWGAME_RESPONSE` (z `createdGameId`)
-7. Nastepnie mozliwe `ACTION_REQUEST`, `ENDTURN_REQUEST`, `ENDGAME_REQUEST`
+7. Nastepnie mozliwe `ACTION_REQUEST`, `ENDGAME_REQUEST`
 
 ### 4.3 Flow dolaczenia do istniejacego pokoju
 1. `JOINROOM_REQUEST`
@@ -157,10 +143,8 @@ Pola:
 
 ### 4.5 Flow tury i zakonczenia gry
 1. `ACTION_REQUEST` (powtarzalne)
-2. `ENDTURN_REQUEST`
-3. `ENDTURN_RESPONSE`
-4. `ENDGAME_REQUEST`
-5. `ENDGAME_RESPONSE`
+2. `ENDGAME_REQUEST`
+3. `ENDGAME_RESPONSE`
 
 ### 4.6 Flow bledow
 - Dla niepoprawnego `messageType` lub niepelnych danych serwer odsyla `ERROR`.
@@ -296,30 +280,7 @@ Pola:
 }
 ```
 
-### 5.12 `EndTurnRequest`
-```json
-{
-  "messageType": "ENDTURN_REQUEST",
-  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
-  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
-  "playerId": "Anna",
-  "turnNumber": 1
-}
-```
-
-### 5.13 `EndTurnResponse`
-```json
-{
-  "messageType": "ENDTURN_RESPONSE",
-  "timestamp": "2026-03-29T11:00:05",
-  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
-  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
-  "accepted": true,
-  "nextPlayerId": "Anna_next"
-}
-```
-
-### 5.14 `EndGameRequest`
+### 5.12 `EndGameRequest`
 ```json
 {
   "messageType": "ENDGAME_REQUEST",
@@ -330,7 +291,7 @@ Pola:
 }
 ```
 
-### 5.15 `EndGameResponse`
+### 5.13 `EndGameResponse`
 ```json
 {
   "messageType": "ENDGAME_RESPONSE",
@@ -342,7 +303,7 @@ Pola:
 }
 ```
 
-### 5.16 `CONNECTION`
+### 5.14 `CONNECTION`
 ```json
 {
   "messageType": "CONNECTION",
@@ -352,7 +313,7 @@ Pola:
 }
 ```
 
-### 5.17 `ERROR`
+### 5.15 `ERROR`
 ```json
 {
   "messageType": "ERROR",

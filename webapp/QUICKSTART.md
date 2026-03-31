@@ -2,7 +2,7 @@
 
 Ten przewodnik uruchamia aktualną wersję projektu:
 - backend Java w pakiecie `pl.staszic.neu`
-- protokół `CREATENEWROOM` / `STARTNEWGAME` / `ENDTURN` / `ENDGAME`
+- protokół `CREATENEWROOM` / `STARTNEWGAME` / `ENDGAME`
 - klient wyłącznie w Pythonie
 
 ## 1) Wymagania
@@ -43,13 +43,12 @@ cd /home/dawid/cpp/projekty/Neuroshima/webapp/client
 Domyślny scenariusz klienta:
 1. wysyła `CREATENEWROOM_REQUEST`
 2. wysyła `STARTNEWGAME_REQUEST` (z `roomId` i `playerId`)
-3. wysyła `ENDTURN_REQUEST`
-4. wysyła `ENDGAME_REQUEST`
+3. wysyła `ENDGAME_REQUEST`
 
 Przykład z parametrami:
 
 ```bash
-../.venv/bin/python websocket_client.py --server ws://localhost:8080/ws/chat --player "Bot-1" --room room-2 --scenario "Moloch" --turn 2 --reason "Smoke test"
+../.venv/bin/python websocket_client.py --server ws://localhost:8080/ws/chat
 ```
 
 ## 5) Szybki test protokołu

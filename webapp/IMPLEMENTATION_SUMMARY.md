@@ -25,11 +25,10 @@ Wprowadzono dziedziczenie komunikatow:
 
 Dodane pary request/response:
 - `STARTNEWGAME`
-- `ENDTURN`
 - `ENDGAME`
 
 Kluczowa zasada protokolu:
-- `gameId` jest wymagane dla `ENDTURN` i `ENDGAME`
+- `gameId` jest wymagane dla `ENDGAME`
 
 ### 3. Aktualizacja `WebSocketHandler`
 
@@ -67,7 +66,7 @@ Odświeżono dokumentację do bieżącego stanu:
 Na obecnym stanie projektu wykonywano:
 - `./gradlew test`
 - `python -m py_compile` dla klientów Python
-- uruchomienie sekwencji `STARTNEWGAME -> ENDTURN -> ENDGAME` na dzialajacym serwerze
+- uruchomienie sekwencji `STARTNEWGAME -> ENDGAME` na dzialajacym serwerze
 
 ## Aktualna struktura (skrocona)
 
@@ -82,8 +81,6 @@ src/main/java/pl/staszic/neu/
     ├── GameScopedWebSocketMessage.java
     ├── StartNewGameRequest.java
     ├── StartNewGameResponse.java
-    ├── EndTurnRequest.java
-    ├── EndTurnResponse.java
     ├── EndGameRequest.java
     └── EndGameResponse.java
 ```

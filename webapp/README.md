@@ -43,7 +43,6 @@ Typy `client -> server`:
 - `LEAVEROOM_REQUEST`
 - `STARTNEWGAME_REQUEST`
 - `ACTION_REQUEST`
-- `ENDTURN_REQUEST`
 - `ENDGAME_REQUEST`
 
 Typy `server -> client`:
@@ -53,7 +52,6 @@ Typy `server -> client`:
 - `JOINROOM_RESPONSE`
 - `LEAVEROOM_RESPONSE`
 - `STARTNEWGAME_RESPONSE`
-- `ENDTURN_RESPONSE`
 - `ENDGAME_RESPONSE`
 - `ERROR`
 
@@ -67,7 +65,6 @@ Walidacja po stronie serwera:
 - `LEAVEROOM_REQUEST`: wymagane `roomId`, klient musi należeć do pokoju
 - `STARTNEWGAME_REQUEST`: wymagane `roomId`, `playerId`, klient musi być członkiem pokoju
 - `ACTION_REQUEST`: wymagane `playerId`, `gameId` musi istnieć; `actionData` może być JSON-em
-- `ENDTURN_REQUEST`: wymagane `gameId`, `gameId` musi istnieć
 - `ENDGAME_REQUEST`: wymagane `gameId`, `gameId` musi istnieć
 
 Przykład `ACTION_REQUEST`:
@@ -177,8 +174,6 @@ webapp/
 │       ├── StartNewGameRequest.java
 │       ├── StartNewGameResponse.java
 │       ├── ActionRequest.java
-│       ├── EndTurnRequest.java
-│       ├── EndTurnResponse.java
 │       ├── EndGameRequest.java
 │       └── EndGameResponse.java
 ├── client/
@@ -248,7 +243,7 @@ Kod jest dobrze skomentowany:
 ```
 Java:
   - WebSocketHandler.java: obsluga request/response
-  - Komunikaty: baza + klasy STARTNEWGAME/ENDTURN/ENDGAME
+  - Komunikaty: baza + klasy STARTNEWGAME/ENDGAME
   - Logback.xml: 46 linii
 
 Python:

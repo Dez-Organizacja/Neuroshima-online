@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import asdict
 import json
 
-from websocket_client import CreateNewRoomRequest, EndGameRequest, EndTurnRequest, StartNewGameRequest
+from websocket_client import CreateNewRoomRequest, EndGameRequest, StartNewGameRequest
 
 
 def build_payload_examples() -> list[dict]:
@@ -21,7 +21,6 @@ def build_payload_examples() -> list[dict]:
     return [
         asdict(CreateNewRoomRequest(room_id=room_id, player_name=player_id)),
         asdict(StartNewGameRequest(room_id=room_id, player_id=player_id, scenario="Moloch")),
-        asdict(EndTurnRequest(game_id=game_id, player_id=player_id, turn_number=1)),
         asdict(EndGameRequest(game_id=game_id, winner_id=player_id, reason="Victory points")),
     ]
 

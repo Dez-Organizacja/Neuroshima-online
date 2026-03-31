@@ -22,8 +22,7 @@ Typy requestow (`client -> server`):
 3. `LEAVEROOM_REQUEST`
 4. `STARTNEWGAME_REQUEST`
 5. `ACTION_REQUEST` (`actionData` przyjmuje JSON)
-6. `ENDTURN_REQUEST`
-7. `ENDGAME_REQUEST`
+6. `ENDGAME_REQUEST`
 
 Typy odpowiedzi/zdarzen (`server -> client`):
 1. `CONNECTION`
@@ -31,9 +30,8 @@ Typy odpowiedzi/zdarzen (`server -> client`):
 3. `JOINROOM_RESPONSE`
 4. `LEAVEROOM_RESPONSE`
 5. `STARTNEWGAME_RESPONSE`
-6. `ENDTURN_RESPONSE`
-7. `ENDGAME_RESPONSE`
-8. `ERROR`
+6. `ENDGAME_RESPONSE`
+7. `ERROR`
 
 Uwaga: `DISCONNECTION` jest generowane przy zamknieciu sesji i logowane po stronie serwera.
 
@@ -62,8 +60,6 @@ webapp/
 │       ├── StartNewGameRequest.java
 │       ├── StartNewGameResponse.java
 │       ├── ActionRequest.java
-│       ├── EndTurnRequest.java
-│       ├── EndTurnResponse.java
 │       ├── EndGameRequest.java
 │       └── EndGameResponse.java
 ├── client/

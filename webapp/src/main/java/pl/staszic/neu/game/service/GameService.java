@@ -17,7 +17,6 @@ public interface GameService {
 
     EndGameResponse endGame(String clientId, EndGameRequest request);
 
-    EndTurnResponse endTurn(String clientId, EndTurnRequest request);
 
     void handleClientDisconnect(String clientId);
 }

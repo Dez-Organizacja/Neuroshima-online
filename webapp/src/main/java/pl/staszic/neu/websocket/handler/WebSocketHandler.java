@@ -72,7 +72,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 case CreateNewRoomRequest.TYPE -> handleCreateNewRoom(session, clientId, rootNode);
                 case NewGameRequest.TYPE -> handleStartNewGame(session, clientId, rootNode);
                 case EndGameRequest.TYPE -> handleEndGame(session, clientId, rootNode);
-                case EndTurnRequest.TYPE -> handleEndTurn(session, clientId, rootNode);
                 default -> sendError(session, clientId, "Unsupported messageType: " + messageType);
             }
         } catch (GameValidationException e) {
@@ -151,13 +150,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
         logger.info("Game ended: {}", objectMapper.writeValueAsString(response));
     }
 
-    private void handleEndTurn(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
-        EndTurnRequest request = objectMapper.treeToValue(rootNode, EndTurnRequest.class);
-        EndTurnResponse response = gameService.endTurn(clientId, request);
-        sendJson(session, response);
-        logger.info("Turn ended: {}", objectMapper.writeValueAsString(response));
-        broadcastMessage(response, clientId);
-    }
 
     private void broadcastMessage(Object message, String excludeClientId) {
         String jsonMessage;

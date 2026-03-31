@@ -26,7 +26,6 @@ Backend obsluguje protokol pokoj + gra:
 - `LEAVEROOM` (request/response)
 - `STARTNEWGAME` (request/response)
 - `ACTION` (request)
-- `ENDTURN` (request/response)
 - `ENDGAME` (request/response)
 - `ERROR` (server -> client)
 
@@ -56,8 +55,6 @@ Hierarchia komunikatow:
 - `src/main/java/pl/staszic/neu/messages/StartNewGameRequest.java`
 - `src/main/java/pl/staszic/neu/messages/StartNewGameResponse.java`
 - `src/main/java/pl/staszic/neu/messages/ActionRequest.java`
-- `src/main/java/pl/staszic/neu/messages/EndTurnRequest.java`
-- `src/main/java/pl/staszic/neu/messages/EndTurnResponse.java`
 - `src/main/java/pl/staszic/neu/messages/EndGameRequest.java`
 - `src/main/java/pl/staszic/neu/messages/EndGameResponse.java`
 
@@ -135,7 +132,6 @@ Wiadomosci game-scoped (`GameScopedWebSocketMessage`) dodatkowo:
 - `LEAVEROOM_REQUEST`
 - `STARTNEWGAME_REQUEST`
 - `ACTION_REQUEST`
-- `ENDTURN_REQUEST`
 - `ENDGAME_REQUEST`
 
 `server -> client`:
@@ -144,7 +140,6 @@ Wiadomosci game-scoped (`GameScopedWebSocketMessage`) dodatkowo:
 - `JOINROOM_RESPONSE`
 - `LEAVEROOM_RESPONSE`
 - `STARTNEWGAME_RESPONSE`
-- `ENDTURN_RESPONSE`
 - `ENDGAME_RESPONSE`
 - `ERROR`
 
@@ -157,7 +152,6 @@ Wiadomosci game-scoped (`GameScopedWebSocketMessage`) dodatkowo:
 - `LEAVEROOM_REQUEST`: wymagane `roomId`; klient musi byc w pokoju; pokoj musi istniec.
 - `STARTNEWGAME_REQUEST`: wymagane `roomId` i `playerId`; klient musi nalezec do pokoju; pokoj nie moze miec aktywnej gry.
 - `ACTION_REQUEST`: wymagane `playerId`; `gameId` musi istniec; `actionData` przyjmuje JSON.
-- `ENDTURN_REQUEST`: wymagane `gameId`; `gameId` musi istniec.
 - `ENDGAME_REQUEST`: wymagane `gameId`; `gameId` musi istniec.
 
 ### 5.4 Formaty JSON - requesty
@@ -224,18 +218,6 @@ Wiadomosci game-scoped (`GameScopedWebSocketMessage`) dodatkowo:
       "y": 5
     }
   }
-}
-```
-
-#### ENDTURN_REQUEST
-
-```json
-{
-  "messageType": "ENDTURN_REQUEST",
-  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
-  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
-  "playerId": "Anna",
-  "turnNumber": 1
 }
 ```
 
@@ -312,18 +294,6 @@ Wiadomosci game-scoped (`GameScopedWebSocketMessage`) dodatkowo:
 }
 ```
 
-#### ENDTURN_RESPONSE
-
-```json
-{
-  "messageType": "ENDTURN_RESPONSE",
-  "timestamp": "2026-03-25T17:05:38.870845967",
-  "clientId": "58a84c5a-ca0e-4a8d-bf04-11ae1152bdf4",
-  "gameId": "8ef7dcb4-db11-4ddb-a8fc-2440391462bf",
-  "accepted": true,
-  "nextPlayerId": "Anna_next"
-}
-```
 
 #### ENDGAME_RESPONSE
 

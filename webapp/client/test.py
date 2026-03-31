@@ -4,7 +4,6 @@
 from websocket_client import (
     CreateNewRoomRequest,
     EndGameRequest,
-    EndTurnRequest,
     StartNewGameRequest,
     WebSocketGameClient,
 )
@@ -24,7 +23,6 @@ def main() -> None:
     if not game_id:
         raise RuntimeError("Brak createdGameId")
 
-    client.send(EndTurnRequest(game_id=game_id, player_id=player, turn_number=1))
     client.send(EndGameRequest(game_id=game_id, winner_id=player, reason="Test finished"))
     client.close()
 

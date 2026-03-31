@@ -237,24 +237,6 @@ public class InMemoryGameService implements GameService {
         return response;
     }
 
-    @Override
-    public EndTurnResponse endTurn(String clientId, EndTurnRequest request) {
-        request.setClientId(clientId);
-
-        if (isBlank(request.getGameId())) {
-            throw new GameValidationException("ENDTURN_REQUEST requires gameId");
-        }
-        if (!activeGames.containsKey(request.getGameId())) {
-            throw new GameValidationException("Unknown gameId: " + request.getGameId());
-        }
-
-        EndTurnResponse response = new EndTurnResponse();
-        response.setClientId(clientId);
-        response.setGameId(request.getGameId());
-        response.setAccepted(true);
-        response.setNextPlayerId(request.getPlayerId() + "_next");
-        return response;
-    }
 
     @Override
     public void handleClientDisconnect(String clientId) {
