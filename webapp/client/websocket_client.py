@@ -2,7 +2,8 @@
 """Klient Python dla websocket - utrzymuje połączenie z serwerem i umożliwia komunikację.
 
 Funkcje:
-- Łączenie się z serwerem websocket
+- Logowanie przez REST i pobranie tokenu
+- Łączenie się z serwerem websocket z nagłówkiem Authorization
 - Utrzymywanie aktywnego połączenia
 - Wysyłanie wiadomości JSON
 - Odbieranie wiadomości JSON
@@ -17,7 +18,18 @@ import sys
 import threading
 from typing import Optional, Callable
 
-import websocket
+try:
+    import requests
+except ModuleNotFoundError as exc:
+    print("Brakuje biblioteki 'requests'. Zainstaluj zależności: pip install -r requirements.txt")
+    raise SystemExit(1) from exc
+
+try:
+    import websocket
+except ModuleNotFoundError as exc:
+    print("Brakuje biblioteki 'websocket-client'. Zainstaluj zależności: pip install -r requirements.txt")
+    raise SystemExit(1) from exc
+
 from user_input_handlers import on_user_input, user_input_loop
 
 # Konfiguracja logowania
@@ -45,17 +57,45 @@ class WebSocketGameClient:
         self.ws_url = ws_url
         self.ws: Optional[websocket.WebSocket] = None
         self.client_id: Optional[str] = None
+        self.auth_token: Optional[str] = None
         self.on_message_callback = on_message_callback
         self.is_connected = False
         self.receive_thread: Optional[threading.Thread] = None
         self.stop_event = threading.Event()
 
+    def login(self, auth_url: str, username: str, password: str) -> None:
+        """Loguje użytkownika i pobiera token autoryzacyjny.
+
+        Args:
+            auth_url: URL endpointu logowania REST
+            username: Nazwa użytkownika
+            password: Hasło użytkownika
+        """
+        logger.info("Logowanie użytkownika %s przez %s", username, auth_url)
+        response = requests.post(
+            auth_url,
+            json={"username": username, "password": password},
+            timeout=5,
+        )
+        response.raise_for_status()
+        data = response.json()
+        token = data.get("token")
+        if not token:
+            raise RuntimeError("Serwer nie zwrócił tokenu podczas logowania")
+
+        self.auth_token = token
+        logger.info("Logowanie zakończone sukcesem. Użytkownik: %s", data.get("username", username))
+
     def connect(self) -> None:
         """Łączy się z serwerem websocket."""
+        if not self.auth_token:
+            raise RuntimeError("Brak tokenu autoryzacyjnego - wywołaj login() przed connect()")
+
         try:
-            logger.info(f"Łączenie się z {self.ws_url}...")
-            self.ws = websocket.create_connection(self.ws_url, timeout=5)
-            
+            logger.info("Łączenie się z %s...", self.ws_url)
+            headers = [f"Authorization: Bearer {self.auth_token}"]
+            self.ws = websocket.create_connection(self.ws_url, timeout=5, header=headers)
+
             # Odebranie wiadomości powitalnej
             raw = self.ws.recv()
             hello = json.loads(raw)
@@ -65,15 +105,15 @@ class WebSocketGameClient:
             self.stop_event.clear()
             self.is_connected = True
             
-            logger.info(f"Połączono pomyślnie. ClientId: {self.client_id}")
-            logger.info(f"Wiadomość serwera: {hello}")
-            
+            logger.info("Połączono pomyślnie. ClientId: %s", self.client_id)
+            logger.info("Wiadomość serwera: %s", hello)
+
             # Uruchomienie wątku do nasłuchiwania wiadomości
             self.receive_thread = threading.Thread(target=self._receive_loop, daemon=True)
             self.receive_thread.start()
             
         except Exception as e:
-            logger.error(f"Błąd podczas połączenia: {e}")
+            logger.error("Błąd podczas połączenia: %s", e)
             self.is_connected = False
             raise
 
@@ -83,7 +123,7 @@ class WebSocketGameClient:
             try:
                 message = self.ws.recv()
                 if message:
-                    logger.info(f"Odebrano wiadomość: {message}")
+                    logger.info("Odebrano wiadomość: %s", message)
                     if self.on_message_callback:
                         self.on_message_callback(message)
             except websocket.WebSocketTimeoutException:
@@ -95,7 +135,7 @@ class WebSocketGameClient:
                 self.stop_event.set()
                 break
             except Exception as e:
-                logger.error(f"Błąd podczas odbierania wiadomości: {e}")
+                logger.error("Błąd podczas odbierania wiadomości: %s", e)
                 self.is_connected = False
                 self.stop_event.set()
                 break
@@ -115,10 +155,10 @@ class WebSocketGameClient:
                 message["clientId"] = self.client_id
             
             json_message = json.dumps(message, ensure_ascii=False)
-            logger.info(f"Wysyłanie wiadomości: {json_message}")
+            logger.info("Wysyłanie wiadomości: %s", json_message)
             self.ws.send(json_message)
         except Exception as e:
-            logger.error(f"Błąd podczas wysyłania wiadomości: {e}")
+            logger.error("Błąd podczas wysyłania wiadomości: %s", e)
             raise
 
     def send_json_string(self, json_string: str) -> None:
@@ -131,10 +171,10 @@ class WebSocketGameClient:
             raise RuntimeError("Brak aktywnego połączenia z serwerem")
         
         try:
-            logger.info(f"Wysyłanie wiadomości: {json_string}")
+            logger.info("Wysyłanie wiadomości: %s", json_string)
             self.ws.send(json_string)
         except Exception as e:
-            logger.error(f"Błąd podczas wysyłania wiadomości: {e}")
+            logger.error("Błąd podczas wysyłania wiadomości: %s", e)
             raise
 
     def is_alive(self) -> bool:
@@ -150,7 +190,7 @@ class WebSocketGameClient:
                 logger.info("Zamykanie połączenia...")
                 self.ws.close()
             except Exception as e:
-                logger.error(f"Błąd podczas zamykania połączenia: {e}")
+                logger.error("Błąd podczas zamykania połączenia: %s", e)
             finally:
                 self.ws = None
 
@@ -166,6 +206,13 @@ def parse_args() -> argparse.Namespace:
         default="ws://localhost:8080/ws/chat",
         help="Adres serwera websocket (domyślnie: ws://localhost:8080/ws/chat)"
     )
+    parser.add_argument(
+        "--auth-url",
+        default="http://localhost:8080/api/auth/login",
+        help="Adres endpointu logowania REST"
+    )
+    parser.add_argument("--username", required=True, help="Login użytkownika")
+    parser.add_argument("--password", required=True, help="Hasło użytkownika")
     parser.add_argument(
         "-v", "--verbose",
         action="store_true",
@@ -188,6 +235,7 @@ def main() -> None:
     client = WebSocketGameClient(args.server, on_message_callback=on_message)
     
     try:
+        client.login(args.auth_url, args.username, args.password)
         client.connect()
         logger.info("Połączenie ustanowione. Naciśnij Ctrl+C aby wyjść.")
         logger.info("Możesz wpisywać dane w terminalu - hook on_user_input() będzie wywoływany.")
@@ -201,7 +249,7 @@ def main() -> None:
     except KeyboardInterrupt:
         logger.info("\nPrzerwano przez użytkownika")
     except Exception as e:
-        logger.error(f"Błąd: {e}")
+        logger.error("Błąd: %s", e)
         sys.exit(1)
     finally:
         client.close()

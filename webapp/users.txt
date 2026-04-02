@@ -1,0 +1,6 @@
+# username:password
+# Uwaga: to repo plikowe do MVP. Docelowo zastąpić bazą danych.
+# Możesz też używać hashy np. username:{bcrypt}$2a$...
+player1:{noop}player1
+
+ws_test_user:{bcrypt}$2a$10$vK08mKx4.nR75nLMrkMXO.v8.6ezO4AleHT68M9NLe3NtQf.yZ2ZG

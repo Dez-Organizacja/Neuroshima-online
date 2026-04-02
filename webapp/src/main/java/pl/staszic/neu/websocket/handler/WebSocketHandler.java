@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -19,7 +20,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Component
 public class WebSocketHandler extends TextWebSocketHandler {
@@ -41,17 +41,25 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        String clientId = UUID.randomUUID().toString();
+        UserDetails user = getAuthenticatedUser(session);
+        if (user == null) {
+            logger.warn("Brak authUser w sesji WebSocket - zamykam połączenie");
+            session.close(CloseStatus.POLICY_VIOLATION);
+            return;
+        }
+
+        String clientId = user.getUsername();
         session.getAttributes().put("clientId", clientId);
         sessionRegistry.register(clientId, session);
 
         Map<String, Object> connectionMessage = new HashMap<>();
         connectionMessage.put("messageType", "CONNECTION");
         connectionMessage.put("clientId", clientId);
+        connectionMessage.put("username", user.getUsername());
         connectionMessage.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
         connectionMessage.put("message", "Connected");
 
-        logger.info("New client connected: {}", objectMapper.writeValueAsString(connectionMessage));
+        logger.info("Authenticated client connected: {}", objectMapper.writeValueAsString(connectionMessage));
         sendJson(session, connectionMessage);
     }
 
@@ -60,9 +68,16 @@ public class WebSocketHandler extends TextWebSocketHandler {
         String clientId = (String) session.getAttributes().get("clientId");
 
         try {
+            UserDetails user = getAuthenticatedUser(session);
+            if (user == null) {
+                sendError(session, clientId, "Unauthorized session");
+                session.close(CloseStatus.POLICY_VIOLATION);
+                return;
+            }
+
             JsonNode rootNode = objectMapper.readTree(message.getPayload());
             String messageType = rootNode.path("messageType").asText("").toUpperCase();
-            logger.info("Message received from {}: {}", clientId, message.getPayload());
+            logger.info("Message received from {}: {}", user.getUsername(), message.getPayload());
 
             switch (messageType) {
                 case GetRoomStatusRequest.TYPE -> handleGetRoomStatus(session, clientId, rootNode);
@@ -150,7 +165,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
         logger.info("Game ended: {}", objectMapper.writeValueAsString(response));
     }
 
-
     private void broadcastMessage(Object message, String excludeClientId) {
         String jsonMessage;
         try {
@@ -183,5 +197,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
         errorMessage.put("error", error);
         sendJson(session, errorMessage);
     }
-}
 
+    private UserDetails getAuthenticatedUser(WebSocketSession session) {
+        Object authUser = session.getAttributes().get("authUser");
+        if (authUser instanceof UserDetails userDetails) {
+            return userDetails;
+        }
+        return null;
+    }
+}
