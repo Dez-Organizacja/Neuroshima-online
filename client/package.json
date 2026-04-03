@@ -1,0 +1,19 @@
+{
+  "name": "canvas-ts-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "http-server -c-1 -p 5173 .",
+    "dev:watch": "tsc --watch",
+    "dev:serve": "browser-sync start --server . --files 'dist/**/*.js,index.html,styles.css' --port 5173 --no-open --host localhost",
+    "test": "npm run build"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.3",
+    "http-server": "^14.1.1",
+    "typescript": "^5.9.2"
+  }
+}
