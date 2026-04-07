@@ -46,12 +46,19 @@ class Actions:
         return None
 
     #############################################################################
-    #   Immediate functions       
+    #   Immediate functions 
     #############################################################################
+    def bitwa(self, game):
+        game.board.bitwa()
+        self.koniec_tury(game)
+        self.poczatek_tury(game)
+        return True
+
     def zeton_bitwa(self, game):
         if(not self.koniec_tury(game)):
             return False
-        game.next_turns.append({"frakcja" : "bitwa", "typ" : None})
+        game.next_turns.insert(0, {"frakcja" : "bitwa", "typ" : None})
+        self.poczatek_tury(game)
         return True
         
 
@@ -137,9 +144,9 @@ class Actions:
         typ = game.next_turns[0]["typ"]
         
 
-        # if(frakcja == "bitwa"):
-        #     bitwa()
-        #     return
+        if(frakcja == "bitwa"):
+            self.bitwa(game)
+            return True
 
         game.current_frakcja = frakcja
         if(typ == "wystaw_sztab"):
@@ -167,7 +174,7 @@ class Actions:
         # if(frakcja == "bitwa"):
         #     return True
         
-        if(len(game.hand[frakcja]) == 3):
+        if(frakcja != "bitwa" and len(game.hand[frakcja]) == 3):
             return False
         
         if(check):
@@ -194,16 +201,6 @@ class Actions:
         
         return actions.pop(0)
     
-    def print_board(self, board):
-        for i in range(board.width):
-            row = []
-            for j in range(board.length):
-                if(board.board[i][j] is None):
-                    row.append(None)
-                else:
-                    # print(type(board.board[i][j]))
-                    row.append((board.board[i][j].nazwa, board.board[i][j].rotacja))
-            print(row)
 
     def print_game_state(self, game):
         print("\n---------------------------\n")
@@ -211,7 +208,7 @@ class Actions:
         print("Current frakcja:", game.current_frakcja)
         print("User actions:", game.user_actions)
         print("Board:")
-        self.print_board(game.board)
+        game.board.print_board()
         # print("Pile:", game.pile)
         print("Hand:", game.hand)
         # print("Available actions:")
@@ -321,17 +318,3 @@ class Actions:
         else:
             self.invalid_move(game.user_actions)
             return
-
-
-    # def bitwa(board):
-
-    #     for inicjatywa in range(9, -1, -1):
-    #         for i in range(5):
-    #             for j in range(9):
-    #                 if board[i][j] is not None:
-    #                     board[i][j].aktywuj(inicjatywa)
-
-    #         for i in range(5):
-    #             for j in range(9):
-    #                 if board[i][j] is not None:
-    #                     board[i][j].koniec_inicjatywy()

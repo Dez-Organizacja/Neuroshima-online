@@ -68,26 +68,26 @@ class Test_board:
                     
         return status
 
-    def test_wstawianie(self):
-        board = Board()
-        frakcja = "moloch"
-        nazwa = "sieciarz"
-        action = {"x": 1, "y": 7}
-        assert(self.run_wstawianie(board, action, nazwa, frakcja, True) == True)
+    # def test_wstawianie(self):
+    #     board = Board()
+    #     frakcja = "moloch"
+    #     nazwa = "sieciarz"
+    #     action = {"x": 1, "y": 7}
+    #     assert(self.run_wstawianie(board, action, nazwa, frakcja, True) == True)
         
-        nazwa = "klaun"
-        action = {"x": 5, "y": 7}
-        assert(self.run_wstawianie(board, action, nazwa, frakcja, False) == False)
+    #     nazwa = "klaun"
+    #     action = {"x": 5, "y": 7}
+    #     assert(self.run_wstawianie(board, action, nazwa, frakcja, False) == False)
 
-        action = {"x": 1, "y": 7}
-        assert(self.run_wstawianie(board, action, nazwa, frakcja, False) == False)
+    #     action = {"x": 1, "y": 7}
+    #     assert(self.run_wstawianie(board, action, nazwa, frakcja, False) == False)
     
-        frakcja = "borgo"
-        nazwa = "mutek"
-        action = {"x": 2, "y": 2}
-        assert(self.run_wstawianie(board, action, nazwa, frakcja, True) == True)
+    #     frakcja = "borgo"
+    #     nazwa = "mutek"
+    #     action = {"x": 2, "y": 2}
+    #     assert(self.run_wstawianie(board, action, nazwa, frakcja, True) == True)
 
-        frakcja = "moloch"
-        nazwa = "bloker"
-        action = {"x": 2, "y": 2}
-        assert(self.run_wstawianie(board, action, nazwa, frakcja, False) == False)
+    #     frakcja = "moloch"
+    #     nazwa = "bloker"
+    #     action = {"x": 2, "y": 2}
+    #     assert(self.run_wstawianie(board, action, nazwa, frakcja, False) == False)

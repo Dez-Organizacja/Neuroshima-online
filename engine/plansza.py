@@ -7,22 +7,39 @@ class Board:
         self.rotation_phase = False
         self.board = [[None] * self.length for i in range(self.width)]
         self.available_hexs = [[False] * self.length for i in range(self.width)]
-        
+        self.max_inicjatywa = 10
+
         self.roza = {
-            0: [-1, 1],
-            1: [0, 2],
-            2: [1, 1],
-            3: [1, -1],
-            4: [0, -2],
-            5: [-1, -1]
+            0 : {"x" : 1, "y" : 1},
+            1 : {"x" : 0, "y" : 2},
+            2 : {"x" : -1, "y" : 1},
+            3 : {"x" : -1, "y" : -1},
+            4 : {"x" : 0, "y" : -2},
+            5 : {"x" : 1, "y" : -1},
         }
 
     def postaw_zeton(self, x, y, zeton):
-        self.board[x][y] = Zeton(x, y, zeton["frakcja"], zeton["nazwa"], zeton["rotacja"], zeton["rany"])
+        self.board[x][y] = Zeton(x, y, zeton)
         # self.rotation_phase = True
 
     def rotate(self, x, y, rotacja):
         self.board[x][y].rotate(rotacja)
+
+    def get_name(self, x, y):
+        if(self.is_empty(x, y)):
+            return None
+        return self.board[x][y].nazwa
+
+    def is_valid_target(self, x, y, frakcja, czy_sztab=False):
+        if(not self.on_board(x, y)):
+            return False
+        if(self.is_empty(x, y)):
+            return False
+        if(self.get_type(x, y) == frakcja):
+            return False
+        if(czy_sztab and self.get_name(x, y) == "sztab"):
+            return False
+        return True
 
     def is_empty(self, x, y):
         return (self.board[x][y] == None)
@@ -62,6 +79,43 @@ class Board:
         if(isinstance(type, dict)):
             self.available_hexs[type["x"]][type["y"]] = "rotate" 
 
+    def bitwa(self):
+        for inicjatywa in range(self.max_inicjatywa, -1, -1):
+            for x in range(self.width):
+                for y in range(self.length):
+                    if(self.is_empty(x, y)):
+                        continue
+                    self.board[x][y].activate(self, inicjatywa)
+            
+            for x in range(self.width):
+                for y in range(self.length):
+                    if(self.is_empty(x, y)):
+                        continue
+                    if(not self.board[x][y].koniec_inicjatywy()):
+                        self.board[x][y] = None
+        
+    def go(self, x, y, direction):
+        return (x + self.roza[direction]["x"], y + self.roza[direction]["y"])
+
+    def print_board(self):
+        for i in range(self.width):
+            row = []
+            for j in range(self.length):
+                if(self.board[i][j] is None):
+                    row.append(None)
+                else:
+                    # print(type(board.board[i][j]))
+                    row.append((self.board[i][j].nazwa, self.board[i][j].rotacja))
+            print(row)
+
+    def wszystkie_jednostki(self):
+        answer = []
+        for x in range(self.width):
+            for y in range(self.length):
+                if(self.is_empty(x, y)):
+                    continue
+                answer.append([x, y, self.board[x][y].zeton_to_json()])
+        return answer
 
     def import_board(self, data):
         for x in range(self.width):

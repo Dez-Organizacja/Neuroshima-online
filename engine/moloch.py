@@ -12,51 +12,65 @@ wlasciwosci = {
         "typ" : "plansza",
         "liczbajednostek" : 2,
         "hp": 1,
-        "strzal": [[0, 1]],
+        "ataki" : {
+            "shoot": [[0, 1]],
+        },
         "inicjatywa": [3]
     },
     "dzialkogaussa": {
         "typ" : "plansza",
         "liczbajednostek" : 1,
         "hp": 2,
-        "gauss": [[5, 1]],
+        "ataki" : {
+            "gauss": [[4, 1]],
+        },
         "inicjatywa": [1]
     },
     "juggernaut": {
         "typ" : "plansza",
         "liczbajednostek" : 1,
         "hp": 2,
-        "strzal" : [[2, 1]],
+        "ataki" : {
+            "shoot" : [[1, 1]],
+            "melee": [[0, 2]],
+        },
         "pancerz": [0, 2, 4],
-        "atak": [[0, 2]],
         "inicjatywa": [1]
     },
     "klaun": {
         "typ" : "plansza",
         "liczbajednostek" : 1,
         "hp": 2,
-        "atak": [[0, 1], [5, 1]],
+        "ataki" : {
+            "melee": [[0, 1], [5, 1]],
+        },
         "inicjatywa": [2]
     },
     "lowca": {
         "typ" : "plansza",
         "liczbajednostek" : 2,
         "hp": 1,
-        "atak": [[0, 1], [1, 1], [3, 1], [5, 1]],
+        "ataki" : {
+            "melee": [[0, 1], [1, 1], [3, 1], [5, 1]],
+        },
         "inicjatywa": [3]
     },
     "obronca": {
         "typ" : "plansza",
         "liczbajednostek" : 1,
         "hp": 2,
-        "strzal": [[0, 1], [1, 1], [5, 1]],
+        "ataki" : {
+            "shoot": [[0, 1], [1, 1], [5, 1]],
+        },
         "inicjatywa": [1]
     },
     "opancerzonylowca": {
         "typ" : "plansza",
         "liczbajednostek" : 2,
         "hp": 2,
-        "atak": [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
+        "ataki" : {
+            "melee": [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
+        },
         "pancerz": [0, 5],
         "inicjatywa": [2]
     },
@@ -64,14 +78,18 @@ wlasciwosci = {
         "typ" : "plansza",
         "liczbajednostek" : 1,
         "hp": 1,
-        "strzal": [[0, 1], [5, 1]],
+        "ataki" : {
+            "shoot": [[0, 1], [5, 1]],
+        },
         "inicjatywa": [2]
     },
     "szerszeń": {
         "typ" : "plansza",
         "liczbajednostek" : 1,
         "hp": 1,
-        "atak": [[0, 2]],
+        "ataki" : {
+            "melee": [[0, 2]],
+        },
         "inicjatywa": [2]
     },
     "sieciarz": {
@@ -85,14 +103,18 @@ wlasciwosci = {
         "liczbajednostek" : 1,
         "hp": 20,
         "wzmocniony_atak": [0, 1, 2, 3, 4, 5],
-        "atak": [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
+        "ataki" : {
+            "melee": [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
+        },
         "inicjatywa": [0]
     },
     "szturmowiec": {
         "typ" : "plansza",
         "liczbajednostek" : 1,
         "hp": 2,
-        "strzal": [[0, 1]],
+        "ataki" : {
+            "shoot": [[0, 1]],
+        },
         "inicjatywa": [1, 2]
     },
     "wartownik": {
@@ -100,7 +122,9 @@ wlasciwosci = {
         "liczbajednostek" : 1,
         "hp": 1,
         "pancerz": [0],
-        "atak": [[0, 1], [5, 1]],
+        "ataki" : {
+            "shoot": [[1, 1], [5, 1]],
+        },
         "inicjatywa": [2]
     },
 
@@ -138,19 +162,19 @@ wlasciwosci = {
     },
     ############## natychmiastowe
     # "bitwa": {
-    #     "typ" : "natychmiastowa",
+    #     "typ" : "natychmiastowy",
     #     "liczbajednostek" : 4,
     # },
     # "ruch": {
-    #     "typ" : "natychmiastowa",
+    #     "typ" : "natychmiastowy",
     #     "liczbajednostek" : 1,
     # },
     # "odepchniecie": {
-    #     "typ" : "natychmiastowa",
+    #     "typ" : "natychmiastowy",
     #     "liczbajednostek" : 5,
     # },
     # "bomba": {
-    #     "typ" : "natychmiastowa",
+    #     "typ" : "natychmiastowy",
     #     "liczbajednostek" : 1,
     # }
 
