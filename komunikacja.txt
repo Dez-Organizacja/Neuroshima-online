@@ -14,7 +14,7 @@ dla engine:
     klik = {"type" : (hand/baord/guzik), ...}
     {"type" : "hand", "slot" : (0/1/2)}
     {"type" : "board", "x" : (int), "y" : (int)}
-    {"type" : "rotate", "rotation" : int}
+    {"type" : "rotate", "rotation" : int, "x" : x, "y" : y}
 
 stan gry{
     user_actions
