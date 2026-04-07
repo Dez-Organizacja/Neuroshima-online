@@ -24,8 +24,7 @@ class Game:
                 self.user_actions.clear()
                 self.actions.default_available_actions(self)
             
-            print("Exporting game state...")
-            self.actions.print_game_state(self)
+           
 
     def start_game(self, frakcja1, frakcja2):
         self.current_frakcja = None
@@ -40,7 +39,7 @@ class Game:
         self.hand = {frakcja1 : [], frakcja2 : []}
         # self.faza = "gra"
         self.actions.poczatek_tury(self)
-        print("FAZA:", self.faza)
+        # print("FAZA:", self.faza)
         self.actions.default_available_actions(self)
 
     # def poczatek_tury(self):
@@ -108,6 +107,8 @@ class Game:
         
 
     def export_game_state(self):
+        # print("Exporting game state...")
+        # self.actions.print_game_state(self)
         for frakcja in self.hand.keys():
             self.actions.fill_hand(self.hand[frakcja])
         data = {

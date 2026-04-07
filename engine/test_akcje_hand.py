@@ -3,9 +3,9 @@ from akcje import Actions
 
 class DummyGame:
     def __init__(self):
-        self.bottoms = {"xd"};
+        self.bottoms = {"xd"}
 
-class test_hand:
+class Test_hand:
     def test_resize_hand(self):
         game = DummyGame()
         actions = Actions(game)

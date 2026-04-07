@@ -30,15 +30,17 @@ class Board:
     def on_board(self, x, y):
         if(not isinstance(x, int)):
             return False
-        if(x < 0 or x >= self.length):
+        if(x < 0 or x >= self.width):
             return False
         if(not isinstance(y, int)):
             return False
-        if(y < 0 or y >= self.width):
+        if(y < 0 or y >= self.length):
             return False
         return True  
 
     def get_type(self, x, y):
+        if(not self.on_board(x, y)):
+            return None
         if(self.board[x][y] is None):
             return None
         return self.board[x][y].frakcja

@@ -17,9 +17,11 @@ class Actions:
     #   Board functions       
     #############################################################################
     def wstawianie(self, board, hand, action, nazwa, frakcja):
+        # print("Wstawianie:", action, nazwa, frakcja)
         x = action["x"]
         y = action["y"]
 
+        # print("ok")
         if(not board.on_board(x, y)):
             return False
 
@@ -29,6 +31,7 @@ class Actions:
         self.odrzuc(hand, nazwa)
         zeton = {"nazwa" : nazwa, "frakcja" : frakcja, "rany" : 0, "rotacja" : 0}
         board.postaw_zeton(x, y, zeton)
+        # self.print_board(board)
         board.update_available_hexs({"x" : x, "y" : y})
         return True
 
@@ -218,27 +221,6 @@ class Actions:
 
         return actions
 
-    # def update_board_available_actions(self, board, available_board):
-    #     actions = [[False for j in range(board.length)] for i in range(board.width)]
-    #     if(not available_board):
-    #         return actions
-        
-    #     elif(available_board == True):
-    #         for i in range(board.width):
-    #             for j in range(board.length):
-    #                 if(board.is_empty(i, j)):
-    #                     actions[i][j] = True
-    #                 else:
-    #                     actions[i][j] = False
-    
-    #     else:
-    #         x = available_board["x"]
-    #         y = available_board["y"]
-    #         actions[x][y] = "rotate"
-
-
-    #     return actions
-
     def update_available_actions(self, game, available_actions):
         # print("AVAILABLE ACTIONS:", available_actions)
         game.available_actions = {}
@@ -280,7 +262,7 @@ class Actions:
 
 
     def handler(self, game):
-        print("USER ACTIONS:", game.user_actions)
+        # print("USER ACTIONS:", game.user_actions)
         actions = deepcopy(game.user_actions)
         action = self.get_first(actions)
         if(action is None):
