@@ -17,6 +17,8 @@ class Tests:
         zeton = {"frakcja" : "moloch", "nazwa" : "sztab", "rotacja" : 1, "rany" : 0}
         board.postaw_zeton(3, 5, zeton)
 
+        # board.print_board()
+
         board.bitwa()
         output = board.wszystkie_jednostki()
         # print(output)
@@ -29,5 +31,5 @@ class Tests:
         assert(Diff().compare(output, correct_output))
         # assert(output == correct_output)
     
-# test = Tests()
-# test.test_bitwa1()
+test = Tests()
+test.test_bitwa1()

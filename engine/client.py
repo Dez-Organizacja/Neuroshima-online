@@ -29,9 +29,6 @@ post_data = zapytaj({"type" : "rotate", "x" : 2, "y" : 0, "rotation" : 1}, post_
 post_data = zapytaj({"type" : "done"}, post_data)
 
 post_data = zapytaj({"type" : "hand", "slot" : 0}, post_data)
-post_data = zapytaj({"type" : "board", "x" : 2, "y" : 0}, post_data)
-
-post_data = zapytaj({"type" : "hand", "slot" : 0}, post_data)
 post_data = zapytaj({"type" : "board", "x" : 2, "y" : 4}, post_data)
 post_data = zapytaj({"type" : "rotate", "x" : 2, "y" : 4, "rotation" : 5}, post_data)
 post_data = zapytaj({"type" : "done"}, post_data)

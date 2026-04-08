@@ -2,6 +2,7 @@ from copy import deepcopy
 from plansza import Board
 import wszystkie_frakcje
 from akcje import Actions
+from random import shuffle
 
 class Game:
     def __init__(self, data):
@@ -19,17 +20,18 @@ class Game:
         else:
             self.import_game_state(data)
 
-            status = True
-            while(status):
-                status = self.actions.handler(self)
-                if(status != None):
-                    self.user_actions.clear()
-                    self.actions.default_available_actions(self)
+            # status = True
+            # while(status):
+            status = self.actions.handler(self)
+            if(status != None):
+                self.user_actions.clear()
+                self.actions.default_available_actions(self)
             
     def setup_pile(self, frakcja):
         for nazwa in wszystkie_frakcje.frakcje.get(frakcja, {}):
             for _ in range(wszystkie_frakcje.frakcje[frakcja][nazwa]["liczbajednostek"]):
                 self.pile[frakcja].append(nazwa)
+        shuffle(self.pile[frakcja])
 
 
     def start_game(self, frakcja1, frakcja2):
@@ -50,54 +52,6 @@ class Game:
         self.actions.poczatek_tury(self)
         # print("FAZA:", self.faza)
         self.actions.default_available_actions(self)
-
-    # def poczatek_tury(self):
-    #     if(self.current_frakcja != None):
-    #         return False
-    #     frakcja = self.next_turns[0]["frakcja"]
-    #     typ = self.next_turns[0]["typ"]
-        
-    #     # if(frakcja == "bitwa"):
-    #     #     bitwa()
-    #     #     return
-
-    #     self.current_frakcja = frakcja
-    #     if(typ == "wystaw_sztab"):
-    #         self.faza = "sztaby"
-    #         self.dobierz(self.hand[frakcja], self.pile[frakcja], "sztab")
-
-    #     else:
-    #         self.faza = "tura"
-    #         self.dociag(self.hand[frakcja], self.pile[frakcja])
-
-    #     if(len(self.pile[frakcja]) == 0):
-    #         self.next_turns.append({"frakcja" : "bitwa", "typ" : "ostatnia"})
-
-    #     print("Faza:", self.faza)
-    #     return True
-
-    # def koniec_tury(self, check=False):
-
-    #     next_turn = self.next_turns[0]
-    #     frakcja = next_turn["frakcja"]
-    #     typ = next_turn["typ"]
-
-    #     if((typ == "wystaw_sztab") and (len(self.hand[frakcja]) > 0)):
-    #         return False
-        
-    #     # if(frakcja == "bitwa"):
-    #     #     return True
-        
-    #     if(len(self.hand[frakcja]) == 3):
-    #         return False
-        
-    #     if(check):
-    #         return True
-        
-    #     self.next_turns.pop(0)
-    #     self.next_turns.append({"frakcja" : frakcja, "typ" : "tura"})
-    #     self.current_frakcja = None
-    #     return True
 
     def import_game_state(self, data):
         # print("Importing game state...")

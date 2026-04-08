@@ -160,23 +160,21 @@ wlasciwosci = {
         "wzmocniony_strzal": [0, 2, 4],
         "wzmocniony_atak": [0, 2, 4]
     },
-    ############## natychmiastowe
-    # "bitwa": {
-    #     "typ" : "natychmiastowy",
-    #     "liczbajednostek" : 4,
-    # },
-    # "ruch": {
-    #     "typ" : "natychmiastowy",
-    #     "liczbajednostek" : 1,
-    # },
-    # "odepchniecie": {
-    #     "typ" : "natychmiastowy",
-    #     "liczbajednostek" : 5,
-    # },
-    # "bomba": {
-    #     "typ" : "natychmiastowy",
-    #     "liczbajednostek" : 1,
-    # }
-
-
+    ############# natychmiastowe
+    "bitwa": {
+        "typ" : "natychmiastowy",
+        "liczbajednostek" : 4,
+    },
+    "ruch": {
+        "typ" : "natychmiastowy",
+        "liczbajednostek" : 1,
+    },
+    "odepchniecie": {
+        "typ" : "natychmiastowy",
+        "liczbajednostek" : 5,
+    },
+    "bomba": {
+        "typ" : "natychmiastowy",
+        "liczbajednostek" : 1,
+    }
 }

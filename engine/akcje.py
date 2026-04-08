@@ -209,9 +209,11 @@ class Actions:
         print("User actions:", game.user_actions)
         print("Board:")
         game.board.print_board()
-        # print("Pile:", game.pile)
-        print("Hand:", game.hand)
-        # print("Available actions:")
+        for frakcja in game.hand.keys():
+            print(frakcja)
+            print("Pile:", game.pile[frakcja])
+            print("Hand:", game.hand[frakcja])
+        print("Available actions:")
         self.print_available_actions(game.available_actions)
         print("\n---------------------------\n")
 
