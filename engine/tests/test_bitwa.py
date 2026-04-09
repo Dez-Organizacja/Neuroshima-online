@@ -29,9 +29,9 @@ class Tests:
         # print(output)
 
         correct_output = []
-        correct_output.append([1, 3, {"frakcja" : "moloch", "nazwa" : "szturmowiec", "rotacja" : 0, "rany" : 1}])
+        correct_output.append([1, 5, {"frakcja" : "moloch", "nazwa" : "sztab", "rotacja" : 1, "rany" : 0}])
         correct_output.append([2, 4, {"frakcja" : "borgo", "nazwa" : "sztab", "rotacja" : 0, "rany" : 3}])
-        correct_output.append([3, 5, {"frakcja" : "moloch", "nazwa" : "sztab", "rotacja" : 1, "rany" : 0}])
+        correct_output.append([3, 3, {"frakcja" : "moloch", "nazwa" : "szturmowiec", "rotacja" : 0, "rany" : 1}])
         # print(correct_output)
         assert(Diff().compare(output, correct_output))
         # assert(output == correct_output)

@@ -80,8 +80,9 @@ def test_scc():
 
     print(data)
 
-    if (data != pop):
-        assert 0
+    assert (data == pop)
+    # if (data != pop):
+    #     assert 0
 
     board.postaw_zeton(1, 1, { 
         "frakcja": "moloch",

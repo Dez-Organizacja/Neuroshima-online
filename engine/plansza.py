@@ -321,8 +321,8 @@ class Board:
                     row.append(None)
                 else:
                     # print(type(board.board[i][j]))
-                    # row.append((self.board[i][j].nazwa, self.board[i][j].rotacja))
-                    row.append(self.board[i][j].zeton_to_json())
+                    row.append((self.board[i][j].nazwa, self.board[i][j].rotacja))
+                    # row.append(self.board[i][j].zeton_to_json())
             print(row)
 
     def wszystkie_jednostki(self):
