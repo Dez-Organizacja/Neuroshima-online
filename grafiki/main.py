@@ -92,7 +92,7 @@ class MyApp(ShowBase):
         # self.licznik = 0
         self.pusty = obj(0, 0, "test.png", 0, 0, 0, 0, "pusty", self, 0, "hex", self.bok)
         # self.klikniety = self.pusty
-        self.podswietlone = dict()
+        # self.podswietlone = dict()
         # nowy = zamien(0, 0, "borgo", "granat", 0, 30, 0, 0, self, 1, 2)
         # nowy.wyswietl(True)
         # self.hand = ["borgo/zwiadowca.png", "borgo/zwiadowca.png", "test.png"]
