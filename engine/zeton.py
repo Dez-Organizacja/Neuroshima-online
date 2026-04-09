@@ -27,6 +27,9 @@ class Zeton:
                 "rany": self.rany
             }
             return json
+        
+        def czy_sieciarz(self):
+            return (self.wlasciwosci.get("siec", None) == None)
 
         def czy_w_planszy(self, x, y):
             return (0 <= x < 5 and 0 <= y < 9)

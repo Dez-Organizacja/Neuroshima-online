@@ -80,14 +80,14 @@ class Diff:
         return True
     
 
-a = [[1, 3, {'frakcja': 'moloch', 'nazwa': 'szturmowiec', 'rotacja': 0, 'rany': 1}], 
-     [2, 4, {'frakcja': 'borgo', 'nazwa': 'sztab', 'rotacja': 0, 'rany': 3}], 
-     [3, 5, {'frakcja': 'moloch', 'nazwa': 'sztab', 'rotacja': 1, 'rany': 0}]
-     ]
+# a = [[1, 3, {'frakcja': 'moloch', 'nazwa': 'szturmowiec', 'rotacja': 0, 'rany': 1}], 
+#      [2, 4, {'frakcja': 'borgo', 'nazwa': 'sztab', 'rotacja': 0, 'rany': 3}], 
+#      [3, 5, {'frakcja': 'moloch', 'nazwa': 'sztab', 'rotacja': 1, 'rany': 0}]
+#      ]
 
-b = [[1, 3, {'frakcja': 'moloch', 'nazwa': 'szturmowiec', 'rotacja': 0, 'rany': 1}], 
-     [2, 4, {'frakcja': 'borgo', 'nazwa': 'szturmowiec', 'rotacja': 0, 'rany': 3}], 
-     [2, 4, {'frakcja': 'moloch', 'nazwa': 'sztab', 'rotacja': 0, 'rany': 0}]
-     ]
+# b = [[1, 3, {'frakcja': 'moloch', 'nazwa': 'szturmowiec', 'rotacja': 0, 'rany': 1}], 
+#      [2, 4, {'frakcja': 'borgo', 'nazwa': 'szturmowiec', 'rotacja': 0, 'rany': 3}], 
+#      [2, 4, {'frakcja': 'moloch', 'nazwa': 'sztab', 'rotacja': 0, 'rany': 0}]
+#      ]
 
-print(Diff().compare(a, b))
+# print(Diff().compare(a, b))

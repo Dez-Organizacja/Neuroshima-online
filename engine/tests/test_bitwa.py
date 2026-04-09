@@ -1,4 +1,9 @@
 import pytest
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from plansza import Board
 from diff import Diff
 
@@ -31,5 +36,5 @@ class Tests:
         assert(Diff().compare(output, correct_output))
         # assert(output == correct_output)
     
-test = Tests()
-test.test_bitwa1()
+# test = Tests()
+# test.test_bitwa1()
