@@ -1,5 +1,6 @@
 from collections import defaultdict
 from zeton import Zeton
+from variable import *
 
 class Board:
     def __init__(self):
@@ -9,6 +10,8 @@ class Board:
         self.board = [[None] * self.length for i in range(self.width)]
         self.available_hexs = [[False] * self.length for i in range(self.width)]
         self.max_inicjatywa = 10
+        self.ALL_HEXES = [(x, y) for y in range(self.length) for x in range(self.width)]
+        self.CENTER = (self.width // 2, self.length // 2)
 
         self.roza = {
             0 : {"x" : -1, "y" : 1},
@@ -18,6 +21,38 @@ class Board:
             4 : {"x" : 0, "y" : -2},
             5 : {"x" : -1, "y" : -1},
         }
+
+    def adjacent_hexes(self, x, y):
+        adjacents = []
+        for diretion in self.roza.keys():
+            nx, ny = self.go(x, y, diretion)
+            if(self.on_board(nx, ny)):
+               adjacents.append((nx, ny))
+        return adjacents 
+
+    def dist_to_centre(self, x, y):
+        cx = self.width // 2
+        cy = self.length // 2
+        dist = (abs(x - cx) + abs(y - cy))
+        if(dist % 2):
+            dist = 100
+        return dist
+
+    def is_on_bound(self, x, y):
+        if(not self.on_board(x, y)):
+            return False
+        cx, cy = self.CENTER
+        return (abs(cx - x) <= 1 and abs(cy - y) <= 2)
+
+    def find_zeton(self, nazwa, frakcja):
+        for x in range(self.width):
+            for y in range(self.length):
+                pole = self.board[x][y]
+                if(pole is None):
+                    continue
+                if(pole.nazwa == nazwa and pole.frakcja == frakcja):
+                    return (x, y)
+        return None
 
     def postaw_zeton(self, x, y, zeton):
         self.board[x][y] = Zeton(x, y, zeton)
@@ -48,13 +83,10 @@ class Board:
     def on_board(self, x, y):
         if(not isinstance(x, int)):
             return False
-        if(x < 0 or x >= self.width):
-            return False
         if(not isinstance(y, int)):
             return False
-        if(y < 0 or y >= self.length):
-            return False
-        return True  
+        
+        return self.dist_to_centre(x, y) <= 4
 
     def get_type(self, x, y):
         if(not self.on_board(x, y)):
@@ -63,22 +95,24 @@ class Board:
             return None
         return self.board[x][y].frakcja
 
-    def update_available_hexs(self, type):
-        if(isinstance(type, bool)):
-            for x in range(self.width):
-                for y in range(self.length):
-                    self.available_hexs[x][y] = type
-            return
-        
+    def update_available_hexs(self, types, hexes, function):
         for x in range(self.width):
             for y in range(self.length):
-                if(self.get_type(x, y) == type):
-                    self.available_hexs[x][y] = True
-                else:
+                type = self.get_type(x, y)
+                if(types != Variable.ALL and type not in types):
                     self.available_hexs[x][y] = False
-        
-        if(isinstance(type, dict)):
-            self.available_hexs[type["x"]][type["y"]] = "rotate" 
+                    continue
+                
+                if((x, y) not in hexes):
+                    self.available_hexs[x][y] = False
+                    continue
+
+                if(function is None):
+                    self.available_hexs[x][y] = True
+                    continue
+                
+                else:
+                    self.available_hexs[x][y] = function(x, y)
 
     def bitwa(self):
         for inicjatywa in range(self.max_inicjatywa, -1, -1):

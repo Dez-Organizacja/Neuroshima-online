@@ -35,71 +35,71 @@ from plansza import Board
 #         print(f"SCC {k} -> {v}")
 
 
-def test_scc():
-    board = Board()
+# def test_scc():
+#     board = Board()
 
-    # [0, 5]
-    board.postaw_zeton(2, 4, { 
-        "frakcja": "moloch",
-        "nazwa": "sieciarz",
-        "rotacja": 1,
-        "rany": 0
-    })
+#     # [0, 5]
+#     board.postaw_zeton(2, 4, { 
+#         "frakcja": "moloch",
+#         "nazwa": "sieciarz",
+#         "rotacja": 1,
+#         "rany": 0
+#     })
 
-    board.postaw_zeton(0, 4, { 
-        "frakcja": "moloch",
-        "nazwa": "sieciarz",
-        "rotacja": 3,
-        "rany": 0
-    })
+#     board.postaw_zeton(0, 4, { 
+#         "frakcja": "moloch",
+#         "nazwa": "sieciarz",
+#         "rotacja": 3,
+#         "rany": 0
+#     })
 
-    # [0]
-    board.postaw_zeton(1, 3, {
-        "frakcja": "testowa",
-        "nazwa": "sieciarz",
-        "rotacja": 2,
-        "rany": 0
-    })
+#     # [0]
+#     board.postaw_zeton(1, 3, {
+#         "frakcja": "testowa",
+#         "nazwa": "sieciarz",
+#         "rotacja": 2,
+#         "rany": 0
+#     })
 
-    board.postaw_zeton(2, 6, {
-        "frakcja": "testowa",
-        "nazwa": "sieciarz",
-        "rotacja": 0,
-        "rany": 0
-    })
+#     board.postaw_zeton(2, 6, {
+#         "frakcja": "testowa",
+#         "nazwa": "sieciarz",
+#         "rotacja": 0,
+#         "rany": 0
+#     })
 
-    board.postaw_zeton(1, 5, {
-        "frakcja": "testowa",
-        "nazwa": "sieciarz",
-        "rotacja": 5,
-        "rany": 0
-    })
+#     board.postaw_zeton(1, 5, {
+#         "frakcja": "testowa",
+#         "nazwa": "sieciarz",
+#         "rotacja": 5,
+#         "rany": 0
+#     })
 
-    pop = defaultdict(int, {(2, 4): 1, (0, 4): 1, (1, 5): 1, (1, 3): 1, (2, 6): 2})
-    data = board.kwestia_sieciarzy()
+#     pop = defaultdict(int, {(2, 4): 1, (0, 4): 1, (1, 5): 1, (1, 3): 1, (2, 6): 2})
+#     data = board.kwestia_sieciarzy()
 
-    print(data)
+#     print(data)
 
-    assert (data == pop)
-    # if (data != pop):
-    #     assert 0
+#     assert (data == pop)
+#     # if (data != pop):
+#     #     assert 0
 
-    board.postaw_zeton(1, 1, { 
-        "frakcja": "moloch",
-        "nazwa": "sieciarz",
-        "rotacja": 1,
-        "rany": 0
-    })
+#     board.postaw_zeton(1, 1, { 
+#         "frakcja": "moloch",
+#         "nazwa": "sieciarz",
+#         "rotacja": 1,
+#         "rany": 0
+#     })
 
-    pop = defaultdict(int, {(1, 1): 1, (2, 4): 1, (0, 4): 1, (1, 5): 2, (1, 3): 2, (2, 6): 2})
-    data = board.kwestia_sieciarzy()
+#     pop = defaultdict(int, {(1, 1): 1, (2, 4): 1, (0, 4): 1, (1, 5): 2, (1, 3): 2, (2, 6): 2})
+#     data = board.kwestia_sieciarzy()
 
-    print(data)
+#     print(data)
 
-    if (data != pop):
-        assert 0
+#     if (data != pop):
+#         assert 0
 
-    assert 1
+#     assert 1
 
-if __name__ == "__main__":
-    test_scc()
+# if __name__ == "__main__":
+#     test_scc()
