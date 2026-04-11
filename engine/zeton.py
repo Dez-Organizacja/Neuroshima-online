@@ -1,3 +1,4 @@
+from copy import deepcopy
 import wszystkie_frakcje
 from variable import *
 from copy import deepcopy
@@ -27,7 +28,8 @@ class Zeton:
             self.rany = data[Token.DAMAGE]
             self.x = x
             self.y = y
-            self.wlasciwosci = wszystkie_frakcje.frakcje.get(self.frakcja, {}).get(self.nazwa, {})
+            self.wlasciwosci_pierwotne = wszystkie_frakcje.frakcje.get(self.frakcja, {}).get(self.nazwa, {})
+            self.wlasciwosci = deepcopy(self.wlasciwosci_pierwotne)
             self.zasiecowany = False
             self.attack_functions = {
                 Attack.MELEE : self.melee,
@@ -125,7 +127,47 @@ class Zeton:
                     board.board[nx][ny].dostan_rane(power, direction, True)
                 nx, ny = board.go(nx, ny, direction)
 
+        def is_boost(self, frakcja):
+            if self.frakcja != frakcja:
+                return False
+            
+            return "wzmocnienia" in self.wlasciwosci
 
+        def boost(self, board):
+            self.wlasciwosci = deepcopy(self.wlasciwosci_pierwotne)
+
+            if (self.zasiecowany):
+                return
+            
+            for i in range(6):
+                nx, ny = board.go(self.x, self.y, i)
+
+                if (self.czy_w_planszy(nx, ny) == 0):             
+                    continue
+
+                cel = board.board[nx][ny]
+
+                if cel is None or not cel.is_boost(self.frakcja):
+                    continue
+
+                wzmocnienia = cel.wlasciwosci["wzmocnienia"]                   
+                
+                for wzmocnienie in wzmocnienia.keys():
+                    if "wzmocniony_atak" in wzmocnienie:
+                        if "ataki" in self.wlasciwosci and "melee" in self.wlasciwosci["ataki"]:
+                                for i in range(len(self.wlasciwosci["ataki"]["melee"])):
+                                    self.wlasciwosci["ataki"]["melee"][i][1] += 1
+                    elif "wzmocniony_strzal" in wzmocnienie:
+                        if "ataki" in self.wlasciwosci and "shoot" in self.wlasciwosci["ataki"]:
+                                for i in range(len(self.wlasciwosci["ataki"]["shoot"])):
+                                    self.wlasciwosci["ataki"]["shoot"][i][1] += 1
+                    elif "wyzsza_inicjatywa" in wzmocnienie:
+                        if "inicjatywa" in self.wlasciwosci:
+                            for i in range(len(self.wlasciwosci["inicjatywa"])):
+                                self.wlasciwosci["inicjatywa"][i] += 1
+
+            # print("Zboostowalem", self.frakcja, self.nazwa, self.wlasciwosci)
+                    
         def activate(self, board, inicjatywa):
             if (self.zasiecowany):
                 # print("Jestem zasieciowany, nie moge atakowac, smuteczek", self.frakcja, self.nazwa)

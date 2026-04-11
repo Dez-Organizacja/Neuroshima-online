@@ -139,32 +139,42 @@ wlasciwosci = {
         Token.TYPE : Token.Type.BOARD,
         Token.UNIT_COUNT : 1,
         Token.Stats.HP: 1,
-        "wzmocniony_strzal": [1, 3, 5]
+        "wzmocnienia":{
+            "wzmocniony_strzal": [1, 3, 5]
+        }
     },
     "zwiadowca": {
         Token.TYPE : Token.Type.BOARD,
         Token.UNIT_COUNT : 1,
         Token.Stats.HP: 1,
-        "wyzsza_inicjatywa": [0, 2, 4]
+        "wzmocnienia":{
+            "wyzsza_inicjatywa": [0, 2, 4]
+        }
     },
     "matka": {
         Token.TYPE : Token.Type.BOARD,
         Token.UNIT_COUNT : 1,
         Token.Stats.HP: 1,
-        "dodatkowa_inicjatywa": [0]
+        "wzmocnienia":{
+            "dodatkowa_inicjatywa": [0]
+        }
     },
     "medyk": {
         Token.TYPE : Token.Type.BOARD,
         Token.UNIT_COUNT : 2,
         Token.Stats.HP: 1,
-        "leczenie": [0, 2, 4]
+        "wzmocnienia":{
+            "leczenie": [0, 2, 4]
+        }
     },
     "mozg": {
         Token.TYPE : Token.Type.BOARD,
         Token.UNIT_COUNT : 1,
         Token.Stats.HP: 1,
-        "wzmocniony_strzal": [0, 2, 4],
-        "wzmocniony_atak": [0, 2, 4]
+        "wzmocnienia":{
+            "wzmocniony_strzal": [0, 2, 4],
+            "wzmocniony_atak": [0, 2, 4]
+        }
     },
     ############# natychmiastowe
     "bitwa": {

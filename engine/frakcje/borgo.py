@@ -73,7 +73,9 @@ wlasciwosci = {
         Token.Stats.ATTACKS: {
             Attack.MELEE: [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
         },
-        "wyzsza_inicjatywa": [0, 1, 2, 3, 4, 5],
+        "wzmocnienia": {
+            "wyzsza_inicjatywa": [0, 1, 2, 3, 4, 5]
+        },
         Token.Stats.INITIATIVE: [0]
     },
 
@@ -82,25 +84,33 @@ wlasciwosci = {
         Token.TYPE: Token.Type.BOARD,
         Token.UNIT_COUNT: 1,
         Token.Stats.HP: 1,
-        "leczenie": [0, 1, 5]
+        "wzmocnienia": {
+            "leczenie": [0, 1, 5]
+        }
     },
     "oficer": {
         Token.TYPE: Token.Type.BOARD,
         Token.UNIT_COUNT: 2,
         Token.Stats.HP: 1,
-        "wzmocniony_atak": [0, 1, 5]
+        "wzmocnienia": {
+            "wzmocniony_atak": [0, 1, 5]
+        }
     },
     "super-oficer": {
         Token.TYPE: Token.Type.BOARD,
         Token.UNIT_COUNT: 1,
         Token.Stats.HP: 2,
-        "wzmocniony_atak": [0, 1, 5]
+        "wzmocnienia": {
+            "wzmocniony_atak": [0, 1, 5]
+        }
     },
     "zwiadowca": {
         Token.TYPE: Token.Type.BOARD,
         Token.UNIT_COUNT: 2,
         Token.Stats.HP: 1,
-        "wyzsza_inicjatywa": [0, 1, 5]
+        "wzmocnienia": {
+            "wyzsza_inicjatywa": [0, 1, 5]
+        }
     },
 
     ############# natychmiastowe
