@@ -9,6 +9,7 @@ class Zeton:
             self.x = x
             self.y = y
             self.wlasciwosci = wszystkie_frakcje.frakcje.get(self.frakcja, {}).get(self.nazwa, {})
+            self.zasiecowany = False
             self.attack_functions = {
                 "melee" : self.melee,
                 "shoot" : self.shoot,
@@ -24,10 +25,14 @@ class Zeton:
                 "frakcja": self.frakcja,
                 "nazwa": self.nazwa,
                 "rotacja": self.rotacja,
-                "rany": self.rany
+                "rany": self.rany,
+                # "zasiecowany": self.zasiecowany
             }
             return json
         
+        def zasieciuj(self):
+            self.zasiecowany = True
+
         def czy_sieciarz(self):
             return ("siec" in self.wlasciwosci)
 

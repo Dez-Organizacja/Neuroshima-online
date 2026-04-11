@@ -78,7 +78,9 @@ def test_scc():
     })
 
     pop = defaultdict(int, {(2, 4): 1, (0, 4): 1, (1, 5): 1, (1, 3): 1, (2, 6): 2})
-    data = board.kwestia_sieciarzy()
+    
+    board.kwestia_sieciarzy()
+    data = board.sieciarze.status_sieciarzy
 
     # print(data)
     # print(data == pop)
@@ -94,7 +96,9 @@ def test_scc():
     })
 
     pop = defaultdict(int, {(1, 1): 1, (2, 4): 1, (0, 4): 1, (1, 5): 2, (1, 3): 2, (2, 6): 2})
-    data = board.kwestia_sieciarzy()
+    
+    board.kwestia_sieciarzy()
+    data = board.sieciarze.status_sieciarzy
 
     # print(data)
     # print(data == pop)
