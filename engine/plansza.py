@@ -166,10 +166,10 @@ class Board:
                 kierunki = akt["siec"]
 
                 for kier in kierunki:
-                    kier = (kier + akt.rotacja + 6) % 6 # albo odwrotnie nwm
+                    kier = (kier + akt.rotacja + 6) % 6
                     nx, ny = self.go(x, y, kier)
 
-                    # print(f"Sieciarz ({x},{y}) frakcja {akt.frakcja} kierunek {kier} -> ({nx},{ny})")
+                    print(f"Sieciarz ({x},{y}) frakcja {akt.frakcja} kierunek {kier} -> ({nx},{ny})")
 
                     if not self.is_valid_target(nx, ny, akt.frakcja):
                         continue
