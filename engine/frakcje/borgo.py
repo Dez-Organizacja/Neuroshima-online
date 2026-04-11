@@ -67,7 +67,9 @@ wlasciwosci = {
         "ataki": {
             "melee": [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1]],
         },
-        "wyzsza_inicjatywa": [0, 1, 2, 3, 4, 5],
+        "wzmocnienia": {
+            "wyzsza_inicjatywa": [0, 1, 2, 3, 4, 5]
+        },
         "inicjatywa": [0]
     },
 
@@ -76,25 +78,33 @@ wlasciwosci = {
         "typ": "plansza",
         "liczbajednostek": 1,
         "hp": 1,
-        "leczenie": [0, 1, 5]
+        "wzmocnienia": {
+            "leczenie": [0, 1, 5]
+        }
     },
     "oficer": {
         "typ": "plansza",
         "liczbajednostek": 2,
         "hp": 1,
-        "wzmocniony_atak": [0, 1, 5]
+        "wzmocnienia": {
+            "wzmocniony_atak": [0, 1, 5]
+        }
     },
     "super-oficer": {
         "typ": "plansza",
         "liczbajednostek": 1,
         "hp": 2,
-        "wzmocniony_atak": [0, 1, 5]
+        "wzmocnienia": {
+            "wzmocniony_atak": [0, 1, 5]
+        }
     },
     "zwiadowca": {
         "typ": "plansza",
         "liczbajednostek": 2,
         "hp": 1,
-        "wyzsza_inicjatywa": [0, 1, 5]
+        "wzmocnienia": {
+            "wyzsza_inicjatywa": [0, 1, 5]
+        }
     },
 
     ############# natychmiastowe

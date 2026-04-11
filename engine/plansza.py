@@ -119,10 +119,20 @@ class Board:
                 else:
                     self.available_hexs[x][y] = function(x, y)
 
+    def boost_all(self):
+        for x in range(self.width):
+            for y in range(self.length):
+                if(self.is_empty(x, y)):
+                    continue
+                self.board[x][y].boost(self)
+
     def bitwa(self):
         for inicjatywa in range(self.max_inicjatywa, -1, -1):
             print(f"--- Inicjatywa {inicjatywa} ---")
+
             self.kwestia_sieciarzy()
+            self.boost_all()
+
             self.print_board()
 
             for x in range(self.width):

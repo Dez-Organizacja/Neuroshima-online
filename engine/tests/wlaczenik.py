@@ -1,3 +1,3 @@
 from test_bitwa import Tests
 
-Tests().test_bitwa3()
+Tests().test_bitwa_moduly()

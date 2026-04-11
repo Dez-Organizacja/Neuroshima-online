@@ -133,32 +133,42 @@ wlasciwosci = {
         "typ" : "plansza",
         "liczbajednostek" : 1,
         "hp": 1,
-        "wzmocniony_strzal": [1, 3, 5]
+        "wzmocnienia":{
+            "wzmocniony_strzal": [1, 3, 5]
+        }
     },
     "zwiadowca": {
         "typ" : "plansza",
         "liczbajednostek" : 1,
         "hp": 1,
-        "wyzsza_inicjatywa": [0, 2, 4]
+        "wzmocnienia":{
+            "wyzsza_inicjatywa": [0, 2, 4]
+        }
     },
     "matka": {
         "typ" : "plansza",
         "liczbajednostek" : 1,
         "hp": 1,
-        "dodatkowa_inicjatywa": [0]
+        "wzmocnienia":{
+            "dodatkowa_inicjatywa": [0]
+        }
     },
     "medyk": {
         "typ" : "plansza",
         "liczbajednostek" : 2,
         "hp": 1,
-        "leczenie": [0, 2, 4]
+        "wzmocnienia":{
+            "leczenie": [0, 2, 4]
+        }
     },
     "mozg": {
         "typ" : "plansza",
         "liczbajednostek" : 1,
         "hp": 1,
-        "wzmocniony_strzal": [0, 2, 4],
-        "wzmocniony_atak": [0, 2, 4]
+        "wzmocnienia":{
+            "wzmocniony_strzal": [0, 2, 4],
+            "wzmocniony_atak": [0, 2, 4]
+        }
     },
     ############# natychmiastowe
     "bitwa": {
