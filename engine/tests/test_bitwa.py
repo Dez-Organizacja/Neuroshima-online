@@ -56,12 +56,12 @@ class Tests:
         zeton = {"frakcja" : "borgo", "nazwa" : "sieciarz", "rotacja" : 4, "rany" : 0}
         board.postaw_zeton(4, 2, zeton)
 
-        board.print_board()
+        # board.print_board()
 
         board.bitwa()
         output = board.wszystkie_jednostki()
 
-        board.print_board()
+        # board.print_board()
 
         # print(output)
 
