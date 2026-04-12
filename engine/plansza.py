@@ -39,7 +39,10 @@ class Board:
         if(not self.on_board(x, y)):
             return False
         cx, cy = self.CENTER
-        return (abs(cx - x) <= 1 and abs(cy - y) <= 2)
+        return (abs(cx - x) > 1 or abs(cy - y) > 2)
+
+    def not_on_bound(self, x, y):
+        return (not self.is_on_bound(x, y))
 
     def find_zeton(self, nazwa, frakcja):
         for x in range(self.width):

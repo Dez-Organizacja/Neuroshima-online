@@ -38,6 +38,7 @@ class Token:
         class Instant:
             BITWA = "bitwa"
             MOVE = "ruch"
+            BOMB = "bomba"
 
     class Stats:
         ARMOR = "pancerz"
@@ -94,3 +95,4 @@ class Mode:
     AVAILABLE_ACTIONS = "available_actions"
     USE = "use"
     RUN = "run"
+    VALIDATE = "validate"

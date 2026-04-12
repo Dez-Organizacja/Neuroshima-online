@@ -99,7 +99,7 @@ class Test_board:
     def test_available_hexes3(self):
         board = Board()
         self.fill_board(board)
-        board.update_available_hexs(["moloch", "borgo", None], board.ALL_HEXES, board.is_on_bound)        
+        board.update_available_hexs(["moloch", "borgo", None], board.ALL_HEXES, board.not_on_bound)        
     
         correct_output = [[False] * board.length for i in range(board.width)]
         correct_output[1][3] = True

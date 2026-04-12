@@ -31,6 +31,13 @@ class Actions:
             Token.Type.Instant.MOVE : self.ruch,
         }
 
+        self.validate_handlers = {
+            Action.Type.BOARD : self.validate_board_action,
+            Action.Type.HAND : self.validate_hand_action,
+            Action.Type.BOTTOM : self.validate_bottom_action,
+            Action.Type.ROTATE : self.validate_rotate_action
+        }
+
         self.state_handlers = {
             State.SELECTED_HAND : self.hand_available_actions,
             State.NO_SELECTION : self.default_available_actions,
@@ -125,7 +132,8 @@ class Actions:
 
         self.update_available_actions(game, available)
 
-    def use_ruch(self, game, action):
+    def use_ruch(self, game):
+        action = game.action
         print("state:", game.state)
         if(game.state == State.SELECTED_HAND):
             x = action[Action.Key.X]
@@ -147,14 +155,12 @@ class Actions:
             game.selected[Selected.Y] = ny
             
         return True
-
-
-
-    def ruch(self, game, mode, action={}):
+    
+    def ruch(self, game, mode):
         if(mode == Mode.AVAILABLE_ACTIONS):
             self.available_actions_ruch(game)
         if(mode == Mode.USE):
-            return self.use_ruch(game, action)
+            return self.use_ruch(game)
     
     #############################################################################
     #   Hand functions       
@@ -247,13 +253,48 @@ class Actions:
 
     def invalid_move(self, message=""):
         print("INVALID MOVE")
-        
-    
-    def get_first(self, actions):
-        if(actions is None or len(actions) == 0):
-            return None
-        
-        return actions.pop(0)
+        if(message):
+            print(message)
+
+    #############################################################################
+    #   Validation functions       
+    #############################################################################
+
+    def validate_board_action(self, game, action):
+        x = action.get(Action.Key.X, None)
+        y = action.get(Action.Key.Y, None)
+        if(not isinstance(x, int) or not isinstance(y, int)):
+            return False
+        if(not game.board.on_board(x, y)):
+            return False
+        return game.available_actions[UI.BOARD][x][y]
+
+    def validate_hand_action(self, game, action):
+        slot = action.get(Action.Key.SLOT, None)
+        if(not isinstance(slot, int)):
+            return False
+        if(slot >= len(game.hand[game.current_frakcja])):
+            return False
+        return game.available_actions[UI.HAND][game.current_frakcja][slot]
+
+    def validate_bottom_action(self, game, action):
+        name = action.get(Action.Key.BOTTOM, None)
+        if(name not in self.bottoms):
+            return False
+        return game.available_actions[UI.BOTTOM][name]
+
+    def validate_rotate_action(self, game, action):
+        rotation = action.get(Action.Key.ROTATION, None)
+        if(not isinstance(rotation, int)):
+            return False
+        return True
+
+    def validate_action(self, game, action):
+        type = action[Action.Key.TYPE]
+        function = self.validate_handlers.get(type, None)
+        if(function is None):
+            return False
+        return function(game, action)
 
     #############################################################################
     #   user_available_actions functions       
@@ -325,12 +366,6 @@ class Actions:
     #   Bottoms functions      
     #############################################################################
     def handle_end_turn(self, game):
-        if(game.state != State.NO_SELECTION):
-            return False
-        
-        if(not self.koniec_tury(game)):
-            return False
-        
         self.poczatek_tury(game)
         self.prepare_for_new_action(game)
         return True
@@ -340,18 +375,14 @@ class Actions:
         return True
     
     def handle_use(self, game):
-        if game.state != State.SELECTED_HAND:
-            return False
         nazwa = game.selected[Selected.NAME]
         function = self.instant_token_handlers.get(nazwa, None)
         if function is None:
             return False
         
-        function(game, Mode.USE)
+        return function(game, Mode.USE)
 
     def handle_discard(self, game):
-        if game.state != State.SELECTED_HAND:
-            return False
         self.odrzuc(self.game.hand[game.current_frakcja], self.selected[Selected.SLOT])
         self.prepare_for_new_action(game)
         return True
@@ -366,7 +397,7 @@ class Actions:
         game.selected = None
 
     def handle_board(self, game, action):
-        print("handle_board")
+        # print("handle_board")
         name = game.selected[Selected.NAME]
         if game.state == State.PLACING:
             return self.wstawianie(game, action, name)
@@ -375,48 +406,32 @@ class Actions:
             function = self.instant_token_handlers.get(name, None)
             if(function is None):
                 return False
-            return function(game, Mode.USE, action)
+            return function(game, Mode.USE)
             
         elif(game.state == State.MOVING):
-            return self.ruch(game, Mode.USE, action)
+            return self.ruch(game, Mode.USE)
 
         else:
             return False
         
     def handle_hand(self, game, action):
-        # print("handle hand")
-        if game.state != State.NO_SELECTION:
-            return False
-        
         hand = game.hand[game.current_frakcja]
         nazwa = self.get_from_hand(hand, action[Action.Key.SLOT])
-        # print(nazwa)
-        # print(game.current_frakcja)
         type = self.get_zeton_type(nazwa, game.current_frakcja)
-        if(nazwa is None):
-            return False
 
-        # print(type)
         if(type == Token.Type.BOARD):
             game.state = State.PLACING
         
         if(type == Token.Type.INSTANT):
             game.state = State.SELECTED_HAND
         game.selected = {Selected.SLOT : action[Action.Key.SLOT], Selected.NAME : nazwa}
-        # self.hand_available_actions(game)
         return True
 
     def handle_bottom(self, game, action):
         name = action[Action.Key.BOTTOM]
-        if(not game.available_actions[UI.BOTTOM][name]):
-            return False
-
         function = self.bottom_handlers.get(name, None)
-        if(function is not None):
-            return function(game)
-        else:
-            return False
-
+        return function(game)
+        
     def handle_rotate(self, game, action):
         x = action[Action.Key.X]
         y = action[Action.Key.Y]
@@ -428,13 +443,12 @@ class Actions:
 
     def handler(self, game):
         action = game.action
+        if(action is None):
+            return None
+        
         print("USER ACTION:", action)
-        # if(action is None):
-        #     return None
+        if(not self.validate_action(game, action)):
+            return False
         
         function = self.action_handlers.get(action[Action.Key.TYPE], None)
-        if(function is not None):
-            return function(game, action)
-            
-        else:
-            return False
+        return function(game, action)

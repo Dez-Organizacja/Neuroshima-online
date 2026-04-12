@@ -23,12 +23,10 @@ class Game:
 
             # status = True
             # while(status):
-            status = self.actions.handler(self)
-            if(not status):
+            if(not self.actions.handler(self)):
                 self.actions.invalid_move()
 
-            status = self.actions.user_available_actions(self)
-            if(not status):
+            if(not self.actions.user_available_actions(self)):
                 print("INVALID STATE")
 
     def setup_pile(self, frakcja):
