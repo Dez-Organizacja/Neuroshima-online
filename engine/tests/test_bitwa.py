@@ -31,9 +31,9 @@ class Tests:
         # print(output)
 
         correct_output = []
-        correct_output.append([1, 5, {Token.FRACTION : "moloch", Token.NAME : "sztab", Token.ROTATION : 1, Token.DAMAGE : 0}])
-        correct_output.append([2, 4, {Token.FRACTION : "borgo", Token.NAME : "sztab", Token.ROTATION : 0, Token.DAMAGE : 2}])
-        correct_output.append([3, 3, {Token.FRACTION : "moloch", Token.NAME : "szturmowiec", Token.ROTATION : 0, Token.DAMAGE : 1}])
+        correct_output.append([1, 5, {Token.FRACTION : "moloch", Token.NAME : "sztab", Token.ROTATION : 1, Token.DAMAGE : 0, Token.WIRED : False}])
+        correct_output.append([2, 4, {Token.FRACTION : "borgo", Token.NAME : "sztab", Token.ROTATION : 0, Token.DAMAGE : 2, Token.WIRED : False}])
+        correct_output.append([3, 3, {Token.FRACTION : "moloch", Token.NAME : "szturmowiec", Token.ROTATION : 0, Token.DAMAGE : 1, Token.WIRED : False}])
         # print(correct_output)
         assert(Diff().compare(output, correct_output))
         # assert(output == correct_output)

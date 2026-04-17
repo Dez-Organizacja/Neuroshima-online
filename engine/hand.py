@@ -1,62 +1,63 @@
 from variable import *
-from token_manager import TokenManager
 
-class Hand(TokenManager):
-    MAX_HAND_SIZE = 3
-    CURRENT_MAX_HAND_SIZE_KEY = "current_max_hand_size"
-    def __init__(self):
-        self.current_max_hand_size = 1
+class Hand():
+    HAND_LIMITS = {
+        Turn.Type.FIRST : 1,
+        Turn.Type.SECOND : 2
+    }
+    DEFAULT_HAND_LIMIT = 3
+    ACTIVE_TOKEN_KEY = "active_token"
+    TOKENS_KEY = "tokens"
 
-    @property
-    def active_hand(self):
-        return self.hand.get(self.current_fraction, None)
+    def __init__(self, fraction):
+        self.tokens = []
+        self.fraction = fraction
+        self.active_token = None
 
     def add_token(self, token):
-        if(len(self.active_hand) >= self.current_max_hand_size):
-            return False
-        self.active_hand.append(token)
-        return True
+        self.tokens.append(token)
 
-    def discard_token(self, token):
-        if(token in self.active_hand):
-            self.active_hand.remove(token)
-            return True
-        return False
+    def discard_last(self):
+        self.tokens.pop(self.active_token)
+        self.active_token = None
 
-    def draw_tokens(self, pile):
-        while(len(self.active_hand) < self.current_max_hand_size and len(pile) > 0):
-            drawn_token = pile.pop()
+    def get_hand_limit(self, turn_type):
+        return self.HAND_LIMITS.get(turn_type, self.DEFAULT_HAND_LIMIT)
+
+    def draw_tokens(self, pile, turn_type):
+        if(turn_type == Turn.Type.HQ_PLACEMENT):
+            drawn_token = Token.Type.Board.HQ
+            pile.remove_token(drawn_token)
             self.add_token(drawn_token)
+            return
+
+        while(len(self.tokens) < self.get_hand_limit(turn_type) and not pile.is_empty()):
+            drawn_token = pile.draw_token()
+            self.tokens.append(drawn_token)
 
     def get_token(self, place):
-        if(place < 0 or place >= len(self.active_hand)):
+        if(place < 0 or place >= len(self.tokens)):
             return None
-        return self.active_hand[place]
+        self.active_token = place
+        return self.tokens[place]
 
-    def update_current_max_hand_size(self, turn_type):
-        if(turn_type == Turn.Type.HQ_PLACEMENT or turn_type == Turn.Type.FIRST):
-            self.current_max_hand_size = 1
-            return
-        
-        if(turn_type == Turn.Type.SECOND):
-            self.current_max_hand_size = 2
-            return
+    def get_active_token(self):
+        if(self.active_token is None):
+            return None
+        return self.get_token(self.active_token)
 
-        self.current_max_hand_size = Hand.MAX_HAND_SIZE
+    def from_dict(self, data):
+        self.tokens = []
+        self.active_token = data.get(self.ACTIVE_TOKEN_KEY, None)
+        for token in data.get(self.TOKENS_KEY, []):
+            self.add_token(token)
 
-    def from_dict(self, hand_data):
-        self.current_max_hand_size = hand_data.get(Hand.CURRENT_MAX_HAND_SIZE_KEY, Hand.MAX_HAND_SIZE)
-        for fraction in self.fractions:
-            self.hand[fraction] = hand_data.get(fraction, [])
-
-    def to_dict(self):
-        data = {Hand.CURRENT_MAX_HAND_SIZE_KEY : self.current_max_hand_size}
-        
-        for fraction in self.fractions:
-            data[fraction] = []
-            for token in self.hand[fraction]:
-                data[fraction].append(token)
+    def to_list(self):
+        tokens = []
+        for token in self.tokens:
+            tokens.append(token)
+        data = {self.ACTIVE_TOKEN_KEY : self.active_token, self.TOKENS_KEY : tokens}
         return data
     
     def print_hand(self):
-        print(self.to_dict())
+        print(self.to_list())

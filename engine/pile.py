@@ -1,44 +1,44 @@
-from token_manager import TokenManager
-from wszystkie_frakcje import wszystkie_frakcje
 from random import shuffle
+import wszystkie_frakcje
 from variable import *
 
-class Pile(TokenManager):
-    def __init__(self, fractions):
-        self.pile = {fraction : [] for fraction in fractions}
+class Pile():
+    def __init__(self, fraction):
+        self.tokens = []
+        self.fraction = fraction
 
-    def create_pile(self, fraction):
-        for nazwa in wszystkie_frakcje.frakcje.get(fraction, {}):
-            for _ in range(wszystkie_frakcje.frakcje[fraction][nazwa][Token.UNIT_COUNT]):
-                self.pile[fraction].append(nazwa)
-        shuffle(self.pile[fraction])
-
-    def create_piles(self):
-        for fraction in self.fractions:
-            self.create_pile(fraction)
-
-    def from_dict(self, pile_data):
-        for fraction in self.fractions:
-            self.pile[fraction] = pile_data.get(fraction, [])
-
-    def to_dict(self):
-        return self.pile
-    
-    @property
-    def active_pile(self):
-        return self.pile.get(self.current_fraction, None)
+    def add_token(self, name):
+        self.tokens.append(name)
 
     def remove_token(self, name):
-        if self.active_pile is None:
-            print("No active pile to remove token from.")
-            return False
-        self.active_pile.remove(name)
+        for i in range(len(self.tokens)):
+            if(name == self.tokens[i]):
+                self.tokens.pop(i)
+                return
+
+    def new_pile(self):
+        self.tokens = []
+        for name, data in wszystkie_frakcje.frakcje.get(self.fraction, {}).items():
+            for _ in range(data[Token.UNIT_COUNT]):
+                self.add_token(name)
+        shuffle(self.tokens)
+
+    def from_list(self, data):
+        self.tokens = []
+        for name in data:
+            self.add_token(name)
+
+    def to_list(self):
+        data = []
+        for token in self.tokens:
+            data.append(token)
+        return data
+    
+    def print_pile(self):
+        print(self.to_list())
 
     def draw_token(self):
-        if self.active_pile is None:
-            print("No active pile to draw token from.")
-            return None
-        if len(self.active_pile) == 0:
-            print("Active pile is empty, cannot draw token.")
-            return None
-        return self.active_pile.pop()
+        return self.tokens.pop()
+    
+    def is_empty(self):
+        return len(self.tokens) == 0
