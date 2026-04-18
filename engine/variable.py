@@ -90,6 +90,7 @@ class Variable:
 class Phase:
     HQ_PLACEMENT = "sztaby"
     GAME = "game"
+    START_GAME = "newgame"
 
 class Turn:
     BITWA = "bitwa"

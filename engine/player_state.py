@@ -9,10 +9,13 @@ class PlayerState:
         self.fraction = fraction
         self.hand = Hand(fraction)
         self.pile = Pile(fraction)
-
-    def from_dict(self, data):
-        self.hand.from_dict(data.get(self.HAND_KEY, []))
-        self.pile.from_list(data.get(self.PILE_KEY, []))
+    
+    @classmethod
+    def from_dict(cls, fraction, data):
+        obj = cls(fraction)
+        obj.hand.from_dict(data.get(cls.HAND_KEY, {}))
+        obj.pile.from_list(data.get(cls.PILE_KEY, []))
+        return obj
 
     def to_dict(self):
         data = {

@@ -5,6 +5,8 @@ from akcje import Actions
 from akcje import State
 from variable import *
 from player_state import PlayerState
+from game_state import GameState
+from random import shuffle
 
 class Game:
     bottoms = [Bottom.END_TURN, Bottom.DISCARD, Bottom.USE, Bottom.CANCEL, Bottom.YES, Bottom.NO]
@@ -14,16 +16,21 @@ class Game:
     }
 
     def __init__(self, data):
-        self.board = Board()
+        fractions = data['fractions']
+        if(isinstance(fractions, dict)):
+            data['fractions'] = [fractions["player1"], fractions["player2"]]
+        print("data:", data)
+        self.state = GameState.from_dict(data)
         self.actions = Actions(self)
-        self.faza = data["faza"]
+        # self.board = Board()
+        # self.faza = data["faza"]
         # self.frakcje = data["frakcje"]
-        self.available_actions = {}
-        self.players = {}
-        self.game_over = False
+        # self.available_actions = {}
+        # self.players = {}
+        # self.game_over = False
 
-        if(self.faza == "newgame"):
-            self.start_game(data["frakcje"]["player1"], data["frakcje"]["player2"])
+        if(self.state.phase == Phase.START_GAME):
+            self.start_game()
 
         else:
             self.import_game_state(data)
@@ -39,23 +46,34 @@ class Game:
                 print("INVALID STATE")
 
 
-    def start_game(self, frakcja1, frakcja2):
-        self.state = State.NO_SELECTION
-        self.selected = None
-        self.active_action = None
-        self.current_frakcja = None
-        self.frakcje = [frakcja1, frakcja2]
-        self.enemy = {self.frakcje[0] : self.frakcje[1], self.frakcje[1] : self.frakcje[0]}
-        # self.user_actions = []
-        self.next_turns = []
-        self.next_turns.append({Turn.FRACTION : frakcja1, Turn.TYPE : Turn.Type.HQ_PLACEMENT})
-        self.next_turns.append({Turn.FRACTION : frakcja2, Turn.TYPE : Turn.Type.HQ_PLACEMENT})
-        # self.hand = {frakcja1 : [], frakcja2 : []}
-        self.faza = "gra"
-        self.players = {fraction : PlayerState(fraction).new_game() for fraction in self.frakcje}
+    def start_game(self):
+        shuffle(self.state.fractions)
+        self.state.current_fraction = self.state.fractions[0]
+        for fraction in self.state.fractions:
+            player = PlayerState(fraction)
+            player.new_game()
+            self.state.players[fraction] = player
+            self.state.next_turns.append({Turn.FRACTION : fraction, Turn.TYPE : Turn.Type.HQ_PLACEMENT})
+        self.state.phase = Phase.GAME
+        # self.actions.poczatek_tury(self)
+        # self.actions.default_available_actions(self)
+
+
+
+        # self.state = State.NO_SELECTION
+        # self.selected = None
+        # self.active_action = None
+        # self.current_frakcja = None
+        # self.frakcje = [frakcja1, frakcja2]
+        # # self.enemy = {self.frakcje[0] : self.frakcje[1], self.frakcje[1] : self.frakcje[0]}
+        # # self.user_actions = []
+        # self.next_turns = []
+        # self.next_turns.append({Turn.FRACTION : frakcja1, Turn.TYPE : Turn.Type.HQ_PLACEMENT})
+        # self.next_turns.append({Turn.FRACTION : frakcja2, Turn.TYPE : Turn.Type.HQ_PLACEMENT})
+        # # self.hand = {frakcja1 : [], frakcja2 : []}
+        # self.faza = "gra"
+        # self.players = {fraction : PlayerState(fraction).new_game() for fraction in self.frakcje}
         # self.hand = Hand(self.frakcje)
-        self.actions.poczatek_tury(self)
-        self.actions.default_available_actions(self)
         # print("FAZA:", self.faza)
 
     def import_game_state(self, data):

@@ -3,6 +3,8 @@ from zeton import Zeton
 from variable import *
 
 class Board:
+    BOARD_KEY = "board"
+    AVAILABLE_HEXES_KEY = "available_hexes"
     length = 9
     width = 5
     roza = {
@@ -273,12 +275,27 @@ class Board:
                 if(pole is None):
                     self.board[x][y] = None
                 else:
-                    self.postaw_zeton(x, y, pole)
+                    self.postaw_zeton(x, y, pole) 
 
-    def board_to_json(self):
-        json_board = [[None] * self.length for i in range(self.width)]
+    def export_board(self):
+        data = [[None] * self.length for i in range(self.width)]
         for i in range(self.width):
             for j in range(self.length):
                 if self.board[i][j] is not None:
-                    json_board[i][j] = self.board[i][j].zeton_to_json()
-        return json_board
+                    data[i][j] = self.board[i][j].zeton_to_json()
+        return data
+    
+    @classmethod
+    def from_dict(cls, data):
+        obj = cls()
+        obj.import_board(data.get(cls.BOARD_KEY, obj.board))
+        obj.available_hexs = data.get(cls.AVAILABLE_HEXES_KEY, obj.available_hexs)
+        return obj
+
+
+    def to_dict(self):
+        data = {
+            self.BOARD_KEY : self.export_board(),
+            self.AVAILABLE_HEXES_KEY : self.available_hexs
+        }
+        return data

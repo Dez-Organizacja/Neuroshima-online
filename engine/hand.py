@@ -52,7 +52,7 @@ class Hand():
         for token in data.get(self.TOKENS_KEY, []):
             self.add_token(token)
 
-    def to_list(self):
+    def to_dict(self):
         tokens = []
         for token in self.tokens:
             tokens.append(token)
