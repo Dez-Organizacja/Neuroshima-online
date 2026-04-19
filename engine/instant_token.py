@@ -4,26 +4,27 @@ from variable import *
 
 class InstantToken:
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, name, fraction=None):
+        super().__init__(name, fraction)
+        # self.name = name
         self.use_handlers = {
-            Token.Type.Instant.BITWA : self.use_bitwa,
-            Token.Type.Instant.MOVE : self.use_move,
-            Token.Type.Instant.BOMB : self.use_bomb,
-            Token.Type.Instant.GRENADE : self.use_grenade,
-            Token.Type.Instant.SNIPER : self.use_sniper,
-            Token.Type.Instant.PUSH : self.use_push,
+            TokenType.Instant.BITWA : self.use_bitwa,
+            TokenType.Instant.MOVE : self.use_move,
+            TokenType.Instant.BOMB : self.use_bomb,
+            TokenType.Instant.GRENADE : self.use_grenade,
+            TokenType.Instant.SNIPER : self.use_sniper,
+            TokenType.Instant.PUSH : self.use_push,
         }
         self.available_actions_handlers = {
-            Token.Type.Instant.BITWA : self.available_actions_bitwa,
-            Token.Type.Instant.MOVE : self.available_actions_move,
-            Token.Type.Instant.BOMB : self.available_actions_bomb,
-            Token.Type.Instant.GRENADE : self.available_actions_grenade,
-            Token.Type.Instant.SNIPER : self.available_actions_sniper,
-            Token.Type.Instant.PUSH : self.available_actions_push,
+            TokenType.Instant.BITWA : self.available_actions_bitwa,
+            TokenType.Instant.MOVE : self.available_actions_move,
+            TokenType.Instant.BOMB : self.available_actions_bomb,
+            TokenType.Instant.GRENADE : self.available_actions_grenade,
+            TokenType.Instant.SNIPER : self.available_actions_sniper,
+            TokenType.Instant.PUSH : self.available_actions_push,
         }
         self.use = self.use_handlers.get(name, None)
-        self.available_actions = self.available_actions_handlers.get(name, None)
+        self.get_available_actions = self.available_actions_handlers.get(name, None)
 
     def resolve(self, game, mode):
         if(mode == Mode.AVAILABLE_ACTIONS):
@@ -50,7 +51,7 @@ class InstantToken:
         game.actions.update_available_actions(game, available)
 
     def use_bitwa(self, game):
-        game.actions.odrzuc(game.hand[game.current_frakcja], Token.Type.Instant.BITWA)
+        game.actions.odrzuc(game.hand[game.current_frakcja], InstantType.BITWA)
         game.actions.koniec_tury(game)
         game.next_turns.insert(0, {Turn.FRACTION : Turn.BITWA, Turn.TYPE : None})
         game.actions.poczatek_tury(game)
@@ -103,7 +104,7 @@ class InstantToken:
             game.selected[Selected.X] = nx
             game.selected[Selected.Y] = ny
             game.active_action = None
-            game.actions.odrzuc(game.hand[game.current_frakcja], Token.Type.Instant.MOVE)
+            game.actions.odrzuc(game.hand[game.current_frakcja], InstantType.MOVE)
             print(game.state)
             
         return True
@@ -131,7 +132,7 @@ class InstantToken:
             game.board.deal_damage(x, y, 1)
         
         game.board.zdejmij_trupy()
-        game.actions.odrzuc(game.hand[game.current_frakcja], Token.Type.Instant.BOMB)
+        game.actions.odrzuc(game.hand[game.current_frakcja], InstantType.BOMB)
         game.actions.prepare_for_new_action(game)
         return True
     
@@ -158,7 +159,7 @@ class InstantToken:
         y = action[Action.Key.Y]
         game.board.deal_damage(x, y, 100)
         game.board.zdejmij_trupy()
-        game.actions.odrzuc(game.hand[game.current_frakcja], Token.Type.Instant.GRENADE)
+        game.actions.odrzuc(game.hand[game.current_frakcja], InstantType.GRENADE)
         game.actions.prepare_for_new_action(game)
 
     #############################################################################
@@ -179,7 +180,7 @@ class InstantToken:
         y = action[Action.Key.Y]
         game.board.deal_damage(x, y, 1)
         game.board.zdejmij_trupy()
-        game.actions.odrzuc(game.hand[game.current_frakcja], Token.Type.Instant.SNIPER)
+        game.actions.odrzuc(game.hand[game.current_frakcja], InstantType.SNIPER)
         game.actions.prepare_for_new_action(game)
 
     #############################################################################
@@ -227,7 +228,7 @@ class InstantToken:
             name = game.board.get_name(x, y)
             game.state = State.SELECTED_PUSHER
             game.selected = {Selected.X : x, Selected.Y : y, Selected.NAME : name}
-            game.active_action = Token.Type.Instant.PUSH
+            game.active_action = InstantType.PUSH
             return True
 
         elif(game.state == State.SELECTED_PUSHER):
@@ -241,7 +242,7 @@ class InstantToken:
             game.selected[Selected.PUSHER_X] = px
             game.selected[Selected.PUSHER_Y] = py
             game.state = State.PUSHING
-            game.active_action = Token.Type.Instant.PUSH
+            game.active_action = InstantType.PUSH
             # print("enemy fraction:", game.enemy[game.current_frakcja])
             game.current_frakcja = game.enemy[game.current_frakcja]
             # print("state after selecting target:", game.current_frakcja, game.state)
@@ -254,6 +255,6 @@ class InstantToken:
             ny = action[Action.Key.Y]
             game.board.przenies(target_x, target_y, nx, ny)
             game.current_frakcja = game.enemy[game.current_frakcja]
-            game.actions.odrzuc(game.hand[game.current_frakcja], Token.Type.Instant.PUSH)
+            game.actions.odrzuc(game.hand[game.current_frakcja], InstantType.PUSH)
             game.actions.prepare_for_new_action(game)
             return True

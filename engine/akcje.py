@@ -43,109 +43,74 @@ class Actions:
     #############################################################################
     #   Board functions       
     #############################################################################
-    def wstawianie(self, game, action, nazwa):
-        print("Wstawianie:", action, nazwa)
-        board = game.board
-        frakcja = game.current_frakcja
+    def wstawianie(self, state, action, name):
+        # print("Wstawianie:", action, name)
+        fraction = state.current_fraction
         # hand = game.hand[frakcja]
-        if((nazwa is None) or (self.get_zeton_type(nazwa, frakcja) != Token.Type.BOARD)):
+        if((name is None) or (self.get_zeton_type(name, fraction) != Token.Type.BOARD)):
             return False
 
         x = action[Action.Key.X]
         y = action[Action.Key.Y]
         
-        game.hand.discard_token(nazwa)
+        state.current_player.hand.discard_token(name)
         # self.odrzuc(hand, game.selected[Selected.NAME])
-        game.board.postaw_zeton(x, y, Zeton.clear_token(nazwa, frakcja))
-        game.state = State.ROTATE
-        game.selected = {Selected.X : x, Selected.Y : y, Selected.NAME : nazwa}
-        game.active_action = None
+        state.board.postaw_zeton(x, y, Zeton.clear_token(name, fraction))
+        state.state = State.ROTATE
+        state.selected = {Selected.X : x, Selected.Y : y, Selected.NAME : name}
+        state.active_action = {}
         return True
     
     def kwestia_sieciarzy(self, board):
         Sieciarze().kwestia_sieciarzy(board)
 
     #############################################################################
-    #   Hand functions       
-    #############################################################################
-    # def resize_hand(self, hand):
-    #     while(len(hand) > 0 and hand[-1] is None):
-    #         hand.pop(-1)
-
-    # def fill_hand(self, hand):
-    #     while(len(hand) < self.MAX_HAND_SIZE):
-    #         hand.append(None)
-
-    # def dobierz(self, hand, pile, nazwa):
-    #     hand.append(nazwa)
-    #     pile.remove(nazwa)
-
-    # def odrzuc(self, hand, name):
-    #     hand.remove(name)
-
-    # def dociag(self, hand, pile):
-    #     while(len(hand) < self.MAX_HAND_SIZE and len(pile) > 0):
-    #             self.dobierz(hand, pile, pile[-1])
-
-    # def get_from_hand(self, hand, click):
-    #     if(not isinstance(click, int)):
-    #         return None
-
-    #     if(len(hand) <= click):
-    #         return None
-
-    #     return hand[click]
-
-    #############################################################################
     #   Turn functions       
     #############################################################################
-    def poczatek_tury(self, game):
-        if(game.current_frakcja != None):
+    def poczatek_tury(self, state):
+        if(state.current_frakcja != None):
             return False
-        frakcja = game.next_turns[0][Turn.FRACTION]
-        typ = game.next_turns[0][Turn.TYPE]
-        game.current_frakcja = frakcja
+        fraction = state.next_turns[0][Turn.FRACTION]
+        type = state.next_turns[0][Turn.TYPE]
+        state.current_frakcja = fraction
         
-        if(frakcja == Turn.BITWA):
-            Battle(game)
+        if(fraction == Turn.BITWA):
+            Battle(state)
             return True
 
-        game.hand.new_turn(frakcja, game.pile[frakcja], typ)
-        if(typ == Turn.Type.HQ_PLACEMENT):
-            game.faza = Phase.HQ_PLACEMENT
-            game.hand.draw_token(game.pile[frakcja], "sztab")
+        player = state.current_player
+        if(type == Turn.Type.HQ_PLACEMENT):
+            state.phase = Phase.HQ_PLACEMENT
             # self.dobierz(game.hand[frakcja], game.pile[frakcja], "sztab")
 
         else:
-            game.faza = Phase.GAME
-            game.hand.draw_tokens(game.pile[frakcja])
+            state.phase = Phase.GAME
+        
+        player.draw_tokens(type)
 
-        if(len(game.pile[frakcja]) == 0):
-            game.next_turns.append({Turn.FRACTION : Turn.BITWA, Turn.TYPE : Turn.Type.LAST})
+        if(player.pile.is_empty()):
+            state.next_turns.append({Turn.FRACTION : Turn.BITWA, Turn.TYPE : Turn.Type.LAST})
 
-        self.prepare_for_new_action(game)
+        self.prepare_for_new_action(state)
         return True
 
-    def koniec_tury(self, game, check=False):
-        print("check:", check)
-        print("next turns:", game.next_turns)
-        next_turn = game.next_turns[0]
+    def koniec_tury(self, state, check=False):
+        # print("check:", check)
+        # print("next turns:", game.next_turns)
+        next_turn = state.next_turns[0]
         frakcja = next_turn[Turn.FRACTION]
         typ = next_turn[Turn.TYPE]
+        player = state.current_player
 
-        if((typ == Turn.Type.HQ_PLACEMENT) and (len(game.hand[frakcja]) > 0)):
-            return False
-        
-        
-        if(frakcja != Turn.BITWA and len(game.hand[frakcja]) == self.MAX_HAND_SIZE):
+        if(player.hand.is_full()):
             return False
         
         if(check):
             return True
         
-        game.next_turns.pop(0)
-        game.next_turns.append({Turn.FRACTION : frakcja, Turn.TYPE : Turn.Type.STANDARD})
-        game.current_frakcja = None
+        state.next_turns.pop(0)
+        state.next_turns.append({Turn.FRACTION : frakcja, Turn.TYPE : Turn.Type.STANDARD})
+        state.current_fraction = None
         return True
 
     #############################################################################
@@ -163,30 +128,34 @@ class Actions:
     #   Validation functions       
     #############################################################################
 
-    def validate_board_action(self, game, action):
+    def validate_board_action(self, state, action):
         x = action.get(Action.Key.X, None)
         y = action.get(Action.Key.Y, None)
         if(not isinstance(x, int) or not isinstance(y, int)):
             return False
-        if(not game.board.on_board(x, y)):
+        if(not state.board.on_board(x, y)):
             return False
-        return game.available_actions[UI.BOARD][x][y]
+        return True
+        # return state.available_actions[UI.BOARD][x][y]
 
-    def validate_hand_action(self, game, action):
+    def validate_hand_action(self, state, action):
         slot = action.get(Action.Key.SLOT, None)
         if(not isinstance(slot, int)):
             return False
-        if(slot >= len(game.hand[game.current_frakcja])):
+        
+        if(state.current_player.hand.get_token(slot) is None):
             return False
-        return game.available_actions[UI.HAND][game.current_frakcja][slot]
+        return True
+        # return game.available_actions[UI.HAND][game.current_frakcja][slot]
 
     def validate_bottom_action(self, game, action):
         name = action.get(Action.Key.BOTTOM, None)
         if(name not in game.bottoms):
             return False
-        return game.available_actions[UI.BOTTOM][name]
+        return Turn
+        # return game.available_actions[UI.BOTTOM][name]
 
-    def validate_rotate_action(self, game, action):
+    def validate_rotate_action(self, state, action):
         rotation = action.get(Action.Key.ROTATION, None)
         if(not isinstance(rotation, int)):
             return False
@@ -201,78 +170,8 @@ class Actions:
             return False
         return function(game, action)
 
-    #############################################################################
-    #   user_available_actions functions       
-    #############################################################################
-    def default_available_actions(self, game):
-        available = deepcopy(game.available_structure)
-        if(self.koniec_tury(game, check=True)):
-            available[UI.BOTTOM][Bottom.END_TURN] = True
-        
-        game.board.update_available_hexs([], [], None)
-        available[UI.HAND] = True
-
-        self.update_available_actions(game, available)
-
-    def rotate_available_actions(self, game):
-        x = game.selected[Selected.X]
-        y = game.selected[Selected.Y]
-        available = deepcopy(game.available_structure)
-        game.board.update_available_hexs([game.current_frakcja], [(x, y)], None)
-        self.update_available_actions(game, available)
-
-    def placing_available_actions(self, game):
-        available = deepcopy(game.available_structure)
-        game.board.update_available_hexs([None], game.board.ALL_HEXES, None)
-
-        available[UI.BOTTOM][Bottom.CANCEL] = True
-        if(game.faza != Phase.HQ_PLACEMENT):
-            available[UI.BOTTOM][Bottom.DISCARD] = True
-        
-        self.update_available_actions(game, available)
-
-    def hand_available_actions(self, game):
-        name = game.selected[Selected.NAME]
-        InstantToken(game.active_action).resolve(game, Mode.AVAILABLE_ACTIONS)
-        return True
-
-    def instant_taken_available_actions(self, game):
-        name = game.active_action
-        InstantToken(name).resolve(game, Mode.AVAILABLE_ACTIONS)
-
-    def update_hand_available_actions(self, current_frakcja, hand, available_hand):
-        actions = {key : [False for i in range(self.MAX_HAND_SIZE)] for key in hand.keys()}
-        if(not available_hand):
-            return actions
-        
-        for i in range(self.MAX_HAND_SIZE):
-            if(self.get_from_hand(hand[current_frakcja], i) is not None):
-                actions[current_frakcja][i] = True
-
-        return actions
-
-    def update_available_actions(self, game, available_actions):
-        # print("AVAILABLE ACTIONS:", available_actions)
-        game.available_actions = {}
-        game.available_actions[UI.HAND] = self.update_hand_available_actions(game.current_frakcja, game.hand, available_actions[UI.HAND])
-        game.available_actions[UI.BOARD] = game.board.available_hexs
-        game.available_actions[UI.BOTTOM] = available_actions[UI.BOTTOM]
-
-    def user_available_actions(self, game):
-        print("Updating available actions...")
-        print("Current state:", game.state)
-        if(game.active_action is not None):
-            print("active action:", game.active_action)
-            self.instant_taken_available_actions(game)
-            return True
-
-        function = self.state_handlers.get(game.state, None)
-        if(function is None):
-            return False
-        function(game)
-        return True
-
-
+    
+   
     #############################################################################
     #   Bottoms functions      
     #############################################################################

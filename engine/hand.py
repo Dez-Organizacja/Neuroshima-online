@@ -3,6 +3,7 @@ from variable import *
 class Hand():
     HAND_LIMITS = {
         Turn.Type.FIRST : 1,
+        Turn.Type.HQ_PLACEMENT : 1,
         Turn.Type.SECOND : 2
     }
     DEFAULT_HAND_LIMIT = 3
@@ -13,6 +14,12 @@ class Hand():
         self.tokens = []
         self.fraction = fraction
         self.active_token = None
+    
+    def get_token(self, place):
+        if(place < 0 or place >= len(self.tokens)):
+            return None
+        self.active_token = place
+        return self.tokens[place]
 
     def add_token(self, token):
         self.tokens.append(token)
@@ -20,6 +27,12 @@ class Hand():
     def discard_last(self):
         self.tokens.pop(self.active_token)
         self.active_token = None
+
+    def discard_token(self, name):
+        token = self.get_active_token()
+        if(name != token):
+            return False
+        self.discard_last()
 
     def get_hand_limit(self, turn_type):
         return self.HAND_LIMITS.get(turn_type, self.DEFAULT_HAND_LIMIT)
@@ -31,20 +44,21 @@ class Hand():
             self.add_token(drawn_token)
             return
 
-        while(len(self.tokens) < self.get_hand_limit(turn_type) and not pile.is_empty()):
+        while(not self.is_full() and not pile.is_empty()):
             drawn_token = pile.draw_token()
             self.tokens.append(drawn_token)
-
-    def get_token(self, place):
-        if(place < 0 or place >= len(self.tokens)):
-            return None
-        self.active_token = place
-        return self.tokens[place]
 
     def get_active_token(self):
         if(self.active_token is None):
             return None
         return self.get_token(self.active_token)
+
+    @property
+    def size(self):
+        return len(self.tokens)
+
+    def is_full(self):
+        return len(self.tokens) == self.get_hand_limit()
 
     def from_dict(self, data):
         self.tokens = []

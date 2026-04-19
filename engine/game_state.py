@@ -5,7 +5,7 @@ from player_state import PlayerState
 from plansza import Board
 
 def convert_value(value, target_type, key = None):
-    print(f"convert value: {value} to {target_type}")
+    # print(f"convert value: {value} to {target_type}")
     origin = get_origin(target_type) # typ tego co chcemy dostać
 
     if hasattr(target_type, "from_dict") and isinstance(value, dict):
@@ -22,6 +22,50 @@ def convert_value(value, target_type, key = None):
     
     return value
 
+def auto_to_dict(obj):
+    if(hasattr(obj, "to_dict")):
+        return obj.to_dict()
+    if(hasattr(obj, "to_list")):
+        return obj.to_list()
+    if(isinstance(obj, dict)):
+        return{
+            k : auto_to_dict(v)
+            for k, v in obj.items()
+        }
+    if(isinstance(obj, list)):
+        return [auto_to_dict(v) for v in obj]
+    
+    return obj
+
+def print_obj(obj, deepth):
+    base_s = "\n" + "   " * deepth
+    pre_s = "\n" + "   " * (deepth - 1)
+    # print("PRINTING: ", obj, "deepth: ", deepth)
+    if(isinstance(obj, dict)):
+        if(deepth > 0):
+            print(pre_s + "--->", end='')
+        for k, v in obj.items():
+            print(base_s, k, end='', sep='')
+            print_obj(v, deepth + 1)
+        
+        if(deepth > 0):
+            print(pre_s + "#####",end='')
+        return True
+    if(isinstance(obj, list)):
+        if(deepth > 0):
+            print(pre_s + "||||", end='')
+        for v in obj:
+            status = print_obj(v, deepth + 1)
+            print(',', end=('\n' if status else ''))
+        
+        if(deepth > 0):
+            print(pre_s + "////",end='')
+        
+        return True
+
+    
+    print(" ", obj, end='')
+    return False
 
 @dataclass
 class GameState:
@@ -49,3 +93,17 @@ class GameState:
                 raise ValueError(f"Missing required field: {f.name}")
             
         return cls(**values)
+    
+    def to_dict(self):
+        return {
+            f.name : auto_to_dict(getattr(self, f.name))
+            for f in fields(self)
+        }
+
+    def print_game_state(self):
+        print_obj(self.to_dict(), 0)
+
+
+    @property
+    def current_player(self):
+        return self.players[self.current_fraction]

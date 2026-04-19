@@ -5,7 +5,7 @@ from variable import *
 
 class Board:
     BOARD_KEY = "board"
-    AVAILABLE_HEXES_KEY = "available_hexes"
+    # AVAILABLE_HEXES_KEY = "available_hexes"
     length = 9
     width = 5
     roza = {
@@ -20,7 +20,7 @@ class Board:
 
     def __init__(self):
         self.board = [[None] * self.length for i in range(self.width)]
-        self.available_hexs = [[False] * self.length for i in range(self.width)]
+        # self.available_hexs = [[False] * self.length for i in range(self.width)]
         self.ALL_HEXES = []
         for x in range(self.width):
             for y in range(self.length):
@@ -151,24 +151,12 @@ class Board:
                 return True
         return False
 
-    def update_available_hexs(self, types, hexes, function):
+    def boost_all(self):
         for x in range(self.width):
             for y in range(self.length):
-                type = self.get_type(x, y)
-                if(types != Variable.ALL and type not in types):
-                    self.available_hexs[x][y] = False
+                if(self.is_empty(x, y)):
                     continue
-                
-                if((x, y) not in hexes):
-                    self.available_hexs[x][y] = False
-                    continue
-
-                if(function is None):
-                    self.available_hexs[x][y] = True
-                    continue
-                
-                else:
-                    self.available_hexs[x][y] = function(x, y)
+                self.board[x][y].boost(self)
 
     def check_hex(self, x, y):
         if(self.board[x][y].is_empty()):

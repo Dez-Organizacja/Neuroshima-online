@@ -7,10 +7,7 @@ class State:
     SELECTED_PUSHER = "selected_pusher"
     PUSHING = "pushing"
 
-class UI:
-    BOTTOM = "bottom"
-    HAND = "hand"
-    BOARD = "board"
+
 
 class Selected:
     SLOT = "slot"
@@ -33,7 +30,7 @@ class Boost:
     NEW_INITIATIVE = "new_initiative"
     HEAL = "heal"
 
-class Token:
+class TokenKey:
     TYPE = "type"
     X = "x"
     Y = "y"
@@ -43,36 +40,31 @@ class Token:
     FRACTION = "frakcja"
     WIRED = "zasieciowany"
     UNIT_COUNT = "liczbajednostek"
-    class Type:
-        BOARD = "plansza"
-        INSTANT = "natychmiastowy"
-        class Instant:
+
+class TokenType:
+    BOARD = "plansza"
+    INSTANT = "natychmiastowy"
+        
+class InstantType:
             BITWA = "bitwa"
             MOVE = "ruch"
             BOMB = "bomba"
             GRENADE = "granat"
             SNIPER = "snajper"
             PUSH = "odepchniecie"
-        class Board:
-            HQ = "sztab"
 
-    class Stats:
-        ARMOR = "pancerz"
-        WIRE = "siec"
-        HP = "hp"
-        ATTACKS = "ataki"
-        BOOSTS = "modul"
-        BOOST_TARGET = "boost_target"
-        INITIATIVE = "inicjatywa"
+class BoardType:
+    HQ = "sztab"
 
+class TokenStats:
+    ARMOR = "pancerz"
+    WIRE = "siec"
+    HP = "hp"
+    ATTACKS = "ataki"
+    BOOSTS = "modul"
+    BOOST_TARGET = "boost_target"
+    INITIATIVE = "inicjatywa"
 
-class Bottom:
-    END_TURN = "end_turn"
-    DISCARD = "discard"
-    USE = "use"
-    CANCEL = "cancel"
-    YES = "yes"
-    NO = "no"
 
 class Action:
 

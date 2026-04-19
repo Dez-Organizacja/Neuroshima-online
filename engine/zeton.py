@@ -4,32 +4,40 @@ from variable import *
 from copy import deepcopy
 
 class Zeton:
-    default_token = {
-        Token.NAME : None,
-        Token.FRACTION : None,
-        Token.ROTATION : 0,
-        Token.DAMAGE : 0,
+    DEFAULT = {
+        TokenKey.NAME : "default",
+        TokenKey.FRACTION : "neutral",
+        TokenKey.ROTATION : 0,
+        TokenKey.DAMAGE : 0,
+        TokenKey.X : -1,
+        TokenKey.Y : -1
         # Token.WIRED : False
     }
 
     @classmethod
     def clear_token(cls, name, fraction):
         token = deepcopy(cls.default_token)
-        token[Token.NAME] = name
-        token[Token.FRACTION] = fraction
+        token[TokenKey.NAME] = name
+        token[TokenKey.FRACTION] = fraction
         return token
 
-    def __init__(self,  x, y, data):
+    def __init__(self, name, fraction, data):
+        merged = {**self.DEFAULT, **data}
         # print(data)
         # print("token.name:", Token.NAME)
-        self.frakcja = data[Token.FRACTION]
-        self.nazwa = data[Token.NAME]
-        self.rotacja = data[Token.ROTATION]
-        self.rany = data[Token.DAMAGE]
-        self.x = x
-        self.y = y
-        self.wlasciwosci_pierwotne = wszystkie_frakcje.frakcje.get(self.frakcja, {}).get(self.nazwa, {})
+        # self.frakcja = data[Token.FRACTION]
+        # self.nazwa = data[Token.NAME]
+        super().__init__(name, fraction)
+        self.rotacja = merged[TokenKey.ROTATION]
+        self.rany = merged[TokenKey.DAMAGE]
+        self.x = merged[TokenKey.X]
+        self.y = merged[TokenKey.Y]
+        self.wlasciwosci_pierwotne = wszystkie_frakcje.frakcje.get(
+            self.frakcja, {}
+        ).get(self.nazwa, {})
+        
         self.wlasciwosci = deepcopy(self.wlasciwosci_pierwotne)
+        
         self.zasiecowany = False
         self.boost_to_attack = {
             Boost.MELEE: Attack.MELEE,
