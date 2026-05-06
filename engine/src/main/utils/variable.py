@@ -88,21 +88,6 @@ class Token:
         INITIATIVE = TokenStats.INITIATIVE
 
 
-class Action:
-    class Key(Enum):
-        TYPE = "type"
-        X = "x"
-        Y = "y"
-        POS = "pos"
-        SLOT = "slot"
-        BOTTOM = "bottom"
-        ROTATION = "rotation"
-
-    class Type(Enum):
-        BOARD = "board"
-        HAND = "hand"
-        ROTATE = "rotate"
-        BOTTOM = "bottom"
 
 class Variable(Enum):
     ALL = "all"

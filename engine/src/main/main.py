@@ -1,10 +1,11 @@
 from main.state.game_state import GameState
 from main.state.contex import ActionContext
+from main.state.user_action import UserActionFactory
 
-from main.rules.game_rules import GameRules
+from main.rules.game import GameRules
 from main.rules.validator import FormatValidator
 
-from main.engine.game_engine import GameEngine
+from main.engine.engine import GameEngine
 from main.engine.resolver import Resolver
 
 from main.systems.passive_system import PassiveSystem
@@ -14,7 +15,7 @@ from main.actions.available_actions.available_actions import AvailableActions
 from main.utils.variable import *
 
 class Game:
-    ACTION_KEY = "user_action"
+    USER_ACTION_KEY = "user_action"
     AVAILABLE_ACTIONS_KEY = "available_actions"
     def __init__(self, data):
         fractions = data['fractions']
@@ -29,7 +30,9 @@ class Game:
             self.available_actions = self.engine.start_game(self.ctx)
 
         else:
-            self.user_action = data.get(self.ACTION_KEY, None)
+            self.user_action = UserActionFactory.create(
+                data.get(self.USER_ACTION_KEY, {})
+            )
             self.available_actions = self.engine.handle_action(
                 ctx = self.ctx, 
                 action = self.user_action

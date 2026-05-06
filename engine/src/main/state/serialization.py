@@ -1,4 +1,5 @@
 from typing import get_origin, get_args
+from dataclasses import fields, MISSING
 from collections import deque
 from main.state.player_state import PlayerState
 
@@ -25,6 +26,20 @@ def convert_value(value, target_type, key = None):
         return tuple(value)
 
     return value
+    
+def from_dict_dataclass(cls, data: dict):
+    values = {}
+
+    for f in fields(cls):
+        if f.name in data:
+            value = data[f.name]
+            values[f.name] = convert_value(value, f.type)
+        else:
+            if f.default is not MISSING or f.default_factory is not MISSING:
+                continue
+            raise ValueError(f"Missing required field: {f.name}")
+
+    return cls(**values)
 
 def auto_to_dict(obj):
     if(hasattr(obj, "to_dict")):
@@ -40,3 +55,9 @@ def auto_to_dict(obj):
         return [auto_to_dict(v) for v in obj]
     
     return obj
+
+def to_dict_dataclass(obj):
+    return{
+        f.name : auto_to_dict(getattr(obj, f.value))
+        for f in fields(obj)
+    }

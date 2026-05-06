@@ -1,4 +1,4 @@
-from dataclasses import dataclass, fields, field, MISSING
+from dataclasses import dataclass, field
 from main.utils.variable import *
 from main.state.player_state import PlayerState
 from main.board.board import Board
@@ -6,7 +6,7 @@ from main.state.selection import Selected
 from main.effects.flow_effects import FlowEvent
 from collections import deque
 from main.workflows.data import WorkflowData
-from main.state.serialization import convert_value, auto_to_dict
+from main.state.serialization import from_dict_dataclass, to_dict_dataclass
 
 def print_obj(obj, deepth):
     base_s = "\n" + "   " * deepth
@@ -42,7 +42,7 @@ def print_obj(obj, deepth):
 
 @dataclass
 class GameState:
-    phase : str
+    phase               : str
     fractions           : list[str]
     interaction_state   : str = State.NO_SELECTION
     selected            : Selected = field(default_factory=Selected)
@@ -56,25 +56,11 @@ class GameState:
 
     @classmethod
     def from_dict(cls, data):
-        values = {}
-        for f in fields(cls):
-            if(f.name in data):
-                value = data.get(f.name)
-                values[f.name] = convert_value(value, f.type)
-
-            else:
-                if f.default is not MISSING or f.default_factory is not MISSING:
-                    continue
-                raise ValueError(f"Missing required field: {f.name}")
-            
-        return cls(**values)
+        return from_dict_dataclass(cls, data)
     
     def to_dict(self):
-        return {
-            f.name : auto_to_dict(getattr(self, f.name))
-            for f in fields(self)
-        }
-
+        return to_dict_dataclass(self)
+    
     def print_game_state(self):
         print_obj(self.to_dict(), 0)
 

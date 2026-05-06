@@ -1,6 +1,7 @@
 import main.rules.predicates as pr
 from main.state.contex import ActionContext
 from main.board.board_query import BoardQuery
+from main.utils.variable import Bottom
 
 class MoveRules:
     @staticmethod
@@ -16,6 +17,7 @@ class MoveRules:
             pr.NOT(pr.is_wired_at)
         ]).apply(ctx)
         return [p for p in candiates if self.can_move(ctx, p)]
+
 
     def get_available_destinations(self, ctx : ActionContext, unit_pos):
         result = BoardQuery([
