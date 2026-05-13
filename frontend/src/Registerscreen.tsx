@@ -10,19 +10,18 @@ type RegisterScreenProps = {
 
 export default function RegisterScreen({onSwitchToLogin} : RegisterScreenProps){
     let url = "http://localhost:8080/api/auth/register";
-    const [name, setName] = useState("");
+    const [username, setName] = useState("");
     const [password, setPassword] = useState("");
+    async function HandleRegister(){
+        const data = await Register(username, password, url);
+    }
     return(
         <div>
-            {/* <form>
-                <input type="text">Login</input>
-
-            </form> */}
             <DisplayText zawartosc="Username"></DisplayText>
-            <TextInput value={name} onChange={setName} placeholder="Enter Username" ></TextInput>
+            <TextInput value={username} onChange={setName} placeholder="Enter Username" ></TextInput>
             <DisplayText zawartosc="Password"></DisplayText>
             <TextInput value={password} onChange={setPassword} placeholder="Enter Password"></TextInput>
-            <Button onClick={() => Register(name, password, url)} zawartosc="Register"></Button>
+            <Button onClick={() => Register(username, password, url)} zawartosc="Register"></Button>
             <DisplayText zawartosc="Already have an account?"></DisplayText>
             <Button onClick={onSwitchToLogin} zawartosc="Login"></Button>
         </div>

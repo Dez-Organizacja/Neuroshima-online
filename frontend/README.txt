@@ -1,7 +1,7 @@
 installujesz nodejs 20+
 potem npm install
 jak masz errory to zapraszam do chatta
-odpalasz ./gradlw w webappie(dawida katalog)
+odpalasz ./gradlw bootRun w webappie(dawida katalog)
 jak masz errory to zapraszam do chatta v2
 we frontendzie(terminal) piszesz npm run dev
 jak masz errory to zapraszam do chatta v3
