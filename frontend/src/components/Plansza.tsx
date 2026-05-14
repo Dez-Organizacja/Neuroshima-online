@@ -1,1 +1,0 @@
-import Pole from "./Pole";
