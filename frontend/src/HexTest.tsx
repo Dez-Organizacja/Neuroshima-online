@@ -16,8 +16,17 @@ export default function HexTest(){
 
     const Size = height / 10;
 
-
     const Items = [];
+
+    // nowe koordynaty //
+    for(let y = 1; y <= 5; y++){
+        let xs = 1 + Math.abs(3 - y);
+        let xf = 5 + Math.abs(3 - y) + 2 * Math.abs(2 - Math.abs(3 - y));
+        // console.log(y + " " + xs + "-" + xf);
+        for(let x = 1 + Math.abs(3 - y); x <= 5 + Math.abs(3 - y) + 2 * Math.abs(2 - Math.abs(3 - y)); x+=2){
+        }
+    }
+    // =============== //
 
     for(let q = -2; q <= 2; q++){
         const rMin = Math.max(-2, -q - 2);
