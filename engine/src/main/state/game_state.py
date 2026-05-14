@@ -5,7 +5,7 @@ from main.board.board import Board
 from main.state.selection import Selected
 from main.effects.flow_effects import FlowEvent
 from collections import deque
-from main.workflows.data import WorkflowData
+from main.workflows.data import WorkflowData, WorkflowInstance
 from main.state.serialization import from_dict_dataclass, to_dict_dataclass
 
 def print_obj(obj, deepth):
@@ -53,6 +53,7 @@ class GameState:
     board               : Board = field(default_factory=Board)
     flow_queue          : deque[FlowEvent] = field(default_factory=deque)
     workflow_data       : WorkflowData = field(default_factory=WorkflowData)
+    workflow_stack      : deque[WorkflowInstance] = field(default_factory=deque)
 
     @classmethod
     def from_dict(cls, data):

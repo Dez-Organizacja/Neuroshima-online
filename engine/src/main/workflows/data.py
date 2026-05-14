@@ -1,16 +1,10 @@
 from dataclasses import dataclass
 from main.state.serialization import from_dict_dataclass, to_dict_dataclass
 from enum import Enum
+from main.state.user_action import Type as ActionType
+from main.tokens.data import Ability
 
 Hex = tuple[int, int]
-
-class WorkflowSource(Enum):
-    HAND = "hand"
-    BOARD = "board"
-
-    @classmethod
-    def from_dict(cls, value):
-        return cls(value)
     
 class WorkflowName(Enum):
     MOVE = "move"
@@ -20,16 +14,26 @@ class WorkflowName(Enum):
     GRENADE = "grenade"
     SNIPER = "sniper"
     BATTLE = "battle"
-    CHOOSING_ACTION = "choosing_action"
+    TURN = "turn"
+    BOARD = "board"
+    HAND = "hand"
 
-
+ABILITY_WORKFLOW_REGISTRY = {
+    Ability.MOVE : WorkflowName.MOVE,
+    Ability.BOMB : WorkflowName.BOMB,
+    Ability.GRENADE : WorkflowName.GRENADE,
+    Ability.SNIPER : WorkflowName.SNIPER,
+    Ability.PUSH : WorkflowName.PUSH,
+    Ability.BITWA : WorkflowName.BITWA,
+}
+    
 @dataclass
 class WorkflowData:
-    unit_pos : Hex | None = None
-    target_pos : Hex | None = None
+    type        : ActionType | None = None
+    slot        : int | None = None
+    unit_pos    : Hex | None = None
+    target_pos  : Hex | None = None
     destination : Hex | None = None
-    source : WorkflowSource | None = None
-    current_step_index : int = 0
 
     @classmethod
     def from_dict(cls, data):
@@ -46,3 +50,14 @@ class WorkflowData:
     
     def set_destination(self, value):
         self.destination = value
+
+    def set_slot(self, value):
+        self.slot = value
+
+    def set_type(self, value):
+        self.type = value
+
+@dataclass
+class WorkflowInstance:
+    name : WorkflowName
+    current_step_index : int = 0

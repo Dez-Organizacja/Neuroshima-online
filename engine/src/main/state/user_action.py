@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from abc import ABC
 from enum import Enum
-from main.state.serialization import from_dict_dataclass
 
 class Type(Enum):
     BOARD = "board"

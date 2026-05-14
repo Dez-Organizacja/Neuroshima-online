@@ -57,15 +57,15 @@ class SwapPlayerEvent(FlowEvent):
     def apply(self, ctx : ActionContext):
         ctx.state.current_fraction = ctx.rules.get_enemy(ctx, ctx.fraction)
 
-class StartWorkflow(FlowEvent):
-    def __init__(self, 
-                 name   : WorkflowName,
-                 source : WorkflowSource | None = None
-        ):
-        super().__init__()
-        self.source = source
-        self.name = name
+# class StartWorkflow(FlowEvent):
+#     def __init__(self, 
+#                  name   : WorkflowName,
+#                  source : WorkflowSource | None = None
+#         ):
+#         super().__init__()
+#         self.source = source
+#         self.name = name
     
-    def apply(self, ctx : ActionContext):
-        ctx.workflow = WorkflowFactory.create(self.name)
-        ctx.workflow.start(ctx, self.source)
+#     def apply(self, ctx : ActionContext):
+#         ctx.workflow = WorkflowFactory.create(self.name)
+#         ctx.workflow.start(ctx, self.source)

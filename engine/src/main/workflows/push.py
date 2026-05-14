@@ -1,13 +1,11 @@
 from main.workflows.base import Workflow
-from main.rules.push import PushRules
+from main.rules.workflow.push import PushRules
 from main.utils.variable import Bottom
-from main.steps.config import StepConfig
-from main.state.contex import ActionContext
+from main.steps.config import InputStepConfig, ResolveStepConfig
+from main.steps.resolve_functions import resolve_push
 from main.state.user_action import BoardAction
-from main.workflows.data import WorkflowData, WorkflowSource, WorkflowName
-from main.actions.exeute_actions.action_result import ActionResult
-from main.effects.board_effects import DiscardActiveTokenEffect, MoveEffect
-from main.effects.flow_effects import StartWorkflow
+from main.workflows.data import WorkflowData, WorkflowName
+
 
 class PushWorkflow(Workflow):
     def __init__(self):
@@ -15,26 +13,32 @@ class PushWorkflow(Workflow):
 
 
     def build_source_step(self):
-        return StepConfig[BoardAction](
+        return InputStepConfig[BoardAction](
             getter=BoardAction.get_pos,
-            setter=WorkflowData.unit_pos,
-            allowed_bottoms=[Bottom.CANCEL, Bottom.DISCARD],
-            get_positions=self.get_sources
+            setter=WorkflowData.set_unit_pos,
+            get_bottoms=self.rules.get_available_bottoms,
+            get_positions=self.rules.get_sources
         )
 
     def build_target_step(self):
-        return StepConfig[BoardAction](
+        return InputStepConfig[BoardAction](
             getter=BoardAction.get_pos,
-            setter=WorkflowData.target_pos,
-            allowed_bottoms=[Bottom.CANCEL],
-            get_positions=self.get_targets
+            setter=WorkflowData.set_target_pos,
+            get_bottoms=self.rules.get_available_bottoms,
+            get_positions=self.rules.get_targets
         )
 
     def build_destination_step(self):
-        return StepConfig[BoardAction](
+        return InputStepConfig[BoardAction](
             getter=BoardAction.get_pos,
-            setter=WorkflowData.destination,
-            get_positions=self.get_destinations
+            setter=WorkflowData.set_destination,
+            get_positions=self.rules.get_destinations
+        )
+
+    def build_end_step(self):
+        return ResolveStepConfig(
+            resolve_func=resolve_push,
+            wf_finished=True
         )
 
     def build_steps(self):
@@ -42,18 +46,8 @@ class PushWorkflow(Workflow):
             self.build_source_step(),
             self.build_target_step(),
             self.build_destination_step(),
+            self.build_end_step()
         ]
     
-    def finish(self, ctx : ActionContext):
-        push = MoveEffect(
-            from_pos=ctx.workflow_data.target_pos,
-            to_pos=ctx.workflow_data.destination
-        )
-        result = ActionResult(
-            effects=[push],
-            flow_events=[StartWorkflow(WorkflowName.CHOOSING_ACTION)]
-        )
-        if ctx.workflow_data.source == WorkflowSource.HAND:
-            result.effects.append(DiscardActiveTokenEffect())
-        
-        return result
+    def get_first_step_index(cls, source : WorkflowName):
+        return 1 if source == WorkflowName.BOARD else 0

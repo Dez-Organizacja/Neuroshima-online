@@ -1,5 +1,5 @@
 
-class BattleRules:
+# class BattleRules:
     # def get_av
 
     # def available_actions_bitwa(self, ctx):

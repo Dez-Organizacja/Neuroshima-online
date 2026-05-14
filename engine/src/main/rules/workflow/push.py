@@ -1,8 +1,11 @@
 import main.rules.predicates as pr
 from main.state.contex import ActionContext
 from main.board.board_query import BoardQuery
+from main.utils.variable import Bottom
+from main.rules.workflow.base import WorkflowRules
 
-class PushRules:
+
+class PushRules(WorkflowRules):
 
     @staticmethod
     def can_be_pushed(ctx : ActionContext, pusher_pos, target_pos):
@@ -25,14 +28,16 @@ class PushRules:
                 return True
         return False
     
-    def get_available_sources(self, ctx : ActionContext):
+    @staticmethod
+    def get_available_sources(ctx : ActionContext):
         candidates = BoardQuery([
             pr.is_ally_at,
             pr.NOT(pr.is_wired_at),
         ]).apply(ctx)
-        return [pos for pos in candidates if self.can_push(ctx, pos)]
+        return [pos for pos in candidates if PushRules.can_push(ctx, pos)]
     
-    def get_available_targets(self, ctx : ActionContext):
+    @staticmethod
+    def get_available_targets(ctx : ActionContext):
         pusher_pos = ctx.workflow_data.unit_pos
         candidates = BoardQuery([
             pr.is_enemy_at,
@@ -40,9 +45,10 @@ class PushRules:
             pr.NOT(pr.is_wired_at)
         ]).apply(ctx)
         return [pos for pos in candidates 
-                if self.can_be_pushed_by(ctx, pusher_pos, pos)]
+                if PushRules.can_be_pushed_by(ctx, pusher_pos, pos)]
 
-    def get_available_destinations(self, ctx : ActionContext):
+    @staticmethod
+    def get_available_destinations(ctx : ActionContext):
         pusher_pos = ctx.workflow_data.unit_pos
         target_pos = ctx.workflow_data.target_pos
         return BoardQuery([
@@ -50,3 +56,13 @@ class PushRules:
             pr.adjacent_to(target_pos),
             pr.NOT(pr.adjacent_to(pusher_pos))
         ]).apply(ctx)
+    
+    @staticmethod
+    def get_available_bottoms(ctx : ActionContext):
+        idx = ctx.workflow_instance.current_step_index
+        result = []
+        if idx == 0: # mozna zdiscardowac przed wybraniem swojej jednostki(zrodła)
+            result = [Bottom.DISCARD]
+        if idx <= 1: # mozna cancelowac przed wybraniem celu (jednostki wroga)
+            result.append(Bottom.CANCEL)
+        return result

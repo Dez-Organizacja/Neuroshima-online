@@ -24,9 +24,7 @@ class GameRules():
             
         return not self.is_token_hq(ctx.active_token)
 
-    def can_end_turn(self, ctx):
-        return not ctx.state.player.hand.is_full()
-
+   
     def can_use_bottom(self, ctx, bottom):
         if(bottom == Bottom.USE):
             return self.can_execute_use(ctx)
@@ -53,19 +51,6 @@ class GameRules():
             return []
         return [i for i in range(hand.size)]
 
-    #############################################################################
-    #   lowlevel functions       
-    #############################################################################
-   
-
-    #############################################################################
-    #   BoardQuery predicators (can only takes context and position as arguments)     
-    #############################################################################
-    def can_push_from(self, ctx, pusher_pos):
-        return self._can_push(ctx, pusher_pos)
-    
-    def can_push(self, ctx, pos):
-        return self._can_push(ctx, pos)
 
     #############################################################################
     #   Other useful functions       
@@ -83,11 +68,3 @@ class GameRules():
         for fraction in ctx.state.fractions:
             if(fraction != my_fraction):
                 return fraction
-
-    #############################################################################
-    #   Predicate makers       
-    #############################################################################
-    
-    
-    
-    
