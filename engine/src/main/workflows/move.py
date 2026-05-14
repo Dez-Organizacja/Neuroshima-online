@@ -1,10 +1,11 @@
+from main.actions.exeute_actions.action_result import ActionResult
+from main.effects.board_effects import MoveEffect
+from main.state.contex import ActionContext
 from main.workflows.base import Workflow
 from main.workflows.data import WorkflowData, WorkflowName
 from main.rules.workflow.move import MoveRules
 from main.steps.config import InputStepConfig, ResolveStepConfig
-from main.steps.resolve_functions import resolve_move
 from main.state.user_action import BoardAction
-from main.utils.variable import Bottom
 
 class MoveWorkflow(Workflow):
     def __init__(self):
@@ -28,7 +29,7 @@ class MoveWorkflow(Workflow):
 
     def build_end_step(self):
         return ResolveStepConfig(
-            resolve_func=resolve_move,
+            resolve_func=self.resolve_move,
             wf_finished=True
         )
 
@@ -38,6 +39,15 @@ class MoveWorkflow(Workflow):
             self.build_destination_step(),
             self.build_end_step()
         ]
-    
+
+    @staticmethod
+    def resolve_move(ctx : ActionContext):
+        move = MoveEffect(
+            from_pos=ctx.workflow_data.unit_pos,
+            to_pos=ctx.workflow_data.destination
+        )
+        return ActionResult(effects=[move])
+
+
     def get_first_step_index(cls, source : WorkflowName):
         return 1 if source == WorkflowName.BOARD else 0

@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from main.state.contex import ActionContext
 from main.steps.factory import StepFactory
-from main.workflows.data import WorkflowName
+from main.workflows.data import WorkflowName, ABILITY_WORKFLOW_REGISTRY
 from main.rules.workflow.base import WorkflowRules
+from main.tokens.data import Ability
 
 class Workflow(ABC):
     def __init__(self, rules : WorkflowRules):
@@ -29,3 +30,9 @@ class Workflow(ABC):
         def function(ctx : ActionContext):
             return name
         return function
+    
+    def get_workflow_for_ability(self, ability : Ability) -> WorkflowName:
+        return ABILITY_WORKFLOW_REGISTRY[ability]
+    
+    def get_active_token(self, ctx : ActionContext):
+        return None

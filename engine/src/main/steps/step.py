@@ -64,12 +64,8 @@ class AutomaticStep(Step, ABC):
 class ResolveStep(AutomaticStep):
     def __init__(self, config : ResolveStepConfig = None):
         super().__init__(config)
-        if config:
-            self.resolve_func = config.resolve_func
-            self.wf_finished = config.wf_finished
-        else:
-            self.resolve_func = self.no_resolve_func
-            self.wf_finished = False
+        self.resolve_func = config.resolve_func or self.no_resolve_func
+        self.wf_finished if config.wf_finished else False
 
     @staticmethod
     def no_resolve_func(ctx : ActionContext):
