@@ -20,13 +20,14 @@ class DispatchWorkflow(ABC, Workflow):
         self.decision_func = decision_func
         self.resolve_func = resolve_func
 
-
-    def token_ability_dispatch(self, ctx : ActionContext):
-        token = self.get_active_token(ctx)
+    @staticmethod
+    def token_ability_dispatch(ctx : ActionContext):
+        token = Workflow.get_active_token(ctx)
         ability = token.get_ability()
-        return self.get_workflow_for_ability(ability)
+        return Workflow.get_workflow_for_ability(ability)
     
-    def action_type_dispatch(self, ctx : ActionContext):
+    @staticmethod
+    def action_type_dispatch(ctx : ActionContext):
         if ctx.workflow_data.type == ActionType.HAND:
             return WorkflowName.HAND
         else:

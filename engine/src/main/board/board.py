@@ -107,6 +107,9 @@ class Board:
         x, y = pos
         self.board[x][y] = None
 
+    def destroy(self, pos):
+        self.zdejmij_zeton(pos)
+
     def move(self, old_pos, new_pos):
         if(old_pos == new_pos):
             return

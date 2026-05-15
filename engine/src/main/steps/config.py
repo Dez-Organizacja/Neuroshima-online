@@ -49,14 +49,12 @@ class InputStepConfig(StepConfig, Generic[A]):
 class AutomaticStepConfig(StepConfig):
     pass
 
+@dataclass
 class ResolveStepConfig(AutomaticStepConfig):
     resolve_func : Callable[[ActionContext], None] | None = None
     wf_finished : bool = False
 
+@dataclass
 class InitStepConfig(AutomaticStepConfig):
     decision_func : Callable[[ActionContext], WorkflowName] | None = None
-    # workflow_name : WorkflowName
-    # source : WorkflowName | None = None
     as_child : bool = True
-
-# class DecisionStepConfig(AutomaticStepConfig):

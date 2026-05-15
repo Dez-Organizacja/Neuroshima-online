@@ -58,5 +58,6 @@ class PushWorkflow(Workflow):
         )
         return ActionResult(effects=[move])
 
+    @classmethod
     def get_first_step_index(cls, source : WorkflowName):
         return 1 if source == WorkflowName.BOARD else 0

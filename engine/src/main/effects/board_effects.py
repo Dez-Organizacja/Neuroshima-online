@@ -1,11 +1,18 @@
 from main.utils.variable import State
+from main.state.contex import ActionContext
+from abc import ABC, abstractmethod
+
+class BoardEffect(ABC):
+    @abstractmethod
+    def apply(ctx : ActionContext):
+        pass
 
 class MoveEffect():
     def __init__(self, from_pos, to_pos):
         self.from_pos = from_pos
         self.to_pos = to_pos
 
-    def apply(self, ctx):
+    def apply(self, ctx : ActionContext):
         ctx.board.move(self.from_pos, self.to_pos)
 
 class PlaceEffect():
@@ -13,7 +20,7 @@ class PlaceEffect():
         self.pos = pos
         self.unit = unit
     
-    def apply(self, ctx):
+    def apply(self, ctx : ActionContext):
         ctx.board.assign_to_tile(pos=self.pos, unit = self.unit)
 
 
@@ -21,7 +28,7 @@ class DiscardActiveTokenEffect():
     def __init__(self):
         pass
 
-    def apply(self, ctx):
+    def apply(self, ctx : ActionContext):
         ctx.player.hand.discard_active_token()
         
 class DamageProfile:
@@ -39,7 +46,7 @@ class DamageEffect():
         self.power = power
         self.profile = profile or DamageProfile()
     
-    def apply(self, ctx):
+    def apply(self, ctx : ActionContext):
         ctx.board.deal_damage_effect(self.pos, self.power, self.profile)
 
 class RotateEffect():
@@ -47,5 +54,12 @@ class RotateEffect():
         self.pos = pos
         self.rotation = rotation
     
-    def apply(self, ctx):
+    def apply(self, ctx : ActionContext):
         ctx.board.rotate(self.pos, self.rotation)
+
+class DestroyEffect():
+    def __init__(self, pos):
+        self.pos = pos
+    
+    def apply(self, ctx : ActionContext):
+        ctx.board.destroy(self.pos)

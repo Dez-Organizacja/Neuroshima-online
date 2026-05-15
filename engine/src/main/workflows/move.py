@@ -4,7 +4,7 @@ from main.state.contex import ActionContext
 from main.workflows.base import Workflow
 from main.workflows.data import WorkflowData, WorkflowName
 from main.rules.workflow.move import MoveRules
-from main.steps.config import InputStepConfig, ResolveStepConfig
+from main.steps.config import InputStepConfig, ResolveStepConfig, InitStepConfig
 from main.state.user_action import BoardAction
 
 class MoveWorkflow(Workflow):
@@ -27,17 +27,24 @@ class MoveWorkflow(Workflow):
                 get_positions=self.rules.get_destinations
             )
 
-    def build_end_step(self):
+    def build_resolve_step(self):
         return ResolveStepConfig(
             resolve_func=self.resolve_move,
-            wf_finished=True
+            wf_finished=False
+        )
+
+    def build_end_step(self):
+        return InitStepConfig(
+            decision_func=self.next_workflow_maker(WorkflowName.ROTATE),
+            as_child=False,
         )
 
     def build_steps(self):
         return [
             self.build_source_step(),
             self.build_destination_step(),
-            self.build_end_step()
+            self.build_resolve_step(),
+            self.build_end_step(),
         ]
 
     @staticmethod
@@ -48,6 +55,6 @@ class MoveWorkflow(Workflow):
         )
         return ActionResult(effects=[move])
 
-
+    @classmethod
     def get_first_step_index(cls, source : WorkflowName):
         return 1 if source == WorkflowName.BOARD else 0
