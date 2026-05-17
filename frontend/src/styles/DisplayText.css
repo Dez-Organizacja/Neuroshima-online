@@ -1,0 +1,26 @@
+.mainText {
+  font-size: 4vw;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 4vh;
+}
+
+.usernameText,
+.passwordText {
+  width: 32vw;
+  color: white;
+  font-size: 1.2vw;
+  font-weight: 600;
+  margin-bottom: 1vh;
+}
+
+.passwordText {
+  margin-top: 2vh;
+}
+
+.switchToRegisterText {
+  color: #e0e7ff;
+  font-size: 1vw;
+  margin-top: 3vh;
+  margin-bottom: 1vh;
+}

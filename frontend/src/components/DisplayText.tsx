@@ -1,9 +1,11 @@
 type DisplayTextProps = {
-    zawartosc : string;
+    text : string;
+    className : string;
 };
 
 export default function DisplayText({
-    zawartosc
+    text,
+    className,
 }:DisplayTextProps){
-    return <p>{zawartosc}</p>
+    return <p className={className}>{text}</p>
 }

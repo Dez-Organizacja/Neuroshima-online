@@ -1,0 +1,23 @@
+.usernameInput,
+.passwordInput {
+  width: 32vw;
+  height: 6vh;
+
+  box-sizing: border-box;
+  padding: 0 1.2vw;
+
+  border: none;
+  border-radius: 1vw;
+  outline: none;
+
+  font-size: 1.1vw;
+  background: white;
+  color: #111827;
+
+  box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.2);
+}
+
+.usernameInput::placeholder,
+.passwordInput::placeholder {
+  color: #94a3b8;
+}

@@ -1,20 +1,22 @@
-import styles from "./modules/Button.module.css";
-// import type { ReactNode } from "react";
+import type { ReactNode } from "react";
+import { CSSProperties } from "react";
 
-type WlasPrzycisku = {
-    zawartosc : React.ReactNode;
+type ButtonProps = {
+    className? : string
+    text : ReactNode;
     onClick? : () => void;
-    type? : "button" | "submit" | "reset";
-    variant? : "primary";
+    // style?: CSSProperties;
 };
 
 export default function Button({
-    zawartosc, 
+    className,
+    // style,
+    text,
     onClick, 
-    type = "button", 
-    variant = "primary",
-}:WlasPrzycisku){
-    return <button className={styles.primaryButton} type={type} onClick={onClick}>
-        {zawartosc}
+}:ButtonProps){
+    return <button className={className}
+        // style={style}
+    type="button" onClick={onClick}>
+        {text}
     </button>
 }

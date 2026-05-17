@@ -18,7 +18,7 @@ export default function App() {
   function SwitchToGame(){
     setScreen("game");
   }
-  function RenderScreen(screen:string){
+  function RenderScreen(){
     if(screen == "login"){
       return <LoginScreen onSwitchToRegister={SwitchToRegister} onAcceptedLogin={AcceptedLogin} />
     }

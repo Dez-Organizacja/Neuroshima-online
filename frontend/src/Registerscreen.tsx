@@ -16,14 +16,38 @@ export default function RegisterScreen({onSwitchToLogin} : RegisterScreenProps){
         const data = await Register(username, password, url);
     }
     return(
-        <div>
-            <DisplayText zawartosc="Username"></DisplayText>
-            <TextInput value={username} onChange={setName} placeholder="Enter Username" ></TextInput>
-            <DisplayText zawartosc="Password"></DisplayText>
-            <TextInput value={password} onChange={setPassword} placeholder="Enter Password"></TextInput>
-            <Button onClick={() => Register(username, password, url)} zawartosc="Register"></Button>
-            <DisplayText zawartosc="Already have an account?"></DisplayText>
-            <Button onClick={onSwitchToLogin} zawartosc="Login"></Button>
+        <div className="loginBackground">
+          <DisplayText className="mainText" text="Create an account" />
+          <DisplayText className="usernameText" text="Username" />
+        
+          <TextInput
+            className="usernameInput"
+            value={username}
+            onChange={setName}
+            placeholder="Enter Username"
+          />
+        
+          <DisplayText className="passwordText" text="Password" />
+        
+          <TextInput
+            className="passwordInput"
+            value={password}
+            onChange={setPassword}
+            placeholder="Enter Password"
+          />
+        
+          <Button className="loginButton" onClick={HandleRegister} text="Create account" />
+        
+          <DisplayText
+            className="switchToRegisterText"
+            text="You already have an account"
+          />
+        
+          <Button
+            className="switchButton"
+            onClick={onSwitchToLogin}
+            text="Login"
+          />
         </div>
     )
 }
