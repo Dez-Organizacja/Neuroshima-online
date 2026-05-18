@@ -1,6 +1,8 @@
 import React from "react";
 import Hexagon from "./components/Hexagon";
+import Image from "./components/HexImage";
 import GetWindowSize from "./GetScreenSize";
+import { imagesByName } from "./Images";
 
 async function cos(name : string) {
   console.log(name);
@@ -38,15 +40,17 @@ export default function HexTest(){
             const Y = Size * (3/2 * r);
             const FinalX = X + CenterX;
             const FinalY = Y + CenterY;
+            // Items.push(
+            // <Hexagon x={X} y={Y} poz1={q} poz2={r} size={Size * 2 - 5} rotation={30} color="#2196F3"> {q}, {r} </Hexagon>
+            // )
             Items.push(
-            // <Hexagon x={X} y={Y} poz1={q} poz2={r} size={Size * 2 - 5} rotation={30} color="#2196F3" />
-            <Hexagon x={X} y={Y} poz1={q} poz2={r} size={Size * 2 - 5} rotation={30} color="#2196F3"> {q}, {r} </Hexagon>
-            )                                                                              
+                <Image imageName="bitwa" x={X} y={Y} height={((Size * 2 - 5) * 0.866)} rotation={30} />
+            )
         }
     }
 
     return (
-        <div>
+        <div className="canvas">
             {Items}
         </div>
     )
