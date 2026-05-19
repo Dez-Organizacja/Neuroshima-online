@@ -1,11 +1,13 @@
 package pl.staszic.neu.game.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pl.staszic.neu.messages.GameStatusChangeRequest;
 import pl.staszic.neu.game.model.Room;
 import pl.staszic.neu.game.model.Game;
 import pl.staszic.neu.messages.*;
@@ -25,14 +27,16 @@ public class InMemoryGameService implements GameService {
     //nwm czy to jest dobre miejsce na restService i url, ale na na razie tak zostanie
     private final RestService restService;
     private final String gameStateServiceUrl;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     public InMemoryGameService(
-        RestService restService,
-        @Value("${game.state-service.url:http://127.0.0.1:5000/api/neuroshima}") String gameStateServiceUrl
+            RestService restService,
+            @Value("${game.state-service.url:http://127.0.0.1:5000/api/neuroshima/request}") String gameStateServiceUrl, ObjectMapper objectMapper
     ) {
         this.restService = restService;
         this.gameStateServiceUrl = gameStateServiceUrl;
+        this.objectMapper = objectMapper;
     }
     //koniec slabego kodu
 
@@ -183,7 +187,7 @@ public class InMemoryGameService implements GameService {
         }
 
         Game game = new Game();
-        game.setGameState(restService.postJson(gameStateServiceUrl+"/newgame", request.getScenario()));
+        game.setGameState(restService.postJson(gameStateServiceUrl, request.getScenario()));
         activeGames.put(game.getGameId(), game);
 
         room.setGameId(game.getGameId());
@@ -197,7 +201,7 @@ public class InMemoryGameService implements GameService {
     }
 
     @Override
-    public void processAction(String clientId, ActionRequest request) {
+    public ActionResponse processAction(String clientId, ActionRequest request) {
         request.setClientId(clientId);
 
         if (isBlank(request.getGameId())) {
@@ -207,7 +211,22 @@ public class InMemoryGameService implements GameService {
             throw new GameValidationException("Unknown gameId: " + request.getGameId());
         }
 
+        Game game = activeGames.get(request.getGameId());
+
+        GameStatusChangeRequest statusChange = new GameStatusChangeRequest();
+        statusChange.setGameId(request.getGameId());
+        statusChange.setKlik(request.getActionData());
+        statusChange.setGameState(game.getGameState());
+
+        JsonNode gameStatusChangeRequest = objectMapper.valueToTree(statusChange);
+        JsonNode responseJsonMessage = restService.postJson(gameStateServiceUrl, gameStatusChangeRequest);
+
+        ActionResponse response = new ActionResponse();
+        response.setGameState(responseJsonMessage);
+
         logger.info("Action processed: {}", request);
+
+        return response;
     }
 
     @Override
@@ -264,6 +283,10 @@ public class InMemoryGameService implements GameService {
 
     private boolean isBlank(String value) {
         return value == null || value.isBlank();
+    }
+
+    public String getAffiliation(String clientId) {
+        return affiliations.get(clientId);
     }
 }
 

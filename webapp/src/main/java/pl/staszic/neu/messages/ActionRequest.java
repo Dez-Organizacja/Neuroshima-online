@@ -6,19 +6,10 @@ public class ActionRequest extends GameScopedWebSocketMessage {
 
     public static final String TYPE = "ACTION_REQUEST";
 
-    private String playerId;
     private JsonNode actionData;
 
     public ActionRequest() {
         super(TYPE);
-    }
-
-    public String getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerId(String playerId) {
-        this.playerId = playerId;
     }
 
     public JsonNode getActionData() {

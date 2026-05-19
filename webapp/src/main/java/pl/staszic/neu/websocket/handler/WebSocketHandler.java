@@ -154,7 +154,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private void handleActionRequest(String clientId, JsonNode rootNode) throws IOException {
         ActionRequest request = objectMapper.treeToValue(rootNode, ActionRequest.class);
-        gameService.processAction(clientId, request);
+        ActionResponse response = gameService.processAction(clientId, request);
+        broadcastMessage(response, gameService.getAffiliation(clientId));
         logger.info("Action processed for client {}", clientId);
     }
 
@@ -165,7 +166,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         logger.info("Game ended: {}", objectMapper.writeValueAsString(response));
     }
 
-    private void broadcastMessage(Object message, String excludeClientId) {
+    private void broadcastMessage(Object message, String excludeRoomId) {
         String jsonMessage;
         try {
             jsonMessage = objectMapper.writeValueAsString(message);
@@ -174,12 +175,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
             return;
         }
 
-        sessionRegistry.getSessions().forEach((clientId, session) -> {
-            if (!clientId.equals(excludeClientId) && session.isOpen()) {
+        sessionRegistry.getSessions().forEach((roomId, session) -> {
+            if (!message.equals(excludeRoomId) && session.isOpen()) {
                 try {
                     session.sendMessage(new TextMessage(jsonMessage));
                 } catch (IOException e) {
-                    logger.error("Error sending broadcast message to client {}: {}", clientId, e.getMessage());
+                    logger.error("Error sending broadcast message to client {}: {}", excludeRoomId, e.getMessage());
                 }
             }
         });

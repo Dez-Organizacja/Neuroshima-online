@@ -13,10 +13,11 @@ public interface GameService {
 
     NewGameResponse startNewGame(String clientId, NewGameRequest request);
 
-    void processAction(String clientId, ActionRequest request);
+    ActionResponse processAction(String clientId, ActionRequest request);
 
     EndGameResponse endGame(String clientId, EndGameRequest request);
 
+    String getAffiliation(String clientId);
 
     void handleClientDisconnect(String clientId);
 }
