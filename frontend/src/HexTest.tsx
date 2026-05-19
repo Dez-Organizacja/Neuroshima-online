@@ -16,16 +16,26 @@ export default function HexTest(){
     const CenterX = ScreenWidth / 2;
     const CenterY = ScreenHeight / 2;
 
-    const Size = height / 10;
+    const Size = height / 16;
 
     const Items = [];
 
     // nowe koordynaty //
-    for(let y = 1; y <= 5; y++){
-        let xs = 1 + Math.abs(3 - y);
-        let xf = 5 + Math.abs(3 - y) + 2 * Math.abs(2 - Math.abs(3 - y));
-        // console.log(y + " " + xs + "-" + xf);
-        for(let x = 1 + Math.abs(3 - y); x <= 5 + Math.abs(3 - y) + 2 * Math.abs(2 - Math.abs(3 - y)); x+=2){
+    for(let y = 0; y <= 4; y++){
+        let xs = Math.abs(2 - y);
+        let xf = 4 + Math.abs(2 - y) + 2 * Math.abs(2 - Math.abs(2 - y));
+        console.log(y + " " + xs + "-" + xf);
+        for(let x = Math.abs(2 - y); x <= 4 + Math.abs(2 - y) + 2 * Math.abs(2 - Math.abs(2 - y)); x+=2){
+            const Y = y * 1.732 * Size;
+            const X = x * Size;
+            const FinalX = X + 200;
+            const FinalY = Y + 200;
+            Items.push(
+                <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 10} rotation={30} color="#d10606"> {y}, {x} </Hexagon>
+            )
+            Items.push(
+                <Image imageName="silacz" x={FinalX} y={FinalY} height={((Size * 2 + 10) * 0.866)} rotation={30} />
+            )
         }
     }
     // =============== //
@@ -43,9 +53,9 @@ export default function HexTest(){
             // Items.push(
             // <Hexagon x={X} y={Y} poz1={q} poz2={r} size={Size * 2 - 5} rotation={30} color="#2196F3"> {q}, {r} </Hexagon>
             // )
-            Items.push(
-                <Image imageName="bitwa" x={X} y={Y} height={((Size * 2 - 5) * 0.866)} rotation={30} />
-            )
+            // Items.push(
+            //     <Image imageName="silacz" x={X} y={Y} height={((Size * 2 - 5) * 0.866)} rotation={30} />
+            // )
         }
     }
 

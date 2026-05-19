@@ -28,7 +28,7 @@ export default function Image({
             left: `${x}px`,
             top: `${y}px`,
             height: `${height}px`,
-            transform: `rotate(${rotation}deg) scale(1) translate(350%, 50%)`,
+            transform: `rotate(${rotation}deg) scale(1)`,
         }}
         />
     )
