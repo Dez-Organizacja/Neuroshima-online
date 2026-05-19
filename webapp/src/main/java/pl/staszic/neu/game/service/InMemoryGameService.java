@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pl.staszic.neu.game.model.GameData;
 import pl.staszic.neu.messages.GameStatusChangeRequest;
 import pl.staszic.neu.game.model.Room;
 import pl.staszic.neu.game.model.Game;
@@ -214,9 +215,7 @@ public class InMemoryGameService implements GameService {
         Game game = activeGames.get(request.getGameId());
 
         GameStatusChangeRequest statusChange = new GameStatusChangeRequest();
-        statusChange.setGameId(request.getGameId());
-        statusChange.setKlik(request.getActionData());
-        statusChange.setGameState(game.getGameState());
+        statusChange.setData(new GameData(request.getGameId(), request.getActionData()));
 
         JsonNode gameStatusChangeRequest = objectMapper.valueToTree(statusChange);
         JsonNode responseJsonMessage = restService.postJson(gameStateServiceUrl, gameStatusChangeRequest);
@@ -286,7 +285,12 @@ public class InMemoryGameService implements GameService {
     }
 
     public String getAffiliation(String clientId) {
-        return affiliations.get(clientId);
+        try{
+            return affiliations.get(clientId);
+        }        catch (Exception e){
+            logger.error("Error getting affiliation for clientId={}: {}", clientId, e.getMessage());
+            return null;
+        }
     }
 }
 
