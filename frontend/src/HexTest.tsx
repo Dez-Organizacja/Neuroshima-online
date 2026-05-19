@@ -30,11 +30,12 @@ export default function HexTest(){
             const X = x * Size;
             const FinalX = X + 200;
             const FinalY = Y + 200;
-            Items.push(
-                <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 10} rotation={30} color="#d10606"> {y}, {x} </Hexagon>
-            )
+
             Items.push(
                 <Image imageName="silacz" x={FinalX} y={FinalY} height={((Size * 2 + 10) * 0.866)} rotation={30} />
+            )
+            Items.push(
+                <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 10} rotation={30} color="#d10606"> {y}, {x} </Hexagon>
             )
         }
     }

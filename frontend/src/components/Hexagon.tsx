@@ -34,7 +34,7 @@ const Hexagon: React.FC<HexagonProps> = ({
         style={{
             width: size,
             height: height,
-            backgroundColor: color,
+            backgroundColor: color + "33",
             position: "absolute",
             left: x,
             top: y,
