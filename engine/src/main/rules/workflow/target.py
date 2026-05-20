@@ -6,13 +6,18 @@ import main.rules.predicates as pr
 from main.state.contex import ActionContext
 
 class TargetWorkflowRules(ABC, WorkflowRules):
-    def get_available_bottoms(self, ctx : ActionContext):
+    @staticmethod
+    def get_available_bottoms(ctx : ActionContext):
         return [Bottom.CANCEL, Bottom.DISCARD]
     
     @abstractmethod
     @staticmethod
     def get_available_tragets(ctx : ActionContext):
         pass
+
+    @staticmethod
+    def get_available_tokens(ctx):
+        return super().get_available_tokens(ctx)
 
 class SniperRules(TargetWorkflowRules):
     @staticmethod

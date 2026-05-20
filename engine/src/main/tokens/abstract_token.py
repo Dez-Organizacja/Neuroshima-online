@@ -1,7 +1,15 @@
 from abc import ABC, abstractmethod
+from main.tokens.data import Ability, TokenType
+from dataclasses import dataclass
 
+@dataclass
 class Token(ABC):
-    def __init__(self, name, fraction, token_type):
-        self.name = name
-        self.fraction = fraction
-        self.type = token_type
+    name         : str
+    fraction     : str
+    type         : TokenType
+    ability_used : bool = False
+    ability      : Ability = Ability.NO_ABILITY
+
+    @abstractmethod
+    def get_ability(self) -> Ability:
+        return Ability.NO_ABILITY

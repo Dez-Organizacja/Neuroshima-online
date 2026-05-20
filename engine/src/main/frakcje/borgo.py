@@ -1,6 +1,7 @@
 import json
 
-from main.utils.variable import Boost, TokenKey, TokenType, InstantType, Attack, TokenStats
+from main.utils.variable import Boost, Attack
+from main.tokens.data import TokenKey, TokenType, TokenStats, Ability
 
 wlasciwosci = {
     ############## wojownicy
@@ -115,15 +116,15 @@ wlasciwosci = {
     },
 
     ############# natychmiastowe
-    InstantType.BITWA: {
+    Ability.BITWA: {
         TokenKey.TYPE: TokenType.INSTANT,
         TokenKey.UNIT_COUNT: 6,
     },
-    InstantType.MOVE: {
+    Ability.MOVE: {
         TokenKey.TYPE: TokenType.INSTANT,
         TokenKey.UNIT_COUNT: 4,
     },
-    InstantType.GRENADE: {
+    Ability.GRENADE: {
         TokenKey.TYPE: TokenType.INSTANT,
         TokenKey.UNIT_COUNT: 1,
     }

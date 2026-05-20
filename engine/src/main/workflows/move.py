@@ -1,50 +1,31 @@
-from main.actions.exeute_actions.action_result import ActionResult
-from main.effects.board_effects import MoveEffect
+from main.actions.execute.result import ActionResult
+from main.events.effects import MoveEffect
 from main.state.contex import ActionContext
 from main.workflows.base import Workflow
-from main.workflows.data import WorkflowData, WorkflowName
-from main.rules.workflow.move import MoveRules
-from main.steps.config import InputStepConfig, ResolveStepConfig, InitStepConfig
-from main.state.user_action import BoardAction
+from main.workflows.data import WorkflowName
+from main.rules.workflow.movement import MoveRules
+from main.steps.config import ResolveStepConfig, InitStepConfig
+from main.workflows.step_builders import BoardSelectionMixin, build_end_step
 
-class MoveWorkflow(Workflow):
+class MoveWorkflow(BoardSelectionMixin, Workflow[MoveRules]):
     def __init__(self):
         super().__init__(rules=MoveRules())
+        self.name = WorkflowName.MOVE
+        self.get_bottoms = self.rules.get_available_bottoms
 
-    def build_source_step(self):
-        return InputStepConfig[BoardAction](
-                getter=BoardAction.get_pos,
-                setter=WorkflowData.set_unit_pos,
-                get_bottoms=self.rules.get_available_bottoms,
-                get_positions=self.rules.get_sources
-            ), 
+    def build_move_step(self):
+        return ResolveStepConfig(resolve_func=self.resolve_move)
 
-    def build_destination_step(self):
-        return InputStepConfig[BoardAction](
-                getter=BoardAction.get_pos,
-                setter=WorkflowData.set_destination,
-                get_bottoms=self.rules.get_available_bottoms,
-                get_positions=self.rules.get_destinations
-            )
-
-    def build_resolve_step(self):
-        return ResolveStepConfig(
-            resolve_func=self.resolve_move,
-            wf_finished=False
-        )
-
-    def build_end_step(self):
-        return InitStepConfig(
-            decision_func=self.next_workflow_maker(WorkflowName.ROTATE),
-            as_child=False,
-        )
+    def build_rotate_step(self):
+        return InitStepConfig(wf_name=WorkflowName.ROTATE)
 
     def build_steps(self):
         return [
-            self.build_source_step(),
-            self.build_destination_step(),
-            self.build_resolve_step(),
-            self.build_end_step(),
+            self.build_source_steps(),
+            self.build_destination_steps(),
+            self.build_move_step(),
+            self.build_rotate_step(),
+            build_end_step(),
         ]
 
     @staticmethod
@@ -56,5 +37,5 @@ class MoveWorkflow(Workflow):
         return ActionResult(effects=[move])
 
     @classmethod
-    def get_first_step_index(cls, source : WorkflowName):
-        return 1 if source == WorkflowName.BOARD else 0
+    def get_first_step_index(cls, ctx : ActionContext):
+        return 2 if ctx.workflow_data.unit_pos else 0

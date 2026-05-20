@@ -27,7 +27,7 @@ class Board:
                     
         self.max_inicjatywa = 10
 
-    def get_tile(self, pos):
+    def get_tile(self, pos) -> BoardToken:
         if not self.on_board(pos):
             return None
         x, y = pos

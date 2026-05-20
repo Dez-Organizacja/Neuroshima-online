@@ -3,93 +3,122 @@ from abc import ABC, abstractmethod
 from main.state.contex import ActionContext
 from main.state.user_action import UserAction
 
-from main.workflows.data import WorkflowName
+from main.workflows.data import WorkflowName, WorkflowConfig
 from main.workflows.factory import WorkflowFactory
 
-from main.actions.exeute_actions.action_result import ActionResult
-from main.actions.available_actions.available_action_result import AvailableActionResult
+from main.actions.execute.result import ActionResult
+from main.actions.available.result import AvailableActionResult
 
 from main.steps.config import (
-    StepType, 
-    InputStepConfig,
+    StepName, 
+    StepConfig,
     ResolveStepConfig,
-    AutomaticStepConfig,
     InitStepConfig,
-    DecisionStepConfig
+    WaitingStepConfig,
+    SetStepConfig,
+    EndTurnChcekConfig
 )
-from main.steps.result import StepResult
+from main.steps.data import StepResult
+from main.events.workflow import PopWorkflow, PushWorkflow, GoToStep
 
-class Step(ABC):
-    def __init__(self, type: StepType, config = None):
-        self.type = type
-        self.config = config
+from typing import TypeVar, Generic
+
+C = TypeVar("C", bound=StepConfig)
+
+class Step(ABC, Generic[C]):
+    def __init__(self, config : C):
+        self.name : StepName = config.name
+        self.config : C = config
 
     @abstractmethod
     def execute(self, 
                 ctx : ActionContext,
                 action : UserAction | None = None 
         ):
-        pass
+        return StepResult()
+
+    @abstractmethod
+    def get_available_actions(self, ctx : ActionContext):
+        return AvailableActionResult()
 
     @property
     def requires_input(self):
-        return self.type in (StepType.INPUT, StepType.CHOICE)
+        return self.name == StepName.WAITING
 
-class InputStep(Step):
-    def __init__(self, config : InputStepConfig):
-        super().__init__(StepType.INPUT, config)
-        self.config : InputStepConfig = config
+class WaitingStep(Step[WaitingStepConfig]):
+    def __init__(self, config : WaitingStep):
+        super().__init__(config)
 
-    def execute(self, ctx : ActionContext, action : UserAction):
-        value = self.config.getter(action)
-        self.config.setter(ctx.workflow_data, value)
-        return StepResult(input_consumed=self.config.consume_action)
-
+    def execute(self, ctx : ActionContext, action = None):
+        return StepResult(input_consumed=True)
+    
     def get_available_actions(self, ctx : ActionContext):
         return AvailableActionResult(
-            positions= self.config.get_positions(ctx),
-            bottoms=self.config.allowed_bottoms,
-            hand=self.config.get_available_tokens(ctx)
+            positions=self.config.get_positions(ctx),
+            bottoms=self.config.get_bottoms(ctx),
+            hand=self.config.get_tokens(ctx),
         )
 
-class AutomaticStep(Step, ABC):
-    def __init__(self, config : AutomaticStepConfig):
-        super().__init__(StepType.AUTOMATIC, config)
+class AutomaticStep(Step[C], ABC):
+    def __init__(self, config : C):
+        super().__init__(config)
         
     @abstractmethod
     def execute(self, ctx : ActionContext):
         pass
+
+    def get_available_actions(self, ctx : ActionContext):
+        return super().get_available_actions(ctx)
     
 
-class ResolveStep(AutomaticStep):
-    def __init__(self, config : ResolveStepConfig = None):
+class ResolveStep(AutomaticStep[ResolveStepConfig]):
+    def __init__(self, config : ResolveStepConfig):
         super().__init__(config)
-        self.resolve_func = config.resolve_func or self.no_resolve_func
-        self.wf_finished if config.wf_finished else False
 
     @staticmethod
     def no_resolve_func(ctx : ActionContext):
         return ActionResult()
     
     def execute(self, ctx : ActionContext):
-        return StepResult(
-            action_result=self.resolve_func(ctx),
-            pop_workflow=self.wf_finished
-        )
-    
-class InitStep(AutomaticStep):
-    def __init__(self, config : InitStepConfig):
+        res = StepResult(action_result=self.config.resolve_func(ctx))
+        if self.config.wf_finished:
+            res.workflow_effects = [PopWorkflow()]
+        return res
+
+A = TypeVar("A", bound = UserAction)
+   
+class SetStep(AutomaticStep[SetStepConfig], Generic[A]):
+    def __init__(self, config : SetStepConfig, action : A):
         super().__init__(config)
-        self.decision_func = config.decision_func
+        self.action = action
 
     def execute(self, ctx : ActionContext):
-        new_workflow_name = self.decision_func(ctx)
-        current_workflow_name = ctx.workflow_instance.name
-        instance = WorkflowFactory.get_workflow_instance(
-            workflow_name=new_workflow_name,
-            source=current_workflow_name
+        value = self.config.getter(self.action)
+        self.config.setter(ctx.workflow_data, value)
+
+class InitStep(AutomaticStep[InitStepConfig]):
+    def __init__(self, config : InitStepConfig):
+        super().__init__(config)
+
+    def execute(self, ctx : ActionContext):
+        wf_name = self.config.wf_name or self.config.decision_func(ctx)
+        return StepResult(
+            workflow_effects=[PushWorkflow(
+                name=wf_name,
+                as_child=self.config.as_child,
+            )]
         )
-        if self.config.as_child:
-            return StepResult(push_workflow=instance)
+    
+class EndTurnChcekStep(AutomaticStep[EndTurnChcekConfig]):
+    def __init__(self, config : EndTurnChcekConfig):
+        super().__init__(config)
+
+    def execute(self, ctx : ActionContext):
+        res = StepResult()
+        if self.config.check_func(ctx):
+            res.workflow_effects.append(PopWorkflow())
+            res.action_result = self.config.resolve_func(ctx)
+
         else:
-            return StepResult(replace_workflow=instance)
+            res.workflow_effects.append(GoToStep(self.config.repeat_from_index))
+            res.advance = False

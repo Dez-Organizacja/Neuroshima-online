@@ -1,7 +1,6 @@
 from main.state.game_state import GameState
 from main.rules.game import GameRules
-from main.workflows.base import Workflow
-from main.workflows.factory import WorkflowFactory
+from main.state.player_state import PlayerState
 
 class ActionContext():
     def __init__(
@@ -11,6 +10,7 @@ class ActionContext():
         ):
         self.state = state
         self.rules = rules
+        self.consumed_input : bool = False
 
     #shortcuts
     @property
@@ -26,7 +26,7 @@ class ActionContext():
         return self.state.board
 
     @property
-    def player(self):
+    def player(self) -> PlayerState:
         return self.state.current_player
     
     @property

@@ -1,4 +1,5 @@
-from main.utils.variable import TokenKey, TokenType, InstantType, TokenStats
+
+from main.tokens.data import TokenKey, TokenType, TokenStats, Ability
 
 wlasciwosci = {
     "sieciarz": {
@@ -13,7 +14,7 @@ wlasciwosci = {
         TokenStats.HP: 1,
         TokenStats.WIRE: [0, 1],
     },
-    InstantType.SNIPER : {
+    Ability.SNIPER : {
         TokenKey.TYPE : TokenType.INSTANT,
         TokenKey.UNIT_COUNT : 1,
     }

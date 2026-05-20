@@ -1,4 +1,4 @@
-from main.actions.exeute_actions.action_result import ActionResult
+from main.actions.execute.result import ActionResult
 from main.state.contex import ActionContext
 
 class Resolver():

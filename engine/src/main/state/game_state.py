@@ -2,8 +2,7 @@ from dataclasses import dataclass, field
 from main.utils.variable import *
 from main.state.player_state import PlayerState
 from main.board.board import Board
-from main.state.selection import Selected
-from main.effects.flow_effects import FlowEvent
+from main.events.flow import FlowEvent
 from collections import deque
 from main.workflows.data import WorkflowData, WorkflowInstance
 from main.state.serialization import from_dict_dataclass, to_dict_dataclass
@@ -44,9 +43,9 @@ def print_obj(obj, deepth):
 class GameState:
     phase               : str
     fractions           : list[str]
-    interaction_state   : str = State.NO_SELECTION
-    selected            : Selected = field(default_factory=Selected)
-    active_action       : dict = field(default_factory=dict)
+    # interaction_state   : str = State.NO_SELECTION
+    # selected            : Selected = field(default_factory=Selected)
+    # active_action       : dict = field(default_factory=dict)
     current_fraction    : str = ""
     next_turns          : list[dict] = field(default_factory=list)
     players             : dict[str, PlayerState] = field(default_factory=dict)

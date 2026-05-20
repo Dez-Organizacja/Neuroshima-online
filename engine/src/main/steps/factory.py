@@ -15,4 +15,4 @@ class StepFactory:
         step_class = cls.REGISTRY.get(config.name)
         if not step_class:
             raise ValueError(f"Unknown step type: {config.name}")
-        return step_class(config=config)
+        return step_class(config)

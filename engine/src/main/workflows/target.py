@@ -2,19 +2,18 @@ from abc import ABC, abstractmethod
 from main.workflows.base import Workflow
 from main.rules.workflow.target import TargetWorkflowRules
 from main.state.contex import ActionContext
-from main.steps.config import InputStepConfig, ResolveStepConfig
-from main.state.user_action import BoardAction
-from main.workflows.data import WorkflowData
-from main.actions.exeute_actions.action_result import ActionResult
-from main.effects.board_effects import(
+from main.steps.config import ResolveStepConfig
+from main.actions.execute.result import ActionResult
+from main.events.effects import(
     DamageEffect, 
     DamageProfile, 
     DestroyEffect
 )
 from main.board.board_query import BoardQuery
 import main.rules.predicates as pr
+from main.workflows.step_builders import BoardSelectionMixin
 
-class TargetWorkflow(Workflow[TargetWorkflowRules], ABC):
+class TargetWorkflow(BoardSelectionMixin, Workflow[TargetWorkflowRules], ABC):
     def __init__(self, rules : TargetWorkflowRules):
         super().__init__(rules)
 
@@ -22,15 +21,6 @@ class TargetWorkflow(Workflow[TargetWorkflowRules], ABC):
     @staticmethod
     def resolve_func(ctx : ActionContext) -> ActionResult:
         pass
-
-    def build_target_step(self):
-        return InputStepConfig(
-            getter = BoardAction.get_pos,
-            setter = WorkflowData.set_target_pos,
-            get_positions = self.rules.get_available_tokens,
-            get_bottoms = self.rules.get_available_bottoms
-        )
-
 
     def build_end_step(self):
         return ResolveStepConfig(
@@ -40,7 +30,7 @@ class TargetWorkflow(Workflow[TargetWorkflowRules], ABC):
 
     def build_steps(self):
         return [
-            self.build_target_step(),
+            self.build_target_steps(),
             self.build_end_step()
         ]
     

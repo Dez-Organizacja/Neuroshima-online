@@ -1,17 +1,12 @@
 from main.state.contex import ActionContext
 from main.rules.workflow.base import WorkflowRules
-from main.workflows.data import WorkflowName
 from main.utils.variable import Bottom
-from main.state.user_action import Type as ActionType
+from main.board.board_query import BoardQuery
 
 class TurnRules(WorkflowRules):
     @staticmethod
     def can_end_turn(ctx : ActionContext):
         return not ctx.player.hand.is_full()
-
-    @staticmethod
-    def get_available_sources(ctx : ActionContext):
-        return []
     
     @staticmethod
     def get_available_tokens(ctx : ActionContext):
@@ -23,3 +18,7 @@ class TurnRules(WorkflowRules):
             return [Bottom.END_TURN]
         else:
             return []
+        
+    @staticmethod
+    def get_available_positions(ctx : ActionContext):
+        pass

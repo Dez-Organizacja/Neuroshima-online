@@ -1,89 +1,75 @@
 from abc import ABC, abstractmethod
-from typing import Callable
-from main.actions.data import ActionType
-from main.effects.board_effects import DiscardActiveTokenEffect
+from main.events.effects import DiscardActiveTokenEffect, MarkAbilityUsedEffect
 from main.workflows.base import Workflow
-from main.rules.workflow.base import WorkflowRules
-from main.steps.config import InputStepConfig, InitStepConfig, ResolveStepConfig
-from main.state.user_action import BoardAction, HandAction
+from main.steps.config import InitStepConfig, ResolveStepConfig
 from main.state.contex import ActionContext
-from main.workflows.data import WorkflowData, WorkflowName
-from main.actions.exeute_actions.action_result import ActionResult
+from main.workflows.data import WorkflowName
+from main.actions.execute.result import ActionResult
+from main.workflows.data import ABILITY_WORKFLOW_REGISTRY
+from main.tokens.abstract_token import Token
 
-class DispatchWorkflow(ABC, Workflow):
-    def __init__(self, 
-                 rules : WorkflowRules, 
-                 decision_func : Callable[[ActionContext], WorkflowName] = None,
-                 resolve_func : Callable[[ActionContext], ActionResult] = None,
-        ):
-        super().__init__(rules)
-        self.decision_func = decision_func
-        self.resolve_func = resolve_func
-
-    @staticmethod
-    def token_ability_dispatch(ctx : ActionContext):
-        token = Workflow.get_active_token(ctx)
-        ability = token.get_ability()
-        return Workflow.get_workflow_for_ability(ability)
+class DispatchActionWorkflow(Workflow, ABC):
+    def __init__(self):
+        super().__init__()
     
     @staticmethod
-    def action_type_dispatch(ctx : ActionContext):
-        if ctx.workflow_data.type == ActionType.HAND:
-            return WorkflowName.HAND
-        else:
-            return WorkflowName.BOARD
-
     @abstractmethod
-    def build_input_step(self):
+    def resolve_function(ctx : ActionContext) -> ActionResult:
         pass
-        
-    def build_decision_step(self):
+
+    @staticmethod
+    @abstractmethod
+    def get_active_token(ctx) -> Token:
+        pass
+    
+    @staticmethod
+    def dispatch_function(ctx : ActionContext) -> WorkflowName:
+        token = DispatchActionWorkflow.get_active_token(ctx)
+        ability = token.get_ability()
+        return ABILITY_WORKFLOW_REGISTRY[ability]
+
+    def build_dispatch_step(self):
         return InitStepConfig(
-            decision_func=self.decision_func,
+            decision_func=self.dispatch_function,
+            as_child=True
         )
 
     def build_end_step(self):
         return ResolveStepConfig(
-            resolve_func = self.resolve_func,
-            wf_finished = True
+            resolve_func=self.resolve_function,
+            wf_finished=True
         )
-
+    
     def build_steps(self):
         return [
-            self.build_input_step(),
-            self.build_decision_step(),
-            self.build_end_step()
+            self.build_dispatch_step(),
+            self.build_end_step()   
         ]
 
-class HandWorkflow(DispatchWorkflow):
+class HandWorkflow(DispatchActionWorkflow):
     def __init__(self):
-        super().__init__(
-            rules=WorkflowRules(),
-            decision_func = self.token_ability_dispatch,
-            resolve_func = self.resolve_discard,
-            )
+        super().__init__()
 
     @staticmethod
-    def resolve_discard(ctx : ActionContext):
+    def get_active_token(ctx : ActionContext):
+        return ctx.player.hand.get_token(ctx.workflow_data.slot)
+
+    @staticmethod
+    def resolve_function(ctx : ActionContext):
         return ActionResult(
             effects=[DiscardActiveTokenEffect()]
         )
-
-    def build_input_step(self):
-        return InputStepConfig(
-            getter = HandAction.get_slot,
-            setter = WorkflowData.set_slot,
-        )
     
-class BoardWorkflow(DispatchWorkflow):
+class BoardWorkflow(DispatchActionWorkflow):
     def __init__(self):
-        super().__init__(
-            rules=WorkflowRules(),
-            decision_func = self.token_ability_dispatch,
-        )
+        super().__init__()
 
-    def build_input_step(self):
-        return InputStepConfig(
-            getter = BoardAction.get_pos,
-            setter = WorkflowData.set_unit_pos,
+    @staticmethod
+    def get_active_token(ctx : ActionContext):
+        return ctx.board.get_tile(ctx.workflow_data.unit_pos)
+
+    @staticmethod
+    def resolve_function(ctx : ActionContext):
+        return ActionResult(
+            effects=[MarkAbilityUsedEffect()]
         )

@@ -34,6 +34,7 @@ class Ability(Enum):
     GRENADE = "granat"
     SNIPER = "snajper"
     PUSH = "odepchniecie"
+    NO_ABILITY = "none"
 
 class Token:
     TYPE = TokenKey.TYPE

@@ -17,6 +17,7 @@ class WorkflowName(Enum):
     TURN = "turn"
     BOARD = "board"
     HAND = "hand"
+    INPUT = "input"
 
 ABILITY_WORKFLOW_REGISTRY = {
     Ability.MOVE : WorkflowName.MOVE,
@@ -34,6 +35,7 @@ class WorkflowData:
     unit_pos    : Hex | None = None
     target_pos  : Hex | None = None
     destination : Hex | None = None
+    rotation    : int | None = None
 
     @classmethod
     def from_dict(cls, data):
@@ -56,6 +58,9 @@ class WorkflowData:
 
     def set_type(self, value):
         self.type = value
+
+    def set_rotation(self, value):
+        self.rotation = value
 
 @dataclass
 class WorkflowInstance:

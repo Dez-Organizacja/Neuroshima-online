@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from main.utils.variable import Token
+from main.tokens.data import Token
 
 class Sieciarze:
     def __init__(self, board):

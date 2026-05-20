@@ -3,11 +3,11 @@ import main.frakcje.wszystkie_frakcje as allfractions
 from main.utils.variable import *
 from copy import deepcopy
 from main.tokens.abstract_token import Token
-from main.actions.available_actions.available_action_result import AvailableActionResult
-from main.actions.exeute_actions.action_result import ActionResult
+from main.actions.available.result import AvailableActionResult
+from main.actions.execute.result import ActionResult
 from main.board.board_query import BoardQuery
-from main.effects.board_effects import DiscardActiveTokenEffect, PlaceEffect
-from main.effects.ui_change_effects  import SetInteractionState, SetSelected
+from main.events.effects import DiscardActiveTokenEffect, PlaceEffect
+# from main.effects.ui_change_effects  import SetInteractionState, SetSelected
 from main.state.selection import Selected
 
 class BoardToken(Token):

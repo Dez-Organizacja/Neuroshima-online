@@ -10,8 +10,8 @@ from main.engine.resolver import Resolver
 
 from main.systems.passive_system import PassiveSystem
 
-from main.actions.exeute_actions.execute_action import Actions
-from main.actions.available_actions.available_actions import AvailableActions
+from main.actions.execute.execute_action import Actions
+from main.actions.available.available_actions import AvailableActions
 from main.utils.variable import *
 
 class Game:

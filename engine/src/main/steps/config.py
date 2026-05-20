@@ -1,60 +1,55 @@
-from dataclasses import dataclass, field
-from enum import Enum
-from main.utils.variable import Bottom
+from dataclasses import dataclass
+from abc import ABC
+from main.actions.available.config import AvActionsConfig
 from main.state.contex import ActionContext
 from main.state.user_action import UserAction
-from main.workflows.data import WorkflowData, WorkflowName
+from main.steps.data import StepResult, StepName
+from main.workflows.data import WorkflowData, WorkflowName, WorkflowConfig
+from main.actions.execute.result import ActionResult
 from typing import Callable, TypeVar, Generic
 
-class StepType(Enum):
-    INPUT = "input"
-    AUTOMATIC = "automatic"
+@dataclass
+class StepConfig(ABC):
+    name : StepName
 
-class StepName(Enum):
-    INPUT = "input"
-    INIT_WORKFLOW = "init_workflow"
-    RESOLVE = "resolve"
 
 @dataclass
-class StepConfig():
-    name : StepType | None = None
-
-
-def no_bottoms(ctx : ActionContext) -> list[Bottom]:
-    return []
-
-def no_positions(ctx : ActionContext) -> list[tuple[int, int]]:
-    return []
-
-def no_tokens(ctx : ActionContext) -> dict[str, list[int]]:
-    return {}
-
-BottomsGetter = Callable[[ActionContext], list[Bottom]]
-PositionsGetter = Callable[[ActionContext], list[tuple[int, int]]]
-TokensGetter = Callable[[ActionContext], dict[str, list[int]]]
-
-A = TypeVar("A", bound=UserAction)
-T = TypeVar("T")
-
-@dataclass
-class InputStepConfig(StepConfig, Generic[A]):
-    getter          : Callable[[A], T]
-    setter          : Callable[[WorkflowData, T], None]
-    consume_action  : bool = True
-    get_bottoms     : BottomsGetter = no_bottoms
-    get_positions   : PositionsGetter = no_positions
-    get_tokens      : TokensGetter = no_tokens
-
+class WaitingStepConfig(StepConfig):
+    name              : StepName = StepName.WAITING
+    av_actions_config : AvActionsConfig
+    consume_action    : bool = True
+     
 @dataclass
 class AutomaticStepConfig(StepConfig):
     pass
 
-@dataclass
-class ResolveStepConfig(AutomaticStepConfig):
-    resolve_func : Callable[[ActionContext], None] | None = None
-    wf_finished : bool = False
+def no_result_function(ctx : ActionContext) -> StepResult:
+    return StepResult()
 
 @dataclass
+class ResolveStepConfig(AutomaticStepConfig):
+    name         : StepName = StepName.RESOLVE
+    resolve_func : Callable[[ActionContext], StepResult] = no_result_function
+    wf_finished  : bool = False
+
+C = TypeVar("C", bound=WorkflowConfig)
+@dataclass
 class InitStepConfig(AutomaticStepConfig):
+    name          : StepName = StepName.INIT
     decision_func : Callable[[ActionContext], WorkflowName] | None = None
-    as_child : bool = True
+    wf_name       : WorkflowName | None = None
+    as_child      : bool = True
+
+A = TypeVar("A", bound=UserAction)
+T = TypeVar("T")
+@dataclass 
+class SetStepConfig(AutomaticStepConfig, Generic[A]):
+    name            : StepName = StepName.SET
+    getter          : Callable[[A], T]
+    setter          : Callable[[WorkflowData, T], None]
+
+@dataclass
+class EndTurnChcekConfig(AutomaticStepConfig):
+    repeat_from_index : int = 0
+    check_func : Callable[[ActionContext], bool]
+    resolve_func : Callable[[ActionContext], ActionResult] = no_result_function
