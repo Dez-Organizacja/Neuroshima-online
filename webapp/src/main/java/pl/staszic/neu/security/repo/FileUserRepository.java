@@ -1,9 +1,9 @@
 package pl.staszic.neu.security.repo;
 
+import org.apache.catalina.Store;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -13,8 +13,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public class FileUserRepository {
+public class FileUserRepository implements UserRepository {
     private static final Logger logger = LoggerFactory.getLogger(FileUserRepository.class);
 
     private final Path usersFile;
@@ -98,7 +97,5 @@ public class FileUserRepository {
         }
     }
 
-    public record StoredUser(String username, String encodedPassword) {
-    }
 }
 

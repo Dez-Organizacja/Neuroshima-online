@@ -28,7 +28,7 @@ public class CreateNewRoomRequest extends WebSocketMessage {
     public String getRoomId() {
         return roomId;
     }
-    
+
     public void setRoomId(String roomId) {
         this.roomId = roomId;
     }

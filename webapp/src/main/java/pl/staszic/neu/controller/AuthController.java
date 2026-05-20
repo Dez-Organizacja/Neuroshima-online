@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.staszic.neu.security.repo.FileUserRepository;
+import pl.staszic.neu.security.repo.UserRepository;
 import pl.staszic.neu.security.service.TokenAuthService;
 
 import java.util.Map;
@@ -23,13 +23,13 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final TokenAuthService tokenAuthService;
-    private final FileUserRepository userRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     public AuthController(
         AuthenticationManager authenticationManager,
         TokenAuthService tokenAuthService,
-        FileUserRepository userRepository,
+        UserRepository userRepository,
         PasswordEncoder passwordEncoder
     ) {
         this.authenticationManager = authenticationManager;

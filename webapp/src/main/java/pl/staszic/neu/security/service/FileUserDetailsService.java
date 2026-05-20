@@ -5,20 +5,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import pl.staszic.neu.security.repo.FileUserRepository;
+import pl.staszic.neu.security.repo.StoredUser;
+import pl.staszic.neu.security.repo.UserRepository;
 
 @Service
 public class FileUserDetailsService implements UserDetailsService {
 
-    private final FileUserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public FileUserDetailsService(FileUserRepository userRepository) {
+    public FileUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        FileUserRepository.StoredUser user = userRepository
+        StoredUser user = userRepository
             .findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("Nie znaleziono użytkownika: " + username));
 

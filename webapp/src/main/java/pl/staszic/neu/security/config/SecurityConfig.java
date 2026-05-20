@@ -1,7 +1,9 @@
 package pl.staszic.neu.security.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -13,11 +15,30 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import pl.staszic.neu.security.repo.DBUserRepository;
+import pl.staszic.neu.security.repo.FileUserRepository;
+import pl.staszic.neu.security.repo.UserRepository;
+import pl.staszic.neu.security.repo.repository.SpringDataUserRepository;
 
 import java.util.List;
 
 @Configuration
 public class SecurityConfig {
+
+    @Value("${auth.users.file:users.txt}")
+    private String usersFilePath;
+
+    @Bean
+    @ConditionalOnProperty(name = "app.user-repository", havingValue = "db", matchIfMissing = true)
+    public UserRepository dbUserRepository(SpringDataUserRepository jpaRepo) {
+        return new DBUserRepository(jpaRepo);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "app.user-repository", havingValue = "file")
+    public UserRepository fileUserRepository() {
+        return new FileUserRepository(usersFilePath);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
