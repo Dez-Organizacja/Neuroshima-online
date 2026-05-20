@@ -3,6 +3,7 @@ package pl.staszic.neu.security.repo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.staszic.neu.security.repo.repository.SpringDataUserRepository;
+import pl.staszic.neu.security.repo.repository.UserEntity;
 
 import java.util.Optional;
 

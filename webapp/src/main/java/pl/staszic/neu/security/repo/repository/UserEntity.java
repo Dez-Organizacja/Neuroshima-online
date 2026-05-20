@@ -1,4 +1,4 @@
-package pl.staszic.neu.security.repo;
+package pl.staszic.neu.security.repo.repository;
 
 import jakarta.persistence.*;
 
