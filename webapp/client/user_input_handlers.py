@@ -83,7 +83,7 @@ def on_user_input(client: "WebSocketGameClient", user_text: str) -> None:
 
     elif (typ == "NEWGAME"):
         if(len(wejscie) < 4):
-            logger.warning("Uzycie: NEWGAME <roomId>")
+            logger.warning("Uzycie: NEWGAME <roomId> <fracion1> <fracion2>")
             return
 
         message = {
@@ -102,6 +102,21 @@ def on_user_input(client: "WebSocketGameClient", user_text: str) -> None:
             logger.info("Wyslano NEWGAME_REQUEST")
         except Exception as e:
             logger.info(f"nie udalo sie stworzyc nowej gry: {e}")
+
+    elif (typ == "ACTION"):
+        if len(wejscie) < 2:
+            logger.warning("Uzycie: ACTION <actionData>")
+            return
+        try:
+            action_data = " ".join(wejscie[1:])
+            message = {
+                "messageType": "ACTION_REQUEST",
+                "actionData": action_data,
+            }
+            client.send(message)
+            logger.info("Wyslano ACTION_REQUEST")
+        except Exception as e:
+            logger.info(f"nie udalo sie wyslac akcji: {e}")
 
     else:
         logger.warning(f"Nieznana komenda: {typ}")
