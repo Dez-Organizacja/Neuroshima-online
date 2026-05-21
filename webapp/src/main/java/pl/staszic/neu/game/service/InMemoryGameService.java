@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pl.staszic.neu.game.model.GameData;
 import pl.staszic.neu.messages.GameStatusChangeRequest;
 import pl.staszic.neu.game.model.Room;
 import pl.staszic.neu.game.model.Game;
@@ -33,7 +32,7 @@ public class InMemoryGameService implements GameService {
     @Autowired
     public InMemoryGameService(
             RestService restService,
-            @Value("${game.state-service.url:http://127.0.0.1:5000/api/neuroshima/request}") String gameStateServiceUrl, ObjectMapper objectMapper
+            @Value("${game.state-service.url:http://127.0.0.1:5000/api/neuroshima}") String gameStateServiceUrl, ObjectMapper objectMapper
     ) {
         this.restService = restService;
         this.gameStateServiceUrl = gameStateServiceUrl;
@@ -214,14 +213,23 @@ public class InMemoryGameService implements GameService {
 
         Game game = activeGames.get(request.getGameId());
 
-        GameStatusChangeRequest statusChange = new GameStatusChangeRequest();
-        statusChange.setData(new GameData(request.getGameId(), request.getActionData()));
+        GameStatusChangeRequest gameStatusChangeRequest = new GameStatusChangeRequest();
+        gameStatusChangeRequest.setGameState(game.getGameState());
+        gameStatusChangeRequest.setUserAction(request.getActionData());
 
-        JsonNode gameStatusChangeRequest = objectMapper.valueToTree(statusChange);
-        JsonNode responseJsonMessage = restService.postJson(gameStateServiceUrl, gameStatusChangeRequest);
+        JsonNode responseGameDataJsonMessage = restService.postJson(gameStateServiceUrl + "/action", objectMapper.valueToTree(gameStatusChangeRequest));
+
+        GameStatusChangeResponse responseGameData = objectMapper.convertValue(responseGameDataJsonMessage, GameStatusChangeResponse.class);
+        game.setGameState(responseGameData.getGameState());
+
+        GameViewRequest gameViewRequest = new GameViewRequest();
+        gameViewRequest.setGameState(game.getGameState());
+
+        JsonNode responseGameViewJsonMessage = restService.postJson(gameStateServiceUrl + "/view", objectMapper.valueToTree(gameViewRequest));
+        GameViewResponse gameViewResponse = objectMapper.convertValue(responseGameViewJsonMessage, GameViewResponse.class);
 
         ActionResponse response = new ActionResponse();
-        response.setGameState(responseJsonMessage);
+        response.setGameView(gameViewResponse.getGameView());
 
         logger.info("Action processed: {}", request);
 

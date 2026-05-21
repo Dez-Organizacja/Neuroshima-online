@@ -1,24 +1,41 @@
 package pl.staszic.neu.messages;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import pl.staszic.neu.game.model.GameData;
 
 public class GameStatusChangeRequest extends ApiMessage {
 
-    @JsonProperty("data")
-    GameData data;
+    public static final String TYPE = "GAMESTATUSCHANGE_REQUEST";
 
-    public GameStatusChangeRequest() { }
+    @JsonProperty("gameState")
+    private JsonNode gameState;
 
-    public GameStatusChangeRequest(GameData data) {
-        this.data = data;
+    @JsonProperty("userAction")
+    private JsonNode userAction;
+
+    public GameStatusChangeRequest() {
+        super(TYPE);
     }
 
-    public GameData getData() {
-        return data;
+    public GameStatusChangeRequest(JsonNode gameState, JsonNode userAction) {
+        super(TYPE);
+        this.gameState = gameState;
+        this.userAction = userAction;
     }
-    public void setData(GameData data) {
-        this.data = data;
+
+    public JsonNode getGameState() {
+        return gameState;
+    }
+    public void setGameState(JsonNode gameState) {
+        this.gameState = gameState;
+    }
+
+    public JsonNode getUserAction() {
+        return userAction;
+    }
+    public void setUserAction(JsonNode userAction) {
+        this.userAction = userAction;
     }
 
 }

@@ -1,24 +1,23 @@
 package pl.staszic.neu.messages;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ActionResponse extends GameScopedWebSocketMessage {
 
     public static final String TYPE = "ACTION_RESPONSE";
 
-    private JsonNode gameState;
+    private JsonNode gameView;
 
     public ActionResponse() {
         super(TYPE);
     }
 
-    public JsonNode getGameState() {
-        return gameState;
+    public JsonNode getGameView() {
+        return gameView;
     }
 
-    public void setGameState(JsonNode newGameState) {
-        this.gameState = newGameState;
+    public void setGameView(JsonNode newGameState) {
+        this.gameView = newGameState;
     }
 }
 
