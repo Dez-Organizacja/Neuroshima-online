@@ -10,16 +10,11 @@ class Hand():
         Turn.Type.SECOND : 2
     }
     DEFAULT_HAND_LIMIT = 3
-    ACTIVE_TOKEN_KEY = "active_token"
     TOKENS_KEY = "tokens"
 
     def __init__(self, fraction):
         self.tokens = []
         self.fraction = fraction
-
-    # def discard_active_token(self):
-    #     self.tokens.pop(self.active_token)
-    #     self.active_token = None
 
     def discard_token(self, slot):
         self.tokens.pop(slot)
@@ -47,19 +42,11 @@ class Hand():
             drawn_token = pile.remove_token()
             self.tokens.append(drawn_token)
 
-    # def reset_active_token(self):
-    #     self.active_token = None
-
     def get_token(self, place):
         if(place < 0 or place >= len(self.tokens)):
             return None
         self.active_token = place
         return self.tokens[place]
-
-    # def get_active_token(self) -> Token:
-    #     if(self.active_token is None):
-    #         return None
-    #     return self.tokens[self.active_token]
 
     def import_token(self, name):
         self.draw_token(TokenFactory().create(name, self.fraction))

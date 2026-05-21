@@ -37,22 +37,6 @@ class GameRules():
         return True
 
     #############################################################################
-    #   get_available_* functions       
-    #############################################################################
-
-    def get_available_bottoms(self, ctx, wanted):
-        return [
-            bottom for bottom in wanted
-            if self.can_use_bottom(ctx=ctx, bottom=bottom)
-        ]
-
-    def get_available_from_hand(self, ctx, hand):
-        if(hand.fraction != ctx.fraction):
-            return []
-        return [i for i in range(hand.size)]
-
-
-    #############################################################################
     #   Other useful functions       
     #############################################################################
     def is_hand_full(self, hand):

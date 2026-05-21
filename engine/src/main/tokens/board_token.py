@@ -3,12 +3,7 @@ import main.frakcje.wszystkie_frakcje as allfractions
 from main.utils.variable import *
 from copy import deepcopy
 from main.tokens.abstract_token import Token
-from main.actions.available.result import AvailableActionResult
-from main.actions.execute.result import ActionResult
-from main.board.board_query import BoardQuery
-from main.events.effects import DiscardActiveTokenEffect, PlaceEffect
-# from main.effects.ui_change_effects  import SetInteractionState, SetSelected
-from main.state.selection import Selected
+from main.tokens.data import TokenKey, TokenStats, TokenType
 
 class BoardToken(Token):
     DEFAULT = {
@@ -63,41 +58,6 @@ class BoardToken(Token):
     def frakcja(self):
         return self.fraction
 
-    def get_available_actions(self, ctx):
-        query = BoardQuery([ctx.rules.is_empty()])
-        return AvailableActionResult(
-            positions=query.apply(),
-            can_discard=self.name != BoardType.HQ,
-            can_cancel=True
-        )
-
-    def execute_placing(self, pos):
-        # pos = action[Action.Key.POS]
-        return ActionResult(
-            effects=[
-                PlaceEffect(pos=pos, unit=self),
-                DiscardActiveTokenEffect()
-            ],
-            interaction_state_changes=[
-                SetInteractionState(State.ROTATE),
-                SetSelected(Selected(pos))
-            ]
-        )
-
-    def execute_selecting(self):
-        return ActionResult(
-            interaction_state_changes=[
-                SetInteractionState(State.SELECTED_HAND)
-            ]
-        )
-
-    def execute(self, ctx, action):
-        if(ctx.state.interaction_state == State.NO_SELECTION):
-            return self.execute_selecting()
-        if(ctx.state.insteraction_state == State.SELECTED_HAND):
-            return self.execute_placing(action[Action.Key.POS])
-
-
     def export(self):
         return self.name
 
@@ -123,24 +83,24 @@ class BoardToken(Token):
         return self.zasiecowany
 
     def czy_sieciarz(self):
-        return (Token.Stats.WIRE in self.wlasciwosci)
+        return (TokenStats.WIRE in self.wlasciwosci)
     
     # --------- moduly ---------
 
     def czy_modul(self):
-        return (Token.Stats.BOOSTS in self.wlasciwosci)
+        return (TokenStats.BOOSTS in self.wlasciwosci)
 
     def get_boosts(self):
-        return self.wlasciwosci.get(Token.Stats.BOOSTS, {})
+        return self.wlasciwosci.get(TokenStats.BOOSTS, {})
     
     def steal_boost(self):
-        self.wlasciwosci[Token.Stats.BOOST_TARGET] = "enemy"
+        self.wlasciwosci[TokenStats.BOOST_TARGET] = "enemy"
 
     def boost_me(self, boost_type):
         if boost_type in self.boost_to_attack:
             attack_key = self.boost_to_attack[boost_type]
 
-            attacks = self.wlasciwosci.get(Token.Stats.ATTACKS)
+            attacks = self.wlasciwosci.get(TokenStats.ATTACKS)
 
             if attacks and attack_key in attacks:
                 attack_list = attacks[attack_key]
@@ -152,7 +112,7 @@ class BoardToken(Token):
             return
 
         if boost_type == Boost.INITIATIVE:
-            initiative = self.wlasciwosci.get(Token.Stats.INITIATIVE)
+            initiative = self.wlasciwosci.get(TokenStats.INITIATIVE)
 
             if initiative:
                 for i in range(len(initiative)):
@@ -177,7 +137,7 @@ class BoardToken(Token):
         # print("dostalem rane", self.frakcja, self.name, obrazenia, kierunek, czy_blokowalny)
         print(f"{self.name} atakowany, obrazenia {obrazenia}, kierunek {kierunek}, czy_blokowalny {czy_blokowalny}")
         kierunek2 = (kierunek - self.rotacja + 6) % 6
-        pancerz = self.wlasciwosci.get(Token.Stats.ARMOR, {})
+        pancerz = self.wlasciwosci.get(TokenStats.ARMOR, {})
 
         if (kierunek2 in pancerz) and (czy_blokowalny):
             obrazenia -= 1
@@ -185,7 +145,7 @@ class BoardToken(Token):
         self.dostan_rane(obrazenia)
 
     def is_alive(self):
-        return(self[Token.Stats.HP] > self.rany)
+        return(self[TokenStats.HP] > self.rany)
         # if self["hp"] <= self.rany:
         #     # wywolaj_medyka()
         #     self.board[self.x][self.y] = None
@@ -194,16 +154,16 @@ class BoardToken(Token):
         return self.wlasciwosci.get(stat_key, None)
 
     def can_activate(self, initiative):
-        initiatives = self.get_stat(Token.Stats.INITIATIVE)
+        initiatives = self.get_stat(TokenStats.INITIATIVE)
         if initiatives:
             return initiative in initiative
         return False
 
     def daj_ataki(self, inicjatywa):
-        if not self.can_activate():
+        if not self.can_activate(inicjatywa):
             return {}
 
-        attacks = self.wlasciwosci.get(Token.Stats.ATTACKS, {})
+        attacks = self.wlasciwosci.get(TokenStats.ATTACKS, {})
         
         ataki = {}
         for attack_type, attack_list in attacks.items():
