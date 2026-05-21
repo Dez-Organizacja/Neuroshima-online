@@ -36,8 +36,8 @@ const Hexagon: React.FC<HexagonProps> = ({
             height: height,
             backgroundColor: color + "33",
             position: "absolute",
-            left: x,
-            top: y,
+            left: x - (size / 2),
+            top: y - (height / 2),
             transform: `rotate(${rotation}deg) scale(1)`,
         }}
         >

@@ -1,4 +1,5 @@
 import React from "react"
+import { useRef, useState, useEffect } from "react"
 import "./HexImage.css"
 import { imagesByName } from "./../Images"
 
@@ -19,37 +20,47 @@ export default function Image({
 }: ImageProps) {
     const imageSrc = imagesByName[imageName]
 
+    const imageRef = useRef<HTMLImageElement>(null);
+    const [width, setWidth] = useState(0);
+
+    useEffect(() => {
+        if (!imageRef.current) return
+
+        const observer = new ResizeObserver(() => {
+            if (imageRef.current) {
+                setWidth(
+                    imageRef.current.offsetWidth
+                )
+            }
+        })
+
+        observer.observe(imageRef.current)
+
+        return () => {
+            observer.disconnect()
+        }
+    }, [])
+
     return (
         <img
+        ref={imageRef}
         src={imageSrc}
         alt={imageName}
         className="placed-image"
+
+        onLoad={() => {
+            if (imageRef.current) {
+                setWidth(imageRef.current.offsetWidth)
+            }
+        }}
+
         style={{
-            left: `${x}px`,
-            top: `${y}px`,
-            height: `${height}px`,
+            height: height,
+            width: "auto",
+            left: x - (width / 2),
+            top: y - (height / 2),
             transform: `rotate(${rotation}deg) scale(1)`,
         }}
         />
     )
 }
-
-// export default function App() {
-//   return (
-//     <div className="canvas">
-//       <MyImage
-//         x={300}
-//         y={150}
-//         height={200}
-//         rotation={30}
-//       />
-
-//       <MyImage
-//         x={500}
-//         y={250}
-//         height={120}
-//         rotation={-15}
-//       />
-//     </div>
-//   )
-// }
