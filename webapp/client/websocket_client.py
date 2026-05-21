@@ -86,6 +86,30 @@ class WebSocketGameClient:
         self.auth_token = token
         logger.info("Logowanie zakończone sukcesem. Użytkownik: %s", data.get("username", username))
 
+    def register(self, register_url: str, username: str, password: str) -> None:
+        """Rejestruje nowego użytkownika za pomocą endpointu REST.
+
+        Args:
+            register_url: URL endpointu rejestracji REST
+            username: Nazwa użytkownika
+            password: Hasło użytkownika
+        """
+        logger.info("Rejestracja użytkownika %s przez %s", username, register_url)
+        response = requests.post(
+            register_url,
+            json={"username": username, "password": password},
+            timeout=5,
+        )
+        try:
+            response.raise_for_status()
+            logger.info("Rejestracja zakończona sukcesem dla użytkownika %s.", username)
+        except requests.exceptions.HTTPError as e:
+            if response.status_code == 409:
+                logger.error("Błąd rejestracji: %s", response.json().get('error', 'Konflikt danych (np. użytkownik już istnieje).'))
+            else:
+                logger.error("Błąd rejestracji HTTP: %s", e)
+            raise RuntimeError("Nie udało się zarejestrować użytkownika") from e
+
     def connect(self) -> None:
         """Łączy się z serwerem websocket."""
         if not self.auth_token:
@@ -211,8 +235,18 @@ def parse_args() -> argparse.Namespace:
         default="http://localhost:8080/api/auth/login",
         help="Adres endpointu logowania REST"
     )
-    parser.add_argument("--username", required=True, help="Login użytkownika")
-    parser.add_argument("--password", required=True, help="Hasło użytkownika")
+    parser.add_argument(
+        "--register-url",
+        default="http://localhost:8080/api/auth/register",
+        help="Adres endpointu rejestracji REST"
+    )
+    parser.add_argument(
+        "--register",
+        action="store_true",
+        help="Zarejestruj użytkownika z podanym loginem i hasłem przed próbą logowania"
+    )
+    parser.add_argument("--username", required=False, help="Login użytkownika")
+    parser.add_argument("--password", required=False, help="Hasło użytkownika")
     parser.add_argument(
         "-v", "--verbose",
         action="store_true",
@@ -235,7 +269,28 @@ def main() -> None:
     client = WebSocketGameClient(args.server, on_message_callback=on_message)
     
     try:
-        client.login(args.auth_url, args.username, args.password)
+        # Jeśli nie podano z CLI, pytamy w konsoli - tryb interaktywny
+        username = args.username
+        password = args.password
+        is_register = args.register
+
+        if not username or not password:
+            print("--- Weryfikacja konta Neuroshima ---")
+            action = input("Wybierz akcję: [L]ogowanie / [R]ejestracja (domyślnie L): ").strip().upper()
+            if action == 'R':
+                is_register = True
+            
+            while not username:
+                username = input("Podaj login użytkownika: ").strip()
+            
+            while not password:
+                import getpass
+                password = getpass.getpass("Podaj hasło użytkownika: ").strip()
+
+        if is_register:
+            client.register(args.register_url, username, password)
+
+        client.login(args.auth_url, username, password)
         client.connect()
         logger.info("Połączenie ustanowione. Naciśnij Ctrl+C aby wyjść.")
         logger.info("Możesz wpisywać dane w terminalu - hook on_user_input() będzie wywoływany.")

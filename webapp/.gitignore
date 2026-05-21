@@ -50,3 +50,4 @@ bin/
 /logs/
 
 users.txt
+users.db
