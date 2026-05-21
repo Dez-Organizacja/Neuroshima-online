@@ -1,172 +1,163 @@
 from copy import deepcopy
-import main.frakcje.wszystkie_frakcje as allfractions
-from main.utils.variable import *
-from copy import deepcopy
+from enum import Enum
+
+from main.utils.variable import Attack, Boost
 from main.tokens.abstract_token import Token
 from main.tokens.data import TokenKey, TokenStats, TokenType
+from main.tokens.properties import Properties
+
 
 class BoardToken(Token):
     DEFAULT = {
-        TokenKey.NAME : "default",
-        TokenKey.FRACTION : "neutral",
-        TokenKey.ROTATION : 0,
-        TokenKey.DAMAGE : 0,
-        # TokenKey.X : -1,
-        # TokenKey.Y : -1
-        # Token.WIRED : False
+        TokenKey.NAME: "default",
+        TokenKey.FRACTION: "neutral",
+        TokenKey.ROTATION: 0,
+        TokenKey.DAMAGE: 0,
     }
-    TYPE = "board"
 
-    def __init__(self, rules, name, fraction, data):
-        merged = {**self.DEFAULT, **data}
-        # print(data)
-        # print("token.name:", Token.NAME)
-        # self.frakcja = data[Token.FRACTION]
-        # self.name = data[Token.NAME]
-        super().__init__(rules, name, fraction, TokenType.BOARD)
-        self.rotacja = merged[TokenKey.ROTATION]
-        self.rany = merged[TokenKey.DAMAGE]
-        # self.x = merged[TokenKey.X]
-        # self.y = merged[TokenKey.Y]
-        raw_wlasciwosci = allfractions.frakcje.get(
-            self.fraction, {}
-        ).get(self.name, {})
-        self.wlasciwosci_pierwotne = raw_wlasciwosci
-        
-        self.wlasciwosci = deepcopy(self.wlasciwosci_pierwotne)
-        
-        self.zasiecowany = False
+    TYPE = TokenType.BOARD
+
+    def __init__(self, data=None):
+        merged = deepcopy(self.DEFAULT)
+
+        if data is not None:
+            merged.update(deepcopy(data))
+
+        super().__init__(merged[TokenKey.NAME], merged[TokenKey.FRACTION], TokenType.BOARD)
+
+        self.rotation = merged[TokenKey.ROTATION]
+        self.fraction = merged[TokenKey.FRACTION]
+        self.damage = merged[TokenKey.DAMAGE]
+        self.name = merged[TokenKey.NAME]
+
+        self.properties = Properties(self.name, self.fraction)
+
+        # print("mam na imie:", name)
+        print(merged)
+
+        self.wired = False
+
         self.boost_to_attack = {
             Boost.MELEE: Attack.MELEE,
             Boost.SHOOT: Attack.SHOOT,
         }
 
-    def __getitem__(self, key):
-        # pozwala robis self["xd"] zamiast self.wlasciwosci["xd"]
-        if isinstance(key, str):
-            for stat in TokenStats:
-                if stat.value == key:
-                    key = stat
-                    break
-        return self.wlasciwosci.get(key)
+    def get_ability(self):
+        return super().get_ability()
+
+    # ---------------- properties ----------------
+
+    def get_property(self, key: Enum, default=None):
+        return getattr(self.properties, key.name, default)
+
+    def set_property(self, key: Enum, value) -> None:
+        setattr(self.properties, key.name, value)
+
+    def has_property(self, key: Enum) -> bool:
+        return hasattr(self.properties, key.name)
+
+    def __getitem__(self, key: Enum):
+        return self.get_property(key)
+
+    # ---------------- basic data ----------------
 
     @property
-    def nazwa(self):
+    def name_pl(self):
         return self.name
 
     @property
-    def frakcja(self):
+    def fraction_pl(self):
         return self.fraction
-
-    def export(self):
-        return self.name
-
-    def zeton_to_json(self):
-        json = {
+        
+    def to_json(self):
+        return {
             Token.FRACTION: self.fraction,
             Token.NAME: self.name,
-            Token.ROTATION: self.rotacja,
-            Token.DAMAGE: self.rany,
-            Token.WIRED: self.zasiecowany
+            Token.ROTATION: self.rotation,
+            Token.DAMAGE: self.damage,
+            Token.WIRED: self.wired,
         }
-        return json
 
-    # --------- sieciarze ---------
+    # ---------------- wire ----------------
 
-    def zasieciuj(self):
-        self.zasiecowany = True
-    
-    def odsieciuj(self):
-        self.zasiecowany = False
+    def wire(self) -> None:
+        self.wired = True
 
-    def czy_zasieciowany(self):
-        return self.zasiecowany
+    def unwire(self) -> None:
+        self.wired = False
 
-    def czy_sieciarz(self):
-        return (TokenStats.WIRE in self.wlasciwosci)
-    
-    # --------- moduly ---------
+    def is_wired(self) -> bool:
+        return self.wired
 
-    def czy_modul(self):
-        return (TokenStats.BOOSTS in self.wlasciwosci)
+    def can_wire(self) -> bool:
+        return self.has_property(TokenStats.SIEC)
+
+    # ---------------- boosts / modules ----------------
+
+    def is_booster(self) -> bool:
+        return self.has_property(TokenStats.BOOSTS)
 
     def get_boosts(self):
-        return self.wlasciwosci.get(TokenStats.BOOSTS, {})
-    
-    def steal_boost(self):
-        self.wlasciwosci[TokenStats.BOOST_TARGET] = "enemy"
+        return self.get_property(TokenStats.BOOSTS, {})
 
-    def boost_me(self, boost_type):
-        if boost_type in self.boost_to_attack:
-            attack_key = self.boost_to_attack[boost_type]
+    def steal_boost(self) -> None:
+        if self.is_booster():
+            self.set_property(TokenStats.BOOST_TARGET, "enemy")
 
-            attacks = self.wlasciwosci.get(TokenStats.ATTACKS)
+    # ---------------- stats ----------------
 
-            if attacks and attack_key in attacks:
-                attack_list = attacks[attack_key]
+    def reset_properties(self) -> None:
+        self.properties = Properties(self.name, self.fraction)
 
-                for i, (direction, power) in enumerate(attack_list):
-                    attack_list[i] = (direction, power + 1)
+    def rotate(self, rotation: int) -> None:
+        self.rotation = rotation
 
-                # print(f"Jestem {self.name}, mam boost {boost_type}, atak {attack_key}: {attack_list}")
-            return
+    def take_damage(self, damage: int) -> None:
+        self.damage += max(0, damage)
 
-        if boost_type == Boost.INITIATIVE:
-            initiative = self.wlasciwosci.get(TokenStats.INITIATIVE)
+    def receive_attack(self, damage: int, direction: int, blockable=False) -> None:
+        relative_direction = (direction - self.rotation + 6) % 6
 
-            if initiative:
-                for i in range(len(initiative)):
-                    initiative[i] += 1
+        armor = self.get_property(TokenStats.ARMOR, [])
 
-    # -----------------------------------------
+        if blockable and relative_direction in armor:
+            damage -= 1
 
-    def reset_stats(self):
-        self.wlasciwosci = deepcopy(self.wlasciwosci_pierwotne)
+        self.take_damage(damage)
 
-    def czy_w_planszy(self, x, y):
-        return (0 <= x < 5 and 0 <= y < 9)
+    def is_alive(self) -> bool:
+        hp = self.get_property(TokenStats.HP, 0)
+        return hp > self.damage
 
-    def rotate(self, rotacja):
-        self.rotacja = rotacja
-        
-    def dostan_rane(self, obrazenia):
-        self.rany += obrazenia
+    def get_stat(self, stat_key: TokenStats, default=None):
+        return self.get_property(stat_key, default)
 
-    def attacked(self, obrazenia, kierunek, czy_blokowalny=False):
-        # kierunek -> skad przychodzi atak
-        # print("dostalem rane", self.frakcja, self.name, obrazenia, kierunek, czy_blokowalny)
-        print(f"{self.name} atakowany, obrazenia {obrazenia}, kierunek {kierunek}, czy_blokowalny {czy_blokowalny}")
-        kierunek2 = (kierunek - self.rotacja + 6) % 6
-        pancerz = self.wlasciwosci.get(TokenStats.ARMOR, {})
+    def can_activate(self, initiative: int) -> bool:
+        initiatives = self.get_stat(TokenStats.INITIATIVE, [])
 
-        if (kierunek2 in pancerz) and (czy_blokowalny):
-            obrazenia -= 1
+        if initiatives is None:
+            return False
 
-        self.dostan_rane(obrazenia)
+        if isinstance(initiatives, (list, tuple, set)):
+            return initiative in initiatives
 
-    def is_alive(self):
-        return(self[TokenStats.HP] > self.rany)
-        # if self["hp"] <= self.rany:
-        #     # wywolaj_medyka()
-        #     self.board[self.x][self.y] = None
+        return initiative == initiatives
 
-    def get_stat(self, stat_key):
-        return self.wlasciwosci.get(stat_key, None)
-
-    def can_activate(self, initiative):
-        initiatives = self.get_stat(TokenStats.INITIATIVE)
-        if initiatives:
-            return initiative in initiative
-        return False
-
-    def daj_ataki(self, inicjatywa):
-        if not self.can_activate(inicjatywa):
+    def get_attacks(self, initiative: int) -> dict:
+        if not self.can_activate(initiative):
             return {}
 
-        attacks = self.wlasciwosci.get(TokenStats.ATTACKS, {})
-        
-        ataki = {}
-        for attack_type, attack_list in attacks.items():
-            ataki[attack_type] = [[(direction + self.rotacja) % 6, power] for direction, power in attack_list]
+        attacks = self.get_stat(TokenStats.ATTACKS, {})
 
-        return ataki
+        rotated_attacks = {}
+
+        for attack_type, attack_list in attacks.items():
+            rotated_attacks[attack_type] = [
+                [
+                    (direction + self.rotation) % 6,
+                    power,
+                ]
+                for direction, power in attack_list
+            ]
+
+        return rotated_attacks
