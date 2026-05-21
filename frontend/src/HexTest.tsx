@@ -13,10 +13,18 @@ export default function HexTest(){
     const ScreenWidth = width;
     const ScreenHeight = height;
 
+    const Size = height / 12;
+
     const CenterX = ScreenWidth / 2;
     const CenterY = ScreenHeight / 2;
+    const MidY = 2 * 1.732 * Size;
+    const MidX = 4 * Size;
+    const AddX = CenterX - MidX;
+    const AddY = CenterY - MidY;
 
-    const Size = height / 16;
+    console.log("Width: " + ScreenWidth + "     Height: " + ScreenHeight);
+    console.log("CenterX: " + CenterX + "     CenterY: " + CenterY);
+    console.log("MidX: " + MidX + "     MidY: " + MidY);
 
     const Items = [];
 
@@ -28,17 +36,22 @@ export default function HexTest(){
         for(let x = Math.abs(2 - y); x <= 4 + Math.abs(2 - y) + 2 * Math.abs(2 - Math.abs(2 - y)); x+=2){
             const Y = y * 1.732 * Size;
             const X = x * Size;
-            const FinalX = X + 200;
-            const FinalY = Y + 200;
+            const FinalX = X + 300;
+            const FinalY = Y + 300;
 
             Items.push(
-                <Image imageName="silacz" x={FinalX} y={FinalY} height={((Size * 2 + 10) * 0.866)} rotation={30} />
+                <Image imageName="silacz" x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
             )
             Items.push(
-                <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 10} rotation={30} color="#d10606"> {y}, {x} </Hexagon>
+                <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={30} color="#d10606"> {y}, {x} </Hexagon>
             )
         }
     }
+
+    Items.push(
+        <Hexagon x={-95} y={-85} poz1={0} poz2={0} size={Size * 2 + 15} rotation={0} color="#d10606"> {0}, {0} </Hexagon>
+    )
+
     // =============== //
 
     for(let q = -2; q <= 2; q++){
