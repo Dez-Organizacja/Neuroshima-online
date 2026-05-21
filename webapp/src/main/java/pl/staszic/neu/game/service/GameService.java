@@ -17,8 +17,9 @@ public interface GameService {
 
     EndGameResponse endGame(String clientId, EndGameRequest request);
 
-    String getAffiliation(String clientId);
-
     void handleClientDisconnect(String clientId);
-}
 
+    void registerClientUsername(String clientId, String username);
+
+    String getAffiliation(String clientId);
+}

@@ -9,20 +9,8 @@ public class CreateNewRoomRequest extends WebSocketMessage {
     @JsonProperty("roomId")
     private String roomId;
 
-    @JsonProperty("playerName")
-    private String playerName;
-
-
     public CreateNewRoomRequest() {
         super(TYPE);
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
     }
 
     public String getRoomId() {

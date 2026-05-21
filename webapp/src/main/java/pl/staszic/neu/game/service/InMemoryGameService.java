@@ -13,7 +13,9 @@ import pl.staszic.neu.game.model.Game;
 import pl.staszic.neu.messages.*;
 import pl.staszic.neu.rest.service.RestService;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -23,6 +25,7 @@ public class InMemoryGameService implements GameService {
     private final Map<String, Room> activeRooms = new ConcurrentHashMap<>();
     private final Map<String, String> affiliations = new ConcurrentHashMap<>();
     private final Map<String, Game> activeGames = new ConcurrentHashMap<>();
+    private final Map<String, String> clientUsernames = new ConcurrentHashMap<>();
 
     //nwm czy to jest dobre miejsce na restService i url, ale na na razie tak zostanie
     private final RestService restService;
@@ -67,7 +70,7 @@ public class InMemoryGameService implements GameService {
         CreateNewRoomResponse response = new CreateNewRoomResponse();
         response.setClientId(clientId);
         response.setCreatedRoomId(roomId);
-        response.setServerStatus("STARTED room=" + request.getRoomId() + " player=" + request.getPlayerName());
+        response.setServerStatus("STARTED room=" + request.getRoomId() + " player=" + clientUsernames.get(clientId));
         return response;
     }
 
@@ -96,7 +99,7 @@ public class InMemoryGameService implements GameService {
 
         JoinRoomResponse response = new JoinRoomResponse();
         response.setClientId(clientId);
-        response.setServerStatus("JOINED room=" + request.getRoomId() + " player=" + request.getPlayerName());
+        response.setServerStatus("JOINED room=" + request.getRoomId() + " player=" + clientUsernames.get(clientId));
         return response;
     }
 
@@ -123,13 +126,16 @@ public class InMemoryGameService implements GameService {
                 activeGames.remove(room.getGameId());
                 room.clearGame();
             }
+            if(room.isEmpty()){
+                activeRooms.remove(request.getRoomId());
+            }
         } catch (Exception e) {
             throw new GameValidationException(e.getMessage());
         }
 
         LeaveRoomResponse response = new LeaveRoomResponse();
         response.setClientId(clientId);
-        response.setServerStatus("LEFT room=" + request.getRoomId() + " player=" + request.getPlayerName());
+        response.setServerStatus("LEFT room=" + request.getRoomId() + " player=" + clientUsernames.get(clientId));
         return response;
     }
 
@@ -146,11 +152,18 @@ public class InMemoryGameService implements GameService {
             throw new GameValidationException("Room does not exist");
         }
 
+        Set<String> playerNamesInRoom = new HashSet<>();
+        for (String id : room.getPlayerIds()) {
+            playerNamesInRoom.add(clientUsernames.getOrDefault(id, "Unknown"));
+        }
+
         GetRoomStatusResponse response = new GetRoomStatusResponse();
         response.setClientId(clientId);
         response.setRoomId(request.getRoomId());
         response.setGameId(room.getGameId());
-        response.setPlayersInRoom(room.getPlayerIds());
+
+
+        response.setPlayersInRoom(playerNamesInRoom);
         response.setServerStatus("STATUS for room=" + request.getRoomId() + ": players=" + room.getPlayerIds() + " activeGame=" + room.hasActiveGame());
         return response;
     }
@@ -266,6 +279,7 @@ public class InMemoryGameService implements GameService {
 
     @Override
     public void handleClientDisconnect(String clientId) {
+        clientUsernames.remove(clientId);
         String roomId = affiliations.remove(clientId);
         if (roomId == null) {
             return;
@@ -286,12 +300,22 @@ public class InMemoryGameService implements GameService {
             activeGames.remove(room.getGameId());
             room.clearGame();
         }
+
+        if(room.isEmpty()){
+            activeRooms.remove(roomId);
+        }
     }
 
     private boolean isBlank(String value) {
         return value == null || value.isBlank();
     }
 
+    @Override
+    public void registerClientUsername(String clientId, String username) {
+        clientUsernames.put(clientId, username);
+    }
+
+    @Override
     public String getAffiliation(String clientId) {
         try{
             return affiliations.get(clientId);
@@ -301,5 +325,3 @@ public class InMemoryGameService implements GameService {
         }
     }
 }
-
-

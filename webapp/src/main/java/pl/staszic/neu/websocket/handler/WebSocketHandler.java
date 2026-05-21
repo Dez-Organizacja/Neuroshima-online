@@ -48,18 +48,24 @@ public class WebSocketHandler extends TextWebSocketHandler {
             return;
         }
 
-        String clientId = user.getUsername();
-        session.getAttributes().put("clientId", clientId);
-        sessionRegistry.register(clientId, session);
+        // Tłumaczymy techniczną sesję na konkretnego użytkownika
+        String sessionId = session.getId();
+        String username = user.getUsername();
+
+        session.getAttributes().put("clientId", sessionId);
+        session.getAttributes().put("username", username);
+
+        sessionRegistry.register(sessionId, session);
+        gameService.registerClientUsername(sessionId, username); // ← Przekazujemy username do serwisu gry
 
         Map<String, Object> connectionMessage = new HashMap<>();
         connectionMessage.put("messageType", "CONNECTION");
-        connectionMessage.put("clientId", clientId);
-        connectionMessage.put("username", user.getUsername());
+        connectionMessage.put("clientId", sessionId);
+        connectionMessage.put("username", username);
         connectionMessage.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
         connectionMessage.put("message", "Connected");
 
-        logger.info("Authenticated client connected: {}", objectMapper.writeValueAsString(connectionMessage));
+        logger.info("Authenticated client {} connected as session: {}", username, sessionId);
         sendJson(session, connectionMessage);
     }
 
