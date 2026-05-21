@@ -25,7 +25,7 @@ dependencies {
     // Spring Data JPA + SQLite JDBC + Hibernate Community Dialects
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.xerial:sqlite-jdbc:3.43.0.0")
-    implementation("org.hibernate.orm:hibernate-community-dialects:6.2.9.Final")
+    implementation("org.hibernate.orm:hibernate-community-dialects:6.1.5.Final")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
