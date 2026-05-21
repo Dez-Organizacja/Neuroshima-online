@@ -45,6 +45,9 @@ bin/
 /doc/prompty/
 /.idea/
 
+### Idea ###
+.idea/
+
 ### Moje ###
 /doc/prompty/
 /logs/
