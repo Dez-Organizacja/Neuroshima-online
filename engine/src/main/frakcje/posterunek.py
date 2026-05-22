@@ -1,7 +1,7 @@
 import json
 
 from main.utils.variable import Boost, Attack
-from main.tokens.data import TokenKey, TokenType, TokenStats, Ability
+from main.tokens.data import TokenKey, TokenType, TokenStats, TokenRelation, Ability
 
 wlasciwosci = {
     ############## wojownicy
@@ -34,7 +34,7 @@ wlasciwosci = {
         TokenStats.BOOSTS: {
             Boost.NEW_INITIATIVE: [0, 1, 2, 3, 4, 5],
         },
-        TokenStats.BOOST_TARGET: "own",
+        TokenStats.BOOST_TARGET: TokenRelation.OWN,
         TokenStats.INITIATIVE: [0],
     },
 
@@ -46,7 +46,7 @@ wlasciwosci = {
         TokenStats.BOOSTS: {
             Boost.STEAL_BOOST: [0, 1, 2, 3, 4, 5],
         },
-        TokenStats.BOOST_TARGET: "enemy"
+        TokenStats.BOOST_TARGET: TokenRelation.ENEMY
     },
 
     ############# natychmiastowe

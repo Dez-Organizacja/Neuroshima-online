@@ -1,6 +1,6 @@
 import json
 from main.utils.variable import Boost, Attack
-from main.tokens.data import TokenKey, TokenType, TokenStats, Ability
+from main.tokens.data import TokenKey, TokenType, TokenStats, TokenRelation, Ability
 
 wlasciwosci = {
     ############## wojownicy
@@ -129,7 +129,7 @@ wlasciwosci = {
         TokenStats.BOOSTS: {
             Boost.SHOOT: [0, 1, 2, 3, 4, 5],
         },
-        TokenStats.BOOST_TARGET: "own",
+        TokenStats.BOOST_TARGET: TokenRelation.OWN,
         TokenStats.INITIATIVE: [0],
     },
 
@@ -141,7 +141,7 @@ wlasciwosci = {
         TokenStats.BOOSTS: {
             Boost.SHOOT: [1, 3, 5],
         },
-        TokenStats.BOOST_TARGET: "own"
+        TokenStats.BOOST_TARGET: TokenRelation.OWN
     },
     "zwiadowca": {
         TokenKey.TYPE : TokenType.BOARD,
@@ -150,7 +150,7 @@ wlasciwosci = {
         TokenStats.BOOSTS: {
              Boost.INITIATIVE: [0, 2, 4]
         },
-        TokenStats.BOOST_TARGET: "own"
+        TokenStats.BOOST_TARGET: TokenRelation.OWN
     },
     "matka": {
         TokenKey.TYPE : TokenType.BOARD,
@@ -159,7 +159,7 @@ wlasciwosci = {
         TokenStats.BOOSTS: {
             Boost.NEW_INITIATIVE: [0]
         },
-        TokenStats.BOOST_TARGET: "own"
+        TokenStats.BOOST_TARGET: TokenRelation.OWN
     },
     "medyk": {
         TokenKey.TYPE : TokenType.BOARD,
@@ -168,7 +168,7 @@ wlasciwosci = {
         TokenStats.BOOSTS: {
             Boost.HEAL: [0, 2, 4]
         },
-        TokenStats.BOOST_TARGET: "own"
+        TokenStats.BOOST_TARGET: TokenRelation.OWN
     },
     "mozg": {
         TokenKey.TYPE : TokenType.BOARD,
@@ -178,7 +178,7 @@ wlasciwosci = {
             Boost.SHOOT: [0, 2, 4],
             Boost.MELEE: [0, 2, 4]
         },
-        TokenStats.BOOST_TARGET: "own"
+        TokenStats.BOOST_TARGET: TokenRelation.OWN
     },
     ############# natychmiastowe
     Ability.BITWA: {

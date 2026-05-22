@@ -11,6 +11,11 @@ class TokenKey(Enum):
     WIRED = "zasieciowany"
     UNIT_COUNT = "liczbajednostek"
 
+class TokenRelation(Enum):
+    OWN = "own"
+    ENEMY = "enemy"
+    ALL = "all"
+
 class TokenType(Enum):
     BOARD = "plansza"
     INSTANT = "natychmiastowy"
