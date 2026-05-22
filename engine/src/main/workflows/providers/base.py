@@ -1,20 +1,14 @@
 from main.state.contex import ActionContext
-from abc import ABC, abstractmethod
 from main.actions.available.config import AvActionsConfig, PositionsGetter
 
-class WorkflowRules(ABC):
-
-    @staticmethod
-    @abstractmethod
-    def get_available_tokens(ctx : ActionContext):
+class WorkflowActionProvider():
+    def get_available_tokens(self, ctx : ActionContext):
         return {}
     
-    @staticmethod
-    @abstractmethod
-    def get_available_bottoms(ctx : ActionContext):
+    def get_available_bottoms(self, ctx : ActionContext):
         return []
     
-    def get_available_positions(ctx : ActionContext):
+    def get_available_positions(self, ctx : ActionContext):
         return []
 
     def build_av_actions_config(self, 

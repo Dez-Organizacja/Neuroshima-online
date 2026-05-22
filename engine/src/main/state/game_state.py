@@ -41,13 +41,8 @@ def print_obj(obj, deepth):
 
 @dataclass
 class GameState:
-    phase               : str
     fractions           : list[str]
-    # interaction_state   : str = State.NO_SELECTION
-    # selected            : Selected = field(default_factory=Selected)
-    # active_action       : dict = field(default_factory=dict)
     current_fraction    : str = ""
-    next_turns          : list[dict] = field(default_factory=list)
     players             : dict[str, PlayerState] = field(default_factory=dict)
     board               : Board = field(default_factory=Board)
     flow_queue          : deque[FlowEvent] = field(default_factory=deque)

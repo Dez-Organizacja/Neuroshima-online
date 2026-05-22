@@ -1,17 +1,17 @@
-from main.actions.execute.result import ActionResult
+from main.events.data import ActionResult
 from main.events.effects import MoveEffect
 from main.state.contex import ActionContext
 from main.workflows.base import Workflow
 from main.workflows.data import WorkflowName
-from main.rules.workflow.movement import MoveRules
+from main.workflows.providers.movement import MoveProvider
 from main.steps.config import ResolveStepConfig, InitStepConfig
 from main.workflows.step_builders import BoardSelectionMixin, build_end_step
 
-class MoveWorkflow(BoardSelectionMixin, Workflow[MoveRules]):
+class MoveWorkflow(BoardSelectionMixin[MoveProvider], Workflow[MoveProvider]):
     def __init__(self):
-        super().__init__(rules=MoveRules())
+        super().__init__(action_provider=MoveProvider())
         self.name = WorkflowName.MOVE
-        self.get_bottoms = self.rules.get_available_bottoms
+        self.get_bottoms = self.action_provider.get_available_bottoms
 
     def build_move_step(self):
         return ResolveStepConfig(resolve_func=self.resolve_move)
@@ -25,7 +25,7 @@ class MoveWorkflow(BoardSelectionMixin, Workflow[MoveRules]):
             self.build_destination_steps(),
             self.build_move_step(),
             self.build_rotate_step(),
-            build_end_step(),
+            build_end_step(self.resolve_move),
         ]
 
     @staticmethod

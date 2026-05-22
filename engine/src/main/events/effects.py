@@ -1,6 +1,7 @@
 from main.state.contex import ActionContext
-from main.events.base import Event
+from main.events.data import Event
 from abc import ABC
+from main.workflows.data import WorkflowData
 
 class Effect(Event, ABC):
     pass
@@ -70,3 +71,27 @@ class MarkAbilityUsedEffect(Effect):
     def apply(self, ctx):
         token = ctx.board.get_tile(ctx.workflow_data.unit_pos)
         token.ability_used = True
+
+class ResetAbilityUsedEffect(Effect):
+    def __init__(self, positions : list[tuple[int, int]]):
+        self.positions = positions
+
+    def apply(self, ctx : ActionContext):
+        for pos in self.positions:
+            token = ctx.board.get_tile(pos)
+            token.ability_used = False
+
+class DrawTokensEffect(Effect):
+    def __init__(self, hand_limit=3):
+        self.hand_limit = hand_limit
+
+    def apply(self, ctx : ActionContext):
+        hand = ctx.player.hand
+        pile = ctx.player.pile
+        while hand.size < self.hand_limit and not pile.empty:
+            token = pile.get_token()
+            hand.draw_token(token)
+
+class ClearWorkflowDataEffect(Effect):
+    def apply(self, ctx):
+        ctx.workflow_data = WorkflowData()

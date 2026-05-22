@@ -1,5 +1,5 @@
 from main.state.contex import ActionContext
-from main.events.base import Event
+from main.events.data import Event
 from main.workflows.data import WorkflowName
 from main.workflows.factory import WorkflowFactory
 from abc import ABC

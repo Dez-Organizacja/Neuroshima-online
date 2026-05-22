@@ -2,10 +2,14 @@ from typing import get_origin, get_args
 from dataclasses import fields, MISSING
 from collections import deque
 from main.state.player_state import PlayerState
+from enum import Enum
 
 def convert_value(value, target_type, key = None):
     # print(f"convert value: {value} to {target_type}")
     origin = get_origin(target_type) # typ tego co chcemy dostać
+
+    if isinstance(target_type, type) and issubclass(target_type, Enum):
+        return target_type(value)
 
     if hasattr(target_type, "from_dict") and isinstance(value, dict):
         if target_type is PlayerState and key is not None:
@@ -21,10 +25,24 @@ def convert_value(value, target_type, key = None):
             k : convert_value(v, value_type, key=k)
             for k, v in value.items()
         }
+    
+    if origin is list:
+        item_type = get_args(target_type)[0]
+        return [
+            convert_value(v, item_type)
+            for v in value
+        ]
+
+    if origin is deque:
+        item_type = get_args(target_type)[0]
+        return deque(
+            convert_value(v, item_type)
+            for v in value
+        )
 
     if origin is tuple:
         return tuple(value)
-
+    
     return value
     
 def from_dict_dataclass(cls, data: dict):

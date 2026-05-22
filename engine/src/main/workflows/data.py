@@ -17,7 +17,8 @@ class WorkflowName(Enum):
     TURN = "turn"
     BOARD = "board"
     HAND = "hand"
-    INPUT = "input"
+    PLACE = "place"
+    START_BATTLE = "start_battle"
 
 ABILITY_WORKFLOW_REGISTRY = {
     Ability.MOVE : WorkflowName.MOVE,
@@ -66,3 +67,4 @@ class WorkflowData:
 class WorkflowInstance:
     name : WorkflowName
     current_step_index : int = 0
+    fraction : str = ""

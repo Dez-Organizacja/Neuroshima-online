@@ -1,15 +1,18 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 from main.state.contex import ActionContext
+from main.events.data import ActionResult
 from main.steps.factory import StepFactory
-from main.rules.workflow.base import WorkflowRules
-R = TypeVar("R", bound=WorkflowRules)
+from main.workflows.providers.base import WorkflowActionProvider
+from main.utils.variable import Bottom
+from main.steps.step import Step
 
+P = TypeVar("R", bound=WorkflowActionProvider)
 
-class Workflow(ABC, Generic[R]):
-    def __init__(self, rules : R):
+class Workflow(ABC, Generic[P]):
+    def __init__(self, action_provider : P):
         super().__init__()
-        self.rules = rules
+        self.action_provider : P = action_provider
         self.steps_list = self.build_steps()
 
     @abstractmethod
@@ -27,6 +30,6 @@ class Workflow(ABC, Generic[R]):
     def finished(self, ctx : ActionContext) -> bool:
         return len(self.steps_list) > ctx.workflow_instance.current_step_index
 
-    def get_current_step(self, ctx : ActionContext):
+    def get_current_step(self, ctx : ActionContext) -> Step:
         idx = ctx.workflow_instance.current_step_index
         return StepFactory.create(config=self.steps_list[idx])

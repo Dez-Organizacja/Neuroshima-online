@@ -3,10 +3,6 @@ from abc import ABC, abstractmethod
 from main.state.contex import ActionContext
 from main.state.user_action import UserAction
 
-from main.workflows.data import WorkflowName, WorkflowConfig
-from main.workflows.factory import WorkflowFactory
-
-from main.actions.execute.result import ActionResult
 from main.actions.available.result import AvailableActionResult
 
 from main.steps.config import (
@@ -16,10 +12,11 @@ from main.steps.config import (
     InitStepConfig,
     WaitingStepConfig,
     SetStepConfig,
-    EndTurnChcekConfig
+    EndTurnCheckConfig
 )
-from main.steps.data import StepResult
+
 from main.events.workflow import PopWorkflow, PushWorkflow, GoToStep
+from main.events.data import ExecutionResult
 
 from typing import TypeVar, Generic
 
@@ -35,7 +32,7 @@ class Step(ABC, Generic[C]):
                 ctx : ActionContext,
                 action : UserAction | None = None 
         ):
-        return StepResult()
+        return ExecutionResult()
 
     @abstractmethod
     def get_available_actions(self, ctx : ActionContext):
@@ -50,7 +47,7 @@ class WaitingStep(Step[WaitingStepConfig]):
         super().__init__(config)
 
     def execute(self, ctx : ActionContext, action = None):
-        return StepResult(input_consumed=True)
+        return ExecutionResult(input_consumed=True)
     
     def get_available_actions(self, ctx : ActionContext):
         return AvailableActionResult(
@@ -77,13 +74,14 @@ class ResolveStep(AutomaticStep[ResolveStepConfig]):
 
     @staticmethod
     def no_resolve_func(ctx : ActionContext):
-        return ActionResult()
+        return ExecutionResult()
     
     def execute(self, ctx : ActionContext):
-        res = StepResult(action_result=self.config.resolve_func(ctx))
+        res = ExecutionResult(action_result=self.config.resolve_func(ctx))
         if self.config.wf_finished:
             res.workflow_effects = [PopWorkflow()]
         return res
+
 
 A = TypeVar("A", bound = UserAction)
    
@@ -102,19 +100,19 @@ class InitStep(AutomaticStep[InitStepConfig]):
 
     def execute(self, ctx : ActionContext):
         wf_name = self.config.wf_name or self.config.decision_func(ctx)
-        return StepResult(
+        return ExecutionResult(
             workflow_effects=[PushWorkflow(
                 name=wf_name,
                 as_child=self.config.as_child,
             )]
         )
     
-class EndTurnChcekStep(AutomaticStep[EndTurnChcekConfig]):
-    def __init__(self, config : EndTurnChcekConfig):
+class EndTurnCheckStep(AutomaticStep[EndTurnCheckConfig]):
+    def __init__(self, config : EndTurnCheckConfig):
         super().__init__(config)
 
     def execute(self, ctx : ActionContext):
-        res = StepResult()
+        res = ExecutionResult()
         if self.config.check_func(ctx):
             res.workflow_effects.append(PopWorkflow())
             res.action_result = self.config.resolve_func(ctx)

@@ -1,6 +1,9 @@
 from main.actions.available.data import AvailableStructure
 from main.actions.available.config import AvActionsConfig
 from main.state.contex import ActionContext
+from main.state.user_action import UserAction
+from typing import TypeVar
+A = TypeVar("A", bound=UserAction)
 
 class AvailableActions:
     def __init__(self, config : AvActionsConfig):
@@ -15,8 +18,7 @@ class AvailableActions:
             for i in idxes:
                 hand[fraction][i] = True
 
-
-    def get_actions(self, ctx : ActionContext):
+    def get_actions(self, ctx : ActionContext) -> AvailableStructure:
         actions = AvailableStructure.build(ctx)
         cfg : AvActionsConfig = self.config
         self.apply_active_key(

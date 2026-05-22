@@ -5,7 +5,7 @@ from main.state.contex import ActionContext
 from main.state.user_action import UserAction
 from main.steps.data import StepResult, StepName
 from main.workflows.data import WorkflowData, WorkflowName, WorkflowConfig
-from main.actions.execute.result import ActionResult
+from main.events.data import ActionResult
 from typing import Callable, TypeVar, Generic
 
 @dataclass
@@ -49,7 +49,7 @@ class SetStepConfig(AutomaticStepConfig, Generic[A]):
     setter          : Callable[[WorkflowData, T], None]
 
 @dataclass
-class EndTurnChcekConfig(AutomaticStepConfig):
+class EndTurnCheckConfig(AutomaticStepConfig):
     repeat_from_index : int = 0
     check_func : Callable[[ActionContext], bool]
     resolve_func : Callable[[ActionContext], ActionResult] = no_result_function

@@ -1,30 +1,42 @@
 from random import shuffle
 from main.state.contex import ActionContext
-from main.utils.variable import Turn, Phase
+from main.workflows.factory import WorkflowFactory
+from main.engine.resolver import Resolver
+from main.rules.validator import FormatValidator
+from main.actions.available.core import AvailableActions
+from main.systems.passive_system import PassiveSystem
 
 class GameEngine:
 
     def __init__(
         self,
-        rules,
         passive_system,
-        resolver,
-        validator,
-        actions,
-        available_actions
+        resolver : Resolver,
+        validator : FormatValidator,
+        available_actions : AvailableActions
     ):
-        self.validator          = validator
-        
-        self.actions            = actions
-        self.available_actions  = available_actions
+        self.validator          : FormatValidator = validator
+        self.available_actions  : AvailableActions = available_actions
+        self.resolver           : Resolver = resolver
+        self.passive_system     : PassiveSystem = passive_system
 
-        self.resolver           = resolver
-        
-        self.passive_system     = passive_system
+    def get_current_step(self, ctx : ActionContext) -> Step:
+        wf = WorkflowFactory.create(ctx.workflow_instance.name)
+        while(wf.finished):
+            ctx.state.workflow_stack.pop()
+            wf = WorkflowFactory.create(ctx.workflow_instance.name)
+        return wf.get_current_step(ctx)
 
     def handle_action(self, ctx : ActionContext, action):
         if not self.validator.is_valid_action(ctx, action):
             raise ValueError("invalid action")
+        
+        input_consume = False
+        wf = WorkflowFactory.create(ctx.workflow_instance.name)
+        step = wf.get_current_step(ctx)
+        result = step.execute(ctx, action)
+        if result:
+            self.resolver.resolve(ctx, result)
         # if not self.rules.can_execute_action(ctx, action):
         #     return False
 

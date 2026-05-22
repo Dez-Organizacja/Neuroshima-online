@@ -1,13 +1,11 @@
 from dataclasses import dataclass
 from enum import Enum
-from main.actions.execute.result import ActionResult
+from main.events.data import ExecutionResult
 from main.events.workflow import WorkflowEvent
 
 @dataclass
 class StepResult:
-    workflow_effects    : list[WorkflowEvent]
-    action_result       : ActionResult = ActionResult()
-    input_consumed      : bool = False
+    execution_result    : ExecutionResult
     advance             : bool = True
 
 class StepName(Enum):
@@ -16,3 +14,4 @@ class StepName(Enum):
     INIT = "init_workflow"
     RESOLVE = "resolve"
     SET = "set"
+    CHECK_END_TURN = "check_end_turn"

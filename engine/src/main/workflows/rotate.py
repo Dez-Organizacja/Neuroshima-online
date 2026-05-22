@@ -1,22 +1,23 @@
 from main.workflows.base import Workflow
 from main.steps.config import (
     WaitingStepConfig,
-    ResolveStepConfig,
     SetStepConfig
 )
 from main.state.user_action import RotationAction
 from main.workflows.data import WorkflowData
 from main.state.contex import ActionContext
-from main.actions.execute.result import ActionResult
+from main.events.data import ActionResult
 from main.events.effects import RotateEffect
-from main.rules.workflow.movement import RotateRules
+from main.workflows.providers.movement import RotateProvider
+from main.workflows.step_builders import build_end_step
 
-class RotateWorkflow(Workflow[RotateRules]):
+
+class RotateWorkflow(Workflow[RotateProvider]):
     def __init__(self):
-        super().__init__(rules=RotateRules())
+        super().__init__(action_provider=RotateProvider())
 
     def build_waiting_step(self):
-        av_config = self.rules.build_av_actions_config()
+        av_config = self.action_provider.build_av_actions_config()
         return WaitingStepConfig(av_actions_config=av_config)
     
     def build_set_step(self):
@@ -34,15 +35,9 @@ class RotateWorkflow(Workflow[RotateRules]):
             )
         ])
 
-    def build_end_step(self):
-        return ResolveStepConfig(
-            resolve_func=self.resolve_function,
-            wf_finished=True
-        )
-
     def build_steps(self):
         return [
             self.build_waiting_step(),
             self.build_set_step(),
-            self.build_end_step()
+            build_end_step(self.resolve_function)
         ]

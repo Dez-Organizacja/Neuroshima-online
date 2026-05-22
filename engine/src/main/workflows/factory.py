@@ -1,5 +1,14 @@
 from main.workflows.move import MoveWorkflow
 from main.workflows.push import PushWorkflow
+from main.workflows.placement import PlaceWorkflow
+from main.workflows.rotate import RotateWorkflow
+from main.workflows.target import (
+    SniperWorkflow, 
+    BombWorkflow, 
+    GranadeWorkflow
+)
+from main.workflows.dispatch import HandWorkflow, BoardWorkflow
+from main.workflows.turn import TurnWorkflow
 from main.workflows.data import WorkflowInstance, WorkflowName
 from main.workflows.base import Workflow
 from main.state.contex import ActionContext
@@ -8,13 +17,24 @@ class WorkflowFactory:
     WORKFLOWS : dict[WorkflowName, Workflow] = {
         WorkflowName.MOVE : MoveWorkflow,
         WorkflowName.PUSH : PushWorkflow,
+        WorkflowName.TURN : TurnWorkflow,
+        WorkflowName.PLACE : PlaceWorkflow,
+        WorkflowName.ROTATE : RotateWorkflow,
+        WorkflowName.SNIPER : SniperWorkflow,
+        WorkflowName.BOMB : BombWorkflow,
+        WorkflowName.GRENADE : GranadeWorkflow,
+        WorkflowName.HAND : HandWorkflow,
+        WorkflowName.BOARD : BoardWorkflow
     }
     @classmethod
-    def create(cls, name : WorkflowName):
+    def create(cls, name : WorkflowName) -> Workflow:
         return cls.WORKFLOWS[name]()
 
     @classmethod
-    def get_workflow_instance(cls, name : WorkflowName, ctx : ActionContext):
+    def get_workflow_instance(cls, 
+                              name : WorkflowName, 
+                              ctx : ActionContext
+        ) -> WorkflowInstance:
         wf = cls.WORKFLOWS[name]
         return WorkflowInstance(
             name = name,

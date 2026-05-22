@@ -1,19 +1,20 @@
-from main.actions.execute.result import ActionResult
+from main.events.data import ActionResult, ExecutionResult
 from main.state.contex import ActionContext
 
 class Resolver():
-    def apply(self, ctx, events):
+    def apply(self, ctx : ActionContext, events):
         for event in events:
             event.apply(ctx)
 
-    def resolve(self, ctx : ActionContext, result : ActionResult):
-        self.apply(ctx, result.effects)
-        self.apply(ctx, result.interaction_state_changes)
+    def resolve(self, ctx : ActionContext, result : ExecutionResult):
+        action_result : ActionResult = result.action_result
+        self.apply(ctx, action_result.effects)
+        self.apply(ctx, result.workflow_effects)
 
-        ctx.state.flow_queue.extend(result.flow_events)
+        ctx.state.flow_queue.extend(action_result.flow_events)
         while ctx.state.flow_queue:
             event = ctx.state.flow_queue.popleft()
-            result = event.apply(ctx)
+            result : ExecutionResult = event.apply(ctx)
             if result:
                 self.resolve(ctx, result)
                 

@@ -88,9 +88,6 @@ class Board:
                     return self.board[x][y]
         return None
 
-    def not_is_hq(self, pos):
-        return self.get_tile(pos).name != BoardType.HQ
-
     def postaw_zeton(self, pos, zeton):
         if not self.on_board(pos):
             return
@@ -119,9 +116,6 @@ class Board:
     def rotate(self, pos, rotacja):
         x, y = pos
         self.board[x][y].rotate(rotacja)
-
-    def get_name(self, pos):
-        return self.get_tile(pos).name
     
     def is_valid_target(self, pos, frakcja, czy_sztab=False):
         if(not self.on_board(pos)):
