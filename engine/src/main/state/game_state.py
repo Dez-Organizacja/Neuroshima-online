@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from main.utils.variable import *
 from main.state.player_state import PlayerState
 from main.board.board import Board
-from main.events.flow import FlowEvent
+from main.events.data import FlowEvent
 from collections import deque
 from main.workflows.data import WorkflowData, WorkflowInstance
 from main.state.serialization import from_dict_dataclass, to_dict_dataclass

@@ -33,7 +33,7 @@ class TokenStats(Enum):
     INITIATIVE = "inicjatywa"
 
 class Ability(Enum):
-    BITWA = "bitwa"
+    BATTLE = "bitwa"
     MOVE = "ruch"
     BOMB = "bomba"
     GRENADE = "granat"

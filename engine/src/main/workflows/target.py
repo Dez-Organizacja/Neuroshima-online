@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from main.events.data import ExecutionResult
 from main.workflows.base import Workflow
 from main.workflows.providers.target import (
     TargetProvider,
@@ -8,7 +9,6 @@ from main.workflows.providers.target import (
 )
 from main.state.contex import ActionContext
 from main.steps.config import ResolveStepConfig
-from main.events.data import ActionResult
 from main.events.effects import(
     DamageEffect, 
     DamageProfile, 
@@ -25,9 +25,9 @@ class TargetWorkflow(BoardSelectionMixin[P], Workflow[P], ABC):
     def __init__(self, action_provider : P):
         super().__init__(action_provider)
 
-    @abstractmethod
     @staticmethod
-    def resolve_func(ctx : ActionContext) -> ActionResult:
+    @abstractmethod
+    def resolve_func(ctx : ActionContext) -> ExecutionResult:
         pass
 
     def build_end_step(self):
@@ -38,7 +38,7 @@ class TargetWorkflow(BoardSelectionMixin[P], Workflow[P], ABC):
 
     def build_steps(self):
         return [
-            self.build_target_steps(),
+            self.build_target_step(),
             build_end_step(self.resolve_func)
         ]
     
@@ -52,7 +52,7 @@ class SniperWorkflow(TargetWorkflow):
             can_hit_hq=False,
             ignore_armor=True
         )
-        return ActionResult(
+        return ExecutionResult(
             effects=[
                 DamageEffect(
                     pos = ctx.workflow_data.target_pos,
@@ -68,7 +68,7 @@ class GranadeWorkflow(TargetWorkflow):
 
     @staticmethod
     def resolve_func(ctx : ActionContext):
-        return ActionResult(
+        return ExecutionResult(
             effects=[DestroyEffect(ctx.workflow_data.target_pos)]
         )
     
@@ -91,7 +91,7 @@ class BombWorkflow(TargetWorkflow):
             can_hit_hq=False,
             ignore_armor=True
         )
-        return ActionResult(
+        return ExecutionResult(
             effects=[
                 DamageEffect(pos=pos, power=1, profile=profile)
                 for pos in positions       

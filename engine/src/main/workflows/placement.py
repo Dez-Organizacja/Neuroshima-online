@@ -4,7 +4,7 @@ from main.workflows.step_builders import BoardSelectionMixin
 from main.workflows.data import WorkflowData
 from main.state.contex import ActionContext
 from main.events.effects import PlaceEffect
-from main.events.data import ActionResult
+from main.events.data import ExecutionResult
 from main.workflows.step_builders import build_end_step
 
 class PlaceWorkflow(BoardSelectionMixin, Workflow[PlacementProvider]):
@@ -13,7 +13,7 @@ class PlaceWorkflow(BoardSelectionMixin, Workflow[PlacementProvider]):
 
     def resolve_function(self, ctx : ActionContext):
         unit = ctx.player.hand.get_token(ctx.workflow_data.slot)
-        return ActionResult(effects=[
+        return ExecutionResult(effects=[
             PlaceEffect(
                 pos = ctx.workflow_data.unit_pos,
                 unit=unit,

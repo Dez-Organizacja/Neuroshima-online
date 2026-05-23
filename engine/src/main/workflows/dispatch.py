@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from main.events.data import ActionResult
+from main.events.data import ExecutionResult
 from main.events.effects import DiscardActiveTokenEffect, MarkAbilityUsedEffect
 
 from main.steps.config import InitStepConfig, SetStepConfig
 from main.state.contex import ActionContext
-from main.state.user_action import HandAction, BoardAction
+from main.input.data import HandAction, BoardAction
 
 from main.tokens.abstract_token import Token
 
@@ -16,7 +16,7 @@ from main.workflows.data import(
     WorkflowData,
 )
 from main.workflows.step_builders import build_end_step
-from main.utils.variable import Bottom
+from main.input.data import Bottom
 
 class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
     def __init__(self):
@@ -24,7 +24,7 @@ class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
     
     @staticmethod
     @abstractmethod
-    def resolve_function(ctx : ActionContext) -> ActionResult:
+    def resolve_function(ctx : ActionContext) -> ExecutionResult:
         pass
 
     @staticmethod
@@ -37,11 +37,7 @@ class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
         token = DispatchActionWorkflow.get_active_token(ctx)
         ability = token.get_ability()
         return ABILITY_WORKFLOW_REGISTRY[ability]
-
-    @abstractmethod
-    def build_set_step(self):
-        pass
-
+    
     def build_dispatch_step(self):
         return InitStepConfig(
             decision_func=self.dispatch_function,
@@ -50,7 +46,6 @@ class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
     
     def build_steps(self):
         return [
-            self.build_set_step(),
             self.build_dispatch_step(),
             build_end_step(self.resolve_function)   
         ]
@@ -64,15 +59,9 @@ class HandWorkflow(DispatchActionWorkflow):
         return ctx.player.hand.get_token(ctx.workflow_data.slot)
 
     @staticmethod
-    def resolve_function(ctx : ActionContext) -> ActionResult:
-        return ActionResult(
+    def resolve_function(ctx : ActionContext) -> ExecutionResult:
+        return ExecutionResult(
             effects=[DiscardActiveTokenEffect()]
-        )
-
-    def build_set_step(self):
-        return SetStepConfig(
-            getter=HandAction.get_slot,
-            setter=WorkflowData.set_slot
         )
     
 class BoardWorkflow(DispatchActionWorkflow):
@@ -85,12 +74,6 @@ class BoardWorkflow(DispatchActionWorkflow):
 
     @staticmethod
     def resolve_function(ctx : ActionContext):
-        return ActionResult(
+        return ExecutionResult(
             effects=[MarkAbilityUsedEffect()]
-        )
-    
-    def build_set_step(self):
-        return SetStepConfig(
-            getter=BoardAction.get_pos,
-            setter=WorkflowData.set_unit_pos
         )

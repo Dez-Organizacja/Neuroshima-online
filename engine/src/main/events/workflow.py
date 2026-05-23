@@ -1,23 +1,23 @@
 from main.state.contex import ActionContext
-from main.events.data import Event
-from main.workflows.data import WorkflowName
-from main.workflows.factory import WorkflowFactory
-from abc import ABC
-
-class WorkflowEvent(Event, ABC):
-    pass
+from main.events.data import WorkflowEvent
+from main.workflows.data import WorkflowConfig, WorkflowName, WorkflowInstance
 
 class PushWorkflow(WorkflowEvent):
     def __init__(self,
                  name : WorkflowName,
-                 as_child : bool = True
+                 as_child : bool = True,
+                 config : WorkflowConfig | None = None
         ):
         super().__init__()
         self.name = name
         self.as_child = as_child
+        self.config = config
 
     def apply(self, ctx : ActionContext):
-        wf_instance = WorkflowFactory.get_workflow_instance(self.config.name)
+        wf_instance = WorkflowInstance(
+            name = self.name,
+            config = self.config
+        )
         if self.as_child:
             ctx.state.workflow_stack.append(wf_instance)
         else:
@@ -33,3 +33,11 @@ class GoToStep(WorkflowEvent):
     
     def apply(self, ctx : ActionContext):
         ctx.workflow_instance.current_step_index = self.index
+
+class DeleteAbove(WorkflowEvent):
+    def __init__(self, name : WorkflowName):
+        self.name : WorkflowName = name
+    
+    def apply(self, ctx : ActionContext):
+        while ctx.workflow_instance.config.name != self.name:
+            ctx.state.workflow_stack.pop(-1)

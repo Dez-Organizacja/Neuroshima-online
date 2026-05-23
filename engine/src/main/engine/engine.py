@@ -4,73 +4,52 @@ from main.workflows.factory import WorkflowFactory
 from main.engine.resolver import Resolver
 from main.rules.validator import FormatValidator
 from main.actions.available.core import AvailableActions
-from main.systems.passive_system import PassiveSystem
+from main.events.data import ExecutionResult
+from main.events.workflow import PushWorkflow
+from main.workflows.data import GameConfig
+
+from main.steps.data import StepResult
 
 class GameEngine:
 
     def __init__(
         self,
-        passive_system,
         resolver : Resolver,
-        validator : FormatValidator,
         available_actions : AvailableActions
     ):
-        self.validator          : FormatValidator = validator
         self.available_actions  : AvailableActions = available_actions
         self.resolver           : Resolver = resolver
-        self.passive_system     : PassiveSystem = passive_system
 
-    def get_current_step(self, ctx : ActionContext) -> Step:
-        wf = WorkflowFactory.create(ctx.workflow_instance.name)
-        while(wf.finished):
-            ctx.state.workflow_stack.pop()
-            wf = WorkflowFactory.create(ctx.workflow_instance.name)
-        return wf.get_current_step(ctx)
+    def execute_action(self, ctx : ActionContext, action):
 
-    def handle_action(self, ctx : ActionContext, action):
-        if not self.validator.is_valid_action(ctx, action):
-            raise ValueError("invalid action")
+        input_consumed = False
+        while True:
+            wf = WorkflowFactory.create(ctx.workflow_instance.config)
+            step = wf.get_current_step(ctx)
+            
+            if step.requires_input and input_consumed:
+                break
         
-        input_consume = False
-        wf = WorkflowFactory.create(ctx.workflow_instance.name)
-        step = wf.get_current_step(ctx)
-        result = step.execute(ctx, action)
-        if result:
+            result = step.execute(ctx, action)
             self.resolver.resolve(ctx, result)
-        # if not self.rules.can_execute_action(ctx, action):
-        #     return False
-
-        result = self.actions.execute_action(ctx, action)
-        self.resolver.resolve(ctx, result)
-
-        result = ctx.workflow.advance(ctx)
-        self.resolver.resolve(ctx, result)
-
-        self.passive_system.compute(ctx)
-        return self.available_actions.get_available_actions(ctx)
-
+            
+            if result.input_consumed:
+                input_consumed = True
 
     def _setup_players(self, ctx : ActionContext):
-        shuffle(ctx.state.fractions)
-        ctx.fraction = ctx.state.fractions[0]
         for fraction in ctx.state.fractions:
             ctx.state.add_player(fraction)
 
     def _setup_turn_order(self, ctx : ActionContext):
-        for fraction in ctx.state.fractions:
-            ctx.state.next_turns.append(
-                {Turn.FRACTION : fraction, 
-                 Turn.TYPE : Turn.Type.HQ_PLACEMENT}
-            )
+        shuffle(ctx.state.fractions)
 
-    def _set_initial_phase(self, ctx : ActionContext):
-        ctx.state.phase = Phase.GAME
+    def _create_game_workflow(self, ctx : ActionContext):
+        config = GameConfig(fractions=ctx.state.fractions)
+        effect = PushWorkflow(config=config)
+        result = ExecutionResult(workflow_effects=[effect])
+        self.resolver.excute(ctx, result)
 
     def start_game(self, ctx : ActionContext):
         self._setup_players(ctx)
         self._setup_turn_order(ctx)
-        self._set_initial_phase(ctx)
-        self.flow_engine.start_turn(ctx)
-        
-        self.passive_system.compute(ctx)
-        return self.available_actions.get_available_actions()
+        self._create_game_workflow(ctx)

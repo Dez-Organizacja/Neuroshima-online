@@ -3,7 +3,7 @@ from main.workflows.base import Workflow
 from main.workflows.providers.movement import PushProvider
 from main.steps.config import ResolveStepConfig
 from main.events.effects import MoveEffect
-from main.events.data import ActionResult
+from main.events.data import ExecutionResult
 from main.workflows.step_builders import BoardSelectionMixin, build_end_step
 
 class PushWorkflow(BoardSelectionMixin[PushProvider], Workflow[PushProvider]):
@@ -30,8 +30,8 @@ class PushWorkflow(BoardSelectionMixin[PushProvider], Workflow[PushProvider]):
             from_pos=ctx.workflow_data.target_pos,
             to_pos=ctx.workflow_data.destination
         )
-        return ActionResult(effects=[move])
+        return ExecutionResult(effects=[move])
     
     @classmethod
     def get_first_step_index(cls, ctx : ActionContext):
-        return 2 if ctx.workflow_data.unit_pos else 0
+        return 1 if ctx.workflow_data.unit_pos else 0

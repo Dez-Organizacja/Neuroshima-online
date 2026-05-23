@@ -1,6 +1,6 @@
 from main.workflows.providers.base import WorkflowActionProvider
 from abc import ABC, abstractmethod
-from main.utils.variable import Bottom
+from main.input.data import Bottom
 from main.board.board_query import BoardQuery
 import main.rules.predicates as pr
 from main.state.contex import ActionContext
@@ -12,6 +12,9 @@ class TargetProvider(ABC, WorkflowActionProvider):
     @abstractmethod
     def get_available_tragets(self, ctx : ActionContext):
         pass
+
+    def get_available_positions(self, ctx):
+        return self.get_available_tragets
 
 class SnipeProvider(TargetProvider):
     def get_available_targets(self, ctx : ActionContext):

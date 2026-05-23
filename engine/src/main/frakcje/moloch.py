@@ -181,7 +181,7 @@ wlasciwosci = {
         TokenStats.BOOST_TARGET: TokenRelation.OWN
     },
     ############# natychmiastowe
-    Ability.BITWA: {
+    Ability.BATTLE: {
         TokenKey.TYPE : TokenType.INSTANT,
         TokenKey.UNIT_COUNT : 4,
     },

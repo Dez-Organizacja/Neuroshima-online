@@ -1,5 +1,5 @@
 from main.state.contex import ActionContext
-from main.utils.variable import Bottom
+from main.input.data import Bottom
 from main.workflows.providers.base import WorkflowActionProvider
 from main.rules.ability.movement import PushRules, MoveRules
 
@@ -19,14 +19,19 @@ class MoveProvider(WorkflowActionProvider):
     def get_available_bottoms(self, ctx : ActionContext):
         idx = ctx.workflow_instance.current_step_index
         result = []
-        if idx == 0: # odzrucanie przed wybraniem jednostki
+        if not ctx.workflow_data.unit_pos: # odzrucanie przed wybraniem jednostki
             result = [Bottom.DISCARD]
-        if idx <= 2: # cancel przed wybraniem celu
+        if not ctx.workflow_data.destination: # cancel przed wybraniem celu
             result.append(Bottom.CANCEL)
         return result
 
-    def get_available_tokens(self, ctx):
-        return super().get_available_tokens(ctx)
+    def get_available_positions(self, ctx):
+        if not ctx.workflow_data.unit_pos:
+            return self.get_available_sources
+        
+        return self.get_available_destinations
+        
+
 
 class PushProvider(WorkflowActionProvider):
     def __init__(self):
@@ -49,12 +54,20 @@ class PushProvider(WorkflowActionProvider):
     def get_available_bottoms(self, ctx : ActionContext):
         idx = ctx.workflow_instance.current_step_index
         result = []
-        if idx == 0: # mozna zdiscardowac przed wybraniem swojej jednostki(zrodła)
+        if not ctx.workflow_data.unit_pos: 
+            # mozna zdiscardowac przed wybraniem swojej jednostki(zrodła)
             result = [Bottom.DISCARD]
-        if idx <= 2: # mozna cancelowac przed wybraniem celu (jednostki wroga)
-            #wybieranie jednostki to 2 stepy wait i set, i pytanie o bottoms bedzie kolejnym waitstepie
+        if not ctx.workflow_data.target_pos: 
+            # mozna cancelowac przed wybraniem celu (jednostki wroga)
             result.append(Bottom.CANCEL)
         return result
+    
+    def get_available_positions(self, ctx):
+        if not ctx.workflow_data.unit_pos:
+            return self.get_available_sources
+        if not ctx.workflow_data.target_pos:
+            return self.get_available_targets
+        return self.get_available_destinations
     
 class RotateProvider(WorkflowActionProvider):
     def get_available_positions(self, ctx : ActionContext):

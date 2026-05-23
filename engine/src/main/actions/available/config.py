@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from main.utils.variable import Bottom
+from main.input.data import Bottom
 from typing import Callable
 from main.state.contex import ActionContext
 
@@ -17,7 +17,7 @@ def no_tokens(ctx : ActionContext) -> dict[str, list[int]]:
     return {}
 
 @dataclass
-class AvActionsConfig:
+class AvailableActionProvider:
     get_bottoms : BottomsGetter = no_bottoms
     get_positions : PositionsGetter = no_positions
     get_tokens : TokensGetter = no_tokens

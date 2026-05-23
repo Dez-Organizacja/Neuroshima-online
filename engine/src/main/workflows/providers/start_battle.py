@@ -1,7 +1,7 @@
 from main.workflows.providers.base import WorkflowActionProvider
 from main.rules.battle import BattleRules
 from main.state.contex import ActionContext
-from main.utils.variable import Bottom
+from main.input.data import Bottom
 
 class StartBattleProvider(WorkflowActionProvider):
     def __int__(self):

@@ -1,6 +1,6 @@
 from main.workflows.providers.base import WorkflowActionProvider
 from main.rules.turn import TurnRules
-from main.utils.variable import Bottom
+from main.input.data import Bottom
 from main.state.contex import ActionContext
 from main.rules.predicates import (
     is_ally,

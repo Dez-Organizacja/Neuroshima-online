@@ -1,5 +1,5 @@
 from main.workflows.providers.base import WorkflowActionProvider
-from main.utils.variable import Bottom
+from main.input.data import Bottom
 from main.state.contex import ActionContext
 from main.board.board_query import BoardQuery
 from main.rules.predicates import is_empty_at

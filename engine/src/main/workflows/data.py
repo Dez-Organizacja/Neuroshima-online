@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from main.state.serialization import from_dict_dataclass, to_dict_dataclass
 from enum import Enum
-from main.state.user_action import Type as ActionType
+from main.input.data import ActionType
 from main.tokens.data import Ability
+from typing import TypeVar
 
 Hex = tuple[int, int]
     
@@ -19,6 +20,7 @@ class WorkflowName(Enum):
     HAND = "hand"
     PLACE = "place"
     START_BATTLE = "start_battle"
+    GAME = "game"
 
 ABILITY_WORKFLOW_REGISTRY = {
     Ability.MOVE : WorkflowName.MOVE,
@@ -26,17 +28,17 @@ ABILITY_WORKFLOW_REGISTRY = {
     Ability.GRENADE : WorkflowName.GRENADE,
     Ability.SNIPER : WorkflowName.SNIPER,
     Ability.PUSH : WorkflowName.PUSH,
-    Ability.BITWA : WorkflowName.BITWA,
+    Ability.BATTLE : WorkflowName.BATTLE,
 }
     
 @dataclass
 class WorkflowData:
-    type        : ActionType | None = None
     slot        : int | None = None
     unit_pos    : Hex | None = None
     target_pos  : Hex | None = None
     destination : Hex | None = None
     rotation    : int | None = None
+    type        : ActionType | None = None
 
     @classmethod
     def from_dict(cls, data):
@@ -64,7 +66,23 @@ class WorkflowData:
         self.rotation = value
 
 @dataclass
+class WorkflowConfig:
+    name : WorkflowName = field(init=False)
+
+C = TypeVar("C", bound = WorkflowConfig)
+
+@dataclass
 class WorkflowInstance:
-    name : WorkflowName
-    current_step_index : int = 0
-    fraction : str = ""
+    name : str
+    current_step_index : int | None = None
+    config : C | None = None
+
+@dataclass
+class TurnConfig(WorkflowConfig):
+    fraction : str
+    name : WorkflowName = field(default=WorkflowName.TURN, init=False)
+
+@dataclass
+class GameConfig(WorkflowConfig):
+    fractions : list[str]
+    name : WorkflowName = field(default=WorkflowName.GAME, init=False)

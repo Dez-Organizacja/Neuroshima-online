@@ -1,57 +1,43 @@
 from main.state.game_state import GameState
 from main.state.contex import ActionContext
-from main.state.user_action import UserActionFactory
-
-from main.rules.game import GameRules
+from main.input.input_handler import InputHandler
 from main.rules.validator import FormatValidator
 
 from main.engine.engine import GameEngine
 from main.engine.resolver import Resolver
+from main.rules.game import GameRules
 
-from main.systems.passive_system import PassiveSystem
+from main.systems.passive_systems import PassiveSystems
+from main.view.builder import GameViewBuilder
 
-from main.actions.execute.execute_action import Actions
-from main.actions.available.available_actions import AvailableActions
 from main.utils.variable import *
 
 class Game:
     USER_ACTION_KEY = "user_action"
-    AVAILABLE_ACTIONS_KEY = "available_actions"
-    def __init__(self, data):
-        fractions = data['fractions']
-        if(isinstance(fractions, dict)):
-            data['fractions'] = [fractions["player1"], fractions["player2"]]
-        
+    TYPE_KEY = "message_type"
+    def __init__(self, data : dict):
         self.state = GameState.from_dict(data)
+        self.ctx = ActionContext(state=self.state, rules=GameRules())
         self.build_game_engine()
-        self.ctx = ActionContext(self.state, self.rules)
-
-        if self.state.phase in (Phase.START_GAME, Phase.START_GAME.value):
-            self.available_actions = self.engine.start_game(self.ctx)
-
-        else:
-            self.user_action = UserActionFactory.create(
-                data.get(self.USER_ACTION_KEY, {})
-            )
-            self.available_actions = self.engine.handle_action(
-                ctx = self.ctx, 
-                action = self.user_action
-            )
 
     def build_game_engine(self):
-        self.rules = GameRules()
-        
         self.engine = GameEngine(
-            rules                   = self.rules,
             resolver                = Resolver(),
-            passive_system          = PassiveSystem(),
-            validator               = FormatValidator(),
-            actions                 = Actions(),
-            available_actions       = AvailableActions()
+            passive_system          = PassiveSystems(),
         )
+        self.input_handler = InputHandler(
+            validator=FormatValidator(),
+            engine=self.engine
+        )
+        self.game_view_builder = GameViewBuilder()
+
+    def handle_action(self, data : dict):
+        self.input_handler.handle_action(self.ctx, data)
+
+    def build_user_view(self):
+        return self.game_view_builder.build(self.ctx)
 
     def export(self):
         return{
             **self.state.to_dict(),
-            self.AVAILABLE_ACTIONS_KEY : self.available_actions
         }

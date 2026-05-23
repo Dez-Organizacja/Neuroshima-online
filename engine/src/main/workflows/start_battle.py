@@ -2,9 +2,10 @@ from main.workflows.base import Workflow
 from main.state.contex import ActionContext
 from main.workflows.providers.start_battle import StartBattleProvider
 from main.steps.config import WaitingStepConfig, ResolveStepConfig
-from main.events.data import ActionResult
+from main.events.data import ExecutionResult
 from main.events.flow import StartBattleEvent, EndTurnEvent
 from main.workflows.step_builders import build_end_step
+from main.input.action_handlers import ActionHandler
 
 class StartBattleWorkflow(Workflow[StartBattleProvider]):
     def __int__(self):
@@ -12,13 +13,13 @@ class StartBattleWorkflow(Workflow[StartBattleProvider]):
 
     def build_waiting_step(self):
         return WaitingStepConfig(
-            av_actions_config=self.action_provider.build_av_actions_config(),
+            action_handler=ActionHandler(),
             consume_action=True
         )
     
     @staticmethod
     def resolve_func(ctx : ActionContext):
-        return ActionResult(flow_events=[
+        return ExecutionResult(flow_events=[
             StartBattleEvent(),
             EndTurnEvent()
         ])

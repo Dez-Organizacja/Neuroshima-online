@@ -67,11 +67,3 @@ class Relation(Enum):
     EMPTY = "empty"
     FRIENDLY = "friendly"
     ENEMY = "enemy"
-
-class Bottom(Enum):
-    END_TURN = "end_turn"
-    DISCARD = "discard"
-    USE = "use"
-    CANCEL = "cancel"
-    YES = "yes"
-    NO = "no"

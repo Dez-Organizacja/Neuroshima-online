@@ -70,21 +70,24 @@ class Board:
     def get_position(self, tokenID) -> tuple[int, int]:
         return self.where_am_i.get(tokenID)
 
+    def remove_token(self, pos):
+        self.assign_to_tile(pos, None)
+
     def get_token(self, pos) -> BoardToken:
         if not self.on_board(pos):
             return None
         x, y = pos
         return self.tokens[self.board[x][y]] if self.board[x][y] is not None else None
 
-    # def adjacent_hexes(self, pos):
-    #     if not self.on_board(pos):
-    #         return []
-    #     adjacents = []
-    #     for diretion in self.rose.keys():
-    #         neighbor = self.go(pos, diretion)
-    #         if(self.on_board(neighbor)):
-    #            adjacents.append(neighbor)
-    #     return adjacents 
+    def adjacent_hexes(self, pos):
+        if not self.on_board(pos):
+            return []
+        adjacents = []
+        for diretion in self.rose.keys():
+            neighbor = self.go(pos, diretion)
+            if(self.on_board(neighbor)):
+               adjacents.append(neighbor)
+        return adjacents 
 
     def is_wired(self, pos) -> bool:
         if(self.is_empty(pos)):

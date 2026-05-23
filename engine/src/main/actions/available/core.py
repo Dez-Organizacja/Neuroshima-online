@@ -1,15 +1,17 @@
 from main.actions.available.data import AvailableStructure
-from main.actions.available.config import AvActionsConfig
+from main.actions.available.config import AvailableActionProvider
+from main.actions.available.builder import AvailableActionsBuilder
 from main.state.contex import ActionContext
-from main.state.user_action import UserAction
+from main.input.data import UserAction
 from typing import TypeVar
 A = TypeVar("A", bound=UserAction)
 
 class AvailableActions:
-    def __init__(self, config : AvActionsConfig):
-        self.config = config
+    def __init__(self, provider : AvailableActionProvider):
+        self.builder = AvailableActionsBuilder()
+        self.provider = provider
 
-    def apply_active_key(self, dict, keys):
+    def apply_active_keys(self, dict, keys):
         for key in keys:
             dict[key] = True
 
@@ -20,14 +22,7 @@ class AvailableActions:
 
     def get_actions(self, ctx : ActionContext) -> AvailableStructure:
         actions = AvailableStructure.build(ctx)
-        cfg : AvActionsConfig = self.config
-        self.apply_active_key(
-            dict=actions.board, 
-            keys=cfg.get_positions(ctx)
-        )
-        self.apply_active_key(
-            dict=actions.bottoms, 
-            keys=cfg.get_bottoms(ctx)
-        )
-        self.apply_hand(cfg.get_tokens(ctx))
+        self.apply_active_keys(actions.board, self.provider.get_positions(ctx))
+        self.apply_active_keys(actions.bottoms, self.provider.get_bottoms(ctx))
+        self.apply_hand(self.provider.get_tokens(ctx))
         return actions

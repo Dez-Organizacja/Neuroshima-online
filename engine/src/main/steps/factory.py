@@ -4,7 +4,7 @@ from main.steps.step import (
     InitStep,
     WaitingStep,
     SetStep,
-    EndTurnCheckStep,
+    RepeatStep,
     Step
 )
 
@@ -14,7 +14,7 @@ class StepFactory:
         StepName.INIT : InitStep,
         StepName.WAITING : WaitingStep,
         StepName.SET : SetStep,
-        StepName.CHECK_END_TURN : EndTurnCheckStep
+        StepName.REPEAT : RepeatStep
     }
     def __init__(self):
         pass

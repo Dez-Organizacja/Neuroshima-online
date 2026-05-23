@@ -1,12 +1,12 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from main.events.data import ExecutionResult
-from main.events.workflow import WorkflowEvent
 
 @dataclass
 class StepResult:
-    execution_result    : ExecutionResult
+    execution_result    : ExecutionResult = field(default_factory=ExecutionResult) 
     advance             : bool = True
+    input_consumed      : bool = False
 
 class StepName(Enum):
     WAITING = "waiting"
@@ -14,4 +14,5 @@ class StepName(Enum):
     INIT = "init_workflow"
     RESOLVE = "resolve"
     SET = "set"
-    CHECK_END_TURN = "check_end_turn"
+    REPEAT = "repeat"
+

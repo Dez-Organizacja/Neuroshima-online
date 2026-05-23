@@ -3,14 +3,15 @@ from main.steps.config import (
     WaitingStepConfig, 
     SetStepConfig
 )
-from main.state.user_action import BoardAction
+from main.input.data import BoardAction
 from main.workflows.data import WorkflowData
 from typing import TypeVar, Generic, Callable
 from main.workflows.providers.base import WorkflowActionProvider
 from main.state.contex import ActionContext
-from main.events.data import ActionResult
+from main.events.data import ExecutionResult
+from main.input.action_handlers import ActionHandler
 
-resolve_func_type = Callable[[ActionContext], ActionResult]
+resolve_func_type = Callable[[ActionContext], ExecutionResult]
 def build_end_step(resolve_function : resolve_func_type | None = None):
     return ResolveStepConfig(
         resolve_func=resolve_function,
@@ -21,39 +22,27 @@ P = TypeVar("P", bound=WorkflowActionProvider)
 
 class BoardSelectionMixin(Generic[P]):
     action_provider : P
-    def build_waiting_step(self, get_positions):
-        av_actions_config = self.action_provider.build_av_actions_config(get_positions)
+
+    def build_input_step(self, setter, get_positions = None):
         return WaitingStepConfig(
-            av_actions_config=av_actions_config,
+            action_handler=ActionHandler(setter),
             consume_action=True
         )
-        
-    def build_set_step(self, setter):
-        return SetStepConfig(
-            getter=BoardAction.get_pos,
-            setter=setter
-        )
 
-    def build_input_steps(self, setter, get_positions = None):
-        return [
-            self.build_waiting_step(get_positions),
-            self.build_set_step(setter)
-        ]
-
-    def build_source_steps(self):
-        return self.build_input_steps(
+    def build_source_step(self):
+        return self.build_input_step(
             get_positions=self.action_provider.get_sources,
             setter=WorkflowData.set_unit_pos
         )
 
-    def build_destination_steps(self):
-        return self.build_input_steps(
+    def build_destination_step(self):
+        return self.build_input_step(
             get_positions=self.action_provider.get_destinations,
             setter=WorkflowData.set_destination
         )
     
-    def build_target_steps(self):
-        return self.build_input_steps(
+    def build_target_step(self):
+        return self.build_input_step(
             get_positions=self.action_provider.get_available_targets,
             setter=WorkflowData.set_target_pos
         )

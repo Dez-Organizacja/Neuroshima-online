@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 from main.state.contex import ActionContext
-from main.events.data import ActionResult
 from main.steps.factory import StepFactory
 from main.workflows.providers.base import WorkflowActionProvider
-from main.utils.variable import Bottom
+from main.input.data import Bottom
 from main.steps.step import Step
 
 P = TypeVar("R", bound=WorkflowActionProvider)
@@ -22,13 +21,6 @@ class Workflow(ABC, Generic[P]):
     @classmethod
     def get_first_step_index(cls, ctx : ActionContext):
         return 0
-
-    @staticmethod
-    def advance(ctx : ActionContext):
-        ctx.workflow_instance.current_step_index += 1
-
-    def finished(self, ctx : ActionContext) -> bool:
-        return len(self.steps_list) > ctx.workflow_instance.current_step_index
 
     def get_current_step(self, ctx : ActionContext) -> Step:
         idx = ctx.workflow_instance.current_step_index

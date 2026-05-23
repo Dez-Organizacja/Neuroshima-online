@@ -1,6 +1,5 @@
-from main.state.user_action import Type
+from main.input.data import ActionType, Bottom
 from enum import Enum
-from main.utils.variable import Bottom
 
 class Key(Enum):
     POS = "pos"
@@ -12,13 +11,13 @@ class Key(Enum):
 class FormatValidator():
     def __init__(self):
         self.validate_handlers = {
-            Type.BOARD : self.validate_board_format,
-            Type.HAND : self.validate_hand_format,
-            Type.BOTTOM : self.validate_bottom_format,
-            Type.ROTATE : self.validate_rotate_format
+            ActionType.BOARD : self.validate_board_format,
+            ActionType.HAND : self.validate_hand_format,
+            ActionType.BOTTOM : self.validate_bottom_format,
+            ActionType.ROTATE : self.validate_rotate_format
         }
 
-    def validate_board_format(self, state, action):
+    def validate_board_format(self, action) -> bool:
         pos = action[Key.POS]
         if(not isinstance(pos, tuple)):
             return False
@@ -30,7 +29,7 @@ class FormatValidator():
         return True
         # return state.available_actions[UI.BOARD][x][y]
 
-    def validate_hand_format(self, state, action):
+    def validate_hand_format(self, action) -> bool:
         slot = action.get(Key.SLOT, None)
         if(not isinstance(slot, int)):
             return False
@@ -38,20 +37,20 @@ class FormatValidator():
         return True
         # return game.available_actions[UI.HAND][game.current_fraction][slot]
 
-    def validate_bottom_format(self, state, action):
+    def validate_bottom_format(self, action) -> bool:
         name = action.get(Key.NAME, None)
         return name in Bottom
         # return game.available_actions[UI.BOTTOM][name]
 
-    def validate_rotate_format(self, state, action):
+    def validate_rotate_format(self, action):
         rotation = action.get(Key.ROTATION, None)
         return isinstance(rotation, int)
 
-    def is_valid_action(self, state, action):
+    def is_valid_action(self, action) -> bool:
         if (action is None):
             return True
         type = action.get(Key.TYPE, None)
         function = self.validate_handlers.get(type, None)
         if(function is None):
             return False
-        return function(state, action)
+        return function(action)

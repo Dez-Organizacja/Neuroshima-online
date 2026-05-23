@@ -7,36 +7,48 @@ from main.workflows.target import (
     BombWorkflow, 
     GranadeWorkflow
 )
+from main.workflows.game import GameWorkflow
 from main.workflows.dispatch import HandWorkflow, BoardWorkflow
 from main.workflows.turn import TurnWorkflow
-from main.workflows.data import WorkflowInstance, WorkflowName
+from main.workflows.data import WorkflowInstance, WorkflowName, WorkflowConfig
 from main.workflows.base import Workflow
 from main.state.contex import ActionContext
+from dataclasses import dataclass
+
+@dataclass
+class WorkflowMeta:
+    cls : type[Workflow]
+    needs_config : bool
 
 class WorkflowFactory:
-    WORKFLOWS : dict[WorkflowName, Workflow] = {
-        WorkflowName.MOVE : MoveWorkflow,
-        WorkflowName.PUSH : PushWorkflow,
-        WorkflowName.TURN : TurnWorkflow,
-        WorkflowName.PLACE : PlaceWorkflow,
-        WorkflowName.ROTATE : RotateWorkflow,
-        WorkflowName.SNIPER : SniperWorkflow,
-        WorkflowName.BOMB : BombWorkflow,
-        WorkflowName.GRENADE : GranadeWorkflow,
-        WorkflowName.HAND : HandWorkflow,
-        WorkflowName.BOARD : BoardWorkflow
+    WORKFLOWS : dict[WorkflowName, type[WorkflowMeta]] = {
+        WorkflowName.MOVE : WorkflowMeta(MoveWorkflow, False),
+        WorkflowName.PUSH : WorkflowMeta(PushWorkflow, False),
+        WorkflowName.PLACE : WorkflowMeta(PlaceWorkflow, False),
+        WorkflowName.ROTATE : WorkflowMeta(RotateWorkflow, False),
+        WorkflowName.SNIPER : WorkflowMeta(SniperWorkflow, False),
+        WorkflowName.BOMB : WorkflowMeta(BombWorkflow, False),
+        WorkflowName.GRENADE : WorkflowMeta(GranadeWorkflow, False),
+        WorkflowName.HAND : WorkflowMeta(HandWorkflow, False),
+        WorkflowName.BOARD : WorkflowMeta(BoardWorkflow, False),
+        WorkflowName.TURN : WorkflowMeta(TurnWorkflow, True),
+        WorkflowName.GAME : WorkflowMeta(GameWorkflow, True)
     }
     @classmethod
-    def create(cls, name : WorkflowName) -> Workflow:
-        return cls.WORKFLOWS[name]()
+    def create(cls, config : WorkflowConfig) -> Workflow:
+        meta = cls.WORKFLOWS[config.name]
+        if meta.needs_config:
+            return meta.cls(config)
+        else:
+            return meta.cls()
 
     @classmethod
     def get_workflow_instance(cls, 
-                              name : WorkflowName, 
+                              config : WorkflowConfig, 
                               ctx : ActionContext
         ) -> WorkflowInstance:
-        wf = cls.WORKFLOWS[name]
+        wf_cls = cls.WORKFLOWS[config.name].cls
         return WorkflowInstance(
-            name = name,
-            current_step_index=wf.get_first_step_index(ctx)
+            config=config,
+            current_step_index=wf_cls.get_first_step_index(ctx)
         )

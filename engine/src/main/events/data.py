@@ -1,21 +1,24 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from main.events.effects import Effect
-from main.events.flow import FlowEvent
-from main.events.workflow import WorkflowEvent
-from main.state.contex import ActionContext
 
-@dataclass
-class ActionResult:
-    effects : list[Effect] = field(default_factory=list)
-    flow_events : list[FlowEvent] = field(default_factory=list)
+
+class Event(ABC):
+    recompute_passive = False
+    @abstractmethod
+    def apply(self, ctx):
+        pass
+
+class Effect(Event, ABC):
+    pass
+
+class FlowEvent(Event, ABC):
+    pass
+
+class WorkflowEvent(Event, ABC):
+    pass
 
 @dataclass
 class ExecutionResult:
-    action_result : ActionResult = field(default_factory=ActionResult)
+    effects : list[Effect] = field(default_factory=list)
+    flow_events : list[FlowEvent] = field(default_factory=list)
     workflow_effects : list[WorkflowEvent] = field(default_factory=list)
-
-class Event(ABC):
-    @abstractmethod
-    def apply(self, ctx : ActionContext):
-        pass
