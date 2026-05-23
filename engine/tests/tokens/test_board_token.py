@@ -54,3 +54,19 @@ class TestBoardToken:
             Attack.SHOOT: [[4, 1]],
             Attack.MELEE: [[3, 2]],
         }
+
+    def test_board_token4(self):
+        token = BoardToken({"name": "juggernaut", "fraction": "moloch", "ROTATION": 1, "DAMAGE": 3}, None)
+
+        assert token.name == "juggernaut"
+        assert token.HP == 2
+
+        assert token.DAMAGE == 3    
+
+        token.rotate(2)
+
+        assert token.ARMOR == [3, 5, 1]
+        assert token.get_attacks(1) == {
+            Attack.SHOOT: [[4, 1]],
+            Attack.MELEE: [[3, 2]],
+    }

@@ -23,19 +23,20 @@ class BoardToken(AbstractToken):
     ARMOR: list[int] = field(default_factory=list)
     UNIT_COUNT: int | None = None
     ATTACKS: dict = field(default_factory=dict)
-    INITIATIVE: list[int] = field(default_factory=list)
     WIRE: list[int] = field(default_factory=list)
     BOOSTS: dict = field(default_factory=dict)
     BOOST_TARGET: TokenRelation | None = None
+
+    INITIATIVE: list[int] = field(default_factory=list)
 
 
     def __post_init__(self):
         if isinstance(self.name, dict):
             data = self.name
-            self.name = data.get(TokenKey.name, "default")
-            self.fraction = data.get(TokenKey.fraction, "neutral")
-            self.ROTATION = data.get(TokenKey.ROTATION, 0)
-            self.DAMAGE = data.get(TokenKey.DAMAGE, 0)
+            self.name = data.get("name", "default")
+            self.fraction = data.get("fraction", "neutral")
+            self.ROTATION = data.get("ROTATION", 0)
+            self.DAMAGE = data.get("DAMAGE", 0)
 
         self.load()
 
@@ -54,6 +55,11 @@ class BoardToken(AbstractToken):
         self.WIRED = False
 
         self.load()
+
+    # --------- HQ ----------
+
+    def is_HQ(self):
+        return self.name == "sztab"
 
     # ---------- wire ----------
 
@@ -89,24 +95,42 @@ class BoardToken(AbstractToken):
 
     def take_damage(self, direction, damage, blockable=False):
         # direction -> from where the attack is coming, 0-5
+
         direction = (direction + 3) % 6
 
         if (blockable and self.ARMOR and direction in self.ARMOR):
             damage -= 1
             
-        self.HP -= max(damage, 0)
+        self.DAMAGE += max(damage, 0)
 
     # --------- attacks and boosts ----------
 
     # boosty bierzesz token.BOOSTS -> dict | None
 
+    def get_wire(self):
+        if self.WIRED:
+            return []
+        return self.WIRE
+
     def get_boosts(self):
+        if self.WIRED:
+            return {}
         return self.BOOSTS
 
     def get_attacks(self, which_initiative):      
-        if which_initiative not in self.INITIATIVE:
+        if which_initiative not in self.INITIATIVE or self.WIRED:
             return {}
         return self.ATTACKS
         
     def get_ability(self) -> Ability:
         return Ability.NO_ABILITY
+    
+    def to_json(self):
+        data = {
+            "name": self.name,
+            "fraction": self.fraction,
+            "ROTATION": self.ROTATION,
+            "DAMAGE": self.DAMAGE,
+            "WIRED": self.WIRED,
+        }
+        return data
