@@ -159,15 +159,6 @@ class Board:
     def is_empty(self, pos):
         return self.get_token(pos) is None
 
-    # def deal_damage_effect(self, pos, damage, profile):
-    #     if self.is_hq(pos) and not profile.can_hit_hq:
-    #         return
-    #     self.get_token(pos).attacked(
-    #         obrazenia=damage, 
-    #         kierunek=-1, 
-    #         czy_blokowalny=profile.ignore_armour
-    #     )
-
     def deal_damage(self, pos, direction, damage, blockable=False):
         if(self.is_empty(pos)):
             return
@@ -228,17 +219,6 @@ class Board:
                     ))
                     # row.append(akt.zeton_to_json())
             print(row)
-            
-    # def wszystkie_jednostki(self):
-    #     answer = []
-    #     for x in range(self.width):
-    #         for y in range(self.length):
-    #             if(self.is_empty((x, y))):
-    #                 continue
-    #             answer.append([x, y, self.board[x][y].zeton_to_json()])
-    #     return answer
-
-
 
     @classmethod
     def from_dict(cls, data : list) -> Board:

@@ -41,7 +41,7 @@ class Sieciarze:
                 if akt is None:
                     continue
                 
-                wires = akt.get_wire()
+                wires = akt.WIRE
                 if len(wires) == 0:
                     continue
 
@@ -52,17 +52,16 @@ class Sieciarze:
                 kierunki = wires
 
                 for kier in kierunki:
-                    kier = (kier + akt.rotacja + 6) % 6
                     nx, ny = self.board.go((x, y), kier)
 
-                    # print(f"Sieciarz ({x},{y}) frakcja {akt.frakcja} kierunek {kier} -> ({nx},{ny})")
+                    print(f"Sieciarz ({x},{y}) frakcja {akt.fraction} kierunek {kier} -> ({nx},{ny}), frakcja {self.board.get_token((nx, ny)).fraction if self.board.get_token((nx, ny)) is not None else 'None'} is valid: {self.board.is_valid_target((nx, ny), akt.fraction)}")
 
-                    if not self.board.is_valid_target((nx, ny), akt.frakcja):
+                    if not self.board.is_valid_target((nx, ny), akt.fraction):
                         continue
 
-                    cel = self.board.board[nx][ny]
+                    cel = self.board.get_token((nx, ny))
 
-                    if cel is None or not cel.czy_sieciarz():
+                    if cel is None or not cel.can_wire():
                         continue
 
                     self.graf_sieciarzy[(x, y)].append((nx, ny))
@@ -229,27 +228,26 @@ class Sieciarze:
 
         for i in range(self.board.width):
             for j in range(self.board.length):
-                cel = self.board.board[i][j]
+                cel = self.board.get_token((i, j))
                 
                 if (cel != None):
-                    cel.odsieciuj()
+                    cel.unwire()
 
         for i in self.status_sieciarzy:
-            akt = self.board.board[i[0]][i[1]]
+            akt = self.board.get_token(i)
             
             if self.status_sieciarzy[i] != 1:
-                akt.zasieciuj()    
+                akt.wire()    
                 continue
                 
-            for kier in (akt[Token.Stats.WIRE] or []):
-                kier = (kier + akt.rotacja + 6) % 6
+            for kier in (akt.WIRE or []):
                 nx, ny = self.board.go(i, kier)
-                cel = self.board.board[nx][ny]
+                cel = self.board.get_token((nx, ny))
 
-                if (not self.board.is_valid_target((nx, ny), akt.frakcja)) or cel.czy_sieciarz() == True:
+                if (not self.board.is_valid_target((nx, ny), akt.fraction)) or cel.can_wire() == True:
                     continue
 
-                cel.zasieciuj()
+                cel.wire()
 
         self.status_sieciarzy = dict(self.status_sieciarzy)
 

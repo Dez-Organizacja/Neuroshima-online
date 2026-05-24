@@ -72,9 +72,15 @@ class BoardToken(AbstractToken):
     def unwire(self):
         self.WIRED = False
 
+    def can_wire(self):
+        return len(self.WIRE) > 0
+
+
     # --------- rotation ----------
 
     def rotate(self, direction = None):
+        self.load()
+
         if direction is not None:
             self.ROTATION = (self.ROTATION + direction) % 6
 
