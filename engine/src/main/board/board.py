@@ -21,6 +21,7 @@ class Board:
 
     def __init__(self):
         self.board = [[None] * self.length for i in range(self.width)]
+        self.where_am_i = {}
         self.tokens = {}
         
         self.ALL_HEXES = []
@@ -121,8 +122,6 @@ class Board:
         token = BoardToken(name, fraction)
         
         x, y = pos
-        name = token.get(token.NAME)
-
         tokenID = self.get_new_id()
         self.tokens[tokenID] = token
         self.board[x][y] = tokenID

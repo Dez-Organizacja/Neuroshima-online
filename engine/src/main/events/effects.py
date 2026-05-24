@@ -3,12 +3,12 @@ from main.events.data import Effect
 from main.workflows.data import WorkflowData
 from dataclasses import dataclass
 
-class DiscardActiveTokenEffect(Effect):
-    def __init__(self):
-        pass
+class DiscardTokenEffect(Effect):
+    def __init__(self, slot):
+        self.slot
 
     def apply(self, ctx : ActionContext):
-        ctx.player.hand.discard_token(ctx.workflow_data.slot)
+        ctx.player.hand.discard_token(self.slot)
 
 class MoveEffect(Effect):
     def __init__(self, from_pos, to_pos):
@@ -64,8 +64,11 @@ class DestroyEffect(Effect):
         ctx.board.destroy_token(self.pos)
 
 class MarkAbilityUsedEffect(Effect):
+    def __init__(self, pos : tuple[int, int]):
+        self.pos = pos
+
     def apply(self, ctx : ActionContext):
-        token = ctx.board.get_token(ctx.workflow_data.unit_pos)
+        token = ctx.board.get_token(self.pos)
         token.ability_used = True
 
 class ResetAbilityUsedEffect(Effect):

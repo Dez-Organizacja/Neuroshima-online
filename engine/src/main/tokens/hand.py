@@ -27,17 +27,16 @@ class Hand():
     def import_token(self, name):
         self.draw_token(TokenFactory().create(name, self.fraction))
 
-    def from_dict(self, data):
-        self.tokens = []
-        self.active_token = data.get(self.ACTIVE_TOKEN_KEY, None)
-        for token in data.get(self.TOKENS_KEY, []):
-            self.import_token(token)
 
-    def to_dict(self) -> list[str]:
-        tokens = []
+    def load_list(self, data : list[str]):
+        self.tokens = []
+        for token in data:
+            self.tokens.append(self.import_token(token))
+
+    def to_list(self) -> list[str]:
+        data = []
         for token in self.tokens:
-            tokens.append(token.name)
-        data = {self.ACTIVE_TOKEN_KEY : self.active_token, self.TOKENS_KEY : tokens}
+            data.append(token.name)
         return data
     
     def print_hand(self):

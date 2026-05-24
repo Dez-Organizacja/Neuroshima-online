@@ -13,7 +13,7 @@ class PlayerState:
     @classmethod
     def from_dict(cls, fraction, data):
         obj = cls(fraction)
-        obj.hand.from_dict(data.get(cls.HAND_KEY, {}))
+        obj.hand.load_list(data.get(cls.HAND_KEY, []))
         obj.pile.from_list(data.get(cls.PILE_KEY, []))
         return obj
 

@@ -2,25 +2,34 @@ dla frontendu:
 {
     "view" : {
         "state" : {
-            "board" : list[5][9] = (True | False)
+            "fractions" : list[str] //obie frakcja
+            "board" : {(x, y) : format jednostki}
             "hands" : {frakcja : list[str] } // nazwy żetonów
         },
-        "available_actions" : {
+        "availableActions" : {
             "hand" : {frackja : [True | False] * 3},
             "board" : {(x, y) : True| False} // po wszystkich pozycjach
         },
-        "ui_state" : {
+        "uiState" : {
             "fraction" : str // current frakcja
             "mode" : ("default"|"rotation"|"decision")
             "message" : str // widomość do wyświetlenia
         }
     }
 }
+format jednostki
+{
+    "name": str
+    "fraction": str
+    "ROTATION": str
+    "DAMAGE": str
+    "WIRED": str
+}
 
 dla engine:{
-    "state" : cały poprzedni stan gry
-    "type" : ("newgame" / "user_action")
-    "action" : format akcji
+    "messageType" : ("newgame" / "user_action")
+    "gameState" : cały poprzedni stan gry
+    "userAction" : format akcji
 }
 
 format akcji:

@@ -27,7 +27,7 @@ class ActionContext():
 
     @property
     def player(self) -> PlayerState:
-        return self.state.current_player
+        return self.state.players[self.fraction]
     
     @property
     def active_token(self):

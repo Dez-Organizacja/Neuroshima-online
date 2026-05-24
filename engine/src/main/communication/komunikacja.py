@@ -4,6 +4,10 @@ import json
 
 app = flask.Flask(__name__)
 
+@app.route('/api/neuroshima/', methods=['POST'])
+def new_game():
+    pass
+
 @app.route('/api/neuroshima/action', methods=['POST'])
 def action():
     pass

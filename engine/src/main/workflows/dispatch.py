@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from main.events.data import ExecutionResult
-from main.events.effects import DiscardActiveTokenEffect, MarkAbilityUsedEffect
+from main.events.effects import DiscardTokenEffect, MarkAbilityUsedEffect
 
 from main.steps.config import InitStepConfig, SetStepConfig
 from main.state.contex import ActionContext
@@ -32,9 +32,8 @@ class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
     def get_active_token(ctx) -> Token:
         pass
     
-    @staticmethod
-    def dispatch_function(ctx : ActionContext) -> WorkflowName:
-        token = DispatchActionWorkflow.get_active_token(ctx)
+    def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
+        token = self.get_active_token(ctx)
         ability = token.get_ability()
         return ABILITY_WORKFLOW_REGISTRY[ability]
     
@@ -58,10 +57,15 @@ class HandWorkflow(DispatchActionWorkflow):
     def get_active_token(ctx : ActionContext):
         return ctx.player.hand.get_token(ctx.workflow_data.slot)
 
+    def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
+        if self.get_active_token(ctx).get_ability() is None:
+            return WorkflowName.PLACE
+        return super().dispatch_function(ctx)
+
     @staticmethod
     def resolve_function(ctx : ActionContext) -> ExecutionResult:
         return ExecutionResult(
-            effects=[DiscardActiveTokenEffect()]
+            effects=[DiscardTokenEffect(ctx.workflow_data.slot)]
         )
     
 class BoardWorkflow(DispatchActionWorkflow):
