@@ -40,7 +40,7 @@ export default function HexTest(){
             const FinalY = Y + AddY;
 
             Items.push(
-                <Image imageName="silacz" x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
+                <Image imageName="borgo/silacz" x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
             )
             Items.push(
                 <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={30} color="#d10606"> {y}, {x} </Hexagon>
@@ -49,6 +49,30 @@ export default function HexTest(){
     }
 
     // =============== //
+
+    // Hand //
+    const VerticalSpacing = 1.732 * Size;
+
+    // keep whole hex visible
+    const LeftX = Size + 10;
+    const RightX = ScreenWidth - Size * 2;
+
+    // vertically centered
+    const StartY = CenterY - VerticalSpacing;
+
+    for (let i = -1; i <= 3; i+=2) {
+        const FinalX = LeftX;
+        const FinalY = StartY + i * VerticalSpacing;
+
+        Items.push(
+            <Image imageName="borgo/silacz" x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
+        )
+
+        Items.push(
+            <Hexagon x={FinalX} y={FinalY} poz1={i} poz2={-1} size={Size * 2 + 15} rotation={30} color="#00aaff" />
+        )
+    }
+    // ==== //
 
     return (
         <div className="canvas">

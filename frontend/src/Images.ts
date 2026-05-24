@@ -1,28 +1,29 @@
 // src/images.ts
 
 const modules = import.meta.glob(
-  "./assets/borgo/*.{png,jpg,jpeg}",
+  "./assets/{borgo,hegemonia,moloch,posterunek,inne}/*.{png,jpg,jpeg}",
   {
     eager: true,
   }
 )
 
-console.log(modules)
-
 export const imagesByName: Record<string, string> =
   Object.fromEntries(
     Object.entries(modules).map(
       ([path, module]: any) => {
-        const fileName =
-          path.split("/").pop() as string
+        // example:
+        // ./assets/cards/card1.png
 
-        const name =
-          fileName.replace(/\.[^/.]+$/, "")
+        const key = path
+          .replace("./assets/", "")
+          .replace(/\.[^/.]+$/, "")
 
-        return [name, module.default]
+        // result:
+        // cards/card1
+
+        return [key, module.default]
       }
     )
   )
 
 console.log(imagesByName)
-console.log(Object.keys(imagesByName))
