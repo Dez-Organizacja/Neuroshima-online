@@ -2,10 +2,11 @@ from main.state.contex import ActionContext
 from main.events.data import Effect
 from main.workflows.data import WorkflowData
 from dataclasses import dataclass
+from main.tokens.abstract_token import Token
 
 class DiscardTokenEffect(Effect):
     def __init__(self, slot):
-        self.slot
+        self.slot = slot
 
     def apply(self, ctx : ActionContext):
         ctx.player.hand.discard_token(self.slot)
@@ -20,12 +21,17 @@ class MoveEffect(Effect):
 
 class PlaceEffect(Effect):
     recompute_passive = True
-    def __init__(self, pos, unit):
+    def __init__(self, pos, unit : Token):
         self.pos = pos
         self.unit = unit
     
     def apply(self, ctx : ActionContext):
-        ctx.board.put_token(pos=self.pos, name=self.unit)
+        ctx.board.put_token(
+            pos=self.pos, 
+            name=self.unit.name, 
+            fraction=self.unit.fraction
+        )
+        
 @dataclass        
 class DamageProfile:
     power : int = 1

@@ -45,6 +45,22 @@ class ActionContext():
     def workflow_data(self):
         return self.state.workflow_data
     
+    @workflow_data.setter
+    def workflow_data(self, vaule):
+        self.state.workflow_data = vaule
+
     @property
     def workflow_instance(self):
         return self.state.workflow_stack[-1]
+    
+    def print_wf_stack(self):
+        print("stack")
+        for instance in self.state.workflow_stack:
+            print("name: ", instance.name)
+        print("---------")
+
+    def str_flow_queue(self):
+        queue = []
+        for flow in self.state.flow_queue:
+            queue.append(type(flow).__name__)
+        return queue

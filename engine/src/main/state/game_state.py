@@ -47,7 +47,7 @@ class GameState:
     board               : Board = field(default_factory=Board)
     flow_queue          : deque[FlowEvent] = field(default_factory=deque)
     workflow_data       : WorkflowData = field(default_factory=WorkflowData)
-    workflow_stack      : deque[WorkflowInstance] = field(default_factory=deque)
+    workflow_stack      : list[WorkflowInstance] = field(default_factory=list)
 
     @classmethod
     def from_dict(cls, data):

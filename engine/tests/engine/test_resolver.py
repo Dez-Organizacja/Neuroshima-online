@@ -26,16 +26,16 @@ class Tests:
         ctx.player.pile.from_list(["lowca"])
         ctx.board.put_token((1, 3), "lowca", "moloch")
         ctx.board.put_token((1, 5), "lowca", "moloch")
-        ctx.workflow_data = WorkflowData(slot=0, unit_pos=(1, 5))
+        ctx.state.workflow_data = WorkflowData(slot=0, unit_pos=(1, 5))
         ctx.state.workflow_stack.extend([
+            WorkflowInstance(name=WorkflowName.TURN, config=TurnConfig("moloch")),
             WorkflowInstance(name=WorkflowName.PLACE, current_step_index=0),
-            WorkflowInstance(name=WorkflowName.TURN, config=TurnConfig("moloch"))
         ])
 
         effects = [
             Ef.DrawTokensEffect(hand_limit=3),
             Ef.DiscardTokenEffect(slot=0),
-            Ef.PlaceEffect((2, 6), unit="klaun"),
+            Ef.PlaceEffect((2, 6), unit=ctx.player.hand.get_token(0)),
             Ef.MoveEffect(from_pos=(1, 3), to_pos=(2, 2)),
             Ef.MarkAbilityUsedEffect((2, 6)),
             Ef.DamageEffect((1, 5), profile=Ef.DamageProfile()),
@@ -50,7 +50,7 @@ class Tests:
             flow_events=flows
         )
         resolver = Resolver()
-        resolver.resolve(result)
+        resolver.excute(ctx=ctx, result=result)
 
         assert(ctx.player.hand.to_list() == ["sieciarz", "lowca"])
         assert(ctx.player.pile.to_list() == [])
@@ -59,6 +59,9 @@ class Tests:
         assert(ctx.workflow_instance.name == WorkflowName.BATTLE)
         assert(ctx.workflow_instance.current_step_index == None)
 
+        unit = ctx.board.get_token((2, 6))
+        # print(unit)
+        print(unit.name, unit.fraction)
         assert(ctx.board.get_token_position("klaun", "moloch") == (2, 6))
         assert(ctx.board.get_token((2, 6)).ability_used == True)
 

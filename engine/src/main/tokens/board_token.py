@@ -93,13 +93,14 @@ class BoardToken(AbstractToken):
 
     # --------- hp and armor ----------
 
-    def take_damage(self, direction, damage, blockable=False):
+    def take_damage(self, direction = None, damage = 1, blockable=False):
         # direction -> from where the attack is coming, 0-5
 
-        direction = (direction + 3) % 6
+        if direction is not None:
+            direction = (direction + 3) % 6
 
-        if (blockable and self.ARMOR and direction in self.ARMOR):
-            damage -= 1
+            if (blockable and self.ARMOR and direction in self.ARMOR):
+                damage -= 1
             
         self.DAMAGE += max(damage, 0)
 

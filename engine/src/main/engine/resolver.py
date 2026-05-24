@@ -16,14 +16,15 @@ class Resolver():
 
     def excute(self, ctx : ActionContext, result : ExecutionResult):
         self.apply(ctx, result.effects)
-        self.apply(ctx, result.workflow_effects)
 
         ctx.state.flow_queue.extend(result.flow_events)
         while ctx.state.flow_queue:
             event = ctx.state.flow_queue.popleft()
-            result : ExecutionResult = event.apply(ctx)
-            if result:
-                self.excute(ctx, result)
+            new_result : ExecutionResult = event.apply(ctx)
+            if new_result:
+                self.excute(ctx, new_result)
+        
+        self.apply(ctx, result.workflow_effects)
 
     def resolve(self, ctx : ActionContext, result : StepResult):
         if result.advance:

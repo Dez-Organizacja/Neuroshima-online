@@ -1,4 +1,3 @@
-from main.actions.akcje_na_planszy import AkcjeNaPlanszy
 from main.tokens.board_token import BoardToken
 from main.utils.variable import *
 
@@ -72,7 +71,12 @@ class Board:
         return self.where_am_i.get(tokenID)
 
     def remove_token(self, pos):
-        self.assign_to_tile(pos, None)
+        if not self.on_board(pos):
+            return
+        x, y = pos
+        del self.tokens[self.board[x][y]]
+        del self.where_am_i[self.board[x][y]]
+        self.board[x][y] = None
 
     def get_token(self, pos) -> BoardToken:
         if not self.on_board(pos):
@@ -128,12 +132,7 @@ class Board:
         self.where_am_i[tokenID] = (x, y)
 
     def destroy_token(self, pos):
-        if not self.on_board(pos):
-            return
-        x, y = pos
-        self.board[x][y] = None
-        del self.tokens[self.board[x][y]]
-        del self.where_am_i[self.board[x][y]]
+        self.remove_token(pos)
 
     def move_token(self, old_pos, new_pos):
         if(old_pos == new_pos):

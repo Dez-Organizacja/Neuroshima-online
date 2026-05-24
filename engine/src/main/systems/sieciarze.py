@@ -1,15 +1,17 @@
 from collections import defaultdict
 
 from main.tokens.data import Token
+from main.board.board import Board
 
 class Sieciarze:
-    def __init__(self, board):
-        self.board = board
+    def __init__(self, board : Board):
+        self.board : Board = board
         # self.kwestia_sieciarzy()
 
     @classmethod
     def compute(cls, board):
-        cls(board).kwestia_sieciarzy()
+        pass
+        # cls(board).kwestia_sieciarzy()
 
     def dfs1(self, akt):
         self.odw.add(akt)
@@ -35,16 +37,19 @@ class Sieciarze:
 
         for x in range(self.board.width):
             for y in range(self.board.length):
-                akt = self.board.board[x][y]
-
-                if akt is None or not akt.czy_sieciarz():
+                akt = self.board.get_token((x, y))
+                if akt is None:
                     continue
                 
+                wires = akt.get_wire()
+                if len(wires) == 0:
+                    continue
+
                 self.wszyscy_sieciarze.add((x, y))
                 self.graf_sieciarzy[(x, y)]
                 self.odwr_sieciarzy[(x, y)]
 
-                kierunki = akt[Token.Stats.WIRE] or []
+                kierunki = wires
 
                 for kier in kierunki:
                     kier = (kier + akt.rotacja + 6) % 6

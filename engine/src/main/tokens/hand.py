@@ -10,7 +10,7 @@ class Hand():
 
     def discard_token(self, slot):
         self.tokens.pop(slot)
-
+        
     @property
     def size(self):
         return len(self.tokens)
@@ -21,7 +21,6 @@ class Hand():
     def get_token(self, place) -> Token:
         if(place < 0 or place >= len(self.tokens)):
             return None
-        self.active_token = place
         return self.tokens[place]
 
     def import_token(self, name):
@@ -31,7 +30,7 @@ class Hand():
     def load_list(self, data : list[str]):
         self.tokens = []
         for token in data:
-            self.tokens.append(self.import_token(token))
+            self.import_token(token)
 
     def to_list(self) -> list[str]:
         data = []

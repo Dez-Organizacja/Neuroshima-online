@@ -39,5 +39,6 @@ class DeleteAbove(WorkflowEvent):
         self.name : WorkflowName = name
     
     def apply(self, ctx : ActionContext):
-        while ctx.workflow_instance.config.name != self.name:
+        while ctx.workflow_instance.name != self.name:
             ctx.state.workflow_stack.pop(-1)
+        

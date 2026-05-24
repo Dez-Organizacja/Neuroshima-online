@@ -16,7 +16,7 @@ class PlaceWorkflow(BoardSelectionMixin, Workflow[PlacementProvider]):
         return ExecutionResult(effects=[
             PlaceEffect(
                 pos = ctx.workflow_data.unit_pos,
-                unit=unit.name,
+                unit=unit,
             )
         ])
 
