@@ -1,28 +1,39 @@
 dla frontendu:
-    aktualna frakcja
-    board[5][9] = (None lub {"frakcja", "nazwa", "rotacja", "rany"})
-    hand = {"frakcja1" : ["nazwa", None, None], "frakcja2" : [cos, cos2, None]}
-    czyklikalne{
-        baord[5][9] = (nie/tak/obróć),
-        hand = {"frakcja1" : [3] = (bool), "frakcja2" : [3] = (bool)},
-        koniec tury, kosz, użyj, cancel, tak, nie 
+{
+    "view" : {
+        "state" : {
+            "board" : list[5][9] = (True | False)
+            "hands" : {frakcja : list[str] } // nazwy żetonów
+        },
+        "available_actions" : {
+            "hand" : {frackja : [True | False] * 3},
+            "board" : {(x, y) : True| False} // po wszystkich pozycjach
+        },
+        "ui_state" : {
+            "fraction" : str // current frakcja
+            "mode" : ("default"|"rotation"|"decision")
+            "message" : str // widomość do wyświetlenia
+        }
     }
-    message(string)
+}
 
-dla engine:
-    cały poprzedni stan planszy
-    klik = {"type" : (hand/baord/guzik), ...}
-    {"type" : "hand", "slot" : (0/1/2)}
-    {"type" : "board", "x" : (int), "y" : (int)}
-    {"type" : "rotate", "rotation" : int, "x" : x, "y" : y}
+dla engine:{
+    "state" : cały poprzedni stan gry
+    "type" : ("newgame" / "user_action")
+    "action" : format akcji
+}
 
-stan gry{
-    user_actions
-    faza
-    next_turns
-    board
-    hand
-    pile
-    aktualna frakcja
-    czyklikalne  //czy klikalne nie należy do stanu gry, jest to jedynie atrybut wiadomości dla frontendu która != stan planszy bo jest spersonalizowana
+format akcji:
+{"type" : (hand/baord/bottom/rotate), ...}
+{"type" : "hand", "slot" : (0/1/2)}
+{"type" : "board", "pos": (int, int)}
+{"type" : "rotate", "rotation" : int}
+{"type" : "bottom", "name" : (
+    "end_turn"/
+    "discard"/
+    "use"/
+    "cancel"/
+    "yes"/
+    "no"/
+    )
 }

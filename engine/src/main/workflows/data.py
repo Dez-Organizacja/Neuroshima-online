@@ -67,7 +67,7 @@ class WorkflowData:
 
 @dataclass
 class WorkflowConfig:
-    name : WorkflowName = field(init=False)
+    pass
 
 C = TypeVar("C", bound = WorkflowConfig)
 
@@ -80,9 +80,7 @@ class WorkflowInstance:
 @dataclass
 class TurnConfig(WorkflowConfig):
     fraction : str
-    name : WorkflowName = field(default=WorkflowName.TURN, init=False)
 
 @dataclass
 class GameConfig(WorkflowConfig):
     fractions : list[str]
-    name : WorkflowName = field(default=WorkflowName.GAME, init=False)

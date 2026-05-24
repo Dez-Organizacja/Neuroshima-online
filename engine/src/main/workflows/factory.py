@@ -35,20 +35,9 @@ class WorkflowFactory:
         WorkflowName.GAME : WorkflowMeta(GameWorkflow, True)
     }
     @classmethod
-    def create(cls, config : WorkflowConfig) -> Workflow:
-        meta = cls.WORKFLOWS[config.name]
+    def create(cls, instance : WorkflowInstance) -> Workflow:
+        meta = cls.WORKFLOWS[instance.name]
         if meta.needs_config:
-            return meta.cls(config)
+            return meta.cls(instance.config)
         else:
             return meta.cls()
-
-    @classmethod
-    def get_workflow_instance(cls, 
-                              config : WorkflowConfig, 
-                              ctx : ActionContext
-        ) -> WorkflowInstance:
-        wf_cls = cls.WORKFLOWS[config.name].cls
-        return WorkflowInstance(
-            config=config,
-            current_step_index=wf_cls.get_first_step_index(ctx)
-        )

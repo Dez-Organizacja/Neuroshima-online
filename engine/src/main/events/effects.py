@@ -1,6 +1,7 @@
 from main.state.contex import ActionContext
 from main.events.data import Effect
 from main.workflows.data import WorkflowData
+from dataclasses import dataclass
 
 class DiscardActiveTokenEffect(Effect):
     def __init__(self):
@@ -15,7 +16,7 @@ class MoveEffect(Effect):
         self.to_pos = to_pos
 
     def apply(self, ctx : ActionContext):
-        ctx.board.move(self.from_pos, self.to_pos)
+        ctx.board.move_token(self.from_pos, self.to_pos)
 
 class PlaceEffect(Effect):
     recompute_passive = True
@@ -24,25 +25,25 @@ class PlaceEffect(Effect):
         self.unit = unit
     
     def apply(self, ctx : ActionContext):
-        ctx.board.assign_to_tile(pos=self.pos, unit = self.unit)
-        
+        ctx.board.put_token(pos=self.pos, name=self.unit)
+@dataclass        
 class DamageProfile:
-    def __init__(
-        self,
-        can_hit_hq=True,
-        ignore_armor=False
-    ):
-        self.can_hit_hq = can_hit_hq
-        self.ignore_armor = ignore_armor
+    power : int = 1
+    direction : int | None = None
+    blockable : bool = False
 
 class DamageEffect(Effect):
-    def __init__(self, pos, power, profile=None):
+    def __init__(self, pos, profile=None):
         self.pos = pos
-        self.power = power
         self.profile = profile or DamageProfile()
     
     def apply(self, ctx : ActionContext):
-        ctx.board.deal_damage_effect(self.pos, self.power, self.profile)
+        unit = ctx.board.get_token(self.pos)
+        unit.take_damage(
+            direction=self.profile.direction,
+            damage=self.profile.power,
+            blockable=self.profile.blockable
+        )
 
 class RotateEffect(Effect):
     recompute_passive = True
@@ -52,7 +53,7 @@ class RotateEffect(Effect):
         self.rotation = rotation
     
     def apply(self, ctx : ActionContext):
-        ctx.board.rotate(self.pos, self.rotation)
+        ctx.board.rotate_token(self.pos, self.rotation)
 
 class DestroyEffect(Effect):
     recompute_passive = True
@@ -60,11 +61,11 @@ class DestroyEffect(Effect):
         self.pos = pos
     
     def apply(self, ctx : ActionContext):
-        ctx.board.destroy(self.pos)
+        ctx.board.destroy_token(self.pos)
 
 class MarkAbilityUsedEffect(Effect):
-    def apply(self, ctx):
-        token = ctx.board.get_tile(ctx.workflow_data.unit_pos)
+    def apply(self, ctx : ActionContext):
+        token = ctx.board.get_token(ctx.workflow_data.unit_pos)
         token.ability_used = True
 
 class ResetAbilityUsedEffect(Effect):
@@ -73,7 +74,7 @@ class ResetAbilityUsedEffect(Effect):
 
     def apply(self, ctx : ActionContext):
         for pos in self.positions:
-            token = ctx.board.get_tile(pos)
+            token = ctx.board.get_token(pos)
             token.ability_used = False
 
 class DrawTokensEffect(Effect):

@@ -2,6 +2,8 @@ from main.state.contex import ActionContext
 from main.input.data import Bottom
 from main.workflows.providers.base import WorkflowActionProvider
 from main.rules.ability.movement import PushRules, MoveRules
+from main.view.data import StepUIState, UIMode
+from main.rules.game import GameRules
 
 positions = list[tuple[int, int]]
 
@@ -64,11 +66,20 @@ class PushProvider(WorkflowActionProvider):
     
     def get_available_positions(self, ctx):
         if not ctx.workflow_data.unit_pos:
-            return self.get_available_sources
+            return self.get_available_sources(ctx)
         if not ctx.workflow_data.target_pos:
-            return self.get_available_targets
-        return self.get_available_destinations
+            return self.get_available_targets(ctx)
+        return self.get_available_destinations(ctx)
+    
+    def get_ui_state(self, ctx):
+        if ctx.workflow_data.unit_pos and not ctx.workflow_data.target_pos:
+            return StepUIState(fraction=GameRules.get_enemy(ctx, ctx.fraction))
+        
+        return super().get_ui_state(ctx)
     
 class RotateProvider(WorkflowActionProvider):
     def get_available_positions(self, ctx : ActionContext):
         return [ctx.workflow_data.unit_pos]
+    
+    def get_ui_state(self, ctx):
+        return StepUIState(fraction=ctx.fraction, mode=UIMode.ROTATION)

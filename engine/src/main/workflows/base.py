@@ -18,6 +18,9 @@ class Workflow(ABC, Generic[P]):
     def build_steps(self):
         pass
 
+    def start(self, ctx : ActionContext):
+        ctx.workflow_instance.current_step_index == self.get_first_step_index(ctx)
+
     @classmethod
     def get_first_step_index(cls, ctx : ActionContext):
         return 0

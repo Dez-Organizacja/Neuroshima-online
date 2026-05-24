@@ -2,7 +2,6 @@ from random import shuffle
 from main.state.contex import ActionContext
 from main.workflows.factory import WorkflowFactory
 from main.engine.resolver import Resolver
-from main.rules.validator import FormatValidator
 from main.actions.available.core import AvailableActions
 from main.events.data import ExecutionResult
 from main.events.workflow import PushWorkflow
@@ -24,7 +23,9 @@ class GameEngine:
 
         input_consumed = False
         while True:
-            wf = WorkflowFactory.create(ctx.workflow_instance.config)
+            wf = WorkflowFactory.create(ctx.workflow_instance)
+            if ctx.workflow_instance.current_step_index is None:
+                wf.start(ctx)
             step = wf.get_current_step(ctx)
             
             if step.requires_input and input_consumed:
