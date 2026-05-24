@@ -5,7 +5,8 @@ from main.board.board import Board
 from main.events.data import FlowEvent
 from collections import deque
 from main.workflows.data import WorkflowData, WorkflowInstance
-from main.state.serialization import from_dict_dataclass, to_dict_dataclass
+from main.state.serialization import Serializator
+from main.tokens.pile_factory import PileFactory
 
 def print_obj(obj, deepth):
     base_s = "\n" + "   " * deepth
@@ -51,15 +52,15 @@ class GameState:
 
     @classmethod
     def from_dict(cls, data):
-        return from_dict_dataclass(cls, data)
+        return Serializator.from_dict_dataclass(cls, data)
     
     def to_dict(self):
-        return to_dict_dataclass(self)
+        return Serializator.to_dict_dataclass(self)
     
     def print_game_state(self):
         print_obj(self.to_dict(), 0)
 
     def add_player(self, fraction):
-        player = PlayerState(fraction)
-        player.new_game()
+        player = PlayerState()
+        player.pile = PileFactory.create_pile(fraction)
         self.players[fraction] = player

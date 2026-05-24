@@ -1,42 +1,28 @@
-from main.tokens.token_factory import TokenFactory
-from main.tokens.abstract_token import Token
+from dataclasses import dataclass, field
 
+@dataclass
 class Hand():
-    TOKENS_KEY = "tokens"
+    tokens : list[str] = field(default_factory=list)
 
-    def __init__(self, fraction):
-        self.tokens = []
-        self.fraction = fraction
-
-    def discard_token(self, slot):
-        self.tokens.pop(slot)
-        
     @property
     def size(self):
         return len(self.tokens)
 
-    def draw_token(self, token : Token):
+    def remove(self, slot : int):
+        self.tokens.pop(slot)
+
+    def add(self, token : str):
         self.tokens.append(token)
 
-    def get_token(self, place) -> Token:
-        if(place < 0 or place >= len(self.tokens)):
+    def get(self, place : int) -> str:
+        if(place < 0 or place >= len(self.hand)):
             return None
         return self.tokens[place]
 
-    def import_token(self, name):
-        self.draw_token(TokenFactory().create(name, self.fraction))
-
-
-    def load_list(self, data : list[str]):
-        self.tokens = []
-        for token in data:
-            self.import_token(token)
+    @classmethod
+    def form_list(self, data : list[str]):
+        return Hand(data)
 
     def to_list(self) -> list[str]:
-        data = []
-        for token in self.tokens:
-            data.append(token.name)
-        return data
+        return self.tokens
     
-    def print_hand(self):
-        print(self.to_list())

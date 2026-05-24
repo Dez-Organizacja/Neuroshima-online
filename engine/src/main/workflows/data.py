@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from main.state.serialization import from_dict_dataclass, to_dict_dataclass
+# from main.state.serialization import from_dict_dataclass, to_dict_dataclass
 from enum import Enum
 from main.input.data import ActionType
 from main.tokens.data import Ability
@@ -40,12 +40,12 @@ class WorkflowData:
     rotation    : int | None = None
     type        : ActionType | None = None
 
-    @classmethod
-    def from_dict(cls, data):
-        return from_dict_dataclass(cls, data) 
+    # @classmethod
+    # def from_dict(cls, data):
+    #     return from_dict_dataclass(cls, data) 
     
-    def to_dict(self):
-        return to_dict_dataclass(self)
+    # def to_dict(self):
+    #     return to_dict_dataclass(self)
     
     def set_unit_pos(self, value):
         self.unit_pos = value
@@ -76,6 +76,7 @@ class WorkflowInstance:
     name : str
     current_step_index : int | None = None
     config : C | None = None
+
 
 @dataclass
 class TurnConfig(WorkflowConfig):

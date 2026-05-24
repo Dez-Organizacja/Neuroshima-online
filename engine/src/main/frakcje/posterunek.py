@@ -50,19 +50,23 @@ wlasciwosci = {
     },
 
     ############# natychmiastowe
-    # Ability.BATTLE: {
+    # "bitwa": {
+    #     TokenKey.ABILITY : Ability.BATTLE,
     #     TokenKey.TYPE : TokenType.INSTANT,
     #     TokenKey.UNIT_COUNT : 4,
     # },
-    # Ability.MOVE: {
+    # "ruch": {
+    #     TokenKey.ABILITY : Ability.MOVE,
     #     TokenKey.TYPE : TokenType.INSTANT,
     #     TokenKey.UNIT_COUNT : 1,
     # },
-    # Ability.PUSH: {
+    # "odepchniecie": {
+    #     TokenKey.ABILITY : Ability.PUSH,
     #     TokenKey.TYPE : TokenType.INSTANT,
     #     TokenKey.UNIT_COUNT : 5,
     # },
-    # Ability.BOMB: {
+    # "bomba": {
+    #     TokenKey.ABILITY : Ability.BOMB,
     #     TokenKey.TYPE : TokenType.INSTANT,
     #     TokenKey.UNIT_COUNT : 1,
     # }

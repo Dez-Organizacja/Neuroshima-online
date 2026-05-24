@@ -10,6 +10,6 @@ class Token(ABC):
     ability_used : bool = False
     ability      : Ability = Ability.NO_ABILITY
 
-    @abstractmethod
+
     def get_ability(self) -> Ability:
-        return Ability.NO_ABILITY
+        return self.ability

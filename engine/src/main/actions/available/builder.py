@@ -11,10 +11,7 @@ class AvailableActionsBuilder:
         }
     
     def build_board(ctx : ActionContext):
-        return {
-            hex: False
-            for hex in ctx.board.ALL_HEXES
-        }
+        return [[False] * ctx.board.length for i in range(ctx.board.width)]                
 
     def build_bottoms(ctx : ActionContext):
         return {

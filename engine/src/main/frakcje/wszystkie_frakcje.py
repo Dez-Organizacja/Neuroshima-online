@@ -4,7 +4,7 @@ from copy import deepcopy
 
 dostepne_frakcje = ["moloch", "borgo", "testowa"]
 path = "main.frakcje"
-frakcje = {}
+frakcje : dict[str, dict] = {}
 
 for frakcja in dostepne_frakcje:
     lib = import_module(f"{path}.{frakcja}")

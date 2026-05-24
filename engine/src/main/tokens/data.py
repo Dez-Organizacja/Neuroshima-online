@@ -10,6 +10,7 @@ class TokenKey(Enum):
     FRACTION = "frakcja"
     WIRED = "zasieciowany"
     UNIT_COUNT = "liczbajednostek"
+    ABILITY = "ability"
 
 class TokenRelation(Enum):
     OWN = "own"

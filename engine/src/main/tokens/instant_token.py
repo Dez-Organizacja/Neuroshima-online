@@ -1,12 +1,15 @@
 from main.utils.variable import *
 from main.tokens.abstract_token import Token
-from main.tokens.data import Ability, TokenType
+from main.tokens.data import Ability, TokenType, TokenKey
+from main.state.serialization import Serializator
+import main.frakcje.wszystkie_frakcje as allfractions
+from dataclasses import dataclass, field
 
+@dataclass
 class InstantToken(Token):
-    def __init__(self, name, fraction):
-        super().__init__(
-            name=name,
-            fraction=fraction,
-            type=TokenType.INSTANT,
-            ability=Ability(name)
-        )
+    type = field(default_factory=TokenType.INSTANT, init=False)
+
+    def __post_init__(self):
+        fraction_config = allfractions.frakcje.get(self.fraction, {})
+        token = fraction_config.get(self.name, {})
+        self.ability = token.get(TokenKey.ABILITY, Ability.NO_ABILITY)

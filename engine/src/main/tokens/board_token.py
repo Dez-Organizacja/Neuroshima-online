@@ -7,14 +7,12 @@ from main.tokens.data import Ability
 from main.tokens.abstract_token import Token as AbstractToken
 from main.tokens.data import TokenKey, TokenStats, TokenType, TokenRelation
 from main.utils.variable import Attack, Boost
+from main.state.serialization import Serializator
 
 @dataclass
 class BoardToken(AbstractToken):
-    name: str | dict = "default"
-    fraction: str = "neutral"
+    # name: str | dict = "default"
     type: TokenType = field(default=TokenType.BOARD, init=False)
-    # ability_used: bool = field(default=False, init=False)
-    # ability: Ability = field(default=Ability.NO_ABILITY, init=False)
 
     ROTATION: int = 0
     DAMAGE: int = 0
@@ -31,14 +29,16 @@ class BoardToken(AbstractToken):
 
 
     def __post_init__(self):
-        if isinstance(self.name, dict):
-            data = self.name
-            self.name = data.get("name", "default")
-            self.fraction = data.get("fraction", "neutral")
-            self.ROTATION = data.get("ROTATION", 0)
-            self.DAMAGE = data.get("DAMAGE", 0)
+        # if isinstance(self.name, dict):
+        #     data = self.name
+        #     self.name = data.get("name", "default")
+        #     self.fraction = data.get("fraction", "neutral")
+        #     self.ROTATION = data.get("ROTATION", 0)
+        #     self.DAMAGE = data.get("DAMAGE", 0)
+        #     self.WIRED = data.get("WIRED", False)
 
         self.load()
+        self.rotate()
 
     # ---------- reset ----------
 
@@ -74,8 +74,9 @@ class BoardToken(AbstractToken):
 
     # --------- rotation ----------
 
-    def rotate(self, direction):
-        self.ROTATION = (self.ROTATION + direction) % 6
+    def rotate(self, direction = None):
+        if direction is not None:
+            self.ROTATION = (self.ROTATION + direction) % 6
 
         for attack_type, attack_list in self.ATTACKS.items():
             self.ATTACKS[attack_type] = [
@@ -90,6 +91,7 @@ class BoardToken(AbstractToken):
             ]
 
         self.ARMOR = [(direction + self.ROTATION) % 6 for direction in self.ARMOR]
+        self.WIRE = [(direction + self.ROTATION) % 6 for direction in self.WIRE]
 
     # --------- hp and armor ----------
 
@@ -133,5 +135,10 @@ class BoardToken(AbstractToken):
             "ROTATION": self.ROTATION,
             "DAMAGE": self.DAMAGE,
             "WIRED": self.WIRED,
+            "ability_used" : self.ability_used
         }
         return data
+    
+    # @classmethod
+    # def from_dict(cls, data : dict) -> BoardToken:
+    #     return Serializator.from_dict_dataclass(cls, data)

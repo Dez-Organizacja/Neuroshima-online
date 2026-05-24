@@ -14,7 +14,8 @@ wlasciwosci = {
         TokenStats.HP: 1,
         TokenStats.WIRE: [0, 1],
     },
-    Ability.SNIPER : {
+    "snajper": {
+        TokenKey.ABILITY : Ability.SNIPER,
         TokenKey.TYPE : TokenType.INSTANT,
         TokenKey.UNIT_COUNT : 1,
     }

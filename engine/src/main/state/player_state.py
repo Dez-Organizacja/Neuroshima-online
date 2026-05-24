@@ -1,34 +1,8 @@
 from main.tokens.hand import Hand
 from main.tokens.pile import Pile
+from dataclasses import dataclass, field
 
+@dataclass
 class PlayerState:
-    HAND_KEY = "hand"
-    PILE_KEY = "pile"
-
-    def __init__(self, fraction):
-        self.fraction = fraction
-        self.hand = Hand(fraction)
-        self.pile = Pile(fraction)
-    
-    @classmethod
-    def from_dict(cls, fraction, data):
-        obj = cls(fraction)
-        obj.hand.load_list(data.get(cls.HAND_KEY, []))
-        obj.pile.from_list(data.get(cls.PILE_KEY, []))
-        return obj
-
-    def to_dict(self):
-        data = {
-            self.HAND_KEY : self.hand.to_dict(),
-            self.PILE_KEY : self.pile.to_list()
-        }
-        return data
-    
-    def print_state(self):
-        print(self.to_dict())
-
-    def new_game(self):
-        self.pile.new_pile()
-
-    def draw_tokens(self, turn_type):
-        self.hand.draw_tokens(self.pile, turn_type)
+    hand : Hand = field(default_factory=Hand)
+    pile : Pile = field(default_factory=Pile)

@@ -1,6 +1,6 @@
 from main.input.data import Bottom
 from dataclasses import dataclass
-from main.state.serialization import to_dict_dataclass
+from main.state.serialization import Serializator
 
 @dataclass
 class AvailableStructure:
@@ -9,4 +9,4 @@ class AvailableStructure:
     bottoms : dict[Bottom, bool]
 
     def to_dict(self):
-        return to_dict_dataclass(self)
+        return Serializator.to_dict_dataclass(self)

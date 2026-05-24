@@ -2,8 +2,6 @@ from main.tokens.board_token import BoardToken
 from main.utils.variable import *
 
 class Board:
-    BOARD_KEY = "board"
-    AVAILABLE_HEXES_KEY = "available_hexes"
     length = 9
     width = 5
     rose = {
@@ -20,8 +18,8 @@ class Board:
 
     def __init__(self):
         self.board = [[None] * self.length for i in range(self.width)]
-        self.where_am_i = {}
-        self.tokens = {}
+        self.where_am_i : dict[int, tuple[int, int]] = {}
+        self.tokens : dict[int, BoardToken] = {}
         
         self.ALL_HEXES = []
 
@@ -118,18 +116,20 @@ class Board:
 
     # ----------- placing and moving tokens ----------
 
+    def add_token(self, pos : tuple[int, int], token : BoardToken):
+        x, y = pos
+        tokenID = self.get_new_id()
+        self.tokens[tokenID] = token
+        self.board[x][y] = tokenID
+        self.where_am_i[tokenID] = pos
+
     def put_token(self, pos, name, fraction = None):
         # mozna wywolac albo put_token(pos, data) albo put_token(pos, name, fraction)
         if not self.on_board(pos):
             return
         
         token = BoardToken(name, fraction)
-        
-        x, y = pos
-        tokenID = self.get_new_id()
-        self.tokens[tokenID] = token
-        self.board[x][y] = tokenID
-        self.where_am_i[tokenID] = (x, y)
+        self.add_token(pos, token)
 
     def destroy_token(self, pos):
         self.remove_token(pos)
@@ -240,20 +240,9 @@ class Board:
 
 
 
-    # @classmethod
-    # def from_dict(cls, data):
-    #     obj = cls()
-    #     obj.import_board(data.get(cls.BOARD_KEY, obj.board))
-    #     return obj
+    @classmethod
+    def from_dict(cls, data : list) -> Board:
+        return cls().import_board()
 
-    # def to_dict(self):
-    #     data = {
-    #         self.BOARD_KEY : self.export_board(),
-    #     }
-    #     return data
-
-    # def not_on_bound(self, pos):
-    #     if not self.on_board(pos):
-    #         return False
-    #     return not self.on_border(pos)
-
+    def to_list(self) -> list:
+        return self.export_board()

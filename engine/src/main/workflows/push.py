@@ -32,6 +32,5 @@ class PushWorkflow(BoardSelectionMixin[PushProvider], Workflow[PushProvider]):
         )
         return ExecutionResult(effects=[move])
     
-    @classmethod
-    def get_first_step_index(cls, ctx : ActionContext):
+    def get_first_step_index(self, ctx : ActionContext):
         return 1 if ctx.workflow_data.unit_pos else 0
