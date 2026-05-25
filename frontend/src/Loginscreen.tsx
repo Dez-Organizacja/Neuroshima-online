@@ -20,6 +20,8 @@ export default function LoginScreen({onSwitchToRegister, onAcceptedLogin} : Logi
     try {
         const data = await Login(username, password, url);
         if (data.token) {
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("username", username);
             onAcceptedLogin();  
         } 
         else {
@@ -66,6 +68,5 @@ export default function LoginScreen({onSwitchToRegister, onAcceptedLogin} : Logi
     onClick={onSwitchToRegister}
     text="Register"
   />
-</div>
-    )
+</div>)
 }

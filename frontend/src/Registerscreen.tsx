@@ -14,6 +14,7 @@ export default function RegisterScreen({onSwitchToLogin} : RegisterScreenProps){
     const [password, setPassword] = useState("");
     async function HandleRegister(){
         const data = await Register(username, password, url);
+        onSwitchToLogin();
     }
     return(
         <div className="loginBackground">

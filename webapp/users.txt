@@ -6,3 +6,10 @@ uwu:{noop}uwu
 
 ws_test_user:{bcrypt}$2a$10$vK08mKx4.nR75nLMrkMXO.v8.6ezO4AleHT68M9NLe3NtQf.yZ2ZG
 sad:{bcrypt}$2a$10$ryB.JNf3LTx586DGzco4hufyw091JL4/ZhJTEOgewfYr6ZktyGgJ6
+ham1:{bcrypt}$2a$10$oM1EpxwgFNayzn4KeDyUK.F1lXAof4KgK0y2nsfOIgzCMmzrizFYS
+ka:{bcrypt}$2a$10$lowm.idXUFgXcjj/Dz0xduIIPZQDMJvR7ZGP.Ooh3mwd.g4RRDiy6
+Cos:{bcrypt}$2a$10$MBSuPtiOcFNVQkRpFSmCnel1gKXjOxaDaNXjruUu/xOfm2ywJrTdu
+Ja:{bcrypt}$2a$10$SVSXA2aCLb3QFX3xXmKYJuKaXX.ShR/UqLawi4A4fqWRzWQbziL0y
+test:{bcrypt}$2a$10$xju9nwuth90Sc4XpDuRSY.t288hKQsXigz2QWEA33XTudjWK7IDty
+testuser:{bcrypt}$2a$10$Rz6fjlcdNYbAL987yd43feKsd.cDcUIZlRsTZYB5yQmCO1I/4kQ3i
+some:{bcrypt}$2a$10$gmkAQJuINkCqWAkUr.o6zOulksoxpgvLwkTzbUW9/.QjoKmcDQJSq
