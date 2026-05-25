@@ -5,11 +5,14 @@ from main.steps.config import InitStepConfig, RepeatStepConfig
 
 class GameWorkflow(Workflow[WorkflowActionProvider]):
     def __init__(self, config : GameConfig):
-        self.config : GameWorkflow = config
-        super().__init__(action_provider = WorkflowActionProvider())
+        self.config : GameConfig = config
+        super().__init__()
 
     def build_player_turn_step(self, fraction : str):
-        return InitStepConfig(wf_config=TurnConfig(fraction))
+        return InitStepConfig(
+            wf_name=WorkflowName.TURN,
+            wf_config=TurnConfig(fraction)
+        )
     
     def build_repeat_step(self):
         return RepeatStepConfig()
@@ -17,7 +20,7 @@ class GameWorkflow(Workflow[WorkflowActionProvider]):
     def build_steps(self):
         steps = [
             self.build_player_turn_step(fraction)
-            for fraction in self.fractions
+            for fraction in self.config.fractions
         ]
         steps.append(self.build_repeat_step())
         return steps

@@ -92,8 +92,8 @@ class BoardToken(AbstractToken):
         
         for boost_type, boost_list in self.BOOSTS.items():
             self.BOOSTS[boost_type] = [
-                [(direction + self.ROTATION) % 6, power]
-                for direction, power in boost_list
+                (direction + self.ROTATION) % 6
+                for direction in boost_list
             ]
 
         self.ARMOR = [(direction + self.ROTATION) % 6 for direction in self.ARMOR]
@@ -134,7 +134,7 @@ class BoardToken(AbstractToken):
     def get_ability(self) -> Ability:
         return Ability.NO_ABILITY
     
-    def to_json(self):
+    def to_dict(self) -> dict:
         data = {
             "name": self.name,
             "fraction": self.fraction,
@@ -145,6 +145,6 @@ class BoardToken(AbstractToken):
         }
         return data
     
-    # @classmethod
-    # def from_dict(cls, data : dict) -> BoardToken:
-    #     return Serializator.from_dict_dataclass(cls, data)
+    @classmethod
+    def from_dict(cls, data : dict) -> BoardToken:
+        return Serializator.from_dict_dataclass(cls, data)

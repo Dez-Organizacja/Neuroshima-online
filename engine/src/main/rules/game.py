@@ -1,12 +1,6 @@
 from main.utils.variable import *
 
 class GameRules():
-    def __init__(self):
-        pass
-    
-    #############################################################################
-    #   Other useful functions       
-    #############################################################################
     def is_hand_full(self, hand):
         return hand.is_full()
 

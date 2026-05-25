@@ -25,8 +25,8 @@ class AvailableActions:
                 hand[fraction][i] = True
 
     def get_actions(self, ctx : ActionContext) -> AvailableStructure:
-        actions = AvailableStructure.build(ctx)
-        self.apply_board(actions.board, self.provider.get_positions(ctx))
+        actions : AvailableStructure = AvailableStructure.build(ctx)
+        actions.board = self.provider.get_positions(ctx)
         self.apply_active_keys(actions.bottoms, self.provider.get_bottoms(ctx))
         self.apply_hand(self.provider.get_tokens(ctx))
         return actions

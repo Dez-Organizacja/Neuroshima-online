@@ -26,14 +26,14 @@ from main.input.action_handlers import ActionHandler
 
 class TurnWorkflow(Workflow[TurnProvider]):
     def __init__(self, config : TurnConfig):
-        super().__init__(action_provider=TurnProvider())
         self.rules : TurnRules = TurnRules()
         self.config : TurnConfig = config
         self.start_turn_resolve = self.create_start_turn_function()
+        super().__init__(action_provider=TurnProvider())
 
     def create_start_turn_function(self) -> Callable[[ActionContext], ExecutionResult]:
         def start_turn_resolve(ctx : ActionContext) -> ExecutionResult:
-            ctx.fraction = self.config.fraction
+            ctx.state.current_fraction = self.config.fraction
             positions = BoardQuery([
                 is_ally(ctx.fraction),
                 has_ability
@@ -56,7 +56,7 @@ class TurnWorkflow(Workflow[TurnProvider]):
     def build_waiting_step(self):
         return WaitingStepConfig(
             action_handler=ActionHandler(WorkflowData.set_unit_pos),
-            consume_action=True
+            av_actions_provider=self.action_provider
         )
     
     def build_dispatch_step(self):
@@ -85,7 +85,7 @@ class TurnWorkflow(Workflow[TurnProvider]):
             #bo endturnevent popuje workflow 
         )
 
-    def build_input_steps(self):
+    def build_steps(self):
         return [
             self.build_init_step(),
             self.build_clear_step(),

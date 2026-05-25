@@ -9,7 +9,7 @@ def NOT(predicate):
 def is_ally(fraction : str):
     def predicate(ctx : ActionContext, pos):
         token = ctx.board.get_token(pos)
-        return token.fraction == fraction
+        return token is not None and token.fraction == fraction
     return predicate
 
 def is_ally_of(unit : Token):
@@ -18,7 +18,7 @@ def is_ally_of(unit : Token):
 def is_enemy(fraction : str):
     def predicate(ctx : ActionContext, pos):
         token = ctx.board.get_token(pos)
-        return token.fraction != fraction
+        return token is not None and token.fraction != fraction
     return predicate
 
 def is_enemy_of(unit : Token):
@@ -31,10 +31,10 @@ def is_on_border(ctx : ActionContext, pos):
     return ctx.board.on_border(pos)
 
 def is_wired_at(ctx : ActionContext, pos):
-    return ctx.board.get_token(pos).is_wired()
+    return ctx.board.get_token(pos).is_wired
 
 def is_hq_at(ctx : ActionContext, pos):
-    return ctx.board.get_token(pos).is_HQ()
+    return ctx.board.get_token(pos).is_HQ
 
 def adjacent_to(my_pos):
     def predicate(ctx : ActionContext, pos):

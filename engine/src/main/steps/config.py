@@ -7,6 +7,7 @@ from main.steps.data import StepResult, StepName
 from main.workflows.data import WorkflowData, WorkflowConfig, WorkflowName
 from typing import Callable, TypeVar, Generic
 from main.input.action_handlers import ActionHandler
+from main.events.data import ExecutionResult
 
 @dataclass
 class StepConfig(ABC):
@@ -29,7 +30,7 @@ def no_result_function(ctx : ActionContext) -> StepResult:
 
 @dataclass
 class ResolveStepConfig(AutomaticStepConfig):
-    resolve_func : Callable[[ActionContext], StepResult] = no_result_function
+    resolve_func : Callable[[ActionContext], ExecutionResult] = no_result_function
     wf_finished  : bool = False
     name         : StepName = field(default=StepName.RESOLVE, init=False)
 
@@ -37,7 +38,7 @@ class ResolveStepConfig(AutomaticStepConfig):
 @dataclass
 class InitStepConfig(AutomaticStepConfig):
     name          : StepName = field(default=StepName.INIT, init=False)
-    wf_name       : WorkflowName
+    wf_name       : WorkflowName | None = None
     decision_func : Callable[[ActionContext], WorkflowConfig] | None = None
     wf_config     : WorkflowConfig | None = None
     as_child      : bool = True

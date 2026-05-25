@@ -9,9 +9,9 @@ from main.steps.step import Step
 P = TypeVar("R", bound=WorkflowActionProvider)
 
 class Workflow(ABC, Generic[P]):
-    def __init__(self, action_provider : P):
+    def __init__(self, action_provider : P | None = None):
         super().__init__()
-        self.action_provider : P = action_provider
+        self.action_provider : P = action_provider or WorkflowActionProvider()
         self.steps_list = self.build_steps()
 
     @abstractmethod
@@ -19,7 +19,7 @@ class Workflow(ABC, Generic[P]):
         pass
 
     def start(self, ctx : ActionContext):
-        ctx.workflow_instance.current_step_index == self.get_first_step_index(ctx)
+        ctx.workflow_instance.current_step_index = self.get_first_step_index(ctx)
 
     def get_first_step_index(self, ctx : ActionContext):
         return 0

@@ -1,5 +1,19 @@
 from main.tokens.board_token import BoardToken
 from main.utils.variable import *
+from dataclasses import dataclass
+from main.state.serialization import Serializator
+
+@dataclass
+class Tile:
+    pos : tuple[int, int]
+    unit : BoardToken
+
+    @classmethod
+    def from_dict(cls, data : dict) -> Tile:
+        return Serializator.from_dict_dataclass(cls, data)
+
+    def to_dict(self):
+        return Serializator.to_dict_dataclass(self)
 
 class Board:
     length = 9
@@ -46,7 +60,7 @@ class Board:
                     self.board[x][y] = None
                 else:
                     tokenID = self.get_new_id()
-                    token = BoardToken(data[x][y])
+                    token = BoardToken.from_dict(data[x][y])
                     self.tokens[tokenID] = token
                     self.board[x][y] = tokenID
                     self.where_am_i[tokenID] = (x, y)
@@ -56,7 +70,7 @@ class Board:
         for i in range(self.width):
             for j in range(self.length):
                 if self.board[i][j] is not None:
-                    data[i][j] = self.tokens[self.board[i][j]].to_json()
+                    data[i][j] = self.tokens[self.board[i][j]].to_dict()
         return data
     
     # ----------- board state and actions -----------
@@ -123,6 +137,9 @@ class Board:
         self.board[x][y] = tokenID
         self.where_am_i[tokenID] = pos
 
+    def import_token(self, pos : tuple[int, int], data : dict):
+        self.add_token(pos, BoardToken.from_dict(data))
+
     def put_token(self, pos, name, fraction = None):
         # mozna wywolac albo put_token(pos, data) albo put_token(pos, name, fraction)
         if not self.on_board(pos):
@@ -154,7 +171,7 @@ class Board:
 
     def is_valid_target(self, pos, frakcja, czy_sztab=False):
         x, y = pos
-        return not (not self.on_board(pos) or self.is_empty(pos) or self.tokens[self.board[x][y]].frakcja == frakcja or (czy_sztab and self.get_token(pos).is_HQ()))
+        return not (not self.on_board(pos) or self.is_empty(pos) or self.tokens[self.board[x][y]].fraction == frakcja or (czy_sztab and self.get_token(pos).is_HQ()))
 
     def is_empty(self, pos):
         return self.get_token(pos) is None
@@ -221,8 +238,16 @@ class Board:
             print(row)
 
     @classmethod
-    def from_dict(cls, data : list) -> Board:
-        return cls().import_board()
+    def from_list(cls, data : list) -> Board:
+        obj = cls()
+        for tile_data in data:
+            tile = Tile.from_dict(tile_data)
+            obj.add_token(tile.pos, tile.unit)
+
+        return obj
 
     def to_list(self) -> list:
-        return self.export_board()
+        return [
+            Tile(pos=self.where_am_i[id], unit=token).to_dict()
+            for id, token in self.tokens.items()
+        ]

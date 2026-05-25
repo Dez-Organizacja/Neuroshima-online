@@ -61,6 +61,4 @@ class GameState:
         print_obj(self.to_dict(), 0)
 
     def add_player(self, fraction):
-        player = PlayerState()
-        player.pile = PileFactory.create_pile(fraction)
-        self.players[fraction] = player
+        self.players[fraction] = PlayerState()

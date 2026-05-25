@@ -7,6 +7,7 @@ from main.state.contex import ActionContext
 from main.input.data import HandAction, BoardAction
 
 from main.tokens.abstract_token import Token
+from main.tokens.token_factory import TokenFactory
 
 from main.workflows.providers.base import WorkflowActionProvider
 from main.workflows.base import Workflow
@@ -20,7 +21,7 @@ from main.input.data import Bottom
 
 class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
     def __init__(self):
-        super().__init__(action_provider=WorkflowActionProvider())
+        super().__init__()
     
     @staticmethod
     @abstractmethod
@@ -54,8 +55,9 @@ class HandWorkflow(DispatchActionWorkflow):
         super().__init__()
 
     @staticmethod
-    def get_active_token(ctx : ActionContext):
-        return ctx.player.hand.get_token(ctx.workflow_data.slot)
+    def get_active_token(ctx : ActionContext) -> Token:
+        name = ctx.player.hand.get(ctx.workflow_data.slot)
+        return TokenFactory.create(name, ctx.fraction)
 
     def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
         if self.get_active_token(ctx).get_ability() is None:

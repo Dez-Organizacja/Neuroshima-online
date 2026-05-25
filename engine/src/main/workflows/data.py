@@ -73,7 +73,7 @@ C = TypeVar("C", bound = WorkflowConfig)
 
 @dataclass
 class WorkflowInstance:
-    name : str
+    name : WorkflowName
     current_step_index : int | None = None
     config : C | None = None
 

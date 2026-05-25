@@ -31,21 +31,26 @@ class Step(ABC, Generic[C]):
                 action : UserAction | None = None 
         ) -> StepResult:
         return StepResult()
-
+    
     @property
+    @abstractmethod
     def requires_input(self) -> bool:
-        return self.name == StepName.WAITING
+        pass
 
 class WaitingStep(Step[WaitingStepConfig]):
     def __init__(self, config : WaitingStep):
         super().__init__(config)
 
-    def execute(self, ctx : ActionContext, action = None) -> StepResult:
+    def execute(self, ctx : ActionContext, action : UserAction) -> StepResult:
         result = self.config.action_handler.handle(ctx, action)
         return StepResult(
             execution_result=result,
             input_consumed=self.config.consume_action
         )
+    
+    @property
+    def requires_input(self):
+        return True
 
 class AutomaticStep(Step[C], ABC):
     def __init__(self, config : C):
@@ -55,6 +60,9 @@ class AutomaticStep(Step[C], ABC):
     def execute(self, ctx : ActionContext) -> StepResult:
         pass
 
+    @property
+    def requires_input(self):
+        return False
 
 class ResolveStep(AutomaticStep[ResolveStepConfig]):
     def __init__(self, config : ResolveStepConfig):
@@ -65,9 +73,9 @@ class ResolveStep(AutomaticStep[ResolveStepConfig]):
         return ExecutionResult()
     
     def execute(self, ctx : ActionContext) -> StepResult:
-        res = ExecutionResult(action_result=self.config.resolve_func(ctx))
+        res : ExecutionResult = self.config.resolve_func(ctx)
         if self.config.wf_finished:
-            res.workflow_effects = [PopWorkflow()]
+            res.workflow_effects.append(PopWorkflow())
         return StepResult(execution_result=res)
 
 
@@ -89,9 +97,9 @@ class InitStep(AutomaticStep[InitStepConfig]):
 
     def execute(self, ctx : ActionContext) -> StepResult:
         effect = PushWorkflow(
-            name=self.name or self.config.decision_func(ctx),
+            name=self.config.wf_name or self.config.decision_func(ctx),
             as_child=self.config.as_child,
-            config = self.config
+            config = self.config.wf_config
         )
         return StepResult(
             execution_result=ExecutionResult(workflow_effects=[effect])

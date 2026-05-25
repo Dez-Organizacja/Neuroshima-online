@@ -3,12 +3,13 @@ dla frontendu:
     "view" : {
         "state" : {
             "fractions" : list[str] //obie frakcja
-            "board" : list[list[format jednostki | None]] //lista 5 x 9
+            "board" : list[{"pos" : (x, y), "unit" : format jednostki}]
             "hands" : {frakcja : list[str] } // nazwy żetonów
         },
         "availableActions" : {
-            "hand" : {frackja : [True | False] * 3},
-            "board" : list[list[True | False]] //lista 5 x 9
+            "hand" : {frackja : [bool] * 3},
+            "board" : list[(x, y)]
+            "bottoms" : {nazwa zetonu : bool}
         },
         "uiState" : {
             "fraction" : str // current frakcja

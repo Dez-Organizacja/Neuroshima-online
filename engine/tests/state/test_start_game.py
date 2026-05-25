@@ -1,0 +1,35 @@
+from main.engine.engine import GameEngine
+from main.state.contex import ActionContext
+from main.state.game_state import GameState
+from main.rules.game import GameRules
+from main.engine.resolver import Resolver
+from main.workflows.data import WorkflowName, TurnConfig
+from main.state.player_state import PlayerState
+
+class Tests:
+    def check_player(self, ctx : ActionContext, fraction : str, hand_size = 0):
+        player = ctx.state.players.get(fraction, None)
+        assert isinstance(player, PlayerState)
+        assert not player.pile.empty
+        assert player.hand.size == hand_size
+
+    def test_start_game(self):
+        ctx = ActionContext(
+            state=GameState(fractions=["moloch", "borgo"]),
+            rules=GameRules()
+        )
+        engine = GameEngine(Resolver())
+        engine.start_game(ctx)
+
+        assert len(ctx.state.workflow_stack) == 2
+        assert ctx.workflow_instance.name == WorkflowName.TURN
+        assert ctx.workflow_instance.current_step_index == 2
+        assert isinstance(ctx.workflow_instance.config, TurnConfig)
+        assert ctx.workflow_instance.config.fraction in ["moloch", "borgo"]
+
+        instance = ctx.state.workflow_stack[0]
+        assert instance.name == WorkflowName.GAME
+        assert sorted(instance.config.fractions) == ["borgo", "moloch"]
+        assert instance.current_step_index == 1
+        self.check_player(ctx, "moloch", hand_size=3)
+        self.check_player(ctx, "borgo")

@@ -28,14 +28,6 @@ class ActionContext():
     @property
     def player(self) -> PlayerState:
         return self.state.players[self.fraction]
-    
-    @property
-    def active_token(self):
-        token = self.player.hand.get_active_token()
-        if token:
-            return token
-        else:
-            return self.board.get_tile(self.selected.unit_position)
 
     @property
     def ui_state(self):

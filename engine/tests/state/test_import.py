@@ -16,7 +16,7 @@ def test_game_state_serialization_roundtrip():
     state.add_player("moloch")
     state.add_player("morgo")
     state.board.put_token((1, 1), "klaun", "moloch")
-
+    
     state.workflow_stack.append(
         WorkflowInstance(
             name=WorkflowName.TURN,
@@ -29,11 +29,10 @@ def test_game_state_serialization_roundtrip():
     data = state.to_dict()
     json_string = json.dumps(data)
 
+    # # THEN
     loaded_data = json.loads(json_string)
 
-    restored_state = GameState.from_dict(loaded_data)
-
-    # THEN
+    restored_state : GameState = GameState.from_dict(loaded_data)
     restored_data = restored_state.to_dict()
 
     assert restored_data == data

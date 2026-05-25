@@ -12,11 +12,11 @@ class PlaceWorkflow(BoardSelectionMixin, Workflow[PlacementProvider]):
         super().__init__(action_provider=PlacementProvider())
 
     def resolve_function(self, ctx : ActionContext):
-        unit = ctx.player.hand.get_token(ctx.workflow_data.slot)
         return ExecutionResult(effects=[
             PlaceEffect(
                 pos = ctx.workflow_data.unit_pos,
-                unit=unit,
+                name = ctx.player.hand.get(ctx.workflow_data.slot),
+                fraction= ctx.fraction
             )
         ])
 

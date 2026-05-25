@@ -7,11 +7,11 @@ from main.tokens.data import *
 class TestBoard:
     def test_board1(self):
         board = Board()
-        token = BoardToken("bloker", "moloch")
+        token = BoardToken(name="bloker", fraction="moloch")
         board.import_board([
             [None, None, None, None, None, None, None, None, None],
             [None, None, None, None, None, None, None, None, None],
-            [None, None, token.to_json(), None, None, None, None, None, None],
+            [None, None, token.to_dict(), None, None, None, None, None, None],
             [None, None, None, None, None, None, None, None, None],
             [None, None, None, None, None, None, None, None, None],
         ])

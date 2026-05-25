@@ -9,7 +9,7 @@ class DiscardTokenEffect(Effect):
         self.slot = slot
 
     def apply(self, ctx : ActionContext):
-        ctx.player.hand.discard_token(self.slot)
+        ctx.player.hand.remove(self.slot)
 
 class MoveEffect(Effect):
     def __init__(self, from_pos, to_pos):
@@ -21,15 +21,16 @@ class MoveEffect(Effect):
 
 class PlaceEffect(Effect):
     recompute_passive = True
-    def __init__(self, pos, unit : Token):
+    def __init__(self, pos, name : str, fraction : str):
         self.pos = pos
-        self.unit = unit
+        self.name = name
+        self.fraction = fraction
     
     def apply(self, ctx : ActionContext):
         ctx.board.put_token(
             pos=self.pos, 
-            name=self.unit.name, 
-            fraction=self.unit.fraction
+            name=self.name, 
+            fraction=self.fraction
         )
         
 @dataclass        
@@ -94,8 +95,8 @@ class DrawTokensEffect(Effect):
         hand = ctx.player.hand
         pile = ctx.player.pile
         while hand.size < self.hand_limit and not pile.empty:
-            token = pile.get_token()
-            hand.draw_token(token)
+            token = pile.draw()
+            hand.add(token)
 
 class ClearWorkflowDataEffect(Effect):
     def apply(self, ctx):

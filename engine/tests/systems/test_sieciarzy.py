@@ -13,16 +13,16 @@ class TestSieciarze:
         board = Board()
 
         # [0, 5]
-        board.put_token((2, 4), {"name": "sieciarz", "fraction": "moloch", "ROTATION": 1, "DAMAGE": 0})
+        board.import_token((2, 4), {"name": "sieciarz", "fraction": "moloch", "ROTATION": 1, "DAMAGE": 0})
 
-        board.put_token((0, 4), {"name": "sieciarz", "fraction": "moloch", "ROTATION": 3, "DAMAGE": 0})
+        board.import_token((0, 4), {"name": "sieciarz", "fraction": "moloch", "ROTATION": 3, "DAMAGE": 0})
 
         # [0]
-        board.put_token((1, 3), {"name": "sieciarz", "fraction": "testowa", "ROTATION": 2, "DAMAGE": 0})
+        board.import_token((1, 3), {"name": "sieciarz", "fraction": "testowa", "ROTATION": 2, "DAMAGE": 0})
 
-        board.put_token((2, 6), {"name": "sieciarz", "fraction": "testowa", "ROTATION": 0, "DAMAGE": 0})
+        board.import_token((2, 6), {"name": "sieciarz", "fraction": "testowa", "ROTATION": 0, "DAMAGE": 0})
 
-        board.put_token((1, 5), {"name": "sieciarz", "fraction": "testowa", "ROTATION": 5, "DAMAGE": 0})
+        board.import_token((1, 5), {"name": "sieciarz", "fraction": "testowa", "ROTATION": 5, "DAMAGE": 0})
 
         # pop = defaultdict(int, {(2, 4): 1, (0, 4): 1, (1, 5): 1, (1, 3): 1, (2, 6): 2})
         pop = {(2, 4): 1, (0, 4): 1, (1, 5): 1, (1, 3): 1, (2, 6): 2}
@@ -34,7 +34,7 @@ class TestSieciarze:
 
         assert data == pop
 
-        board.put_token((1, 1), {"name": "sieciarz", "fraction": "moloch", "ROTATION": 1, "DAMAGE": 0})
+        board.import_token((1, 1), {"name": "sieciarz", "fraction": "moloch", "ROTATION": 1, "DAMAGE": 0})
 
         # pop = defaultdict(int, {(1, 1): 1, (2, 4): 1, (0, 4): 1, (1, 5): 2, (1, 3): 2, (2, 6): 2})
         pop = {(1, 1): 1, (2, 4): 1, (0, 4): 1, (1, 5): 2, (1, 3): 2, (2, 6): 2}
@@ -50,31 +50,31 @@ class TestSieciarze:
     #     board = Board()
         
     #     zeton = {"fraction" : "testowa", "name" : "sieciarz", "ROTATION" : 5, "DAMAGE" : 0}
-    #     board.put_token((3, 3), zeton)
+    #     board.import_token((3, 3), zeton)
 
     #     zeton = {"fraction" : "moloch", "name" : "sieciarz", "ROTATION" : 0, "DAMAGE" : 0}
-    #     board.put_token((2, 2), zeton)
+    #     board.import_token((2, 2), zeton)
 
     #     zeton = {"fraction" : "testowa", "name" : "dwu-sieciarz", "ROTATION" : 1, "DAMAGE" : 0}
-    #     board.put_token((1, 3), zeton)
+    #     board.import_token((1, 3), zeton)
 
     #     zeton = {"fraction" : "moloch", "name" : "sieciarz", "ROTATION" : 3, "DAMAGE" : 0}
-    #     board.put_token((2, 4), zeton)
+    #     board.import_token((2, 4), zeton)
 
     #     zeton = {"fraction" : "moloch", "name" : "sztab", "ROTATION" : 0, "DAMAGE" : 0}
-    #     board.put_token((1, 5), zeton)
+    #     board.import_token((1, 5), zeton)
 
     #     zeton = {"fraction" : "testowa", "name" : "sieciarz", "ROTATION" : 2, "DAMAGE" : 0}
-    #     board.put_token((1, 7), zeton)
+    #     board.import_token((1, 7), zeton)
 
     #     zeton = {"fraction" : "moloch", "name" : "sieciarz", "ROTATION" : 1, "DAMAGE" : 0}
-    #     board.put_token((2, 8), zeton)
+    #     board.import_token((2, 8), zeton)
 
     #     zeton = {"fraction" : "testowa", "name" : "sieciarz", "ROTATION" : 3, "DAMAGE" : 0}
-    #     board.put_token((3, 7), zeton)
+    #     board.import_token((3, 7), zeton)
 
     #     zeton = {"fraction" : "moloch", "name" : "opancerzonywartownik", "ROTATION" : 2, "DAMAGE" : 0}
-    #     board.put_token((4, 6), zeton)
+    #     board.import_token((4, 6), zeton)
 
     #     sieciarze = Sieciarze(board)
     #     sieciarze.kwestia_sieciarzy()

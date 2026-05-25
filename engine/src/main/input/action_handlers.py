@@ -3,7 +3,7 @@ from typing import Callable
 from main.state.contex import ActionContext
 from main.events.data import ExecutionResult
 from main.events.flow import EndTurnEvent, DeleteAbove
-from main.events.effects import ClearWorkflowDataEffect, DiscardActiveTokenEffect
+from main.events.effects import ClearWorkflowDataEffect, DiscardTokenEffect
 from main.workflows.data import WorkflowName, WorkflowData
 from main.input.data import(
     BoardAction, 
@@ -44,7 +44,7 @@ class BottomHandler:
     @bottom_register(Bottom.DISCARD)
     def handle_discard(ctx : ActionContext) -> ExecutionResult:
         return ExecutionResult(
-            effects=[DiscardActiveTokenEffect()],
+            effects=[DiscardTokenEffect(ctx.workflow_data.slot)],
             workflow_effects=[DeleteAbove(WorkflowName.TURN)]
         )
     

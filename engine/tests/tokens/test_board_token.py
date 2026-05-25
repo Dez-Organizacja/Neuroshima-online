@@ -6,7 +6,7 @@ from main.utils.variable import *
 
 class TestBoardToken:
     def test_board_token1(self):
-        token = BoardToken("bloker", "moloch")
+        token = BoardToken(name="bloker", fraction="moloch")
 
         assert token.name == "bloker"
         assert token.HP == 3
@@ -20,7 +20,7 @@ class TestBoardToken:
         assert token.get_attacks(0) == {}
 
     def test_board_token2(self):
-        token = BoardToken("sztab", "moloch")
+        token = BoardToken(name="sztab", fraction="moloch")
 
         assert token.name == "sztab"
         assert token.HP == 20
@@ -42,7 +42,7 @@ class TestBoardToken:
         }
 
     def test_board_token3(self):
-        token = BoardToken("juggernaut", "moloch")
+        token = BoardToken(name="juggernaut", fraction="moloch")
 
         assert token.name == "juggernaut"
         assert token.HP == 2
@@ -56,7 +56,7 @@ class TestBoardToken:
         }
 
     def test_board_token4(self):
-        token = BoardToken({"name": "juggernaut", "fraction": "moloch", "ROTATION": 1, "DAMAGE": 3}, None)
+        token = BoardToken.from_dict({"name": "juggernaut", "fraction": "moloch", "ROTATION": 1, "DAMAGE": 3})
 
         assert token.name == "juggernaut"
         assert token.HP == 2
@@ -70,3 +70,13 @@ class TestBoardToken:
             Attack.SHOOT: [[4, 1]],
             Attack.MELEE: [[3, 2]],
     }
+        
+    def test_save_load(self):
+        token = BoardToken(name="klaun", fraction="moloch")
+        data = token.to_dict()
+        # print(data)
+        # token : BoardToken = Serializator.from_dict_dataclass(BoardToken, data)
+        # print(token.to_dict())
+        token = BoardToken.from_dict(data)
+        # assert False
+        assert data == token.to_dict()

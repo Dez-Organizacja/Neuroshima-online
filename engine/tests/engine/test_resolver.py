@@ -4,7 +4,6 @@ import main.events.flow as F
 import main.events.workflow as WF
 from main.state.contex import ActionContext
 from main.state.game_state import GameState
-from main.state.player_state import PlayerState
 from main.rules.game import GameRules
 from main.engine.resolver import Resolver
 from main.events.data import ExecutionResult
@@ -21,9 +20,9 @@ class Tests:
 
     def test1(self):
         ctx = self.contex_maker()
-        ctx.state.players["moloch"] = PlayerState("moloch")
-        ctx.player.hand.load_list(["klaun", "sieciarz"])
-        ctx.player.pile.from_list(["lowca"])
+        ctx.state.add_player("moloch")
+        ctx.player.hand.tokens = ["klaun", "sieciarz"]
+        ctx.player.pile.tokens = ["lowca"]
         ctx.board.put_token((1, 3), "lowca", "moloch")
         ctx.board.put_token((1, 5), "lowca", "moloch")
         ctx.state.workflow_data = WorkflowData(slot=0, unit_pos=(1, 5))
@@ -35,7 +34,7 @@ class Tests:
         effects = [
             Ef.DrawTokensEffect(hand_limit=3),
             Ef.DiscardTokenEffect(slot=0),
-            Ef.PlaceEffect((2, 6), unit=ctx.player.hand.get_token(0)),
+            Ef.PlaceEffect((2, 6), ctx.player.hand.get(0), "moloch"),
             Ef.MoveEffect(from_pos=(1, 3), to_pos=(2, 2)),
             Ef.MarkAbilityUsedEffect((2, 6)),
             Ef.DamageEffect((1, 5), profile=Ef.DamageProfile()),
@@ -52,8 +51,8 @@ class Tests:
         resolver = Resolver()
         resolver.excute(ctx=ctx, result=result)
 
-        assert(ctx.player.hand.to_list() == ["sieciarz", "lowca"])
-        assert(ctx.player.pile.to_list() == [])
+        assert(ctx.player.hand.tokens == ["sieciarz", "lowca"])
+        assert(ctx.player.pile.tokens == [])
         
         assert(len(ctx.state.workflow_stack) == 1)
         assert(ctx.workflow_instance.name == WorkflowName.BATTLE)
@@ -72,4 +71,3 @@ class Tests:
 
         assert(ctx.workflow_data.slot is None)
         assert(ctx.workflow_data.unit_pos is None)
-
