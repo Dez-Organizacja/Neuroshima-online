@@ -1,30 +1,35 @@
 dla frontendu:
 {
-    "view" : {
-        "state" : {
-            "fractions" : list[str] //obie frakcja
-            "board" : list[{"pos" : (x, y), "unit" : format jednostki}]
-            "hands" : {frakcja : list[str] } // nazwy żetonów
-        },
-        "availableActions" : {
-            "hand" : {frackja : [bool] * 3},
-            "board" : list[(x, y)]
-            "bottoms" : {nazwa zetonu : bool}
-        },
-        "uiState" : {
-            "fraction" : str // current frakcja
-            "mode" : ("default"|"rotation"|"decision")
-            "message" : str // widomość do wyświetlenia
-        }
+    "state": {
+        "fractions": ["borgo", "moloch"], 
+        "board": [
+            {
+                "pos": [1, 1], 
+                "unit": {
+                    "name": "klaun", 
+                    "fraction": "moloch", 
+                    "ROTATION": 0, 
+                    "DAMAGE": 0, 
+                    "WIRED": false, 
+                    "ability_used": false
+                }
+            }
+        ], 
+        "hands": {
+            "borgo": {"tokens": ["bitwa", "sztab", "zabojca"]}, 
+            "moloch": {"tokens": ["bitwa", "sztab", "zabojca"]}
+            }
+        }, 
+    "available_actions": {
+        "hand": [true, true, true], 
+        "board": [[1, 1], [1, 3]], 
+        "buttons": ["end_turn"]
+    }, 
+    "ui_state": {
+        "fraction": "borgo", 
+        "mode": "default"/"rotation"/"decision", 
+        "message": ""
     }
-}
-format jednostki
-{
-    "name": str
-    "fraction": str
-    "ROTATION": str
-    "DAMAGE": str
-    "WIRED": str
 }
 
 dla engine:{

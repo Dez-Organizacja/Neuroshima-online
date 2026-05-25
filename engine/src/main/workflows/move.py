@@ -11,7 +11,7 @@ class MoveWorkflow(BoardSelectionMixin[MoveProvider], Workflow[MoveProvider]):
     def __init__(self):
         super().__init__(action_provider=MoveProvider())
         self.name = WorkflowName.MOVE
-        self.get_bottoms = self.action_provider.get_available_bottoms
+        self.get_buttons = self.action_provider.get_available_buttons
 
     def build_move_step(self):
         return ResolveStepConfig(resolve_func=self.resolve_move)

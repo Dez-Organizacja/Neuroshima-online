@@ -7,8 +7,8 @@ class StartBattleProvider(WorkflowActionProvider):
     def __int__(self):
         self.rules = BattleRules()
 
-    def get_available_bottoms(self, ctx : ActionContext):
-        bottoms = [Bottom.DISCARD, Bottom.CANCEL]
+    def get_available_buttons(self, ctx : ActionContext):
+        buttons = [Bottom.DISCARD, Bottom.CANCEL]
         if self.rules.can_start(ctx):
-            bottoms.append(Bottom.USE)
-        return bottoms
+            buttons.append(Bottom.USE)
+        return buttons

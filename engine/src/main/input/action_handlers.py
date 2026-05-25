@@ -13,11 +13,11 @@ from main.input.data import(
     BottomAction
 )
 
-bottom_handler = Callable[[ActionContext], ExecutionResult]
+button_handler = Callable[[ActionContext], ExecutionResult]
 BOTTOM_DISPATCH = {}
-def bottom_register(bottom : Bottom):
-    def wrapper(func : bottom_handler):
-        BOTTOM_DISPATCH[bottom] = func
+def button_register(button : Bottom):
+    def wrapper(func : button_handler):
+        BOTTOM_DISPATCH[button] = func
         return func
     return wrapper
 
@@ -27,13 +27,13 @@ class BottomHandler:
         return cls.DISPATCH[action.name](ctx)
 
     @staticmethod
-    @bottom_register(Bottom.END_TURN)
+    @button_register(Bottom.END_TURN)
     def handle_end_turn(ctx : ActionContext) -> ExecutionResult:
         return ExecutionResult(flow_events=[EndTurnEvent()])
 
 
     @staticmethod
-    @bottom_register(Bottom.CANCEL)
+    @button_register(Bottom.CANCEL)
     def handle_cancel(ctx : ActionContext) -> ExecutionResult:
         return ExecutionResult(
             workflow_effects=[DeleteAbove(name=WorkflowName.TURN)],
@@ -41,7 +41,7 @@ class BottomHandler:
         )
     
     @staticmethod
-    @bottom_register(Bottom.DISCARD)
+    @button_register(Bottom.DISCARD)
     def handle_discard(ctx : ActionContext) -> ExecutionResult:
         return ExecutionResult(
             effects=[DiscardTokenEffect(ctx.workflow_data.slot)],
@@ -49,14 +49,14 @@ class BottomHandler:
         )
     
     @staticmethod
-    @bottom_register(Bottom.USE)
+    @button_register(Bottom.USE)
     def handle_use(ctx : ActionContext) -> ExecutionResult:
         return ExecutionResult()
 
 position_setter = Callable[[WorkflowData, BoardAction], None]
 class ActionHandler:
     def __init__(self, setter = None):
-        self.bottom_handler = BottomHandler
+        self.button_handler = BottomHandler
         self.setter : position_setter = setter or self.no_setter
         self.dispatch = {}
         self._build_dispatch()
@@ -82,7 +82,7 @@ class ActionHandler:
 
     def handle(self, ctx : ActionContext, action : UserAction) -> ExecutionResult:
         if action.type == ActionType.BOTTOM:
-            return self.bottom_handler.handle(ctx, action)
+            return self.button_handler.handle(ctx, action)
         
         self.DISPATCH[action.type](ctx, action)
         return ExecutionResult()

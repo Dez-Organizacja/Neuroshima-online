@@ -3,9 +3,9 @@ from main.view.data import StepUIState
 
 class WorkflowActionProvider():
     def get_available_tokens(self, ctx : ActionContext):
-        return {}
+        return []
     
-    def get_available_bottoms(self, ctx : ActionContext):
+    def get_available_buttons(self, ctx : ActionContext):
         return []
     
     def get_available_positions(self, ctx : ActionContext):

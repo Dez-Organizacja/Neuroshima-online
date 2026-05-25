@@ -71,15 +71,15 @@
 #     assert(game.current_frakcja == "borgo")
 #     assert(game.hand["moloch"] == [])
 
-# def check_available_actions(active_hand, active_bottoms, active_hexes, output):
+# def check_available_actions(active_hand, active_buttons, active_hexes, output):
 #     for fraction in output[UI.HAND]:
 #         for slot in output[UI.HAND][fraction]:
 #             status = output[UI.HAND][fraction][slot]
 #             assert((fraction, slot) in active_hand) == status
     
-#     for bottom in output[UI.BOTTOM]:
-#         status = output[UI.BOTTOM][bottom]
-#         assert(bottom in active_bottoms) == status
+#     for button in output[UI.BOTTOM]:
+#         status = output[UI.BOTTOM][button]
+#         assert(button in active_buttons) == status
         
 #     for x in range(width):
 #         for y in range(length):
@@ -110,10 +110,10 @@
 
 #     output = game.available_actions
 #     active_hand = []
-#     active_bottoms = [Bottom.DISCARD, Bottom.CANCEL]
+#     active_buttons = [Bottom.DISCARD, Bottom.CANCEL]
 #     active_hexes = [(2, 2)]
 #     # print(output)
-#     check_available_actions(active_hand, active_bottoms, active_hexes, output)
+#     check_available_actions(active_hand, active_buttons, active_hexes, output)
     
 
 # def test_ruch_selected2():
@@ -144,9 +144,9 @@
 #     output = game.available_actions
 #     # print(output)
 #     active_hand = []
-#     active_bottoms = [Bottom.CANCEL]
+#     active_buttons = [Bottom.CANCEL]
 #     active_hexes = [(3, 1), (3, 3), (2, 2)]
-#     check_available_actions(active_hand, active_bottoms, active_hexes, output)
+#     check_available_actions(active_hand, active_buttons, active_hexes, output)
 
 # def test_ruch3():
 #     data = deepcopy(default_game_state)
@@ -182,9 +182,9 @@
 
 #     output = game.available_actions
 #     active_hand = []
-#     active_bottoms = []
+#     active_buttons = []
 #     active_hexes = [(3, 3)]
-#     check_available_actions(active_hand, active_bottoms, active_hexes, output)
+#     check_available_actions(active_hand, active_buttons, active_hexes, output)
 
 # def test_bomb_selected():
 #     data = deepcopy(default_game_state)
@@ -200,9 +200,9 @@
 #     output = game.available_actions
 #     # print(output)
 #     active_hand = []
-#     active_bottoms = [Bottom.DISCARD, Bottom.CANCEL]
+#     active_buttons = [Bottom.DISCARD, Bottom.CANCEL]
 #     active_hexes = [(1, 3), (1, 5), (2, 2), (2, 4), (2, 6), (3, 3), (3, 5)]
-#     check_available_actions(active_hand, active_bottoms, active_hexes, output)
+#     check_available_actions(active_hand, active_buttons, active_hexes, output)
 
 # def test_bomb_use():
 #     data = deepcopy(default_game_state)
@@ -255,9 +255,9 @@
 #     output = game.available_actions
 #     # print(output)
 #     active_hand = []
-#     active_bottoms = [Bottom.DISCARD, Bottom.CANCEL]
+#     active_buttons = [Bottom.DISCARD, Bottom.CANCEL]
 #     active_hexes = [(1, 5), (2, 2)]
-#     check_available_actions(active_hand, active_bottoms, active_hexes, output)
+#     check_available_actions(active_hand, active_buttons, active_hexes, output)
 
 # def test_grenade_use():
 #     data = deepcopy(default_game_state)
@@ -306,9 +306,9 @@
 #     output = game.available_actions
 #     # print(output)
 #     active_hand = []
-#     active_bottoms = [Bottom.DISCARD, Bottom.CANCEL]
+#     active_buttons = [Bottom.DISCARD, Bottom.CANCEL]
 #     active_hexes = [(2, 2), (0, 6)]
-#     check_available_actions(active_hand, active_bottoms, active_hexes, output)
+#     check_available_actions(active_hand, active_buttons, active_hexes, output)
 
 # def test_sniper_use():
 #     data = deepcopy(default_game_state)
@@ -360,10 +360,10 @@
 
 #     output = game.available_actions
 #     active_hand = []
-#     active_bottoms = [Bottom.DISCARD, Bottom.CANCEL]
+#     active_buttons = [Bottom.DISCARD, Bottom.CANCEL]
 #     active_hexes = [(2, 2)]
 #     # print(output)
-#     check_available_actions(active_hand, active_bottoms, active_hexes, output)
+#     check_available_actions(active_hand, active_buttons, active_hexes, output)
     
 
 # def test_push_selected2():
@@ -397,9 +397,9 @@
 #     output = game.available_actions
 #     print(output)
 #     active_hand = []
-#     active_bottoms = [Bottom.CANCEL]
+#     active_buttons = [Bottom.CANCEL]
 #     active_hexes = [(1, 1), (2, 4)]
-#     check_available_actions(active_hand, active_bottoms, active_hexes, output)
+#     check_available_actions(active_hand, active_buttons, active_hexes, output)
 
 # def test_push_target_selected():
 #     data = deepcopy(default_game_state)
@@ -429,9 +429,9 @@
 #     assert(game.current_frakcja == "borgo")
 #     output = game.available_actions
 #     active_hand = []
-#     active_bottoms = []
+#     active_buttons = []
 #     active_hexes = [(0, 2)]
-#     check_available_actions(active_hand, active_bottoms, active_hexes, output)
+#     check_available_actions(active_hand, active_buttons, active_hexes, output)
 
 
 # def test_push_use():

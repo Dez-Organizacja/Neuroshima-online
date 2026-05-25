@@ -18,7 +18,7 @@ class MoveProvider(WorkflowActionProvider):
     def get_available_destinations(self, ctx : ActionContext) -> positions:
         return self.rules.get_destinations(ctx, ctx.workflow_data.unit_pos)
     
-    def get_available_bottoms(self, ctx : ActionContext):
+    def get_available_buttons(self, ctx : ActionContext):
         idx = ctx.workflow_instance.current_step_index
         result = []
         if not ctx.workflow_data.unit_pos: # odzrucanie przed wybraniem jednostki
@@ -53,7 +53,7 @@ class PushProvider(WorkflowActionProvider):
             target_pos=ctx.workflow_data.target_pos
         )
 
-    def get_available_bottoms(self, ctx : ActionContext):
+    def get_available_buttons(self, ctx : ActionContext):
         idx = ctx.workflow_instance.current_step_index
         result = []
         if not ctx.workflow_data.unit_pos: 

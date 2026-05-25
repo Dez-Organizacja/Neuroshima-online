@@ -7,17 +7,17 @@ BottomsGetter = Callable[[ActionContext], list[Bottom]]
 PositionsGetter = Callable[[ActionContext], list[tuple[int, int]]]
 TokensGetter = Callable[[ActionContext], dict[str, list[int]]]
 
-def no_bottoms(ctx : ActionContext) -> list[Bottom]:
+def no_buttons(ctx : ActionContext) -> list[Bottom]:
     return []
 
 def no_positions(ctx : ActionContext) -> list[tuple[int, int]]:
     return []
 
-def no_tokens(ctx : ActionContext) -> dict[str, list[int]]:
-    return {}
+def no_tokens(ctx : ActionContext) -> list[int]:
+    return []
 
 @dataclass
 class AvailableActionProvider:
-    get_bottoms : BottomsGetter = no_bottoms
+    get_buttons : BottomsGetter = no_buttons
     get_positions : PositionsGetter = no_positions
     get_tokens : TokensGetter = no_tokens

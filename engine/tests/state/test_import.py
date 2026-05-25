@@ -28,6 +28,8 @@ def test_game_state_serialization_roundtrip():
     # WHEN
     data = state.to_dict()
     json_string = json.dumps(data)
+    # print(json_string)
+    # assert False
 
     # # THEN
     loaded_data = json.loads(json_string)

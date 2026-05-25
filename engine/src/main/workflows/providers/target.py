@@ -6,7 +6,7 @@ import main.rules.predicates as pr
 from main.state.contex import ActionContext
 
 class TargetProvider(ABC, WorkflowActionProvider):
-    def get_available_bottoms(self, ctx : ActionContext):
+    def get_available_buttons(self, ctx : ActionContext):
         return [Bottom.CANCEL, Bottom.DISCARD]
     
     @abstractmethod

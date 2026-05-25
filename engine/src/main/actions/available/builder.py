@@ -10,14 +10,14 @@ class AvailableActionsBuilder:
             for fraction, player in ctx.state.players.items()
         }         
 
-    def build_bottoms(ctx : ActionContext):
+    def build_buttons(ctx : ActionContext):
         return {
-            bottom: False
-            for bottom in Bottom
+            button: False
+            for button in Bottom
         }
 
     def build(self, ctx : ActionContext):
         return AvailableStructure(
             hand=self.build_hand(ctx),
-            bottoms=self.build_bottoms(ctx)
+            buttons=self.build_buttons(ctx)
         )

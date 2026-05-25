@@ -15,12 +15,12 @@ class StepUIState:
     message : str = ""
    
     def to_dict(self):
-        Serializator.to_dict_dataclass(self)
+        return Serializator.to_dict_dataclass(self)
 
 @dataclass
 class StepViewData:
     available_actions : AvailableStructure
     ui_state : StepUIState
     
-    def to_dict(self):
-        Serializator.to_dict_dataclass(self)
+    def to_dict(self) -> dict:
+        return Serializator.to_dict_dataclass(self)

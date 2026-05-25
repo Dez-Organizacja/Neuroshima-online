@@ -1,4 +1,4 @@
-from main import Game
+from main.main import Game
 import flask
 import json
 

@@ -18,14 +18,14 @@ class GameEngine:
         self.resolver           : Resolver = resolver
 
     def _get_step(self, ctx : ActionContext) -> Step:
-        print(ctx.print_wf_stack())
+        # print(ctx.print_wf_stack())
         wf = WorkflowFactory.create(ctx.workflow_instance)
         if ctx.workflow_instance.current_step_index is None:
             wf.start(ctx)
         return wf.get_current_step(ctx)
     
     def execute_step(self, ctx : ActionContext, step : Step):
-        print("executing step", step)
+        # print("executing step", step)
         result = step.execute(ctx)
         self.resolver.resolve(ctx, result)
 

@@ -20,13 +20,12 @@ class AvailableActions:
             board[x][y] = True
 
     def apply_hand(self, hand, hand_result):
-        for fraction, idxes in hand_result.items():
-            for i in idxes:
-                hand[fraction][i] = True
+        for idx in hand_result:
+            hand[idx] = True
 
     def get_actions(self, ctx : ActionContext) -> AvailableStructure:
-        actions : AvailableStructure = AvailableStructure.build(ctx)
+        actions : AvailableStructure = AvailableStructure()
         actions.board = self.provider.get_positions(ctx)
-        self.apply_active_keys(actions.bottoms, self.provider.get_bottoms(ctx))
-        self.apply_hand(self.provider.get_tokens(ctx))
+        actions.buttons = self.provider.get_buttons(ctx)
+        self.apply_hand(actions.hand, self.provider.get_tokens(ctx))
         return actions

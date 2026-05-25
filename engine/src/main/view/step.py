@@ -12,13 +12,13 @@ class StepViewBuilder:
         ) -> AvailableActionProvider:
         
         return AvailableActionProvider(
-            get_bottoms=provider.get_available_bottoms,
+            get_buttons=provider.get_available_buttons,
             get_tokens=provider.get_available_tokens,
             get_positions=provider.get_available_positions
         )
     
-    def build_step(self, ctx : ActionContext):
-        wf = WorkflowFactory.create(ctx)
+    def build_step(self, ctx : ActionContext) -> StepViewData:
+        wf = WorkflowFactory.create(ctx.workflow_instance)
         action_provider : WorkflowActionProvider = wf.action_provider
         provider = self.build_av_actions_provider(action_provider)
         

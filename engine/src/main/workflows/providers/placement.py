@@ -5,7 +5,7 @@ from main.board.board_query import BoardQuery
 from main.rules.predicates import is_empty_at
 
 class PlacementProvider(WorkflowActionProvider):
-    def get_available_bottoms(self, ctx : ActionContext):
+    def get_available_buttons(self, ctx : ActionContext):
         return [Bottom.CANCEL, Bottom.DISCARD]
     
     def get_available_positions(self, ctx : ActionContext):

@@ -8,6 +8,7 @@ class GameViewBuilder:
         self.step_view = StepViewBuilder()
 
     def build(self, ctx : ActionContext) -> dict:
+        # print("cos", cos)
         return {
             "state" : self.state_view.build(ctx),
             **self.step_view.build_step(ctx).to_dict()

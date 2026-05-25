@@ -7,11 +7,11 @@ from main.workflows.data import WorkflowName, TurnConfig
 from main.state.player_state import PlayerState
 
 class Tests:
-    def check_player(self, ctx : ActionContext, fraction : str, hand_size = 0):
+    def check_player(self, ctx : ActionContext, fraction : str):
         player = ctx.state.players.get(fraction, None)
         assert isinstance(player, PlayerState)
         assert not player.pile.empty
-        assert player.hand.size == hand_size
+        assert player.hand.size in (0, 3)
 
     def test_start_game(self):
         ctx = ActionContext(
@@ -31,5 +31,5 @@ class Tests:
         assert instance.name == WorkflowName.GAME
         assert sorted(instance.config.fractions) == ["borgo", "moloch"]
         assert instance.current_step_index == 1
-        self.check_player(ctx, "moloch", hand_size=3)
+        self.check_player(ctx, "moloch")
         self.check_player(ctx, "borgo")

@@ -14,7 +14,7 @@ class TurnProvider(WorkflowActionProvider):
     def __init__(self):
         self.rules = TurnRules()
 
-    def get_available_bottoms(self, ctx : ActionContext):
+    def get_available_buttons(self, ctx : ActionContext):
         if self.rules.can_end(ctx):
             return [Bottom.END_TURN]
         else:
@@ -28,4 +28,4 @@ class TurnProvider(WorkflowActionProvider):
         ]).apply(ctx)
     
     def get_available_tokens(self, ctx : ActionContext):
-        return {ctx.fraction : [i for i in range(ctx.player.hand.size)]}
+        return [i for i in range(ctx.player.hand.size)]

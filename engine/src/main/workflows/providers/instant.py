@@ -5,7 +5,7 @@
     # def available_actions_bitwa(self, ctx):
     #     wanted_bootoms = [Bottom.USE, Bottom.DISCARD, Bottom.CANCEL]
     #     return AvailableActionResult(
-    #         bottoms=self.get_availabe_bottoms(ctx, wanted_bootoms)
+    #         buttons=self.get_availabe_buttons(ctx, wanted_bootoms)
     #     )
           
    
