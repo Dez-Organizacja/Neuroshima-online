@@ -21,6 +21,7 @@ class GameEngine:
     def _get_step(ctx : ActionContext) -> Step:
         # print(ctx.print_wf_stack())
         wf = WorkflowFactory.create(ctx.workflow_instance)
+        wf.build_steps()
         if ctx.workflow_instance.current_step_index is None:
             wf.start(ctx)
         return wf.get_current_step(ctx)

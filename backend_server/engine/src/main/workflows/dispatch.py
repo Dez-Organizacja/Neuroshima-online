@@ -2,9 +2,8 @@ from abc import ABC, abstractmethod
 from main.events.data import ExecutionResult
 from main.events.effects import DiscardTokenEffect, MarkAbilityUsedEffect
 
-from main.steps.config import InitStepConfig, SetStepConfig
+from main.steps.config import InitStepConfig
 from main.state.contex import ActionContext
-from main.input.data import HandAction, BoardAction
 
 from main.tokens.abstract_token import Token
 from main.tokens.token_factory import TokenFactory
@@ -17,7 +16,6 @@ from main.workflows.data import(
     WorkflowData,
 )
 from main.workflows.step_builders import build_end_step
-from main.input.data import Bottom
 
 class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
     def __init__(self):
@@ -44,7 +42,7 @@ class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
             as_child=True
         )
     
-    def build_steps(self):
+    def _build_steps(self):
         return [
             self.build_dispatch_step(),
             build_end_step(self.resolve_function)   

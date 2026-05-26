@@ -27,7 +27,7 @@ class RotateWorkflow(Workflow[RotateProvider]):
             )
         ])
 
-    def build_steps(self):
+    def _build_steps(self):
         return [
             self.build_waiting_step(),
             build_end_step(self.resolve_function)

@@ -3,7 +3,7 @@ from main.events.data import ExecutionResult
 from main.workflows.base import Workflow
 from main.workflows.providers.target import (
     TargetProvider,
-    SnipeProvider,
+    SniperProvider,
     BombProvider,
     GrenadeProvider
 )
@@ -36,15 +36,15 @@ class TargetWorkflow(BoardSelectionMixin[P], Workflow[P], ABC):
             wf_finished=True
         )
 
-    def build_steps(self):
+    def _build_steps(self):
         return [
             self.build_target_step(),
             build_end_step(self.resolve_func)
         ]
     
-class SniperWorkflow(TargetWorkflow):
-    def __int__(self):
-        super().__init__(action_provider=SnipeProvider())
+class SniperWorkflow(TargetWorkflow[SniperProvider]):
+    def __init__(self):
+        super().__init__(SniperProvider())
 
     @staticmethod
     def resolve_func(ctx : ActionContext):

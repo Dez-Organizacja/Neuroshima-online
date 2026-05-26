@@ -1,6 +1,6 @@
 from main.actions.available.data import AvailableStructure
 from main.state.contex import ActionContext
-from main.input.data import Bottom
+from main.input.data import Button
 
 class AvailableActionsBuilder:
     @staticmethod
@@ -13,7 +13,7 @@ class AvailableActionsBuilder:
     def build_buttons(ctx : ActionContext):
         return {
             button: False
-            for button in Bottom
+            for button in Button
         }
 
     def build(self, ctx : ActionContext):

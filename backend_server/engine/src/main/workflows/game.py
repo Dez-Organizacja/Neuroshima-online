@@ -17,7 +17,7 @@ class GameWorkflow(Workflow[WorkflowActionProvider]):
     def build_repeat_step(self):
         return RepeatStepConfig()
     
-    def build_steps(self):
+    def _build_steps(self):
         steps = [
             self.build_player_turn_step(fraction)
             for fraction in self.config.fractions

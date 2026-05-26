@@ -23,26 +23,17 @@ P = TypeVar("P", bound=WorkflowActionProvider)
 class BoardSelectionMixin(Generic[P]):
     action_provider : P
 
-    def build_input_step(self, setter, get_positions = None):
+    def build_input_step(self, setter):
         return WaitingStepConfig(
             action_handler=ActionHandler(setter),
             consume_action=True
         )
 
     def build_source_step(self):
-        return self.build_input_step(
-            get_positions=self.action_provider.get_sources,
-            setter=WorkflowData.set_unit_pos
-        )
+        return self.build_input_step(WorkflowData.set_unit_pos)
 
     def build_destination_step(self):
-        return self.build_input_step(
-            get_positions=self.action_provider.get_destinations,
-            setter=WorkflowData.set_destination
-        )
+        return self.build_input_step(WorkflowData.set_destination)
     
     def build_target_step(self):
-        return self.build_input_step(
-            get_positions=self.action_provider.get_available_targets,
-            setter=WorkflowData.set_target_pos
-        )
+        return self.build_input_step(WorkflowData.set_target_pos)

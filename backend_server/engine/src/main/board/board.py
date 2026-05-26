@@ -1,3 +1,4 @@
+from __future__ import annotations
 from main.tokens.board_token import BoardToken
 from main.utils.variable import *
 from dataclasses import dataclass

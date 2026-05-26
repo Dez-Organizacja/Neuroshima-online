@@ -1,5 +1,5 @@
 from main.state.contex import ActionContext
-from main.input.data import Bottom
+from main.input.data import Button
 from main.workflows.providers.base import WorkflowActionProvider
 from main.rules.ability.movement import PushRules, MoveRules
 from main.view.data import StepUIState, UIMode
@@ -22,9 +22,9 @@ class MoveProvider(WorkflowActionProvider):
         idx = ctx.workflow_instance.current_step_index
         result = []
         if not ctx.workflow_data.unit_pos: # odzrucanie przed wybraniem jednostki
-            result = [Bottom.DISCARD]
+            result = [Button.DISCARD]
         if not ctx.workflow_data.destination: # cancel przed wybraniem celu
-            result.append(Bottom.CANCEL)
+            result.append(Button.CANCEL)
         return result
 
     def get_available_positions(self, ctx):
@@ -58,10 +58,10 @@ class PushProvider(WorkflowActionProvider):
         result = []
         if not ctx.workflow_data.unit_pos: 
             # mozna zdiscardowac przed wybraniem swojej jednostki(zrodła)
-            result = [Bottom.DISCARD]
+            result = [Button.DISCARD]
         if not ctx.workflow_data.target_pos: 
             # mozna cancelowac przed wybraniem celu (jednostki wroga)
-            result.append(Bottom.CANCEL)
+            result.append(Button.CANCEL)
         return result
     
     def get_available_positions(self, ctx):

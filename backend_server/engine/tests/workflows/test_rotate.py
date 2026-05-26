@@ -12,6 +12,7 @@ def test_rotate():
         data=WorkflowData(unit_pos=(1, 1))
     )
     wf = RotateWorkflow()
+    wf.build_steps()
     result = execute_step(ctx, action=RotationAction(1))
 
     assert result.advance

@@ -1,4 +1,4 @@
-from main.input.data import ActionType, Bottom
+from main.input.data import ActionType, Button
 from enum import Enum
 
 class Key(Enum):
@@ -13,7 +13,7 @@ class FormatValidator():
         self.validate_handlers = {
             ActionType.BOARD : self.validate_board_format,
             ActionType.HAND : self.validate_hand_format,
-            ActionType.BOTTOM : self.validate_bottom_format,
+            ActionType.BUTTON : self.validate_button_format,
             ActionType.ROTATE : self.validate_rotate_format
         }
 
@@ -37,10 +37,10 @@ class FormatValidator():
         return True
         # return game.available_actions[UI.HAND][game.current_fraction][slot]
 
-    def validate_bottom_format(self, action) -> bool:
+    def validate_button_format(self, action) -> bool:
         name = action.get(Key.NAME, None)
-        return name in Bottom
-        # return game.available_actions[UI.BOTTOM][name]
+        return name in Button
+        # return game.available_actions[UI.BUTTON][name]
 
     def validate_rotate_format(self, action):
         rotation = action.get(Key.ROTATION, None)

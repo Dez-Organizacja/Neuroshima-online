@@ -19,10 +19,10 @@ class MoveWorkflow(BoardSelectionMixin[MoveProvider], Workflow[MoveProvider]):
     def build_rotate_step(self):
         return InitStepConfig(wf_name=WorkflowName.ROTATE)
 
-    def build_steps(self):
+    def _build_steps(self):
         return [
-            self.build_source_steps(),
-            self.build_destination_steps(),
+            self.build_source_step(),
+            self.build_destination_step(),
             self.build_move_step(),
             self.build_rotate_step(),
             build_end_step(self.resolve_move),

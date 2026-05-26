@@ -1,4 +1,4 @@
-from main.input.data import ActionType, Bottom
+from main.input.data import ActionType, Button
 from typing import Callable
 from main.state.contex import ActionContext
 from main.events.data import ExecutionResult
@@ -10,30 +10,30 @@ from main.input.data import(
     UserAction, 
     RotationAction,
     HandAction,
-    BottomAction
+    ButtonAction
 )
 
 button_handler = Callable[[ActionContext], ExecutionResult]
-BOTTOM_DISPATCH = {}
-def button_register(button : Bottom):
+Button_DISPATCH = {}
+def button_register(button : Button):
     def wrapper(func : button_handler):
-        BOTTOM_DISPATCH[button] = func
+        Button_DISPATCH[button] = func
         return func
     return wrapper
 
-class BottomHandler:
+class ButtonHandler:
     @classmethod
-    def handle(cls, ctx : ActionContext, action : BottomAction) -> ExecutionResult:
+    def handle(cls, ctx : ActionContext, action : ButtonAction) -> ExecutionResult:
         return cls.DISPATCH[action.name](ctx)
 
     @staticmethod
-    @button_register(Bottom.END_TURN)
+    @button_register(Button.END_TURN)
     def handle_end_turn(ctx : ActionContext) -> ExecutionResult:
         return ExecutionResult(flow_events=[EndTurnEvent()])
 
 
     @staticmethod
-    @button_register(Bottom.CANCEL)
+    @button_register(Button.CANCEL)
     def handle_cancel(ctx : ActionContext) -> ExecutionResult:
         return ExecutionResult(
             workflow_effects=[DeleteAbove(name=WorkflowName.TURN)],
@@ -41,7 +41,7 @@ class BottomHandler:
         )
     
     @staticmethod
-    @button_register(Bottom.DISCARD)
+    @button_register(Button.DISCARD)
     def handle_discard(ctx : ActionContext) -> ExecutionResult:
         return ExecutionResult(
             effects=[DiscardTokenEffect(ctx.workflow_data.slot)],
@@ -49,14 +49,14 @@ class BottomHandler:
         )
     
     @staticmethod
-    @button_register(Bottom.USE)
+    @button_register(Button.USE)
     def handle_use(ctx : ActionContext) -> ExecutionResult:
         return ExecutionResult()
 
 position_setter = Callable[[WorkflowData, BoardAction], None]
 class ActionHandler:
     def __init__(self, setter = None):
-        self.button_handler = BottomHandler
+        self.button_handler = ButtonHandler
         self.setter : position_setter = setter or self.no_setter
         self.dispatch = {}
         self._build_dispatch()
@@ -81,7 +81,7 @@ class ActionHandler:
         ctx.workflow_data.slot = action.slot
 
     def handle(self, ctx : ActionContext, action : UserAction) -> ExecutionResult:
-        if action.type == ActionType.BOTTOM:
+        if action.type == ActionType.BUTTON:
             return self.button_handler.handle(ctx, action)
         
         self.dispatch[action.type](ctx, action)

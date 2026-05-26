@@ -1,14 +1,14 @@
 from main.workflows.providers.base import WorkflowActionProvider
 from main.rules.battle import BattleRules
 from main.state.contex import ActionContext
-from main.input.data import Bottom
+from main.input.data import Button
 
 class StartBattleProvider(WorkflowActionProvider):
     def __int__(self):
         self.rules = BattleRules()
 
     def get_available_buttons(self, ctx : ActionContext):
-        buttons = [Bottom.DISCARD, Bottom.CANCEL]
+        buttons = [Button.DISCARD, Button.CANCEL]
         if self.rules.can_start(ctx):
-            buttons.append(Bottom.USE)
+            buttons.append(Button.USE)
         return buttons

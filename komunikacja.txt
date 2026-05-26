@@ -43,7 +43,7 @@ format akcji:
 {"type" : "hand", "slot" : (0/1/2)}
 {"type" : "board", "pos": (int, int)}
 {"type" : "rotate", "rotation" : int}
-{"type" : "bottom", "name" : (
+{"type" : "button", "name" : (
     "end_turn"/
     "discard"/
     "use"/

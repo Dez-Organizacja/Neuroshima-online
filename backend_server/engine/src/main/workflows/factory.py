@@ -12,7 +12,6 @@ from main.workflows.dispatch import HandWorkflow, BoardWorkflow
 from main.workflows.turn import TurnWorkflow
 from main.workflows.data import WorkflowInstance, WorkflowName, WorkflowConfig
 from main.workflows.base import Workflow
-from main.state.contex import ActionContext
 from dataclasses import dataclass
 
 @dataclass
@@ -31,6 +30,8 @@ class WorkflowFactory:
         WorkflowName.GRENADE : WorkflowMeta(GranadeWorkflow, False),
         WorkflowName.HAND : WorkflowMeta(HandWorkflow, False),
         WorkflowName.BOARD : WorkflowMeta(BoardWorkflow, False),
+
+        #configurable workflows
         WorkflowName.TURN : WorkflowMeta(TurnWorkflow, True),
         WorkflowName.GAME : WorkflowMeta(GameWorkflow, True)
     }

@@ -1,6 +1,6 @@
 from main.workflows.providers.base import WorkflowActionProvider
 from main.rules.turn import TurnRules
-from main.input.data import Bottom
+from main.input.data import Button
 from main.state.contex import ActionContext
 from main.rules.predicates import (
     is_ally,
@@ -16,7 +16,7 @@ class TurnProvider(WorkflowActionProvider):
 
     def get_available_buttons(self, ctx : ActionContext):
         if self.rules.can_end(ctx):
-            return [Bottom.END_TURN]
+            return [Button.END_TURN]
         else:
             return []
         

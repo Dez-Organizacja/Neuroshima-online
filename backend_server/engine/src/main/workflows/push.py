@@ -16,7 +16,7 @@ class PushWorkflow(BoardSelectionMixin[PushProvider], Workflow[PushProvider]):
             wf_finished=True
         )
 
-    def build_steps(self):
+    def _build_steps(self):
         return [
             self.build_source_step(),
             self.build_target_step(),

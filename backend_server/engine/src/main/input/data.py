@@ -6,9 +6,9 @@ class ActionType(Enum):
     BOARD = "board"
     HAND = "hand"
     ROTATE = "rotate"
-    BOTTOM = "bottom"
+    BUTTON = "button"
 
-class Bottom(Enum):
+class Button(Enum):
     END_TURN = "end_turn"
     DISCARD = "discard"
     USE = "use"
@@ -31,9 +31,9 @@ class BoardAction(UserAction):
     type : ActionType = field(default=ActionType.BOARD, init=False)
 
 @dataclass
-class BottomAction(UserAction):
-    name : Bottom
-    type : ActionType = field(default=ActionType.BOTTOM, init=False)
+class ButtonAction(UserAction):
+    name : Button
+    type : ActionType = field(default=ActionType.BUTTON, init=False)
     
 @dataclass
 class HandAction(UserAction):
@@ -44,7 +44,7 @@ class UserActionFactory(ABC):
     USER_ACTIONS={
         ActionType.ROTATE : RotationAction,
         ActionType.BOARD : BoardAction,
-        ActionType.BOTTOM : BottomAction,
+        ActionType.BUTTON : ButtonAction,
         ActionType.HAND : HandAction
     }
     TYPE_KEY = "type"

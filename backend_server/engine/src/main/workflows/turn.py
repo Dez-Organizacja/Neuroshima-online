@@ -85,7 +85,7 @@ class TurnWorkflow(Workflow[TurnProvider]):
             #bo endturnevent popuje workflow 
         )
 
-    def build_steps(self):
+    def _build_steps(self):
         return [
             self.build_init_step(),
             self.build_clear_step(),
