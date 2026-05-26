@@ -6,7 +6,7 @@ import DevBoardApp from "./DevBoardApp";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {/* <App/> */}
-    <DevBoardApp />
+    <App/>
+    {/* <DevBoardApp /> */}
   </React.StrictMode>
 );

@@ -4,11 +4,25 @@ import json
 
 app = flask.Flask(__name__)
 
+@app.route("/api/neuroshima", methods=["POST"])
 @app.route('/api/neuroshima/', methods=['POST'])
 def new_game():
     data = flask.request.get_json()
-    print(data)
-    return ""
+    with open ("odp.txt", "w") as f:
+        print(data, file=f)
+    data = flask.request.get_json(silent=True)
+    if data is None:
+        return flask.jsonify({
+            "error": "Invalid JSON body"
+        }), 400
+    try:
+        game = Game(data)
+        game.start_game()
+        return flask.jsonify(game.export()), 200
+    except Exception as e:
+        return flask.jsonify({
+            "error": str(e)
+        }), 400
 
 @app.route('/api/neuroshima/action', methods=['POST'])
 def action():
