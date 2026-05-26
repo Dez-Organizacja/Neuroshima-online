@@ -1,5 +1,6 @@
 from main.state.contex import ActionContext
 from main.tokens.abstract_token import Token
+from typing import Callable
 
 def NOT(predicate):
     def not_predicate(ctx : ActionContext, pos):
@@ -30,11 +31,16 @@ def is_empty_at(ctx : ActionContext, pos):
 def is_on_border(ctx : ActionContext, pos):
     return ctx.board.on_border(pos)
 
-def is_wired_at(ctx : ActionContext, pos):
-    return ctx.board.get_token(pos).is_wired
+def token_predicate(func : Callable[[Token], bool]):
+    def predicate(ctx : ActionContext, pos):
+        return func(ctx.board.get_token(pos))
+    return predicate
 
-def is_hq_at(ctx : ActionContext, pos):
-    return ctx.board.get_token(pos).is_HQ
+# def is_wired_at(ctx : ActionContext, pos):
+#     return ctx.board.get_token(pos).is_wired
+
+# def is_hq_at(ctx : ActionContext, pos):
+#     return ctx.board.get_token(pos).is_HQ
 
 def adjacent_to(my_pos):
     def predicate(ctx : ActionContext, pos):

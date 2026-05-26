@@ -1,13 +1,14 @@
 from main.rules.ability.base import AbilityRules
 from main.state.contex import ActionContext
 from main.board.board_query import BoardQuery
+from main.tokens.board_token import BoardToken
 from main.rules.predicates import (
     adjacent_to,
     is_ally, 
     is_empty_at,
     is_enemy_of,
     NOT,
-    is_wired_at,
+    token_predicate
 )
 
 class MoveRules(AbilityRules):
@@ -15,7 +16,7 @@ class MoveRules(AbilityRules):
     def get_sources(ctx : ActionContext):
         candidates = BoardQuery([
             is_ally(ctx.fraction),
-            NOT(is_wired_at),
+            NOT(token_predicate(BoardToken.is_wired)),
         ]).apply(ctx)
 
         return [pos for pos in candidates 
@@ -51,7 +52,7 @@ class PushRules(AbilityRules):
     def get_targets(ctx : ActionContext, pusher_pos):
         candidates = BoardQuery([
             adjacent_to(pusher_pos),
-            NOT(is_wired_at),
+            NOT(token_predicate(BoardToken.is_wired)),
             is_enemy_of(ctx.board.get_tile(pusher_pos)),
         ]).apply(ctx)
         return [pos for pos in candidates
@@ -61,7 +62,7 @@ class PushRules(AbilityRules):
     def get_sources(ctx):
         candidates = BoardQuery([
             is_ally(ctx.fraction),
-            NOT(is_wired_at),
+            NOT(token_predicate(BoardToken.is_wired)),
         ]).apply(ctx)
 
         return [pos for pos in candidates 

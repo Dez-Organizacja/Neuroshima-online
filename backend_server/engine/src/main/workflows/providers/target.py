@@ -4,6 +4,7 @@ from main.input.data import Button
 from main.board.board_query import BoardQuery
 import main.rules.predicates as pr
 from main.state.contex import ActionContext
+from main.tokens.board_token import BoardToken
 
 class TargetProvider(ABC, WorkflowActionProvider):
     def get_available_buttons(self, ctx : ActionContext):
@@ -19,7 +20,7 @@ class TargetProvider(ABC, WorkflowActionProvider):
 class SniperProvider(TargetProvider):
     def get_available_targets(self, ctx : ActionContext):
         query = BoardQuery([
-            pr.NOT(pr.is_hq_at),
+            pr.NOT(pr.token_predicate(BoardToken.is_wired)),
             pr.is_enemy(ctx.fraction)
         ])
         return query.apply(ctx)
@@ -40,5 +41,5 @@ class GrenadeProvider(TargetProvider):
         return BoardQuery([
             pr.adjacent_to(pos),
             pr.is_enemy_of(hq),
-            pr.NOT(pr.is_hq_at)
+            pr.NOT(pr.token_predicate(BoardToken.is_wired))
         ]).apply(ctx)

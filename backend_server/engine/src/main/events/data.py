@@ -1,27 +1,33 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from typing import ClassVar
 
 
+@dataclass
 class Event(ABC):
-    recompute_passive = False
+    recompute_passive: ClassVar[bool] = False
+
     @abstractmethod
     def apply(self, ctx):
         pass
 
+@dataclass
 class Effect(Event, ABC):
     pass
 
+@dataclass
 class FlowEvent(Event, ABC):
     pass
 
+@dataclass
 class WorkflowEvent(Event, ABC):
     pass
 
 @dataclass
 class ExecutionResult:
-    effects : list[Effect] = field(default_factory=list)
-    flow_events : list[FlowEvent] = field(default_factory=list)
-    workflow_effects : list[WorkflowEvent] = field(default_factory=list)
+    effects: list[Effect] = field(default_factory=list)
+    flow_events: list[FlowEvent] = field(default_factory=list)
+    workflow_effects: list[WorkflowEvent] = field(default_factory=list)
 
     def print(self):
         print("flows")

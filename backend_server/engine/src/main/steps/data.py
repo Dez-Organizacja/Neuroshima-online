@@ -6,7 +6,6 @@ from main.events.data import ExecutionResult
 class StepResult:
     execution_result    : ExecutionResult = field(default_factory=ExecutionResult) 
     advance             : bool = True
-    input_consumed      : bool = False
 
 class StepName(Enum):
     WAITING = "waiting"

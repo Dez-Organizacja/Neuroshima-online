@@ -43,10 +43,7 @@ class WaitingStep(Step[WaitingStepConfig]):
 
     def execute(self, ctx : ActionContext, action : UserAction) -> StepResult:
         result = self.config.action_handler.handle(ctx, action)
-        return StepResult(
-            execution_result=result,
-            input_consumed=self.config.consume_action
-        )
+        return StepResult(execution_result=result)
     
     @property
     def requires_input(self):
