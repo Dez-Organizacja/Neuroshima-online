@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Hexagon from "./components/Hexagon";
 import Image from "./components/HexImage";
+import GameButton from "./components/GameButton";
 import GetWindowSize from "./GetScreenSize";
 import { imagesByName } from "./Images";
 import { GameData } from "./components/GameData";
@@ -121,6 +122,19 @@ export default function HexTest(){
     }
     // ======= ========== ======= //
     // ==== //
+
+
+    // ===== End Button ===== //
+    Items.push(
+        <GameButton x={RightX - Size * 2 - 100} y={height / 16} height={height / 20} width={height / 8} text={"End Turn"} />
+    )
+    Items.push(
+        <GameButton x={RightX - Size * 2 - 100} y={(height / 16) + (height / 20)} height={height / 20} width={height / 8} text={"Cancel"} />
+    )
+    Items.push(
+        <GameButton x={RightX - Size * 2 - 100} y={(height / 16) + 2 * (height / 20)} height={height / 20} width={height / 8} text={"Discard"} />
+    )
+    // ===== ========== ===== //
 
     // =================== ================= =================== //
 
