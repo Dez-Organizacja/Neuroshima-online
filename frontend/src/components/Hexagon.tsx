@@ -1,17 +1,34 @@
 import React from "react";
 import "./Hexagon.css";
+import { GameData } from "./GameData";
 
 type HexagonProps = {
     x: number;
     y: number;
-    poz1?: number;
-    poz2?: number;
+    poz1: number;
+    poz2: number;
     size?: number;
     color?: string;
     rotation?: number;
     onClick?: () => void;
     children?: React.ReactNode;
 };
+
+export function ClickCheck(x: number, y: number): void {
+    if(y === 999) return;
+    if(y === -1) {
+        if(GameData.view.availableActions.hand[x]) console.log("Click accepted (hand) : ", { x, y });
+    } else {
+        const Pair = [x, y];
+        const field = GameData.view.availableActions.board.find(field =>
+            field[0] === Pair[0] &&
+            field[1] === Pair[1]
+        );
+        if(field) {
+            console.log("Click accepted (board) : ", { x, y });
+        }
+    }
+}
 
 const Hexagon: React.FC<HexagonProps> = ({
     x,
@@ -30,7 +47,8 @@ const Hexagon: React.FC<HexagonProps> = ({
         <div
             className="hexagon"
             // onClick={onClick}
-            onClick={() => console.log("Clicked hex:", { poz1, poz2 })}
+            // onClick={() => console.log("Clicked hex:", { poz1, poz2 })}
+            onClick={() => ClickCheck(poz1, poz2)}
         style={{
             width: size,
             height: height,

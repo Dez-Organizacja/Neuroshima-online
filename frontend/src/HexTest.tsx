@@ -80,11 +80,9 @@ export default function HexTest(){
 
     // Hand //
     const VerticalSpacing = 1.732 * Size;
-
     // keep whole hex visible
     const LeftX = Size + 10;
     const RightX = ScreenWidth - Size - 10;
-
     // vertically centered
     const StartY = CenterY - VerticalSpacing;
 
@@ -93,17 +91,13 @@ export default function HexTest(){
     for (let i = -1; i <= 3; i+=2) {
         const FinalX = LeftX;
         const FinalY = StartY + i * VerticalSpacing;
-
         // === Dict check === //
         const Index = (i + 1) / 2;
         const TokenName = GameData.view.state.hands[currentFraction].tokens[Index];
-        const Path = currentFraction + "/" + TokenName
-
-
+        const Path = currentFraction + "/" + TokenName;
         Items.push(
             <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
         )
-
         Items.push(
             <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={-1} size={Size * 2 + 15} rotation={30} color="#00aaff" />
         )
@@ -117,7 +111,7 @@ export default function HexTest(){
         if(enemyFraction === currentFraction) setEnemyFraction(GameData.view.state.fractions[1]);
         const Index = (i + 1) / 2;
         const TokenName = GameData.view.state.hands[enemyFraction].tokens[Index];
-        const Path = enemyFraction + "/" + TokenName
+        const Path = enemyFraction + "/" + TokenName;
         Items.push(
             <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
         )
