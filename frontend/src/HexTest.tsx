@@ -24,9 +24,9 @@ export default function HexTest(){
     const AddX = CenterX - MidX;
     const AddY = CenterY - MidY;
 
-    // console.log("Width: " + ScreenWidth + "     Height: " + ScreenHeight);
-    // console.log("CenterX: " + CenterX + "     CenterY: " + CenterY);
-    // console.log("MidX: " + MidX + "     MidY: " + MidY);
+    console.log("Width: " + ScreenWidth + "     Height: " + ScreenHeight);
+    console.log("CenterX: " + CenterX + "     CenterY: " + CenterY);
+    console.log("MidX: " + MidX + "     MidY: " + MidY);
 
     const Items = [];
 
@@ -135,6 +135,10 @@ export default function HexTest(){
         <GameButton x={RightX - Size * 2 - 100} y={(height / 16) + 2 * (height / 20)} height={height / 20} width={height / 8} text={"Discard"} />
     )
     // ===== ========== ===== //
+
+    // console.log("======");
+    // console.log(window.api);
+    // console.log("======");
 
     // =================== ================= =================== //
 

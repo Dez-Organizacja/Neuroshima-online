@@ -1,6 +1,8 @@
 import React from "react";
 import "./Hexagon.css";
 import { GameData } from "./GameData";
+// import { SaveToFile } from "./SaveToFile";
+import { ActionData } from "./ActionTypes";
 
 type HexagonProps = {
     x: number;
@@ -17,7 +19,16 @@ type HexagonProps = {
 export function ClickCheck(x: number, y: number): void {
     if(y === 999) return;
     if(y === -1) {
-        if(GameData.view.availableActions.hand[x]) console.log("Click accepted (hand) : ", { x, y });
+        if(GameData.view.availableActions.hand[x]) {
+            console.log("Click accepted (hand) : ", { x, y });
+
+            const action: ActionData = {
+                type: "hand",
+                slot: x
+            };
+            // SaveToFile(action);
+            window.api.saveAction(action);
+        }
     } else {
         const Pair = [x, y];
         const field = GameData.view.availableActions.board.find(field =>
@@ -26,6 +37,14 @@ export function ClickCheck(x: number, y: number): void {
         );
         if(field) {
             console.log("Click accepted (board) : ", { x, y });
+
+            const Pair = [x, y];
+            const action: ActionData = {
+                type: "board",
+                pos: Pair
+            };
+            // SaveToFile(action);
+            window.api.saveAction(action);
         }
     }
 }
