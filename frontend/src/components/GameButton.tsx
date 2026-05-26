@@ -1,5 +1,6 @@
 import React from "react";
 import "./GameButton.css";
+import { ActionData } from "./ActionTypes";
 
 interface GameButtonProps {
     x: number;
@@ -11,7 +12,14 @@ interface GameButtonProps {
 }
 
 export function ClickButton(text: string): void {
-    if(text === "End Turn") {console.log("Your turn has ended.")}
+    if(text === "End Turn") {
+        console.log("Your turn has ended.")
+
+        const action: ActionData = {
+            type: "button",
+            name: "end_turn"
+        }
+    }
     else {console.log(text + ".")}
 }
 

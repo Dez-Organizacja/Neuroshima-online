@@ -1,7 +1,5 @@
 import { app, BrowserWindow, screen, ipcMain } from "electron";
 import path from "path";
-import fs from "fs"
-import { fileURLToPath } from "url";
 
 // // app.disableHardwareAcceleration();
 
@@ -24,22 +22,6 @@ import { fileURLToPath } from "url";
 
 // const { app, BrowserWindow } = require("electron");
 
-
-const __filename = fileURLToPath(import.meta.url);
-
-const __dirname = path.dirname(__filename);
-
-
-ipcMain.handle("save-action", (_, data) => {
-
-    fs.writeFileSync(
-        "./src/packages/action.json",
-
-        JSON.stringify(data, null, 2)
-    );
-});
-
-
 let mainWindow;
 
 function createWindow() {
@@ -51,9 +33,9 @@ function createWindow() {
     height,
     minWidth: 800,
     minHeight: 600,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
+    // webPreferences: {
+    //   preload: path.join(__dirname, "preload.js"),
+    // },
   });
 
   mainWindow.loadURL("http://localhost:5173");

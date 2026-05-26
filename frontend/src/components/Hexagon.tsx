@@ -1,7 +1,6 @@
 import React from "react";
 import "./Hexagon.css";
 import { GameData } from "./GameData";
-// import { SaveToFile } from "./SaveToFile";
 import { ActionData } from "./ActionTypes";
 
 type HexagonProps = {
@@ -26,8 +25,6 @@ export function ClickCheck(x: number, y: number): void {
                 type: "hand",
                 slot: x
             };
-            // SaveToFile(action);
-            window.api.saveAction(action);
         }
     } else {
         const Pair = [x, y];
@@ -43,8 +40,6 @@ export function ClickCheck(x: number, y: number): void {
                 type: "board",
                 pos: Pair
             };
-            // SaveToFile(action);
-            window.api.saveAction(action);
         }
     }
 }
