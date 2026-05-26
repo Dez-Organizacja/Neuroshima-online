@@ -65,9 +65,9 @@ class ActionHandler:
         pass
 
     def _build_dispatch(self):
-        self.dispatch[ActionType.BOARD] = self.handle_board,
-        self.dispatch[ActionType.HAND] = self.handle_hand,
-        self.dispatch[ActionType.ROTATE] = self.handle_rotation,
+        self.dispatch[ActionType.BOARD] = self.handle_board
+        self.dispatch[ActionType.HAND] = self.handle_hand
+        self.dispatch[ActionType.ROTATE] = self.handle_rotation
         
     def handle_board(self, ctx : ActionContext, action : BoardAction):
         self.setter(ctx.workflow_data, action)
@@ -84,5 +84,5 @@ class ActionHandler:
         if action.type == ActionType.BOTTOM:
             return self.button_handler.handle(ctx, action)
         
-        self.DISPATCH[action.type](ctx, action)
+        self.dispatch[action.type](ctx, action)
         return ExecutionResult()

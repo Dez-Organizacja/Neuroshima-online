@@ -17,7 +17,8 @@ class GameEngine:
     ):
         self.resolver           : Resolver = resolver
 
-    def _get_step(self, ctx : ActionContext) -> Step:
+    @staticmethod
+    def _get_step(ctx : ActionContext) -> Step:
         # print(ctx.print_wf_stack())
         wf = WorkflowFactory.create(ctx.workflow_instance)
         if ctx.workflow_instance.current_step_index is None:

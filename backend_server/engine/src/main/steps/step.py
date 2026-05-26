@@ -38,7 +38,7 @@ class Step(ABC, Generic[C]):
         pass
 
 class WaitingStep(Step[WaitingStepConfig]):
-    def __init__(self, config : WaitingStep):
+    def __init__(self, config : WaitingStepConfig):
         super().__init__(config)
 
     def execute(self, ctx : ActionContext, action : UserAction) -> StepResult:

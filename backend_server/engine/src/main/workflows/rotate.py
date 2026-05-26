@@ -16,9 +16,7 @@ class RotateWorkflow(Workflow[RotateProvider]):
         super().__init__(action_provider=RotateProvider())
 
     def build_waiting_step(self):
-        return WaitingStepConfig(
-            action_handler=ActionHandler(),
-        )
+        return WaitingStepConfig()
     
     @staticmethod
     def resolve_function(ctx : ActionContext):

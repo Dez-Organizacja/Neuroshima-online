@@ -16,8 +16,8 @@ class StepConfig(ABC):
 
 @dataclass
 class WaitingStepConfig(StepConfig):
-    av_actions_provider : AvailableActionProvider
-    action_handler     : ActionHandler
+    av_actions_provider : AvailableActionProvider = field(default_factory=AvailableActionProvider)
+    action_handler     : ActionHandler = field(default_factory=ActionHandler)
     consume_action     : bool = True
     name               : StepName = field(default=StepName.WAITING, init=False)
     
