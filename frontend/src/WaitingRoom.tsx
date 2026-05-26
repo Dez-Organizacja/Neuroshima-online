@@ -12,6 +12,7 @@ type RoomScreenProps = {
 export function RoomScreen({onSwitchToGame, onSwitchToMenu} : RoomScreenProps){
     const {latestMessage, leaveRoomAWFR, getRoomStatusAWFR, startNewGameAWFR} = useGameSocketContext();
     const [playersInRoom, setPlayersInRoom] = useState<string[]>([]);
+    const factions : string[] = ["borgo", "moloch"];
     async function HandleLeave() {
         RefreshPlayersInRoom()
         try{
@@ -59,7 +60,7 @@ export function RoomScreen({onSwitchToGame, onSwitchToMenu} : RoomScreenProps){
         RefreshPlayersInRoom();
         if(playersInRoom.length == 2){
             try{
-                const response = await startNewGameAWFR(playersInRoom);
+                const response = await startNewGameAWFR(playersInRoom, factions);
                 if(response.messageType == "NEWGAME_RESPONSE" && typeof response.createdGameId === "string"){
                     console.log("New game started");
                     localStorage.setItem("game", response.createdGameId);

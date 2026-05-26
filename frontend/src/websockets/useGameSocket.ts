@@ -97,7 +97,6 @@ export function useGameSocket() {
                 reject,
                 timeoutId,
             });
-
             socket.send(JSON.stringify(request));
             });
         },[]

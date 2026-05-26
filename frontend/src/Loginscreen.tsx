@@ -11,7 +11,6 @@ type LoginScreenProps = {
     onSwitchToRegister: () => void;
     onAcceptedLogin: () => void;
 };
-
 export default function LoginScreen({onSwitchToRegister, onAcceptedLogin} : LoginScreenProps){
     let url = "http://localhost:8080/api/auth/login";
     const [username, setName] = useState("");
