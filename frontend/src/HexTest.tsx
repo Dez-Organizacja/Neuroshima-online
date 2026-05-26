@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Hexagon from "./components/Hexagon";
 import Image from "./components/HexImage";
 import GetWindowSize from "./GetScreenSize";
@@ -88,12 +88,13 @@ export default function HexTest(){
     // vertically centered
     const StartY = CenterY - VerticalSpacing;
 
+    const currentFraction = GameData.view.uiState.fraction;
+
     for (let i = -1; i <= 3; i+=2) {
         const FinalX = LeftX;
         const FinalY = StartY + i * VerticalSpacing;
 
         // === Dict check === //
-        const currentFraction = GameData.view.uiState.fraction;
         const Index = (i + 1) / 2;
         const TokenName = GameData.view.state.hands[currentFraction].tokens[Index];
         const Path = currentFraction + "/" + TokenName
@@ -104,9 +105,27 @@ export default function HexTest(){
         )
 
         Items.push(
-            <Hexagon x={FinalX} y={FinalY} poz1={i} poz2={-1} size={Size * 2 + 15} rotation={30} color="#00aaff" />
+            <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={-1} size={Size * 2 + 15} rotation={30} color="#00aaff" />
         )
     }
+    // ======= Enemy Hand ======= //
+    for( let i = -1; i <= 3; i+=2) {
+        const FinalX = RightX;
+        const FinalY = StartY + i * VerticalSpacing;
+        // === Dict check === //
+        const [enemyFraction, setEnemyFraction] = useState(GameData.view.state.fractions[0]);
+        if(enemyFraction === currentFraction) setEnemyFraction(GameData.view.state.fractions[1]);
+        const Index = (i + 1) / 2;
+        const TokenName = GameData.view.state.hands[enemyFraction].tokens[Index];
+        const Path = enemyFraction + "/" + TokenName
+        Items.push(
+            <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
+        )
+        Items.push(
+            <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={999} size={Size * 2 + 15} rotation={30} color="#00aaff" />
+        )
+    }
+    // ======= ========== ======= //
     // ==== //
 
     // =================== ================= =================== //
