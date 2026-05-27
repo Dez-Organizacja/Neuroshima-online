@@ -1,6 +1,7 @@
 package pl.staszic.neu.messages;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class NewGameResponse extends WebSocketMessage {
 
@@ -14,6 +15,9 @@ public class NewGameResponse extends WebSocketMessage {
 
     @JsonProperty("serverStatus")
     private String serverStatus;
+
+    @JsonProperty("gameView")
+    private JsonNode gameView;
 
     public NewGameResponse() {
         super(TYPE);
@@ -41,6 +45,14 @@ public class NewGameResponse extends WebSocketMessage {
 
     public void setRoomId(String roomId) {
         this.roomId = roomId;
+    }
+
+    public JsonNode getGameView() {
+        return gameView;
+    }
+
+    public void setGameView(JsonNode gameView) {
+        this.gameView = gameView;
     }
 }
 

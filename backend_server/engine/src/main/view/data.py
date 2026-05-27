@@ -15,7 +15,9 @@ class StepUIState:
     message : str = ""
    
     def to_dict(self):
-        return Serializator.to_dict_dataclass(self)
+        data = Serializator.to_dict_dataclass(self)
+        data["faction"] = data.pop("fraction")
+        return data
 
 @dataclass
 class StepViewData:
@@ -23,4 +25,7 @@ class StepViewData:
     ui_state : StepUIState
     
     def to_dict(self) -> dict:
-        return Serializator.to_dict_dataclass(self)
+        return {
+            "availableActions": Serializator.auto_to_dict(self.available_actions),
+            "uiState": self.ui_state.to_dict()
+        }

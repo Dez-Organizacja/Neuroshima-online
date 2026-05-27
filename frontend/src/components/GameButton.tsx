@@ -1,7 +1,7 @@
 import React from "react";
 import "./GameButton.css";
 import { ActionData } from "./ActionTypes";
-
+import { useGameSocketContext } from "../websockets/gameSocketContext";
 interface GameButtonProps {
     x: number;
     y: number;
@@ -12,13 +12,14 @@ interface GameButtonProps {
 }
 
 export function ClickButton(text: string): void {
+    const {sendAction} = useGameSocketContext();
     if(text === "End Turn") {
         console.log("Your turn has ended.")
-
         const action: ActionData = {
             type: "button",
             name: "end_turn"
         }
+        sendAction(action);
     } else if(text === "Cancel") {
         console.log("Cancel.");
 
@@ -26,13 +27,14 @@ export function ClickButton(text: string): void {
             type: "button",
             name: "cancel"
         }
+        sendAction(action);
     } else if(text === "Discard") {
         console.log("Discard.");
-
         const action: ActionData = {
             type: "button",
             name: "discard"
         }
+        sendAction(action);
     }
 }
 

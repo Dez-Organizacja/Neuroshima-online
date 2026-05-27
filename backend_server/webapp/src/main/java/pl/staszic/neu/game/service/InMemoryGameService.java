@@ -14,6 +14,7 @@ import pl.staszic.neu.messages.*;
 import pl.staszic.neu.rest.service.RestService;
 
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -153,8 +154,15 @@ public class InMemoryGameService implements GameService {
         }
 
         Set<String> playerNamesInRoom = new HashSet<>();
+        Map<String, String> playerFactionsByUsername = new LinkedHashMap<>();
+        Map<String, String> playerFactionsByClientId = room.getPlayerFactions();
+
         for (String id : room.getPlayerIds()) {
-            playerNamesInRoom.add(clientUsernames.getOrDefault(id, "Unknown"));
+            String username = clientUsernames.getOrDefault(id, "Unknown");
+            playerNamesInRoom.add(username);
+
+            String faction = playerFactionsByClientId.get(id);
+            playerFactionsByUsername.put(username, faction);
         }
 
         GetRoomStatusResponse response = new GetRoomStatusResponse();
@@ -164,7 +172,53 @@ public class InMemoryGameService implements GameService {
 
 
         response.setPlayersInRoom(playerNamesInRoom);
-        response.setServerStatus("STATUS for room=" + request.getRoomId() + ": players=" + room.getPlayerIds() + " activeGame=" + room.hasActiveGame());
+        response.setPlayerFactions(playerFactionsByUsername);
+        response.setServerStatus("STATUS for room=" + request.getRoomId() + ": players=" + room.getPlayerIds() + " playerFactions=" + playerFactionsByUsername + " activeGame=" + room.hasActiveGame());
+        return response;
+    }
+
+    @Override
+    public SetFactionResponse setFaction(String clientId, SetFactionRequest request) {
+        request.setClientId(clientId);
+
+        SetFactionResponse response = new SetFactionResponse();
+        response.setClientId(clientId);
+
+        String faction = request.getFaction();
+        if (isBlank(faction)) {
+            response.setError("Faction is null or empty");
+            return response;
+        }
+
+        faction = faction.trim();
+        String roomId = affiliations.get(clientId);
+        if (roomId == null) {
+            response.setError("Client is not in a room");
+            return response;
+        }
+
+        Room room = activeRooms.get(roomId);
+        if (room == null) {
+            response.setError("Room does not exist");
+            return response;
+        }
+
+        synchronized (room) {
+            if (!room.hasPlayer(clientId)) {
+                response.setError("Client is not a member of room=" + roomId);
+                return response;
+            }
+
+            if (room.isFactionSelectedByAnotherPlayer(clientId, faction)) {
+                response.setError("Faction already selected by another player");
+                return response;
+            }
+
+            room.setPlayerFaction(clientId, faction);
+        }
+
+        response.setFaction(faction);
+        response.setServerStatus("Faction succesfully selected");
         return response;
     }
 
@@ -209,8 +263,21 @@ public class InMemoryGameService implements GameService {
         response.setClientId(clientId);
         response.setRoomId(request.getRoomId());
         response.setCreatedGameId(game.getGameId());
+        response.setGameView(buildGameView(game.getGameState()));
         response.setServerStatus("STARTED game=" + request.getRoomId() + " in room=" + response.getRoomId() + " by=" + clientId);
         return response;
+    }
+
+    private JsonNode buildGameView(JsonNode gameState) {
+        GameViewRequest gameViewRequest = new GameViewRequest();
+        gameViewRequest.setGameState(gameState);
+
+        JsonNode responseGameViewJsonMessage = restService.postJson(
+                gameStateServiceUrl + "/view",
+                objectMapper.valueToTree(gameViewRequest)
+        );
+        GameViewResponse gameViewResponse = objectMapper.convertValue(responseGameViewJsonMessage, GameViewResponse.class);
+        return gameViewResponse.getGameView();
     }
 
     @Override
@@ -235,14 +302,8 @@ public class InMemoryGameService implements GameService {
         GameStatusChangeResponse responseGameData = objectMapper.convertValue(responseGameDataJsonMessage, GameStatusChangeResponse.class);
         game.setGameState(responseGameData.getGameState());
 
-        GameViewRequest gameViewRequest = new GameViewRequest();
-        gameViewRequest.setGameState(game.getGameState());
-
-        JsonNode responseGameViewJsonMessage = restService.postJson(gameStateServiceUrl + "/view", objectMapper.valueToTree(gameViewRequest));
-        GameViewResponse gameViewResponse = objectMapper.convertValue(responseGameViewJsonMessage, GameViewResponse.class);
-
         ActionResponse response = new ActionResponse();
-        response.setGameView(gameViewResponse.getGameView());
+        response.setGameView(buildGameView(game.getGameState()));
 
         logger.info("Action processed: {}", request);
 

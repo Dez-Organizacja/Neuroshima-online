@@ -1,9 +1,9 @@
 import React from "react";
 import { useState, useContext } from "react";
 import "./Hexagon.css";
-import { GameData } from "./GameData";
 import { ActionData } from "./ActionTypes";
 import { useGameSocketContext } from "../websockets/gameSocketContext";
+import { useProcesedGameState, GameState } from "../Dlaigora";
 type HexagonProps = {
     x: number;
     y: number;
@@ -19,9 +19,13 @@ type HexagonProps = {
 
 export function ClickCheck(x: number, y: number): void {
     const {sendAction} = useGameSocketContext();
+    const {gameState} = useProcesedGameState();
     if(y === 999) return;
+    if(!gameState){
+        return;
+    }
     if(y === -1) {
-        if(GameData.view.availableActions.hand[x]) {
+        if(gameState.view.availableActions.hand[x]) {
             console.log("Click accepted (hand) : ", { x, y });
             const action: ActionData = {
                 type: "hand",
@@ -31,7 +35,7 @@ export function ClickCheck(x: number, y: number): void {
         }
     } else {
         const Pair = [x, y];
-        const field = GameData.view.availableActions.board.find(field =>
+        const field = gameState.view.availableActions.board.find(field =>
             field[0] === Pair[0] &&
             field[1] === Pair[1]
         );

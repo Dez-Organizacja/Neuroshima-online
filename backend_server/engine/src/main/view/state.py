@@ -11,7 +11,7 @@ class StateViewBuilder:
 
     def build(self, ctx : ActionContext):
         return {
-            "fractions" : ctx.state.fractions,
+            "factions" : ctx.state.fractions,
             "board" : ctx.board.to_list(),
             "hands" : self.build_hands_view(ctx)
         }

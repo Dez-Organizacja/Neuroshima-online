@@ -87,6 +87,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
             switch (messageType) {
                 case GetRoomStatusRequest.TYPE -> handleGetRoomStatus(session, clientId, rootNode);
+                case SetFactionRequest.TYPE -> handleSetFaction(session, clientId, rootNode);
                 case ActionRequest.TYPE -> handleActionRequest(clientId, rootNode);
                 case JoinRoomRequest.TYPE -> handleJoinRoom(session, clientId, rootNode);
                 case LeaveRoomRequest.TYPE -> handleLeaveRoom(session, clientId, rootNode);
@@ -106,8 +107,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String clientId = (String) session.getAttributes().get("clientId");
+        String roomId = gameService.getAffiliation(clientId);
         sessionRegistry.unregister(clientId);
         gameService.handleClientDisconnect(clientId);
+        broadcastRoomStatus(roomId);
 
         Map<String, Object> disconnectionMessage = new HashMap<>();
         disconnectionMessage.put("messageType", "DISCONNECTION");
@@ -155,13 +158,24 @@ public class WebSocketHandler extends TextWebSocketHandler {
         logger.info("Room status: {}", objectMapper.writeValueAsString(response));
     }
 
+    private void handleSetFaction(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
+        SetFactionRequest request = objectMapper.treeToValue(rootNode, SetFactionRequest.class);
+        SetFactionResponse response = gameService.setFaction(clientId, request);
+        sendJson(session, response);
+
+        String roomId = gameService.getAffiliation(clientId);
+        if (response.getError() == null && roomId != null) {
+            broadcastRoomStatus(roomId);
+        }
+
+        logger.info("Faction selected: {}", objectMapper.writeValueAsString(response));
+    }
+
     private void handleStartNewGame(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
         NewGameRequest request = objectMapper.treeToValue(rootNode, NewGameRequest.class);
         NewGameResponse response = gameService.startNewGame(clientId, request);
 
         broadcastToRoom(response, response.getRoomId());
-        broadcastRoomStatus(response.getRoomId());
-
         logger.info("Game started: {}", objectMapper.writeValueAsString(response));
     }
 

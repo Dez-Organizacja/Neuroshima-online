@@ -1,14 +1,18 @@
 package pl.staszic.neu.game.model;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Room {
     private String roomId;
     private String player1;
     private String player2;
     private String gameId;
+    private final Map<String, String> playerFactions = new ConcurrentHashMap<>();
 
     public Room(String roomId) {
         this.roomId = roomId;
@@ -56,6 +60,7 @@ public class Room {
         else{
             throw new Exception("There is no such player in the room");
         }
+        playerFactions.remove(player);
     }
 
     public boolean isEmpty() {
@@ -96,5 +101,25 @@ public class Room {
     public void clearGame() {
         this.gameId = null;
     }
-}
 
+    public boolean isFactionSelectedByAnotherPlayer(String clientId, String faction) {
+        for (Map.Entry<String, String> entry : playerFactions.entrySet()) {
+            if (!Objects.equals(entry.getKey(), clientId) && Objects.equals(entry.getValue(), faction)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setPlayerFaction(String clientId, String faction) {
+        playerFactions.put(clientId, faction);
+    }
+
+    public String getPlayerFaction(String clientId) {
+        return playerFactions.get(clientId);
+    }
+
+    public Map<String, String> getPlayerFactions() {
+        return new HashMap<>(playerFactions);
+    }
+}

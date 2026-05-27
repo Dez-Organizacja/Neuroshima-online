@@ -90,6 +90,15 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         5000,   
     )
     }
+    function setFactionAWFR(Faction : string){
+        return sendAWFR({
+            messageType : "SETFACTION_REQUEST",
+            faction : Faction,
+        },
+        ["SETFACTION_RESPONSE", "ERROR"],
+        5000,        
+    )
+    }
     function sendAction(action : Action){
         const gameId = localStorage.getItem("gameId");
         if (!gameId) {
@@ -109,5 +118,6 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         getRoomStatusAWFR,
         startNewGameAWFR,
         sendAction,
+        setFactionAWFR,
     }
 }

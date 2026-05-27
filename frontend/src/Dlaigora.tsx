@@ -21,7 +21,7 @@ export type GameState = {
                 [key : string] : {tokens : [string, string, string]}
             }
         }
-        avaliableActions : {
+        availableActions : {
             hand : [boolean, boolean, boolean]
             board : [number, number][]
             buttons : string[]
@@ -45,6 +45,15 @@ export function useProcesedGameState(){
             setGameState({
                 view : latestMessage.gameView as GameState["view"]
             });
+        }
+        if(latestMessage.messageType === "NEWGAME_RESPONSE" && latestMessage.gameView){
+            setGameState({
+                view : latestMessage.gameView as GameState["view"]
+            })
+            if(typeof latestMessage.createdGameId === "string"){
+                localStorage.setItem("gameId", latestMessage.createdGameId);
+            }
+            return;
         }
         if (latestMessage.messageType === "ERROR") {
             console.error(latestMessage.error);

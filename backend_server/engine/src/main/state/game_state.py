@@ -52,6 +52,11 @@ class GameState:
 
     @classmethod
     def from_dict(cls, data):
+        if "factions" in data and "fractions" not in data:
+            data = {
+                **data,
+                "fractions": data["factions"]
+            }
         return Serializator.from_dict_dataclass(cls, data)
     
     def to_dict(self):

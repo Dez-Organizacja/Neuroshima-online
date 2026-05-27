@@ -30,7 +30,10 @@ def action():
         data = ActionMessage(**data)
         game = Game(data.gameState)
         game.handle_action(data.userAction)
-        return json.dumps(game.export())
+        return flask.jsonify({
+            "messageType": "GAMESTATUSCHANGE_RESPONSE",
+            "gameState": game.export()
+        }), 200
     except Exception as e:
         return flask.jsonify({
             "error": str(e)
@@ -40,7 +43,13 @@ def action():
 def view():
     data = flask.request.get_json()
     try:
-        return json.dumps(Game(data).build_user_view())
+        # Java sends { "messageType": "GAMEVIEW_REQUEST", "gameState": {...} }.
+        # Also accept raw game-state JSON for easier direct testing.
+        game_state = data.get("gameState", data) if isinstance(data, dict) else data
+        return flask.jsonify({
+            "messageType": "GAMEVIEW_RESPONSE",
+            "gameView": Game(game_state).build_user_view()
+        }), 200
     except Exception as e:
         return flask.jsonify({
                 "error": str(e)

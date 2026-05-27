@@ -137,7 +137,7 @@ class BoardToken(AbstractToken):
     def to_dict(self) -> dict:
         data = {
             "name": self.name,
-            "fraction": self.fraction,
+            "faction": self.fraction,
             "ROTATION": self.ROTATION,
             "DAMAGE": self.DAMAGE,
             "WIRED": self.WIRED,
@@ -146,5 +146,10 @@ class BoardToken(AbstractToken):
         return data
     
     @classmethod
-    def from_dict(cls, data : dict) -> BoardToken:
+    def from_dict(cls, data: dict) -> "BoardToken":
+        if "faction" in data and "fraction" not in data:
+            data = {
+                **data,
+                "fraction": data["faction"]
+            }
         return Serializator.from_dict_dataclass(cls, data)

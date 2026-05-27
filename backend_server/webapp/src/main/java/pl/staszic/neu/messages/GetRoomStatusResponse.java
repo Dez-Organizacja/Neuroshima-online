@@ -2,6 +2,7 @@ package pl.staszic.neu.messages;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Map;
 import java.util.Set;
 
 public class GetRoomStatusResponse extends WebSocketMessage {
@@ -16,6 +17,9 @@ public class GetRoomStatusResponse extends WebSocketMessage {
 
     @JsonProperty("playersInRoom")
     private Set<String> playersInRoom;
+
+    @JsonProperty("playerFactions")
+    private Map<String, String> playerFactions;
 
     @JsonProperty("gameId")
     private String gameId;
@@ -40,6 +44,14 @@ public class GetRoomStatusResponse extends WebSocketMessage {
         this.playersInRoom = playersInRoom;
     }
 
+    public Map<String, String> getPlayerFactions() {
+        return playerFactions;
+    }
+
+    public void setPlayerFactions(Map<String, String> playerFactions) {
+        this.playerFactions = playerFactions;
+    }
+
     public String getRoomId() {
         return roomId;
     }
@@ -54,4 +66,3 @@ public class GetRoomStatusResponse extends WebSocketMessage {
         return gameId;
     }
 }
-
