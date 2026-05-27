@@ -19,8 +19,21 @@ export function ClickButton(text: string): void {
             type: "button",
             name: "end_turn"
         }
+    } else if(text === "Cancel") {
+        console.log("Cancel.");
+
+        const action: ActionData = {
+            type: "button",
+            name: "cancel"
+        }
+    } else if(text === "Discard") {
+        console.log("Discard.");
+
+        const action: ActionData = {
+            type: "button",
+            name: "discard"
+        }
     }
-    else {console.log(text + ".")}
 }
 
 export default function GameButton({
