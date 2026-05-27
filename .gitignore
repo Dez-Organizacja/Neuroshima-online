@@ -4,3 +4,6 @@ __pycache__/
 .cph/
 .vscode/
 webapp.zip
+frontend.zip
+backend_server.zip
+nomodules/

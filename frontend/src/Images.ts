@@ -1,29 +1,16 @@
-// src/images.ts
-
-const modules = import.meta.glob(
-  "./assets/{borgo,hegemonia,moloch,posterunek,inne}/*.{png,jpg,jpeg}",
+const modules = import.meta.glob<{ default: string }>(
+  "/src/assets/{borgo,hegemonia,moloch,posterunek,inne}/*.{png,jpg,jpeg}",
   {
     eager: true,
   }
 )
 
-export const imagesByName: Record<string, string> =
-  Object.fromEntries(
-    Object.entries(modules).map(
-      ([path, module]: any) => {
-        // example:
-        // ./assets/cards/card1.png
+export const imagesByName: Record<string, string> = Object.fromEntries(
+  Object.entries(modules).map(([path, module]) => {
+    const key = path
+      .replace("/src/assets/", "")
+      .replace(/\.[^.]+$/, "")
 
-        const key = path
-          .replace("./assets/", "")
-          .replace(/\.[^/.]+$/, "")
-
-        // result:
-        // cards/card1
-
-        return [key, module.default]
-      }
-    )
-  )
-
-console.log(imagesByName)
+    return [key, module.default]
+  })
+)

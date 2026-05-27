@@ -1,6 +1,6 @@
 package pl.staszic.neu.game.service;
-
 import pl.staszic.neu.messages.*;
+import java.util.Set;
 
 public interface GameService {
     CreateNewRoomResponse createNewRoom(String clientId, CreateNewRoomRequest request);
@@ -22,4 +22,6 @@ public interface GameService {
     void registerClientUsername(String clientId, String username);
 
     String getAffiliation(String clientId);
+
+    Set<String> getClientIdsInRoom(String roomId);
 }

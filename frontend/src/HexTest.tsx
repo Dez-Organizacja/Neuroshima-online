@@ -4,8 +4,9 @@ import Image from "./components/HexImage";
 import GameButton from "./components/GameButton";
 import GetWindowSize from "./GetScreenSize";
 import { imagesByName } from "./Images";
-import { GameData } from "./components/GameData";
-
+// import { gameState } from "./components/gameState";
+// import { gameState } from "./components/gameState";
+import { useProcesedGameState, GameState } from "./Dlaigora";
 async function cos(name : string) {
   console.log(name);
 }
@@ -16,29 +17,31 @@ export default function HexTest(){
     const ScreenHeight = height;
 
     const Size = height / 12;
-
     const CenterX = ScreenWidth / 2;
     const CenterY = ScreenHeight / 2;
     const MidY = 2 * 1.732 * Size;
     const MidX = 4 * Size;
     const AddX = CenterX - MidX;
     const AddY = CenterY - MidY;
-
     console.log("Width: " + ScreenWidth + "     Height: " + ScreenHeight);
     console.log("CenterX: " + CenterX + "     CenterY: " + CenterY);
     console.log("MidX: " + MidX + "     MidY: " + MidY);
 
-    const Items = [];
+    const { gameState } = useProcesedGameState();
+    if (!gameState) {
+        return <div>Loading game...</div>;
+    }
 
+    const Items = [];
     // =============== //
 
     
                 // =================== Testowanie inputu =================== //
-                console.log(GameData.view.uiState.message);
+                console.log(gameState.view.uiState.message);
 
-                console.log(GameData.view.state.board);
+                console.log(gameState.view.state.board);
 
-                console.log(GameData.view.state.hands.borgo.tokens);
+                console.log(gameState.view.state.hands.borgo.tokens);
                 // =================== ================= =================== //
 
 
@@ -56,13 +59,13 @@ export default function HexTest(){
             const FinalY = Y + AddY;
 
             // === Dict check === //
-            const field = GameData.view.state.board.find(field =>
+            const field = gameState.view.state.board.find(field =>
                 field.pos[0] === y &&
                 field.pos[1] === x
             );
 
             if (field) {
-                const Path = field.unit.fraction + "/" + field.unit.name;
+                const Path = field.unit.faction + "/" + field.unit.name;
                 console.log("{" + y + ", " + x +  "}  " + Path);
 
                 Items.push(
@@ -87,15 +90,15 @@ export default function HexTest(){
     // vertically centered
     const StartY = CenterY - VerticalSpacing;
 
-    const currentFraction = GameData.view.uiState.fraction;
+    const currentfaction = gameState.view.uiState.faction;
 
     for (let i = -1; i <= 3; i+=2) {
         const FinalX = LeftX;
         const FinalY = StartY + i * VerticalSpacing;
         // === Dict check === //
         const Index = (i + 1) / 2;
-        const TokenName = GameData.view.state.hands[currentFraction].tokens[Index];
-        const Path = currentFraction + "/" + TokenName;
+        const TokenName = gameState.view.state.hands[currentfaction].tokens[Index];
+        const Path = currentfaction + "/" + TokenName;
         Items.push(
             <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
         )
@@ -108,11 +111,11 @@ export default function HexTest(){
         const FinalX = RightX;
         const FinalY = StartY + i * VerticalSpacing;
         // === Dict check === //
-        const [enemyFraction, setEnemyFraction] = useState(GameData.view.state.fractions[0]);
-        if(enemyFraction === currentFraction) setEnemyFraction(GameData.view.state.fractions[1]);
+        const [enemyfaction, setEnemyfaction] = useState(gameState.view.state.factions[0]);
+        if(enemyfaction === currentfaction) setEnemyfaction(gameState.view.state.factions[1]);
         const Index = (i + 1) / 2;
-        const TokenName = GameData.view.state.hands[enemyFraction].tokens[Index];
-        const Path = enemyFraction + "/" + TokenName;
+        const TokenName = gameState.view.state.hands[enemyfaction].tokens[Index];
+        const Path = enemyfaction + "/" + TokenName;
         Items.push(
             <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
         )

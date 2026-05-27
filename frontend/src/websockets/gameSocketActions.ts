@@ -8,6 +8,11 @@ type SendMessageAndWaitForResponse = (
     timeoutId : number,
 ) => Promise<WebSocketMessage>;
 
+type Action = {
+    [key : string] : unknown;
+}
+
+
 export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : SendMessageAndWaitForResponse){
     function createRoomAWFR(roomName : string){
         const username = localStorage.getItem("username");
@@ -85,12 +90,24 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         5000,   
     )
     }
+    function sendAction(action : Action){
+        const gameId = localStorage.getItem("gameId");
+        if (!gameId) {
+            throw new Error("No gameId found");
+        }
 
+        return sendMessage({
+            messageType: "ACTION_REQUEST",
+            gameId: gameId,
+            actionData: action,
+        });
+    }
     return{
         createRoomAWFR,
         joinRoomAWFR,
         leaveRoomAWFR,
         getRoomStatusAWFR,
         startNewGameAWFR,
+        sendAction,
     }
 }

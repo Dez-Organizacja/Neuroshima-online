@@ -324,4 +324,14 @@ public class InMemoryGameService implements GameService {
             return null;
         }
     }
+    @Override
+    public Set<String> getClientIdsInRoom(String roomId) {
+        Room room = activeRooms.get(roomId);
+
+        if (room == null) {
+            return Set.of();
+        }
+
+        return room.getPlayerIds();
+    }
 }

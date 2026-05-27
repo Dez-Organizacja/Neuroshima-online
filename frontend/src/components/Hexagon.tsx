@@ -1,8 +1,9 @@
 import React from "react";
+import { useState, useContext } from "react";
 import "./Hexagon.css";
 import { GameData } from "./GameData";
 import { ActionData } from "./ActionTypes";
-
+import { useGameSocketContext } from "../websockets/gameSocketContext";
 type HexagonProps = {
     x: number;
     y: number;
@@ -13,18 +14,20 @@ type HexagonProps = {
     rotation?: number;
     onClick?: () => void;
     children?: React.ReactNode;
+    
 };
 
 export function ClickCheck(x: number, y: number): void {
+    const {sendAction} = useGameSocketContext();
     if(y === 999) return;
     if(y === -1) {
         if(GameData.view.availableActions.hand[x]) {
             console.log("Click accepted (hand) : ", { x, y });
-
             const action: ActionData = {
                 type: "hand",
                 slot: x
             };
+            sendAction(action);
         }
     } else {
         const Pair = [x, y];
@@ -40,6 +43,7 @@ export function ClickCheck(x: number, y: number): void {
                 type: "board",
                 pos: Pair
             };
+            sendAction(action);
         }
     }
 }

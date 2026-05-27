@@ -7,6 +7,9 @@
     "dev:vite": "vite",
     "dev:electron": "wait-on http://localhost:5173 && electron ."
   },
+  "compilerOptions": {
+    "types": ["node", "vite/client"]
+  },
   "devDependencies": {
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",

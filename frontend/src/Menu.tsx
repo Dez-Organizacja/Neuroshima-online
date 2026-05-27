@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useEffect, useContext} from "react";
 import Button from "./components/Button";
 import TextInput from "./components/TekstInput";
 import DisplayText from "./components/DisplayText";
@@ -9,12 +9,20 @@ type MenuScreenProps = {
 }
 
 export default function MenuScreen({onSwitchToWaitingRoom} : MenuScreenProps){
-    // const gameSocket = useGameSocketContext();
-    // console.log("gameSocket context:", gameSocket);
+
     const [joinRoomName, setJoinRoomName] = useState("");
     const [createRoomName, setCreateRoomName] = useState("");
     
-    const {createRoomAWFR, joinRoomAWFR} = useGameSocketContext();
+    const {latestMessage, createRoomAWFR, joinRoomAWFR} = useGameSocketContext();
+    useEffect(() => {
+        if(!latestMessage){
+            return;
+        }
+        if(latestMessage.messageType == "CONNECTION" && typeof latestMessage.clientId === "string"){
+            localStorage.setItem("clientID", latestMessage.clientId) 
+        }   
+    }, [latestMessage])
+    
     async function HandleJoin() {
         try{
             const response = await joinRoomAWFR(joinRoomName);

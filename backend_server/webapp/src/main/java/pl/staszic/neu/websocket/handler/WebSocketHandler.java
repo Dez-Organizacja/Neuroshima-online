@@ -127,6 +127,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         CreateNewRoomRequest request = objectMapper.treeToValue(rootNode, CreateNewRoomRequest.class);
         CreateNewRoomResponse response = gameService.createNewRoom(clientId, request);
         sendJson(session, response);
+        broadcastRoomStatus(request.getRoomId());
         logger.info("Room created: {}", objectMapper.writeValueAsString(response));
     }
 
@@ -134,13 +135,16 @@ public class WebSocketHandler extends TextWebSocketHandler {
         JoinRoomRequest request = objectMapper.treeToValue(rootNode, JoinRoomRequest.class);
         JoinRoomResponse response = gameService.joinRoom(clientId, request);
         sendJson(session, response);
+        broadcastRoomStatus(request.getRoomId());
         logger.info("Room joined: {}", objectMapper.writeValueAsString(response));
     }
 
     private void handleLeaveRoom(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
         LeaveRoomRequest request = objectMapper.treeToValue(rootNode, LeaveRoomRequest.class);
+        String roomId = request.getRoomId();
         LeaveRoomResponse response = gameService.leaveRoom(clientId, request);
         sendJson(session, response);
+        broadcastRoomStatus(roomId);
         logger.info("Room left: {}", objectMapper.writeValueAsString(response));
     }
 
@@ -154,17 +158,23 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private void handleStartNewGame(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
         NewGameRequest request = objectMapper.treeToValue(rootNode, NewGameRequest.class);
         NewGameResponse response = gameService.startNewGame(clientId, request);
-        sendJson(session, response);
+
+        broadcastToRoom(response, response.getRoomId());
+        broadcastRoomStatus(response.getRoomId());
+
         logger.info("Game started: {}", objectMapper.writeValueAsString(response));
     }
 
     private void handleActionRequest(String clientId, JsonNode rootNode) throws IOException {
         ActionRequest request = objectMapper.treeToValue(rootNode, ActionRequest.class);
         ActionResponse response = gameService.processAction(clientId, request);
-        broadcastMessage(response, gameService.getAffiliation(clientId));
+
+        String roomId = gameService.getAffiliation(clientId);
+        broadcastToRoom(response, roomId);
+
         logger.info("Action processed for client {}", clientId);
     }
-
+    
     private void handleEndGame(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
         EndGameRequest request = objectMapper.treeToValue(rootNode, EndGameRequest.class);
         EndGameResponse response = gameService.endGame(clientId, request);
@@ -194,6 +204,72 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private void sendJson(WebSocketSession session, Object payload) throws IOException {
         session.sendMessage(new TextMessage(objectMapper.writeValueAsString(payload)));
+    }
+
+    private void broadcastRoomStatus(String roomId) {
+        if (roomId == null || roomId.isBlank()) {
+            return;
+        }
+
+        for (String targetClientId : gameService.getClientIdsInRoom(roomId)) {
+            WebSocketSession targetSession = sessionRegistry.getSessions().get(targetClientId);
+
+            if (targetSession == null || !targetSession.isOpen()) {
+                continue;
+            }
+
+            try {
+                GetRoomStatusRequest statusRequest = new GetRoomStatusRequest();
+                statusRequest.setRoomId(roomId);
+
+                GetRoomStatusResponse statusResponse = gameService.getRoomStatus(targetClientId, statusRequest);
+                sendJson(targetSession, statusResponse);
+            } catch (GameValidationException e) {
+                logger.warn(
+                    "Could not send room status to client {} in room {}: {}",
+                    targetClientId,
+                    roomId,
+                    e.getMessage()
+                );
+            } catch (IOException e) {
+                logger.error(
+                    "Error sending room status to client {} in room {}: {}",
+                    targetClientId,
+                    roomId,
+                    e.getMessage()
+                );
+            }
+        }
+    }
+
+    private void broadcastToRoom(Object payload, String roomId) {
+        String jsonMessage;
+
+        try {
+            jsonMessage = objectMapper.writeValueAsString(payload);
+        } catch (Exception e) {
+            logger.error("Error serializing message for room broadcast: {}", e.getMessage());
+            return;
+        }
+
+        for (String targetClientId : gameService.getClientIdsInRoom(roomId)) {
+            WebSocketSession targetSession = sessionRegistry.getSessions().get(targetClientId);
+
+            if (targetSession == null || !targetSession.isOpen()) {
+                continue;
+            }
+
+            try {
+                targetSession.sendMessage(new TextMessage(jsonMessage));
+            } catch (IOException e) {
+                logger.error(
+                    "Error sending message to client {} in room {}: {}",
+                    targetClientId,
+                    roomId,
+                    e.getMessage()
+                );
+            }
+        }
     }
 
     private void sendError(WebSocketSession session, String clientId, String error) throws IOException {
