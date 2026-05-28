@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 @dataclass
 class Token(ABC):
     name         : str
-    fraction     : str
+    faction     : str
     type         : TokenType = field(default_factory=TokenType, init=False)
     ability_used : bool = False
     ability      : Ability = Ability.NO_ABILITY

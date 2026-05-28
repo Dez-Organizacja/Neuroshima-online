@@ -9,7 +9,7 @@ def test_game_state_serialization_roundtrip():
 
     # GIVEN
     state = GameState(
-        fractions=["moloch", "borgo"],
+        factions=["moloch", "borgo"],
         current_fraction="moloch"
     )
 

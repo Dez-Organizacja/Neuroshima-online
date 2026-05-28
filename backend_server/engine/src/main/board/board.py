@@ -122,10 +122,10 @@ class Board:
     def is_hq(self, pos) -> bool:
         return self.get_token(pos).is_HQ() if not self.is_empty(pos) else False
 
-    def get_token_position(self, name, fraction) -> tuple[int, int] | None:
+    def get_token_position(self, name, faction) -> tuple[int, int] | None:
         for pos in self.ALL_HEXES:
             token = self.get_token(pos)
-            if token and token.name == name and token.fraction == fraction:
+            if token and token.name == name and token.faction == faction:
                 return pos
         return None
 
@@ -141,12 +141,12 @@ class Board:
     def import_token(self, pos : tuple[int, int], data : dict):
         self.add_token(pos, BoardToken.from_dict(data))
 
-    def put_token(self, pos, name, fraction = None):
-        # mozna wywolac albo put_token(pos, data) albo put_token(pos, name, fraction)
+    def put_token(self, pos, name, faction = None):
+        # mozna wywolac albo put_token(pos, data) albo put_token(pos, name, faction)
         if not self.on_board(pos):
             return
         
-        token = BoardToken(name, fraction)
+        token = BoardToken(name, faction)
         self.add_token(pos, token)
 
     def destroy_token(self, pos):
@@ -172,7 +172,7 @@ class Board:
 
     def is_valid_target(self, pos, frakcja, czy_sztab=False):
         x, y = pos
-        return not (not self.on_board(pos) or self.is_empty(pos) or self.tokens[self.board[x][y]].fraction == frakcja or (czy_sztab and self.get_token(pos).is_HQ()))
+        return not (not self.on_board(pos) or self.is_empty(pos) or self.tokens[self.board[x][y]].faction == frakcja or (czy_sztab and self.get_token(pos).is_HQ()))
 
     def is_empty(self, pos):
         return self.get_token(pos) is None

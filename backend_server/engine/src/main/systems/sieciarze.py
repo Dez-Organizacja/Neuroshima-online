@@ -54,9 +54,9 @@ class Sieciarze:
                 for kier in kierunki:
                     nx, ny = self.board.go((x, y), kier)
 
-                    print(f"Sieciarz ({x},{y}) frakcja {akt.fraction} kierunek {kier} -> ({nx},{ny}), frakcja {self.board.get_token((nx, ny)).fraction if self.board.get_token((nx, ny)) is not None else 'None'} is valid: {self.board.is_valid_target((nx, ny), akt.fraction)}")
+                    print(f"Sieciarz ({x},{y}) frakcja {akt.faction} kierunek {kier} -> ({nx},{ny}), frakcja {self.board.get_token((nx, ny)).faction if self.board.get_token((nx, ny)) is not None else 'None'} is valid: {self.board.is_valid_target((nx, ny), akt.faction)}")
 
-                    if not self.board.is_valid_target((nx, ny), akt.fraction):
+                    if not self.board.is_valid_target((nx, ny), akt.faction):
                         continue
 
                     cel = self.board.get_token((nx, ny))
@@ -244,7 +244,7 @@ class Sieciarze:
                 nx, ny = self.board.go(i, kier)
                 cel = self.board.get_token((nx, ny))
 
-                if (not self.board.is_valid_target((nx, ny), akt.fraction)) or cel.can_wire() == True:
+                if (not self.board.is_valid_target((nx, ny), akt.faction)) or cel.can_wire() == True:
                     continue
 
                 cel.wire()

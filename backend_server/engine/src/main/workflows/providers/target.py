@@ -21,7 +21,7 @@ class SniperProvider(TargetProvider):
     def get_available_targets(self, ctx : ActionContext):
         query = BoardQuery([
             pr.NOT(pr.token_predicate(BoardToken.is_wired)),
-            pr.is_enemy(ctx.fraction)
+            pr.is_enemy(ctx.faction)
         ])
         return query.apply(ctx)
 
@@ -33,7 +33,7 @@ class BombProvider(TargetProvider):
 class GrenadeProvider(TargetProvider):
     @staticmethod
     def get_available_targets(ctx : ActionContext):
-        pos = ctx.board.get_hq_pos(ctx.fraction)
+        pos = ctx.board.get_hq_pos(ctx.faction)
         hq = ctx.board.get_tile(pos)
         if hq.is_wired:
             return []

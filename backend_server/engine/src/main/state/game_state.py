@@ -60,5 +60,5 @@ class GameState:
     def print_game_state(self):
         print_obj(self.to_dict(), 0)
 
-    def add_player(self, fraction):
-        self.players[fraction] = PlayerState()
+    def add_player(self, faction):
+        self.players[faction] = PlayerState()

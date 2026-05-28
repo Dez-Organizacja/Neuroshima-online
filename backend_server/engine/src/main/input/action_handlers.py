@@ -70,7 +70,7 @@ class ActionHandler:
         self.dispatch[ActionType.ROTATE] = self.handle_rotation
         
     def handle_board(self, ctx : ActionContext, action : BoardAction):
-        self.setter(ctx.workflow_data, action)
+        self.setter(ctx.workflow_data, action.pos)
 
     @staticmethod
     def handle_rotation(ctx : ActionContext, action : RotationAction) -> None:
@@ -84,5 +84,6 @@ class ActionHandler:
         if action.type == ActionType.BUTTON:
             return self.button_handler.handle(ctx, action)
         
+        ctx.workflow_data.type = action.type
         self.dispatch[action.type](ctx, action)
         return ExecutionResult()

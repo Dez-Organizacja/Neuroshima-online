@@ -7,7 +7,7 @@ class TokenKey(Enum):
     NAME = "name"
     ROTATION = "rotation"
     DAMAGE = "rany"
-    FRACTION = "frakcja"
+    FACTION = "frakcja"
     WIRED = "zasieciowany"
     UNIT_COUNT = "liczbajednostek"
     ABILITY = "ability"
@@ -49,7 +49,7 @@ class Token:
     NAME = TokenKey.NAME
     ROTATION = TokenKey.ROTATION
     DAMAGE = TokenKey.DAMAGE
-    FRACTION = TokenKey.FRACTION
+    FACTION = TokenKey.FACTION
     WIRED = TokenKey.WIRED
 
     class Stats:

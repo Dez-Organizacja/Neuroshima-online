@@ -59,21 +59,21 @@ class Board:
         cx, cy = self.CENTER
         return (abs(cx - x) > 1 or abs(cy - y) > 2)
 
-    def is_hq_wired(self, fraction):
-        tile = self.get_tile(self.get_token_position(BoardType.HQ, fraction))
+    def is_hq_wired(self, faction):
+        tile = self.get_tile(self.get_token_position(BoardType.HQ, faction))
         return (tile and not tile.czy_zasieciowany())
 
     def is_hq(self, pos):
         return self.get_name(pos) == BoardType.HQ.value
 
-    def get_hq_pos(self, fraction):
-        return self.get_token_position(BoardType.HQ, fraction) 
+    def get_hq_pos(self, faction):
+        return self.get_token_position(BoardType.HQ, faction) 
     
-    def get_token_position(self, name, fraction):
+    def get_token_position(self, name, faction):
         expected_name = name.value if isinstance(name, BoardType) else name
         for pos in self.ALL_HEXES:
             tile = self.get_tile(pos)
-            if tile and tile.name == expected_name and tile.fraction == fraction:
+            if tile and tile.name == expected_name and tile.faction == faction:
                 return pos
         return None
 
@@ -92,9 +92,9 @@ class Board:
             return
         x, y = pos
         name = zeton.get(Token.NAME)
-        fraction = zeton.get(Token.FRACTION)
+        faction = zeton.get(Token.FACTION)
         data = {**zeton, Token.X: x, Token.Y: y}
-        self.board[x][y] = BoardToken(name, fraction, data)
+        self.board[x][y] = BoardToken(name, faction, data)
         # self.rotation_phase = True
 
     def zdejmij_zeton(self, pos):
@@ -165,7 +165,7 @@ class Board:
             return None
         if(self.is_empty(pos)):
             return None
-        return self.get_tile(pos).fraction
+        return self.get_tile(pos).faction
 
     def zdejmij_trupy(self):
         for pos in self.ALL_HEXES:

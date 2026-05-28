@@ -30,8 +30,8 @@
 #                       'current_frakcja': 'moloch', 
 #                       'active_action': None,
 #                       'next_turns': [
-#                           {Turn.FRACTION: 'moloch', Turn.TYPE: 'tura'}, 
-#                           {Turn.FRACTION: 'borgo', Turn.TYPE: 'tura'}
+#                           {Turn.FACTION: 'moloch', Turn.TYPE: 'tura'}, 
+#                           {Turn.FACTION: 'borgo', Turn.TYPE: 'tura'}
 #                           ], 
 #                       'board': [[None for _ in range(length)] for _ in range(width)], 
 #                       'pile': {"moloch" : [], 'borgo': []}, 
@@ -62,7 +62,7 @@
 #     data["selected"] = {Selected.SLOT : 0, Selected.NAME : Token.Type.Instant.BITWA}
 #     data["active_action"] = Token.Type.Instant.BITWA
 #     data["available_actions"][UI.BOTTOM][Bottom.USE] = True
-#     data["next_turns"] = [{Turn.FRACTION : "moloch", Turn.TYPE : Turn.Type.STANDARD}, {Turn.FRACTION : "borgo", Turn.TYPE : Turn.Type.STANDARD}]
+#     data["next_turns"] = [{Turn.FACTION : "moloch", Turn.TYPE : Turn.Type.STANDARD}, {Turn.FACTION : "borgo", Turn.TYPE : Turn.Type.STANDARD}]
 #     game = Game(data)
 
 #     assert(game.state == State.NO_SELECTION)
@@ -72,10 +72,10 @@
 #     assert(game.hand["moloch"] == [])
 
 # def check_available_actions(active_hand, active_buttons, active_hexes, output):
-#     for fraction in output[UI.HAND]:
-#         for slot in output[UI.HAND][fraction]:
-#             status = output[UI.HAND][fraction][slot]
-#             assert((fraction, slot) in active_hand) == status
+#     for faction in output[UI.HAND]:
+#         for slot in output[UI.HAND][faction]:
+#             status = output[UI.HAND][faction][slot]
+#             assert((faction, slot) in active_hand) == status
     
 #     for button in output[UI.BOTTOM]:
 #         status = output[UI.BOTTOM][button]
@@ -174,7 +174,7 @@
 #     assert(game.board.board[2][2] == None)
 #     zeton = game.board.board[3][3].zeton_to_json()
 #     assert(zeton[Token.NAME] == "klaun")
-#     assert(zeton[Token.FRACTION] == "moloch")
+#     assert(zeton[Token.FACTION] == "moloch")
 #     assert(zeton[Token.DAMAGE] == 0)
 #     assert(zeton[Token.WIRED] == False)
 #     assert(zeton[Token.ROTATION] == 0)
@@ -211,7 +211,7 @@
 #     data["state"] = State.SELECTED_HAND
 #     data["selected"] = {Selected.SLOT : 0, Selected.NAME : Token.Type.Instant.BOMB}
 #     data["active_action"] = Token.Type.Instant.BOMB
-#     # data["next_turns"] = [{Turn.FRACTION : "moloch", Turn.TYPE : Turn.Type.STANDARD}, {Turn.FRACTION : "borgo", Turn.TYPE : Turn.Type.STANDARD}]
+#     # data["next_turns"] = [{Turn.FACTION : "moloch", Turn.TYPE : Turn.Type.STANDARD}, {Turn.FACTION : "borgo", Turn.TYPE : Turn.Type.STANDARD}]
     
 #     data["board"][1][1] = Zeton.clear_token("sieciarz", "borgo")
 #     data["board"][1][3] = Zeton.clear_token("mutek", "borgo")

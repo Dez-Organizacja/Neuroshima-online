@@ -1,1 +1,1 @@
-{'fractions': ['borgo', 'moloch']}
+{'factions': ['borgo', 'moloch']}

@@ -5,11 +5,11 @@ import main.frakcje.wszystkie_frakcje as allfractions
 
 class TokenFactory():
     @staticmethod
-    def create(name, fraction, data={}):
-        stats = allfractions.frakcje.get(fraction, {}).get(name, {})
+    def create(name, faction, data={}):
+        stats = allfractions.frakcje.get(faction, {}).get(name, {})
         token_type = stats.get(TokenKey.TYPE)
         if(token_type == TokenType.INSTANT):
-            return InstantToken(name, fraction)
+            return InstantToken(name, faction)
         elif(token_type == TokenType.BOARD):
-            return BoardToken(name, fraction, data)
-        raise ValueError(f"nie znaleziono żetonu o nazwie {name} z frakcji {fraction}")
+            return BoardToken(name, faction, data)
+        raise ValueError(f"nie znaleziono żetonu o nazwie {name} z frakcji {faction}")

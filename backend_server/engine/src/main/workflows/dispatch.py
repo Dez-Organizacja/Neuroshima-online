@@ -55,7 +55,7 @@ class HandWorkflow(DispatchActionWorkflow):
     @staticmethod
     def get_active_token(ctx : ActionContext) -> Token:
         name = ctx.player.hand.get(ctx.workflow_data.slot)
-        return TokenFactory.create(name, ctx.fraction)
+        return TokenFactory.create(name, ctx.faction)
 
     def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
         if self.get_active_token(ctx).get_ability() is None:

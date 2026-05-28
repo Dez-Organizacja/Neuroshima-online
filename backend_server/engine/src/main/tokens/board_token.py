@@ -32,7 +32,7 @@ class BoardToken(AbstractToken):
         # if isinstance(self.name, dict):
         #     data = self.name
         #     self.name = data.get("name", "default")
-        #     self.fraction = data.get("fraction", "neutral")
+        #     self.faction = data.get("faction", "neutral")
         #     self.ROTATION = data.get("ROTATION", 0)
         #     self.DAMAGE = data.get("DAMAGE", 0)
         #     self.WIRED = data.get("WIRED", False)
@@ -43,7 +43,7 @@ class BoardToken(AbstractToken):
     # ---------- reset ----------
 
     def load(self):
-        data = allfractions.frakcje.get(self.fraction, {}).get(self.name, {})
+        data = allfractions.frakcje.get(self.faction, {}).get(self.name, {})
         for key, value in data.items():
             attr_name = key.name if isinstance(key, Enum) else str(key)
             if attr_name.isidentifier():
@@ -137,7 +137,7 @@ class BoardToken(AbstractToken):
     def to_dict(self) -> dict:
         data = {
             "name": self.name,
-            "faction": self.fraction,
+            "faction": self.faction,
             "ROTATION": self.ROTATION,
             "DAMAGE": self.DAMAGE,
             "WIRED": self.WIRED,
@@ -147,9 +147,9 @@ class BoardToken(AbstractToken):
     
     @classmethod
     def from_dict(cls, data: dict) -> "BoardToken":
-        if "faction" in data and "fraction" not in data:
+        if "faction" in data and "faction" not in data:
             data = {
                 **data,
-                "fraction": data["faction"]
+                "faction": data["faction"]
             }
         return Serializator.from_dict_dataclass(cls, data)

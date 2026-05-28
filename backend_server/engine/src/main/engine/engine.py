@@ -44,15 +44,15 @@ class GameEngine:
         self.run_until_input_required(ctx)
 
     def _setup_players(self, ctx : ActionContext):
-        for fraction in ctx.state.fractions:
-            ctx.state.add_player(fraction)
-            ctx.state.players[fraction].pile = PileFactory.create_pile(fraction)
+        for faction in ctx.state.factions:
+            ctx.state.add_player(faction)
+            ctx.state.players[faction].pile = PileFactory.create_pile(faction)
 
     def _setup_turn_order(self, ctx : ActionContext):
-        shuffle(ctx.state.fractions)
+        shuffle(ctx.state.factions)
 
     def _create_game_workflow(self, ctx : ActionContext):
-        config = GameConfig(fractions=ctx.state.fractions)
+        config = GameConfig(factions=ctx.state.factions)
         effect = PushWorkflow(name = WorkflowName.GAME, config=config)
         result = ExecutionResult(workflow_effects=[effect])
         self.resolver.excute(ctx, result)

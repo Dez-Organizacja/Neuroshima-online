@@ -1,12 +1,8 @@
-from typing import Callable
-from dataclasses import dataclass
 from main.workflows.data import WorkflowData, WorkflowConfig, WorkflowName
-from workflow_tester import StepCase, Scenario
+from workflow_tester import StepCase, Scenario, FakeContext, SetupFn
 from main.input.data import UserAction
 from main.steps.data import StepResult
 from main.events.data import ExecutionResult
-
-SetupFn = Callable[[WorkflowData], None]
 
 class ScenarioBuilder:
     def __init__(self, 
@@ -34,6 +30,11 @@ class ScenarioBuilder:
         self._current_step.expected_data = WorkflowData(**fileds)
         return self
     
+    # def then_data_delta(self, **kwargs):
+    #     self._require_step()
+    #     self._current_step.expected_data = WorkflowData()
+
+
     def then_execution(self, *, 
                        effects = None, 
                        flow_events = None, 

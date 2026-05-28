@@ -2,9 +2,9 @@ from enum import Enum
 import main.frakcje.wszystkie_frakcje as allfractions
 
 class Properties:
-    def __init__(self, name: str, fraction: str):
+    def __init__(self, name: str, faction: str):
         self.data = allfractions.frakcje.get(
-            fraction, {}
+            faction, {}
         ).get(name, {})
 
         self.import_from_dict(self.data)

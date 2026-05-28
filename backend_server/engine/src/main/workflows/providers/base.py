@@ -12,4 +12,4 @@ class WorkflowActionProvider():
         return []
     
     def get_ui_state(self, ctx : ActionContext) -> StepUIState:
-        return StepUIState(ctx.fraction)
+        return StepUIState(ctx.faction)

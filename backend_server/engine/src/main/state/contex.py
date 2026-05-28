@@ -18,7 +18,7 @@ class ActionContext():
         return self.state.selected
     
     @property
-    def fraction(self):
+    def faction(self):
         return self.state.current_fraction
     
     @property
@@ -27,7 +27,7 @@ class ActionContext():
 
     @property
     def player(self) -> PlayerState:
-        return self.state.players[self.fraction]
+        return self.state.players[self.faction]
 
     @property
     def ui_state(self):

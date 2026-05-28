@@ -85,7 +85,7 @@ wlasciwosci = {
         },
         TokenStats.INITIATIVE: [2]
     },
-    "szerszeń": {
+    "szerszen": {
         TokenKey.TYPE : TokenType.BOARD,
         TokenKey.UNIT_COUNT : 1,
         TokenStats.HP: 1,

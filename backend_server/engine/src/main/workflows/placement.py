@@ -15,7 +15,7 @@ class PlaceWorkflow(BoardSelectionMixin, Workflow[PlacementProvider]):
             PlaceEffect(
                 pos = ctx.workflow_data.unit_pos,
                 name = ctx.player.hand.get(ctx.workflow_data.slot),
-                fraction= ctx.fraction
+                faction= ctx.faction
             )
         ])
 

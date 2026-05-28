@@ -14,7 +14,7 @@ wlasciwosci = {
         },
         TokenStats.INITIATIVE: [2]
     },
-    "nożownik": {
+    "nozownik": {
         TokenKey.TYPE: TokenType.BOARD,
         TokenKey.UNIT_COUNT: 4,
         TokenStats.HP: 1,

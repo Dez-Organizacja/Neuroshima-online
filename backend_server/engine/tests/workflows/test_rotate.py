@@ -3,15 +3,15 @@ from main.input.data import RotationAction
 from main.events.effects import RotateEffect
 from main.events.workflow import PopWorkflow
 
-from workflow_tester import WokrflowTester
+from workflow_tester import WorkflowTester
 from scenario_builder import ScenarioBuilder
 
 def test_rotate():
     scenario = (
         ScenarioBuilder(WorkflowName.ROTATE)
         .when(RotationAction(1))
-        .given(lambda d : d.set_unit_pos((1, 1)))
-        .then_data(unit_pos=(1, 1), rotation=1)
+        .given(lambda d : d.workflow_data.set_unit_pos((1, 1)))
+        .then_data(type=RotationAction.type, unit_pos=(1, 1), rotation=1)
         
         .when(None)
         .then_execution(
@@ -19,7 +19,7 @@ def test_rotate():
             workflows=[PopWorkflow()]
         )
     ).build()
-    WokrflowTester().run(scenario)
+    WorkflowTester().run(scenario)
 
 # def test_rotate():
 #     ctx = build_contex(

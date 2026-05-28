@@ -6,8 +6,8 @@ class AvailableActionsBuilder:
     @staticmethod
     def build_hand(ctx : ActionContext):
         return {
-            fraction: [False for _ in range(player.hand.size)]
-            for fraction, player in ctx.state.players.items()
+            faction: [False for _ in range(player.hand.size)]
+            for faction, player in ctx.state.players.items()
         }         
 
     def build_buttons(ctx : ActionContext):

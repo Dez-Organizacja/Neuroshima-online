@@ -15,7 +15,7 @@ class MoveRules(AbilityRules):
     @staticmethod
     def get_sources(ctx : ActionContext):
         candidates = BoardQuery([
-            is_ally(ctx.fraction),
+            is_ally(ctx.faction),
             NOT(token_predicate(BoardToken.is_wired)),
         ]).apply(ctx)
 
@@ -61,7 +61,7 @@ class PushRules(AbilityRules):
     @staticmethod
     def get_sources(ctx):
         candidates = BoardQuery([
-            is_ally(ctx.fraction),
+            is_ally(ctx.faction),
             NOT(token_predicate(BoardToken.is_wired)),
         ]).apply(ctx)
 

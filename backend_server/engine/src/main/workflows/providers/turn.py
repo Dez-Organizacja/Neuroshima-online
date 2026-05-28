@@ -22,7 +22,7 @@ class TurnProvider(WorkflowActionProvider):
         
     def get_available_positions(self, ctx : ActionContext):
         return BoardQuery([
-            is_ally(ctx.fraction),
+            is_ally(ctx.faction),
             has_ability,
             NOT(has_used_ability)
         ]).apply(ctx)

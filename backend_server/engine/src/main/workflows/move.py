@@ -25,7 +25,7 @@ class MoveWorkflow(BoardSelectionMixin[MoveProvider], Workflow[MoveProvider]):
             self.build_destination_step(),
             self.build_move_step(),
             self.build_rotate_step(),
-            build_end_step(self.resolve_move),
+            build_end_step(),
         ]
 
     @staticmethod

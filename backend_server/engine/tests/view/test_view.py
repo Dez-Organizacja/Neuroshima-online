@@ -11,7 +11,7 @@
 #         engine = GameEngine(resolver=Resolver())
 #         builder = GameViewBuilder()
 #         ctx = ActionContext(
-#             state=GameState(fractions=["moloch", "borgo"]), 
+#             state=GameState(factions=["moloch", "borgo"]), 
 #             rules=GameRules()
 #         )
 #         engine.start_game(ctx)

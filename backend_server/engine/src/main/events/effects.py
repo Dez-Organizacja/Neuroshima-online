@@ -26,15 +26,15 @@ class MoveEffect(Effect):
 @dataclass
 class PlaceEffect(Effect):
     pos: tuple[int, int]
-    name: object
-    fraction: str
+    name: str
+    faction: str
     recompute_passive: ClassVar[bool] = True
 
     def apply(self, ctx: ActionContext):
         ctx.board.put_token(
             pos=self.pos,
             name=self.name,
-            fraction=self.fraction,
+            faction=self.faction,
         )
 
 

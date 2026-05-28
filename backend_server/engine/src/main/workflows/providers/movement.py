@@ -73,7 +73,7 @@ class PushProvider(WorkflowActionProvider):
     
     def get_ui_state(self, ctx):
         if ctx.workflow_data.unit_pos and not ctx.workflow_data.target_pos:
-            return StepUIState(fraction=GameRules.get_enemy(ctx, ctx.fraction))
+            return StepUIState(faction=GameRules.get_enemy(ctx, ctx.faction))
         
         return super().get_ui_state(ctx)
     
@@ -82,4 +82,4 @@ class RotateProvider(WorkflowActionProvider):
         return [ctx.workflow_data.unit_pos]
     
     def get_ui_state(self, ctx):
-        return StepUIState(fraction=ctx.fraction, mode=UIMode.ROTATION)
+        return StepUIState(faction=ctx.faction, mode=UIMode.ROTATION)

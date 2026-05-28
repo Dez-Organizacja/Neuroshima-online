@@ -13,7 +13,7 @@ class Tests:
     @staticmethod
     def contex_maker() -> ActionContext:
         state = GameState(
-            fractions=["moloch", "borgo"],
+            factions=["moloch", "borgo"],
             current_fraction="moloch",
         )
         return ActionContext(state=state, rules=GameRules())
@@ -60,7 +60,7 @@ class Tests:
 
         unit = ctx.board.get_token((2, 6))
         # print(unit)
-        print(unit.name, unit.fraction)
+        print(unit.name, unit.faction)
         assert(ctx.board.get_token_position("klaun", "moloch") == (2, 6))
         assert(ctx.board.get_token((2, 6)).ability_used == True)
 

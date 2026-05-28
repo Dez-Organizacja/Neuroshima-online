@@ -5,13 +5,13 @@ class StateViewBuilder:
     @staticmethod
     def build_hands_view(ctx : ActionContext):
         return {
-            fraction : Serializator.to_dict_dataclass(ctx.player.hand)
-            for fraction in ctx.state.fractions
+            faction : Serializator.to_dict_dataclass(ctx.player.hand)
+            for faction in ctx.state.factions
         }
 
     def build(self, ctx : ActionContext):
         return {
-            "factions" : ctx.state.fractions,
+            "factions" : ctx.state.factions,
             "board" : ctx.board.to_list(),
             "hands" : self.build_hands_view(ctx)
         }

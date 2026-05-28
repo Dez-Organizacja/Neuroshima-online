@@ -5,10 +5,10 @@ from main.tokens.pile import Pile
 
 class PileFactory:
     @staticmethod
-    def create_pile(fraction : str) -> Pile:
+    def create_pile(faction : str) -> Pile:
         pile = Pile()
 
-        config = allfractions.frakcje.get(fraction, {})
+        config = allfractions.frakcje.get(faction, {})
         for name, data in config.items():
 
             for _ in range(data[TokenKey.UNIT_COUNT]):

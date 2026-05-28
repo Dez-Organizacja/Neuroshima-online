@@ -80,8 +80,8 @@ class WorkflowInstance:
 
 @dataclass
 class TurnConfig(WorkflowConfig):
-    fraction : str
+    faction : str
 
 @dataclass
 class GameConfig(WorkflowConfig):
-    fractions : list[str]
+    factions : list[str]

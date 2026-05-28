@@ -10,6 +10,6 @@ class InstantToken(Token):
     type : TokenType = field(default_factory=TokenType.INSTANT, init=False)
 
     def __post_init__(self):
-        fraction_config = allfractions.frakcje.get(self.fraction, {})
+        fraction_config = allfractions.frakcje.get(self.faction, {})
         token = fraction_config.get(self.name, {})
         self.ability = token.get(TokenKey.ABILITY, Ability.NO_ABILITY)

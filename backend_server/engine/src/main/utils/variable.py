@@ -48,7 +48,7 @@ class Phase(Enum):
 class Turn:
     BITWA = "bitwa"
     TYPE = "type"
-    FRACTION = "frakcja"
+    FACTION = "frakcja"
 
     class Type(Enum):
         LAST = "ostatnia"

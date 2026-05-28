@@ -10,13 +10,13 @@ class UIMode(Enum):
 
 @dataclass
 class StepUIState:
-    fraction : str
+    faction : str
     mode : UIMode = UIMode.DEFAULT
     message : str = ""
    
     def to_dict(self):
         data = Serializator.to_dict_dataclass(self)
-        data["faction"] = data.pop("fraction")
+        data["faction"] = data.pop("faction")
         return data
 
 @dataclass

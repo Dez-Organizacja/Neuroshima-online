@@ -10,11 +10,11 @@ def build_contex(
         data : WorkflowData,
         name : WorkflowName, 
         config : WorkflowConfig = WorkflowConfig(), 
-        fractions : list[str] = ["moloch", "borgo"]
+        factions : list[str] = ["moloch", "borgo"]
     ) -> ActionContext:
     return ActionContext(
         state=GameState(
-            fractions=fractions,
+            factions=factions,
             workflow_data=data,
             workflow_stack=[
                 WorkflowInstance(name=name, current_step_index=0)

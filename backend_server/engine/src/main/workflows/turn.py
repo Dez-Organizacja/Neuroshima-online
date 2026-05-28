@@ -33,9 +33,9 @@ class TurnWorkflow(Workflow[TurnProvider]):
 
     def create_start_turn_function(self) -> Callable[[ActionContext], ExecutionResult]:
         def start_turn_resolve(ctx : ActionContext) -> ExecutionResult:
-            ctx.state.current_fraction = self.config.fraction
+            ctx.state.current_fraction = self.config.faction
             positions = BoardQuery([
-                is_ally(ctx.fraction),
+                is_ally(ctx.faction),
                 has_ability
             ]).apply(ctx)
             return ExecutionResult(
