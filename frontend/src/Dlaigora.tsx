@@ -18,11 +18,11 @@ export type GameState = {
             factions : [string, string]
             board : BoardCell[]
             hands : {
-                [key : string] : {tokens : [string, string, string]}
+                [key : string] : {tokens : string[]}
             }
         }
         availableActions : {
-            hand : [boolean, boolean, boolean]
+            hand : boolean[]
             board : [number, number][]
             buttons : string[]
         }

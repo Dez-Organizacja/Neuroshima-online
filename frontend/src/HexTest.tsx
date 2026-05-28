@@ -4,6 +4,7 @@ import Image from "./components/HexImage";
 import GameButton from "./components/GameButton";
 import GetWindowSize from "./GetScreenSize";
 import { imagesByName } from "./Images";
+import { useGameSocketContext } from "./websockets/gameSocketContext"; 
 // import { gameState } from "./components/gameState";
 // import { gameState } from "./components/gameState";
 import { useProcesedGameState, GameState } from "./Dlaigora";
@@ -26,8 +27,8 @@ export default function HexTest(){
     console.log("Width: " + ScreenWidth + "     Height: " + ScreenHeight);
     console.log("CenterX: " + CenterX + "     CenterY: " + CenterY);
     console.log("MidX: " + MidX + "     MidY: " + MidY);
-
-    const { gameState } = useProcesedGameState();
+    const { sendAction } = useGameSocketContext();
+    const { gameState} = useProcesedGameState();
     if (!gameState) {
         return <div>Loading game...</div>;
     }
@@ -74,7 +75,7 @@ export default function HexTest(){
             }
 
             Items.push(
-                <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={30} color="#d10606"> {y}, {x} </Hexagon>
+                <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={30} color="#d10606" gameState={gameState} sendAction={sendAction}> {y}, {x} </Hexagon>
             )
         }
     }
@@ -103,24 +104,29 @@ export default function HexTest(){
             <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
         )
         Items.push(
-            <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={-1} size={Size * 2 + 15} rotation={30} color="#00aaff" />
+            <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={-1} size={Size * 2 + 15} rotation={30} color="#00aaff" gameState={gameState} sendAction={sendAction} />
         )
     }
+    // const [enemyfaction, setEnemyfaction] = useState(gameState.view.state.factions[0]);
+    // if(enemyfaction === currentfaction) setEnemyfaction(gameState.view.state.factions[1]);
+
+    const enemyfaction = 
+        gameState.view.state.factions.find((candidate) => candidate !== currentfaction) ??
+        gameState.view.state.factions[0];
+
     // ======= Enemy Hand ======= //
     for( let i = -1; i <= 3; i+=2) {
         const FinalX = RightX;
         const FinalY = StartY + i * VerticalSpacing;
         // === Dict check === //
-        const [enemyfaction, setEnemyfaction] = useState(gameState.view.state.factions[0]);
-        if(enemyfaction === currentfaction) setEnemyfaction(gameState.view.state.factions[1]);
         const Index = (i + 1) / 2;
         const TokenName = gameState.view.state.hands[enemyfaction].tokens[Index];
         const Path = enemyfaction + "/" + TokenName;
         Items.push(
-            <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
+            <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30}  />
         )
         Items.push(
-            <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={999} size={Size * 2 + 15} rotation={30} color="#00aaff" />
+            <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={999} size={Size * 2 + 15} rotation={30} color="#00aaff" gameState={gameState} sendAction={sendAction} />
         )
     }
     // ======= ========== ======= //

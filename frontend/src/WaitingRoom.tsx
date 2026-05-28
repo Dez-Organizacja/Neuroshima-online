@@ -105,7 +105,7 @@ export function RoomScreen({onSwitchToGame, onSwitchToMenu} : RoomScreenProps){
                 const response = await startNewGameAWFR(playersInRoom, factions);
                 if(response.messageType == "NEWGAME_RESPONSE" && typeof response.createdGameId === "string"){
                     console.log("New game started");
-                    localStorage.setItem("gameID", response.createdGameId);
+                    localStorage.setItem("gameId", response.createdGameId);
                     onSwitchToGame();
                     console.log("Could not start game");
                 }

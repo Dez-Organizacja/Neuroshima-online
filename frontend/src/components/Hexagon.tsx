@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useContext } from "react";
 import "./Hexagon.css";
-import { ActionData } from "./ActionTypes";
+import { ActionData } from "./ActionTypes"
 import { useGameSocketContext } from "../websockets/gameSocketContext";
 import { useProcesedGameState, GameState } from "../Dlaigora";
 type HexagonProps = {
@@ -14,14 +14,16 @@ type HexagonProps = {
     rotation?: number;
     onClick?: () => void;
     children?: React.ReactNode;
-    
+    sendAction? : (action : ActionData) => void;
+    gameState? : GameState;
 };
 
-export function ClickCheck(x: number, y: number): void {
-    const {sendAction} = useGameSocketContext();
-    const {gameState} = useProcesedGameState();
+export function ClickCheck(x: number, y: number, gameState : GameState | undefined, sendAction : ((action : ActionData) => void) | undefined) : void {
     if(y === 999) return;
     if(!gameState){
+        return;
+    }
+    if(!sendAction){
         return;
     }
     if(y === -1) {
@@ -62,6 +64,8 @@ const Hexagon: React.FC<HexagonProps> = ({
     rotation = 0,
     onClick,
     children,
+    sendAction,
+    gameState,
 }) => {
     const height = size * 0.866;
 
@@ -70,7 +74,7 @@ const Hexagon: React.FC<HexagonProps> = ({
             className="hexagon"
             // onClick={onClick}
             // onClick={() => console.log("Clicked hex:", { poz1, poz2 })}
-            onClick={() => ClickCheck(poz1, poz2)}
+            onClick={() => ClickCheck(poz1, poz2, gameState, sendAction)}
         style={{
             width: size,
             height: height,

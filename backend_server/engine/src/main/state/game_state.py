@@ -42,7 +42,7 @@ def print_obj(obj, deepth):
 
 @dataclass
 class GameState:
-    fractions           : list[str]
+    factions            : list[str]
     current_fraction    : str = ""
     players             : dict[str, PlayerState] = field(default_factory=dict)
     board               : Board = field(default_factory=Board)
@@ -52,11 +52,6 @@ class GameState:
 
     @classmethod
     def from_dict(cls, data):
-        if "factions" in data and "fractions" not in data:
-            data = {
-                **data,
-                "fractions": data["factions"]
-            }
         return Serializator.from_dict_dataclass(cls, data)
     
     def to_dict(self):

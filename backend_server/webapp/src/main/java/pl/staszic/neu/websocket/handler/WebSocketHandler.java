@@ -176,6 +176,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         NewGameResponse response = gameService.startNewGame(clientId, request);
 
         broadcastToRoom(response, response.getRoomId());
+        
         logger.info("Game started: {}", objectMapper.writeValueAsString(response));
     }
 
