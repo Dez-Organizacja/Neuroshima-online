@@ -43,7 +43,7 @@ wlasciwosci = {
         TokenStats.ARMOR: [0, 1, 5],
         TokenStats.INITIATIVE: [2]
     },
-    "siłacz": {
+    "silacz": {
         TokenKey.TYPE: TokenType.BOARD,
         TokenKey.UNIT_COUNT: 2,
         TokenStats.HP: 1,

@@ -28,11 +28,12 @@ class Boost(Enum):
     MELEE = "melee"
     SHOOT = "shoot"
     INITIATIVE = "initiative"
+    MINUS_INITIATIVE = "minus_initiative"
+    SET_INITIATIVE_TO_0 = "set_initiative_to_0"
     NEW_INITIATIVE = "new_initiative"
+    MEELE_TO_SHOOT = "meele_to_shoot"
     HEAL = "heal"
     STEAL_BOOST = "steal_boost"
-
-
 
 class Variable(Enum):
     ALL = "all"

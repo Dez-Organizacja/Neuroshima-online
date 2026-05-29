@@ -4,6 +4,7 @@ from enum import Enum
 
 import main.frakcje.wszystkie_frakcje as allfractions
 from main.tokens.data import Ability
+from main.tokens.Clever_iniciative import CleverIniciative
 from main.tokens.abstract_token import Token as AbstractToken
 from main.tokens.data import TokenKey, TokenStats, TokenType, TokenRelation
 from main.utils.variable import Attack, Boost
@@ -23,9 +24,20 @@ class BoardToken(AbstractToken):
     ATTACKS: dict = field(default_factory=dict)
     WIRE: list[int] = field(default_factory=list)
     BOOSTS: dict = field(default_factory=dict)
+
+    REAL_BOOST_TARGET: TokenRelation | None = None
     BOOST_TARGET: TokenRelation | None = None
 
     INITIATIVE: list[int] = field(default_factory=list)
+    CLEVER_INICIATIVE: CleverIniciative | None = None
+
+    MEELE_BOOSTS: int = 0
+    SHOOT_BOOSTS: int = 0
+
+    BOOST_TO_ATTACK = {
+        Attack.MELEE: "MEELE_BOOSTS",
+        Attack.SHOOT: "SHOOT_BOOSTS"
+    }
 
 
     def __post_init__(self):
@@ -39,6 +51,8 @@ class BoardToken(AbstractToken):
 
         self.load()
         self.rotate()
+        self.CLEVER_INICIATIVE = CleverIniciative(self.INITIATIVE)
+        self.REAL_BOOST_TARGET = self.BOOST_TARGET
 
     # ---------- reset ----------
 
@@ -126,10 +140,19 @@ class BoardToken(AbstractToken):
             return {}
         return self.BOOSTS
 
-    def get_attacks(self, which_initiative):      
-        if which_initiative not in self.INITIATIVE or self.WIRED:
+    def get_attacks(self, which_initiative) -> dict:      
+        if self.CLEVER_INICIATIVE.activate(which_initiative) or self.WIRED:
             return {}
-        return self.ATTACKS
+        
+        attacks = {}
+        for attack_type, attack_list in self.ATTACKS.items():
+            boost_attr = self.BOOST_TO_ATTACK.get(attack_type)
+            boost = getattr(self, boost_attr, 0) if boost_attr is not None else 0
+            attacks[attack_type] = [
+                [direction, power + boost]
+                for direction, power in attack_list
+            ]
+        return attacks
         
     def get_ability(self) -> Ability:
         return Ability.NO_ABILITY
@@ -142,6 +165,18 @@ class BoardToken(AbstractToken):
             "DAMAGE": self.DAMAGE,
             "WIRED": self.WIRED,
             "ability_used" : self.ability_used
+        }
+        return data
+    
+    def to_dict_battle(self) -> dict:
+        data = {
+            "name": self.name,
+            "fraction": self.fraction,
+            "ROTATION": self.ROTATION,
+            "DAMAGE": self.DAMAGE,
+            "WIRED": self.WIRED,
+            "ability_used" : self.ability_used,
+            "clever_iniciative": self.CLEVER_INICIATIVE.export_iniciative() if self.CLEVER_INICIATIVE else None
         }
         return data
     
