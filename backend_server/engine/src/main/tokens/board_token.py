@@ -6,7 +6,7 @@ import main.frakcje.wszystkie_frakcje as allfractions
 from main.tokens.data import Ability
 from main.tokens.Clever_iniciative import CleverIniciative
 from main.tokens.abstract_token import Token as AbstractToken
-from main.tokens.data import TokenKey, TokenStats, TokenType, TokenRelation
+from main.tokens.data import TokenKey, TokenType, TokenRelation
 from main.utils.variable import Attack, Boost
 from main.state.serialization import Serializator
 
@@ -22,32 +22,17 @@ class BoardToken(AbstractToken):
     armor: list[int] = field(default_factory=list)
     unit_count: int | None = None
     attacks: dict = field(default_factory=dict)
-    wire_dirs: list[int] = field(default_factory=list)
+    wire: list[int] = field(default_factory=list)
     boosts: dict = field(default_factory=dict)
 
     real_boost_target: TokenRelation | None = None
     boost_target: TokenRelation | None = None
 
-    iniciative: list[int] = field(default_factory=list)
+    initiative: list[int] = field(default_factory=list)
     clever_iniciative: CleverIniciative | None = None
 
     meele_boosts: int = 0
     shoot_boosts: int = 0
-
-    _LOAD_ATTR_MAP = {
-        "INITIATIVE": "iniciative",
-        "MEELE_BOOSTS": "meele_boosts",
-        "SHOOT_BOOSTS": "shoot_boosts",
-        "BOOST_TARGET": "boost_target",
-        "REAL_BOOST_TARGET": "real_boost_target",
-        "UNIT_COUNT": "unit_count",
-        "WIRE": "wire_dirs",
-    }
-
-    BOOST_TO_ATTACK = {
-        Attack.MELEE: "MEELE_BOOSTS",
-        Attack.SHOOT: "SHOOT_BOOSTS"
-    }
 
     # chwilowo zadane np w trakcie bitwy
     wounds : list[int] = field(default_factory=list)
@@ -55,7 +40,7 @@ class BoardToken(AbstractToken):
     def __post_init__(self):
         self.load()
         self.rotate()
-        self.clever_iniciative = CleverIniciative(self.iniciative)
+        self.clever_iniciative = CleverIniciative(self.initiative)
         self.real_boost_target = self.boost_target
 
     # ---------- reset ----------
@@ -65,10 +50,8 @@ class BoardToken(AbstractToken):
         data = allfractions.frakcje.get(self.faction, {}).get(self.name, {})
         for key, value in data.items():
             attr_name = key.name if isinstance(key, Enum) else str(key)
-            # print(f"attr_name {attr_name}")
             if attr_name.isidentifier():
-                setattr(self, self._LOAD_ATTR_MAP.get(attr_name, attr_name.lower()), deepcopy(value))
-        # print("load finished")
+                setattr(self, attr_name.lower(), deepcopy(value))
 
     def reset(self):
         self.rotation = 0
@@ -100,19 +83,19 @@ class BoardToken(AbstractToken):
     def is_wired(self):
         return self.wired
     
-    def wire(self):
+    def set_wire(self):
         self.wired = True
 
     def unwire(self):
         self.wired = False
 
     def can_wire(self):
-        return len(self.wire_dirs) > 0
+        return len(self.wire) > 0
 
     def get_wire(self):
         if self.wired:
             return []
-        return self.wire_dirs
+        return self.wire
 
     # --------- rotation ----------
 
@@ -135,7 +118,7 @@ class BoardToken(AbstractToken):
             ]
 
         self.armor = [(direction + self.rotation) % 6 for direction in self.armor]
-        self.wire_dirs = [(direction + self.rotation) % 6 for direction in self.wire_dirs]
+        self.wire = [(direction + self.rotation) % 6 for direction in self.wire]
 
     # --------- hp and armor ----------
 

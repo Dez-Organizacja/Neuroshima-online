@@ -8,7 +8,7 @@ def solve_boosters(board):
     BoosterSolver(board)
 
 def initiatives(board, pos):
-    return board.get_token(pos).clever_iniciative.iniciative
+    return board.get_token(pos).clever_iniciative.initiative
 
 def activates_at(board, pos, initiative, can = False):
     return can == board.get_token(pos).clever_iniciative.activate(initiative)

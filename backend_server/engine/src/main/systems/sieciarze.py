@@ -41,7 +41,7 @@ class Sieciarze:
                 if akt is None:
                     continue
                 
-                wires = akt.wire_dirs
+                wires = akt.wire
                 if len(wires) == 0:
                     continue
 
@@ -237,17 +237,17 @@ class Sieciarze:
             akt = self.board.get_token(i)
             
             if self.status_sieciarzy[i] != 1:
-                akt.wire()    
+                akt.set_wire()    
                 continue
                 
-            for kier in (akt.wire_dirs or []):
+            for kier in (akt.wire or []):
                 nx, ny = self.board.go(i, kier)
                 cel = self.board.get_token((nx, ny))
 
                 if (not self.board.is_valid_target((nx, ny), akt.faction)) or cel.can_wire() == True:
                     continue
 
-                cel.wire()
+                cel.set_wire()
 
         self.status_sieciarzy = dict(self.status_sieciarzy)
 
