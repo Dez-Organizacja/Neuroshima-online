@@ -10,7 +10,8 @@ class StepViewBuilder:
     def build_av_actions_provider(self, 
                                 provider : WorkflowActionProvider
         ) -> AvailableActionProvider:
-        
+        # print("")
+
         return AvailableActionProvider(
             get_buttons=provider.get_available_buttons,
             get_tokens=provider.get_available_tokens,
@@ -19,7 +20,12 @@ class StepViewBuilder:
     
     def build_step(self, ctx : ActionContext) -> StepViewData:
         wf = WorkflowFactory.create(ctx.workflow_instance)
+        # print(f"current wf {wf}")
+        # print()
         action_provider : WorkflowActionProvider = wf.action_provider
+        # print(f"type action provider {type(wf.action_provider)}")
+        # print(f"action provider {wf.action_provider}")
+        # print(f"positons {action_provider.get_available_positions(ctx)}")
         provider = self.build_av_actions_provider(action_provider)
         
         return StepViewData(

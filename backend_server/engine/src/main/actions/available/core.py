@@ -11,14 +11,6 @@ class AvailableActions:
         self.builder = AvailableActionsBuilder()
         self.provider = provider
 
-    def apply_active_keys(self, dict, keys):
-        for key in keys:
-            dict[key] = True
-
-    def apply_board(self, board : list[list[int]], positions : list[tuple[int, int]]):
-        for (x, y) in positions:
-            board[x][y] = True
-
     def apply_hand(self, hand, hand_result):
         for idx in hand_result:
             hand[idx] = True

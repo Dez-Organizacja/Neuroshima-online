@@ -5,8 +5,8 @@ class StateViewBuilder:
     @staticmethod
     def build_hands_view(ctx : ActionContext):
         return {
-            faction : Serializator.to_dict_dataclass(ctx.player.hand)
-            for faction in ctx.state.factions
+            faction : Serializator.to_dict_dataclass(player_state.hand)
+            for faction, player_state in ctx.state.players.items()
         }
 
     def build(self, ctx : ActionContext):

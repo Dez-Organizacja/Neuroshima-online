@@ -26,21 +26,31 @@ class GameEngine:
             wf.start(ctx)
         return wf.get_current_step(ctx)
     
-    def execute_step(self, ctx : ActionContext, step : Step):
+    def execute_step(
+            self, 
+            ctx : ActionContext, 
+            step : Step, 
+            action : UserAction | None = None
+        ):
         # print("executing step", step)
-        result = step.execute(ctx)
+        if action:
+            result = step.execute(ctx, action)
+        else:
+            result = step.execute(ctx)
         self.resolver.resolve(ctx, result)
 
     def run_until_input_required(self, ctx : ActionContext):
         while True:
             step = self._get_step(ctx)
+            # print(f"current_step {step}")
             if step.requires_input:
                 break
 
             self.execute_step(ctx=ctx, step=step)
 
     def execute_action(self, ctx : ActionContext, action : UserAction):
-        self._get_step(ctx).execute(ctx, action)
+        # print(f"executing action {action}")
+        self.execute_step(ctx, step=self._get_step(ctx), action=action)
         self.run_until_input_required(ctx)
 
     def _setup_players(self, ctx : ActionContext):

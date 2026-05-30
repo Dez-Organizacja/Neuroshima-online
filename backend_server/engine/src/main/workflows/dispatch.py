@@ -68,8 +68,8 @@ class HandWorkflow(DispatchActionWorkflow):
         # print(f"ability {self.get_active_token(ctx).get_ability()}")
         token = self.get_active_token(ctx)
         ability = token.get_ability()
-        print(f"token {token}")
-        print(f"ability {ability}")
+        # print(f"token {token}")
+        # print(f"ability {ability}")
         if ability is None:
             return WorkflowName.PLACE
         

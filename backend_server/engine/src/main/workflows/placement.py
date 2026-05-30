@@ -6,8 +6,8 @@ from main.events.effects import PlaceEffect
 from main.events.data import ExecutionResult
 from main.workflows.step_builders import build_end_step
 
-class PlaceWorkflow(BoardSelectionMixin, Workflow[PlacementProvider]):
-    def __int__(self):
+class PlaceWorkflow(Workflow[PlacementProvider], BoardSelectionMixin, ):
+    def __init__(self):
         super().__init__(action_provider=PlacementProvider())
 
     def resolve_function(self, ctx : ActionContext):

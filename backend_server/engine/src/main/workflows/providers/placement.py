@@ -9,4 +9,6 @@ class PlacementProvider(WorkflowActionProvider):
         return [Button.CANCEL, Button.DISCARD]
     
     def get_available_positions(self, ctx : ActionContext):
+        # print("available positions")
+        # print(BoardQuery([is_empty_at]).apply(ctx))
         return BoardQuery([is_empty_at]).apply(ctx)
