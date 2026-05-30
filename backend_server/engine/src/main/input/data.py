@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from abc import ABC
-from enum import Enum
+from enum import StrEnum, Enum
 
-class ActionType(Enum):
+class ActionType(StrEnum):
     BOARD = "board"
     HAND = "hand"
     ROTATE = "rotate"

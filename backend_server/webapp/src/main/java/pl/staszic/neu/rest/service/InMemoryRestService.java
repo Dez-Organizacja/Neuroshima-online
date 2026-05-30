@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 public class InMemoryRestService implements RestService {
     private static final Logger logger = LoggerFactory.getLogger(InMemoryRestService.class);
-
+    private static final Logger backendMessageLogger = LoggerFactory.getLogger("BACKEND_MESSAGES");
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
@@ -46,9 +46,31 @@ public class InMemoryRestService implements RestService {
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setAccept(List.of(MediaType.APPLICATION_JSON, MediaType.TEXT_HTML, MediaType.ALL));
 
+            String requestJson = objectMapper
+            .writerWithDefaultPrettyPrinter()
+            .writeValueAsString(requestBody);
+
+            backendMessageLogger.info("""
+                ===== OUTGOING MESSAGE TO BACKEND =====
+                URL: {}
+                BODY:
+                {}
+                ======================================
+                """, url, requestJson);
+
             HttpEntity<String> entity = new HttpEntity<>(requestBody.toString(), headers);
+
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, entity, String.class);
             String body = responseEntity.getBody();
+
+            backendMessageLogger.info("""
+                ===== RESPONSE FROM BACKEND =====
+                URL: {}
+                STATUS: {}
+                BODY:
+                {}
+                ================================
+                """, url, responseEntity.getStatusCode(), body);
 
             if (body == null || body.isBlank()) {
                 logger.warn("Odpowiedź z {} jest pusta", url);

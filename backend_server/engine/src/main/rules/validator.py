@@ -1,7 +1,7 @@
 from main.input.data import ActionType, Button
-from enum import Enum
+from enum import StrEnum
 
-class Key(Enum):
+class Key(StrEnum):
     POS = "pos"
     SLOT = "slot"
     NAME = "name"
