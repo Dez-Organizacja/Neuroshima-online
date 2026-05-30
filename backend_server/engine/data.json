@@ -1,0 +1,50 @@
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-05-30T23:18:08.026068906",
+  "gameState" : {
+    "board" : [ ],
+    "current_faction" : "borgo",
+    "factions" : [ "borgo", "moloch" ],
+    "flow_queue" : [ ],
+    "players" : {
+      "borgo" : {
+        "hand" : {
+          "tokens" : [ "bitwa", "nozownik", "medyk" ]
+        },
+        "pile" : [ "zabojca", "nozownik", "zwiadowca", "ruch", "granat", "bitwa", "mutek", "bitwa", "super-oficer", "ruch", "ruch", "mutek", "oficer", "sieciarz", "bitwa", "mutek", "mutek", "silacz", "mutek", "nozownik", "nozownik", "oficer", "silacz", "zabojca", "sztab", "bitwa", "bitwa", "super-mutant", "zwiadowca", "ruch", "sieciarz", "mutek" ]
+      },
+      "moloch" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "lowca", "dzialkogaussa", "opancerzonylowca", "opancerzonywartownik", "szerszen", "bitwa", "hybryda", "wartownik", "zwiadowca", "bomba", "matka", "medyk", "ruch", "bitwa", "odepchniecie", "obronca", "opancerzonylowca", "sieciarz", "sztab", "odepchniecie", "bitwa", "bloker", "oficer", "lowca", "bitwa", "hybryda", "juggernaut", "szturmowiec", "mozg", "klaun", "odepchniecie", "odepchniecie", "medyk", "bloker", "odepchniecie" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "factions" : [ "borgo", "moloch" ]
+      },
+      "current_step_index" : 1,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "borgo"
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  },
+  "userAction" : {
+    "type" : "hand",
+    "slot" : 0
+  }
+}

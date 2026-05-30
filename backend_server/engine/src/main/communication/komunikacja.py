@@ -2,6 +2,7 @@ from main.main import Game
 import flask
 import json
 from main.communication.action_message import ActionMessage
+from main.state.serialization import Serializator
 
 app = flask.Flask(__name__)
 
