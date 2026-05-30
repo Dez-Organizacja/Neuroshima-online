@@ -11,7 +11,14 @@ class Tile:
 
     @classmethod
     def from_dict(cls, data : dict) -> Tile:
-        return Serializator.from_dict_dataclass(cls, data)
+        unit = data["unit"]
+        if isinstance(unit, dict):
+            unit = BoardToken.from_dict(unit)
+
+        return cls(
+            pos=tuple(data["pos"]),
+            unit=unit,
+        )
 
     def to_dict(self):
         return Serializator.to_dict_dataclass(self)

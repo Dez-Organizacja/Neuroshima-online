@@ -156,27 +156,40 @@ class BoardToken(AbstractToken):
             "ROTATION": self.rotation,
             "DAMAGE": self.damage,
             "WIRED": self.wired,
-            "ability_used" : self.ability_used
+            "ability_used" : self.ability_used,
+            "clever_iniciative": self.clever_iniciative.export_state() if self.clever_iniciative else None,
         }
         return data
     
     def to_dict_battle(self) -> dict:
-        data = {
-            "name": self.name,
-            "fraction": self.fraction,
-            "ROTATION": self.rotation,
-            "DAMAGE": self.damage,
-            "WIRED": self.wired,
-            "ability_used" : self.ability_used,
-            "clever_iniciative": self.clever_iniciative.export_iniciative() if self.clever_iniciative else None
-        }
-        return data
+        return self.to_dict()
     
     @classmethod
     def from_dict(cls, data: dict) -> "BoardToken":
-        if "faction" in data and "faction" not in data:
-            data = {
-                **data,
-                "faction": data["faction"]
-            }
-        return Serializator.from_dict_dataclass(cls, data)
+        data = cls._normalize_dict(data)
+        clever_iniciative_data = data.pop("clever_iniciative", None)
+        token = Serializator.from_dict_dataclass(cls, data)
+        if clever_iniciative_data is not None and token.clever_iniciative is not None:
+            token.clever_iniciative.import_state(clever_iniciative_data)
+        return token
+
+    @staticmethod
+    def _normalize_dict(data: dict) -> dict:
+        normalized = dict(data)
+
+        if "fraction" in normalized and "faction" not in normalized:
+            normalized["faction"] = normalized["fraction"]
+
+        if "clever_initiative" in normalized and "clever_iniciative" not in normalized:
+            normalized["clever_iniciative"] = normalized["clever_initiative"]
+
+        legacy_keys = {
+            "ROTATION": "rotation",
+            "DAMAGE": "damage",
+            "WIRED": "wired",
+        }
+        for legacy_key, field_name in legacy_keys.items():
+            if legacy_key in normalized and field_name not in normalized:
+                normalized[field_name] = normalized[legacy_key]
+
+        return normalized

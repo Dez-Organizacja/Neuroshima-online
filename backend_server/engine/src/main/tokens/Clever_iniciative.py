@@ -84,10 +84,17 @@ class CleverIniciative():
                 return False
         return True
             
-    def export_iniciative(self) -> list[int]:
-        return [x for x in zip(self.initiative, self.is_used, self.is_basic)]
+    def export_iniciative(self) -> list[list[int | bool]]:
+        return [
+            [initiative, is_used, is_basic]
+            for initiative, is_used, is_basic in zip(
+                self.initiative,
+                self.is_used,
+                self.is_basic,
+            )
+        ]
 
-    def import_iniciative(self, data: list[int]) -> None:
+    def import_iniciative(self, data: list[list[int | bool]]) -> None:
         self.initiative = [x[0] for x in data]
         self.is_used = [x[1] for x in data]
         self.is_basic = [x[2] for x in data]
@@ -96,3 +103,21 @@ class CleverIniciative():
             for initiative, is_used, is_basic in data
             if is_basic
         ]
+
+    def export_state(self) -> dict:
+        return {
+            "initiative": self.export_iniciative(),
+            "is_blocked_to_0": self.is_blocked_to_0,
+            "iniciative_boosts": self.iniciative_boosts,
+            "num_of_new": self.num_of_new,
+        }
+
+    def import_state(self, data: dict | list[list[int | bool]]) -> None:
+        if isinstance(data, list):
+            self.import_iniciative(data)
+            return
+
+        self.import_iniciative(data.get("initiative", []))
+        self.is_blocked_to_0 = data.get("is_blocked_to_0", False)
+        self.iniciative_boosts = data.get("iniciative_boosts", 0)
+        self.num_of_new = data.get("num_of_new", 0)
