@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from abc import ABC
 from enum import StrEnum, Enum
+from main.state.serialization import Serializator
 
 class ActionType(StrEnum):
     BOARD = "board"
@@ -49,6 +50,9 @@ class UserActionFactory(ABC):
     }
     TYPE_KEY = "type"
     @classmethod
-    def create(cls, data : dict):
+    def create(cls, data : dict) -> UserAction:
         action_type = data.pop(cls.TYPE_KEY)
-        return cls.USER_ACTIONS[action_type](**data)
+        return Serializator.from_dict_dataclass(
+            cls.USER_ACTIONS[action_type], 
+            data
+        )

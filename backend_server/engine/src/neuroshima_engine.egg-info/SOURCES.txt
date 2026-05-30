@@ -17,6 +17,7 @@ src/main/board/board.py
 src/main/board/board_query.py
 src/main/board/stary_board_jakbys_potrzebowal.py
 src/main/communication/__init__.py
+src/main/communication/action_message.py
 src/main/communication/client.py
 src/main/communication/komunikacja.py
 src/main/engine/__init__.py
@@ -45,6 +46,7 @@ src/main/rules/turn.py
 src/main/rules/validator.py
 src/main/rules/ability/__init__.py
 src/main/rules/ability/base.py
+src/main/rules/ability/heal.py
 src/main/rules/ability/movement.py
 src/main/state/__init__.py
 src/main/state/contex.py
@@ -57,8 +59,10 @@ src/main/steps/data.py
 src/main/steps/factory.py
 src/main/steps/step.py
 src/main/systems/__init__.py
+src/main/systems/boosters.py
 src/main/systems/passive_systems.py
 src/main/systems/sieciarze.py
+src/main/tokens/Clever_iniciative.py
 src/main/tokens/__init__.py
 src/main/tokens/abstract_token.py
 src/main/tokens/board_token.py
@@ -93,6 +97,7 @@ src/main/workflows/target.py
 src/main/workflows/turn.py
 src/main/workflows/providers/__init__.py
 src/main/workflows/providers/base.py
+src/main/workflows/providers/healers.py
 src/main/workflows/providers/instant.py
 src/main/workflows/providers/movement.py
 src/main/workflows/providers/placement.py
