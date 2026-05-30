@@ -6,6 +6,7 @@ import main.frakcje.wszystkie_frakcje as allfractions
 class TokenFactory():
     @staticmethod
     def create(name, faction, data={}):
+        # print(f"create token request of name {name} and faction {faction}")
         stats = allfractions.frakcje.get(faction, {}).get(name, {})
         token_type = stats.get(TokenKey.TYPE)
         if(token_type == TokenType.INSTANT):

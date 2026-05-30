@@ -32,10 +32,6 @@ class MoveRules(AbilityRules):
         return query.apply(ctx) + [unit_pos] 
     
     @staticmethod
-    def get_targets(ctx : ActionContext):
-        return super().get_targets(ctx)
-    
-    @staticmethod
     def can_use(ctx : ActionContext, pos : tuple[int, int]) -> bool:
         return not ctx.board.get_tile(pos).is_wired
     

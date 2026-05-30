@@ -25,8 +25,9 @@ class WaitingStepConfig(StepConfig):
 class AutomaticStepConfig(StepConfig):
     pass
 
-def no_result_function(ctx : ActionContext) -> StepResult:
-    return StepResult()
+
+def no_result_function(ctx : ActionContext) -> ExecutionResult:
+    return ExecutionResult()
 
 @dataclass
 class ResolveStepConfig(AutomaticStepConfig):

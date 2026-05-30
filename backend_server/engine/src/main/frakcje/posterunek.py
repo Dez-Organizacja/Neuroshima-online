@@ -12,7 +12,7 @@ wlasciwosci = {
         TokenStats.ATTACKS : {
             Attack.SHOOT: [[5, 1]],
         },
-        # i tu jeszcze mobilnosc
+        TokenKey.ABILITY : Ability.MOVE,
         TokenStats.INITIATIVE: [2]
     },
     "ckm": {

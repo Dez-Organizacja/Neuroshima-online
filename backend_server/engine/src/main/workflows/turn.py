@@ -28,24 +28,21 @@ class TurnWorkflow(Workflow[TurnProvider]):
     def __init__(self, config : TurnConfig):
         self.rules : TurnRules = TurnRules()
         self.config : TurnConfig = config
-        self.start_turn_resolve = self.create_start_turn_function()
         super().__init__(action_provider=TurnProvider())
 
-    def create_start_turn_function(self) -> Callable[[ActionContext], ExecutionResult]:
-        def start_turn_resolve(ctx : ActionContext) -> ExecutionResult:
-            ctx.state.current_fraction = self.config.faction
-            positions = BoardQuery([
-                is_ally(ctx.faction),
-                has_ability
-            ]).apply(ctx)
-            return ExecutionResult(
-                effects=[
-                    ResetAbilityUsedEffect(positions),
-                    DrawTokensEffect(),
-                ]
-            )
-        return start_turn_resolve
-
+    def start_turn_resolve(self, ctx : ActionContext) -> ExecutionResult:
+        ctx.faction = self.config.faction
+        positions = BoardQuery([
+            is_ally(ctx.faction),
+            has_ability
+        ]).apply(ctx)
+        return ExecutionResult(
+            effects=[
+                ResetAbilityUsedEffect(positions),
+                DrawTokensEffect(),
+            ]
+        )
+    
     @staticmethod
     def end_turn_resolve(ctx : ActionContext) -> ExecutionResult:
         return ExecutionResult(flow_events=[EndTurnEvent()])

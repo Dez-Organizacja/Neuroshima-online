@@ -4,7 +4,6 @@ from main.workflows.providers.start_battle import StartBattleProvider
 from main.steps.config import WaitingStepConfig, ResolveStepConfig
 from main.events.data import ExecutionResult
 from main.events.flow import StartBattleEvent, EndTurnEvent
-from main.workflows.step_builders import build_end_step
 from main.input.action_handlers import ActionHandler
 
 class StartBattleWorkflow(Workflow[StartBattleProvider]):
@@ -16,16 +15,23 @@ class StartBattleWorkflow(Workflow[StartBattleProvider]):
             action_handler=ActionHandler(),
             consume_action=True
         )
-    
+
+    def build_end_step(self):
+        return ResolveStepConfig(
+            resolve_func = self.resolve_func,
+            wf_finished=False, #bo start battle konczy ture
+        )
+
     @staticmethod
     def resolve_func(ctx : ActionContext):
-        return ExecutionResult(flow_events=[
-            StartBattleEvent(),
-            EndTurnEvent()
-        ])
+        return ExecutionResult(
+            flow_events=[StartBattleEvent()]
+        )
+
+
 
     def _build_steps(self):
         return [
             self.build_waiting_step(),
-            build_end_step(self.resolve_func)
+            self.build_end_step()
         ]

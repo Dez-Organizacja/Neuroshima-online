@@ -14,17 +14,24 @@ from main.input.data import(
 )
 
 button_handler = Callable[[ActionContext], ExecutionResult]
-Button_DISPATCH = {}
+BUTTON_DISPATCH = {}
 def button_register(button : Button):
     def wrapper(func : button_handler):
-        Button_DISPATCH[button] = func
+        BUTTON_DISPATCH[button] = func
         return func
     return wrapper
 
 class ButtonHandler:
-    @classmethod
-    def handle(cls, ctx : ActionContext, action : ButtonAction) -> ExecutionResult:
-        return cls.DISPATCH[action.name](ctx)
+    @staticmethod
+    def handle(ctx : ActionContext, action : ButtonAction) -> ExecutionResult:
+        return  BUTTON_DISPATCH[action.name](ctx)
+    
+    @staticmethod
+    def can_handle(ctx : ActionContext, action : UserAction) -> bool:
+        return (
+            action.type == ActionType.BUTTON 
+            and action.name in BUTTON_DISPATCH.keys()
+        )
 
     @staticmethod
     @button_register(Button.END_TURN)
@@ -47,11 +54,6 @@ class ButtonHandler:
             effects=[DiscardTokenEffect(ctx.workflow_data.slot)],
             workflow_effects=[DeleteAbove(WorkflowName.TURN)]
         )
-    
-    @staticmethod
-    @button_register(Button.USE)
-    def handle_use(ctx : ActionContext) -> ExecutionResult:
-        return ExecutionResult()
 
 position_setter = Callable[[WorkflowData, BoardAction], None]
 class ActionHandler:
@@ -68,6 +70,7 @@ class ActionHandler:
         self.dispatch[ActionType.BOARD] = self.handle_board
         self.dispatch[ActionType.HAND] = self.handle_hand
         self.dispatch[ActionType.ROTATE] = self.handle_rotation
+        self.dispatch[ActionType.BUTTON] = self.handle_button
         
     def handle_board(self, ctx : ActionContext, action : BoardAction):
         self.setter(ctx.workflow_data, action.pos)
@@ -80,10 +83,15 @@ class ActionHandler:
     def handle_hand(ctx : ActionContext, action : HandAction) -> None:
         ctx.workflow_data.slot = action.slot
 
+    @staticmethod
+    def handle_button(ctx : ActionContext, action : ButtonAction):
+        ctx.workflow_data.button = action.name
+
+
     def handle(self, ctx : ActionContext, action : UserAction) -> ExecutionResult:
-        if action.type == ActionType.BUTTON:
-            return self.button_handler.handle(ctx, action)
-        
+        if ButtonHandler.can_handle(ctx, action):
+            return ButtonHandler.handle(ctx, action)
+
         ctx.workflow_data.type = action.type
         self.dispatch[action.type](ctx, action)
         return ExecutionResult()

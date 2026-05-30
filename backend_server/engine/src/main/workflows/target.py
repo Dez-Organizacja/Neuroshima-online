@@ -18,6 +18,7 @@ from main.board.board_query import BoardQuery
 import main.rules.predicates as pr
 from main.workflows.step_builders import BoardSelectionMixin, build_end_step
 from typing import TypeVar
+from main.tokens.board_token import BoardToken
 
 P = TypeVar("P", bound=TargetProvider)
 
@@ -48,17 +49,9 @@ class SniperWorkflow(TargetWorkflow[SniperProvider]):
 
     @staticmethod
     def resolve_func(ctx : ActionContext):
-        profile = DamageProfile(
-            can_hit_hq=False,
-            ignore_armor=True
-        )
         return ExecutionResult(
             effects=[
-                DamageEffect(
-                    pos = ctx.workflow_data.target_pos,
-                    profile=profile,
-                    power=1
-                )
+                DamageEffect(pos = ctx.workflow_data.target_pos)
             ]
         )
     
@@ -79,21 +72,20 @@ class BombWorkflow(TargetWorkflow):
     @staticmethod
     def resolve_func(ctx : ActionContext):
         pos = ctx.workflow_data.target_pos
-        query = BoardQuery([
+        positions = BoardQuery([
             pr.adjacent_to(pos),
             pr.NOT(pr.is_empty_at),
-        ])
-        positions = query.apply()
+            pr.NOT(pr.token_predicate(BoardToken.is_HQ))
+        ]).apply(ctx)
+
+        print(f"postitions {positions}")
+
         if not pr.is_empty_at(ctx, pos):
             positions.append(pos)
 
-        profile = DamageProfile(
-            can_hit_hq=False,
-            ignore_armor=True
-        )
         return ExecutionResult(
             effects=[
-                DamageEffect(pos=pos, power=1, profile=profile)
+                DamageEffect(pos)
                 for pos in positions       
             ]
         )

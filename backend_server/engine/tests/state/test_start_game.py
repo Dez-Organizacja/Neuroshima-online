@@ -11,7 +11,10 @@ class Tests:
         player = ctx.state.players.get(faction, None)
         assert isinstance(player, PlayerState)
         assert not player.pile.empty
-        assert player.hand.size in (0, 3)
+        if faction == ctx.faction:
+            assert player.hand.size == 3
+        else:
+            assert player.hand.size == 0
 
     def test_start_game(self):
         ctx = ActionContext(

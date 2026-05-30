@@ -5,6 +5,7 @@ class BoardQuery():
         self.predicates = predicates or []
 
     def matches(self, ctx : ActionContext, pos) -> bool:
+        # print(f"matching check of {pos}")
         return all(p(ctx, pos) for p in self.predicates)
 
     def apply(self, ctx : ActionContext) -> list[tuple[int, int]]:

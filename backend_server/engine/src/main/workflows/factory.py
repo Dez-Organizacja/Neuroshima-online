@@ -11,6 +11,7 @@ from main.workflows.game import GameWorkflow
 from main.workflows.dispatch import HandWorkflow, BoardWorkflow
 from main.workflows.turn import TurnWorkflow
 from main.workflows.data import WorkflowInstance, WorkflowName, WorkflowConfig
+from main.workflows.start_battle import StartBattleWorkflow
 from main.workflows.base import Workflow
 from dataclasses import dataclass
 
@@ -30,6 +31,7 @@ class WorkflowFactory:
         WorkflowName.GRENADE : WorkflowMeta(GranadeWorkflow, False),
         WorkflowName.HAND : WorkflowMeta(HandWorkflow, False),
         WorkflowName.BOARD : WorkflowMeta(BoardWorkflow, False),
+        WorkflowName.START_BATTLE : WorkflowMeta(StartBattleWorkflow, False),
 
         #configurable workflows
         WorkflowName.TURN : WorkflowMeta(TurnWorkflow, True),

@@ -6,6 +6,7 @@ from main.steps.config import InitStepConfig
 from main.state.contex import ActionContext
 
 from main.tokens.abstract_token import Token
+from main.tokens.data import Ability
 from main.tokens.token_factory import TokenFactory
 
 from main.workflows.providers.base import WorkflowActionProvider
@@ -13,7 +14,6 @@ from main.workflows.base import Workflow
 from main.workflows.data import(
     WorkflowName, 
     ABILITY_WORKFLOW_REGISTRY, 
-    WorkflowData,
 )
 from main.workflows.step_builders import build_end_step
 
@@ -31,10 +31,14 @@ class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
     def get_active_token(ctx) -> Token:
         pass
     
+    @staticmethod
+    def get_workflow_for_ability(ability : Ability):
+        return ABILITY_WORKFLOW_REGISTRY[ability]
+
     def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
         token = self.get_active_token(ctx)
         ability = token.get_ability()
-        return ABILITY_WORKFLOW_REGISTRY[ability]
+        return self.get_workflow_for_ability(ability)
     
     def build_dispatch_step(self):
         return InitStepConfig(
@@ -54,13 +58,22 @@ class HandWorkflow(DispatchActionWorkflow):
 
     @staticmethod
     def get_active_token(ctx : ActionContext) -> Token:
+        # print("get active token")
         name = ctx.player.hand.get(ctx.workflow_data.slot)
+        # print(f"name {name}")
         return TokenFactory.create(name, ctx.faction)
 
     def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
-        if self.get_active_token(ctx).get_ability() is None:
+        # print("dispatch function")
+        # print(f"ability {self.get_active_token(ctx).get_ability()}")
+        token = self.get_active_token(ctx)
+        ability = token.get_ability()
+        print(f"token {token}")
+        print(f"ability {ability}")
+        if ability is None:
             return WorkflowName.PLACE
-        return super().dispatch_function(ctx)
+        
+        return self.get_workflow_for_ability(ability)
 
     @staticmethod
     def resolve_function(ctx : ActionContext) -> ExecutionResult:
@@ -74,7 +87,7 @@ class BoardWorkflow(DispatchActionWorkflow):
 
     @staticmethod
     def get_active_token(ctx : ActionContext):
-        return ctx.board.get_tile(ctx.workflow_data.unit_pos)
+        return ctx.board.get_token(ctx.workflow_data.unit_pos)
 
     @staticmethod
     def resolve_function(ctx : ActionContext):

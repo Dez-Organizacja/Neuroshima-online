@@ -36,15 +36,9 @@ def token_predicate(func : Callable[[Token], bool]):
         return func(ctx.board.get_token(pos))
     return predicate
 
-# def is_wired_at(ctx : ActionContext, pos):
-#     return ctx.board.get_token(pos).is_wired
-
-# def is_hq_at(ctx : ActionContext, pos):
-#     return ctx.board.get_token(pos).is_HQ
-
 def adjacent_to(my_pos):
     def predicate(ctx : ActionContext, pos):
-        return pos in ctx.board.adjacent_hexes(pos)
+        return pos in ctx.board.adjacent_hexes(my_pos)
     return predicate
 
 def has_ability(ctx : ActionContext, pos):

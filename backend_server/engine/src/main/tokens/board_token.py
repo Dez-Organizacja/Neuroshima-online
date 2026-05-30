@@ -39,17 +39,11 @@ class BoardToken(AbstractToken):
         Attack.SHOOT: "SHOOT_BOOSTS"
     }
 
+    # chwilowo zadane np w trakcie bitwy
+    wounds : list[int] = field(default_factory=list)
 
     def __post_init__(self):
-        # if isinstance(self.name, dict):
-        #     data = self.name
-        #     self.name = data.get("name", "default")
-        #     self.faction = data.get("faction", "neutral")
-        #     self.ROTATION = data.get("ROTATION", 0)
-        #     self.DAMAGE = data.get("DAMAGE", 0)
-        #     self.WIRED = data.get("WIRED", False)
-
-        self.load()
+        # self.load()
         self.rotate()
         self.CLEVER_INICIATIVE = CleverIniciative(self.INITIATIVE)
         self.REAL_BOOST_TARGET = self.BOOST_TARGET
@@ -57,11 +51,14 @@ class BoardToken(AbstractToken):
     # ---------- reset ----------
 
     def load(self):
+        # print(f"loading token {self.name}")
         data = allfractions.frakcje.get(self.faction, {}).get(self.name, {})
         for key, value in data.items():
             attr_name = key.name if isinstance(key, Enum) else str(key)
+            # print(f"attr_name {attr_name}")
             if attr_name.isidentifier():
                 setattr(self, attr_name, deepcopy(value))
+        # print("load finished")
 
     def reset(self):
         self.ROTATION = 0
@@ -74,6 +71,19 @@ class BoardToken(AbstractToken):
 
     def is_HQ(self):
         return self.name == "sztab"
+
+    # --------- healer ----------
+
+    @property
+    def is_healer(self) -> bool:
+        return Boost.HEAL in self.BOOSTS.keys()
+    
+    @property
+    def needs_heal(self) -> bool:
+        return len(self.wounds) > 0
+
+    def get_heal_direction(self) -> list[int]:
+        return self.BOOSTS.get(Boost.HEAL, [])
 
     # ---------- wire ----------
 
@@ -89,6 +99,10 @@ class BoardToken(AbstractToken):
     def can_wire(self):
         return len(self.WIRE) > 0
 
+    def get_wire(self):
+        if self.WIRED:
+            return []
+        return self.WIRE
 
     # --------- rotation ----------
 
@@ -130,11 +144,6 @@ class BoardToken(AbstractToken):
 
     # boosty bierzesz token.BOOSTS -> dict | None
 
-    def get_wire(self):
-        if self.WIRED:
-            return []
-        return self.WIRE
-
     def get_boosts(self):
         if self.WIRED:
             return {}
@@ -144,19 +153,19 @@ class BoardToken(AbstractToken):
         if self.CLEVER_INICIATIVE.activate(which_initiative) or self.WIRED:
             return {}
         
-        attacks = {}
-        for attack_type, attack_list in self.ATTACKS.items():
-            boost_attr = self.BOOST_TO_ATTACK.get(attack_type)
-            boost = getattr(self, boost_attr, 0) if boost_attr is not None else 0
-            attacks[attack_type] = [
-                [direction, power + boost]
-                for direction, power in attack_list
-            ]
-        return attacks
-        
-    def get_ability(self) -> Ability:
-        return Ability.NO_ABILITY
+        # attacks = {}
+        # for attack_type, attack_list in self.ATTACKS.items():
+        #     boost_attr = self.BOOST_TO_ATTACK.get(attack_type)
+        #     boost = getattr(self, boost_attr, 0) if boost_attr is not None else 0
+        #     attacks[attack_type] = [
+        #         [direction, power + boost]
+        #         for direction, power in attack_list
+        #     ]
+        # return attacks
+        return self.ATTACKS
     
+    # --------- save and load ----------
+
     def to_dict(self) -> dict:
         data = {
             "name": self.name,

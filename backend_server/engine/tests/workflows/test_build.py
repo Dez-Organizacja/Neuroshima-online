@@ -1,4 +1,4 @@
-from main.workflows.factory import WorkflowFactory, WorkflowMeta
+from main.workflows.factory import WorkflowFactory
 from main.workflows.base import Workflow
 
 def _test_build(cls : Workflow):

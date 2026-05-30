@@ -2,30 +2,30 @@ from main.workflows.data import WorkflowName
 from main.input.data import BoardAction
 from main.events.effects import PlaceEffect
 from main.events.workflow import PopWorkflow
-
-from workflow_tester import WorkflowTester, SetupFn
-from scenario_builder import ScenarioBuilder
 from main.state.contex import ActionContext
 
+from .builder import ScenarioBuilder
+from .registry import register
 
-def test_placement():
+
+name = WorkflowName.PLACE
+@register(name)
+def placement_scenario():
     def setup_function(ctx : ActionContext):
         print(f"setup ctx {ctx}")
         ctx.workflow_data.set_slot(0)
         ctx.player.hand.add("klaun")
 
-    scenario = (
-        ScenarioBuilder(WorkflowName.PLACE)
+    return (
+        ScenarioBuilder(name)
         
         .when(BoardAction(pos = (1, 1)))
         .given(setup_function)
-        .then_data(type=BoardAction.type, unit_pos=(1, 1), slot=0)
+        .then_data_delta(type=BoardAction.type, unit_pos=(1, 1), slot=0)
 
-        .when(None)
+        .tick()
         .then_execution(
             effects = [PlaceEffect(pos=(1, 1), name="klaun", faction="moloch")],
             workflows=[PopWorkflow()]
         )
     ).build()
-
-    WorkflowTester().run(scenario)

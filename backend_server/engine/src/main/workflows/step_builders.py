@@ -13,10 +13,10 @@ from main.input.action_handlers import ActionHandler
 
 resolve_func_type = Callable[[ActionContext], ExecutionResult]
 def build_end_step(resolve_function : resolve_func_type | None = None):
-    return ResolveStepConfig(
-        resolve_func=resolve_function,
-        wf_finished=True
-    )
+    step = ResolveStepConfig(wf_finished=True)
+    if resolve_function:
+        step.resolve_func=resolve_function
+    return step
 
 P = TypeVar("P", bound=WorkflowActionProvider)
 

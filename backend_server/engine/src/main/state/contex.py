@@ -19,8 +19,12 @@ class ActionContext():
     
     @property
     def faction(self):
-        return self.state.current_fraction
+        return self.state.current_faction
     
+    @faction.setter
+    def faction(self, value):
+        self.state.current_faction = value
+
     @property
     def board(self):
         return self.state.board
@@ -38,8 +42,8 @@ class ActionContext():
         return self.state.workflow_data
     
     @workflow_data.setter
-    def workflow_data(self, vaule):
-        self.state.workflow_data = vaule
+    def workflow_data(self, value):
+        self.state.workflow_data = value
 
     @property
     def workflow_instance(self):

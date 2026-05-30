@@ -64,10 +64,6 @@ class AutomaticStep(Step[C], ABC):
 class ResolveStep(AutomaticStep[ResolveStepConfig]):
     def __init__(self, config : ResolveStepConfig):
         super().__init__(config)
-
-    @staticmethod
-    def no_resolve_func(ctx : ActionContext):
-        return ExecutionResult()
     
     def execute(self, ctx : ActionContext) -> StepResult:
         res : ExecutionResult = self.config.resolve_func(ctx)
@@ -93,6 +89,8 @@ class InitStep(AutomaticStep[InitStepConfig]):
         super().__init__(config)
 
     def execute(self, ctx : ActionContext) -> StepResult:
+        # print("executing init workflow step")
+        # print(f"decision function {self.config.decision_func}")
         effect = PushWorkflow(
             name=self.config.wf_name or self.config.decision_func(ctx),
             as_child=self.config.as_child,

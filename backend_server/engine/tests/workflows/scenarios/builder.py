@@ -1,8 +1,9 @@
 from main.workflows.data import WorkflowData, WorkflowConfig, WorkflowName
-from workflow_tester import StepCase, Scenario, FakeContext, SetupFn
+from .data import StepCase, Scenario, SetupFn
 from main.input.data import UserAction
 from main.steps.data import StepResult
 from main.events.data import ExecutionResult
+
 
 class ScenarioBuilder:
     def __init__(self, 
@@ -25,14 +26,18 @@ class ScenarioBuilder:
         self._current_step.setup = fn
         return self
 
-    def then_data(self, **fileds):
-        self._require_step()
-        self._current_step.expected_data = WorkflowData(**fileds)
-        return self
-    
-    # def then_data_delta(self, **kwargs):
+    # def then_data(self, **fileds):
     #     self._require_step()
-    #     self._current_step.expected_data = WorkflowData()
+    #     self._current_step.expected_data = WorkflowData(**fileds)
+    #     return self
+    
+    def then_data_delta(self, **kwargs):
+        self._require_step()
+        for key in kwargs:
+            if not hasattr(WorkflowData, key):
+                raise RuntimeError(f"data has not argument {key}")
+        self._current_step.data_delta = kwargs
+        return self
 
 
     def then_execution(self, *, 
@@ -52,6 +57,9 @@ class ScenarioBuilder:
         )
         return self
 
+    def tick(self):
+        return self.when(None)
+
     def _require_step(self):
         if self._current_step is None:
             raise RuntimeError("Call when() first")
@@ -60,5 +68,5 @@ class ScenarioBuilder:
         return Scenario(
             name= self.workflow_name,
             config= self.workflow_config,
-            steps = self.steps
+            steps = self.steps,
         )

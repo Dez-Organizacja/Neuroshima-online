@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from main.input.data import ActionType
 from main.tokens.data import Ability
+from main.input.data import Button
 from typing import TypeVar
 
 Hex = tuple[int, int]
@@ -39,6 +40,7 @@ class WorkflowData:
     destination : Hex | None = None
     rotation    : int | None = None
     type        : ActionType | None = None
+    button      : Button | None = None
 
     # @classmethod
     # def from_dict(cls, data):
@@ -85,3 +87,7 @@ class TurnConfig(WorkflowConfig):
 @dataclass
 class GameConfig(WorkflowConfig):
     factions : list[str]
+
+@dataclass
+class HealersConfig(WorkflowConfig):
+    faction : str

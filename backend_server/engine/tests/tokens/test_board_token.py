@@ -80,3 +80,11 @@ class TestBoardToken:
         token = BoardToken.from_dict(data)
         # assert False
         assert data == token.to_dict()
+
+    # def test_board_get_ability(self):
+    #     token = BoardToken(name="biegacz", faction="posterunek")
+    #     # print(token)
+    #     print(TokenKey.ABILITY.name)
+    #     assert TokenKey.ABILITY.name.isidentifier()
+    #     assert hasattr(token, TokenKey.ABILITY.name) 
+    #     assert token.get_ability() == Ability.MOVE

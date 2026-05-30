@@ -43,7 +43,7 @@ def print_obj(obj, deepth):
 @dataclass
 class GameState:
     factions            : list[str]
-    current_fraction    : str = ""
+    current_faction     : str = ""
     players             : dict[str, PlayerState] = field(default_factory=dict)
     board               : Board = field(default_factory=Board)
     flow_queue          : deque[FlowEvent] = field(default_factory=deque)
