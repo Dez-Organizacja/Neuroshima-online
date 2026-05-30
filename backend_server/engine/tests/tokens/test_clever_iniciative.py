@@ -30,7 +30,7 @@ class TestCleverIniciative:
         initiative.end_booster_faze()
         initiative.iniciative_boosts = 1
 
-        assert initiative.INICIATIVE == [0, -1]
+        assert initiative.iniciative == [0, -1]
         assert_activates(initiative, 1)
         assert_activates(initiative, 0)
         assert_does_not_activate(initiative, -1)
@@ -50,11 +50,11 @@ class TestCleverIniciative:
         initiative.num_of_new = 1
         initiative.end_booster_faze()
 
-        assert initiative.INICIATIVE == [2, 1]
+        assert initiative.iniciative == [2, 1]
         assert_activates(initiative, 2)
         assert_does_not_activate(initiative, 2)
 
         initiative.begin_iniciative()
 
-        assert initiative.INICIATIVE == [2]
+        assert initiative.iniciative == [2]
         assert_activates(initiative, 2)

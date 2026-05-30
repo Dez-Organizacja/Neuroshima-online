@@ -9,13 +9,13 @@ class TestBoardToken:
         token = BoardToken(name="bloker", faction="moloch")
 
         assert token.name == "bloker"
-        assert token.HP == 3
+        assert token.hp == 3
 
         # token.HP = 5
         # assert token.HP == 5
 
-        assert token.ARMOR == [0]
-        assert token.WIRED == False
+        assert token.armor == [0]
+        assert token.wired is False
 
         assert token.get_attacks(0) == {}
 
@@ -23,7 +23,7 @@ class TestBoardToken:
         token = BoardToken(name="sztab", faction="moloch")
 
         assert token.name == "sztab"
-        assert token.HP == 20
+        assert token.hp == 20
 
         # token.HP = 15
         # assert token.HP == 15
@@ -33,8 +33,8 @@ class TestBoardToken:
         assert token.get_boosts() == {
             Boost.SHOOT: [0, 1, 2, 3, 4, 5],
         }
-        assert token.ARMOR == []
-        assert token.WIRED == False
+        assert token.armor == []
+        assert token.wired is False
 
         assert token.get_attacks(1) == {}
         assert token.get_attacks(0) == {
@@ -45,31 +45,31 @@ class TestBoardToken:
         token = BoardToken(name="juggernaut", faction="moloch")
 
         assert token.name == "juggernaut"
-        assert token.HP == 2
+        assert token.hp == 2
 
         token.rotate(3)
 
-        assert token.ARMOR == [3, 5, 1]
+        assert token.armor == [3, 5, 1]
         assert token.get_attacks(1) == {
             Attack.SHOOT: [[4, 1]],
             Attack.MELEE: [[3, 2]],
         }
 
     def test_board_token4(self):
-        token = BoardToken.from_dict({"name": "juggernaut", "faction": "moloch", "ROTATION": 1, "DAMAGE": 3})
+        token = BoardToken.from_dict({"name": "juggernaut", "faction": "moloch", "rotation": 1, "damage": 3})
 
         assert token.name == "juggernaut"
-        assert token.HP == 2
+        assert token.hp == 2
 
-        assert token.DAMAGE == 3    
+        assert token.damage == 3
 
         token.rotate(2)
 
-        assert token.ARMOR == [3, 5, 1]
+        assert token.armor == [3, 5, 1]
         assert token.get_attacks(1) == {
             Attack.SHOOT: [[4, 1]],
             Attack.MELEE: [[3, 2]],
-    }
+        }
         
     def test_save_load(self):
         token = BoardToken(name="klaun", faction="moloch")

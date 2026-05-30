@@ -15,38 +15,55 @@ class BoardToken(AbstractToken):
     # name: str | dict = "default"
     type: TokenType = field(default=TokenType.BOARD, init=False)
 
-    ROTATION: int = 0
-    DAMAGE: int = 0
-    WIRED: bool = False
-    HP: int = 0
-    ARMOR: list[int] = field(default_factory=list)
-    UNIT_COUNT: int | None = None
-    ATTACKS: dict = field(default_factory=dict)
-    WIRE: list[int] = field(default_factory=list)
-    BOOSTS: dict = field(default_factory=dict)
+    rotation: int = 0
+    damage: int = 0
+    wired: bool = False
+    hp: int = 0
+    armor: list[int] = field(default_factory=list)
+    unit_count: int | None = None
+    attacks: dict = field(default_factory=dict)
+    wire_dirs: list[int] = field(default_factory=list)
+    boosts: dict = field(default_factory=dict)
 
-    REAL_BOOST_TARGET: TokenRelation | None = None
-    BOOST_TARGET: TokenRelation | None = None
+    real_boost_target: TokenRelation | None = None
+    boost_target: TokenRelation | None = None
 
-    INITIATIVE: list[int] = field(default_factory=list)
-    CLEVER_INICIATIVE: CleverIniciative | None = None
+    iniciative: list[int] = field(default_factory=list)
+    clever_iniciative: CleverIniciative | None = None
 
-    MEELE_BOOSTS: int = 0
-    SHOOT_BOOSTS: int = 0
+    meele_boosts: int = 0
+    shoot_boosts: int = 0
 
     BOOST_TO_ATTACK = {
         Attack.MELEE: "MEELE_BOOSTS",
         Attack.SHOOT: "SHOOT_BOOSTS"
     }
 
+    _LOAD_ATTR_MAP = {
+        "ROTATION": "rotation",
+        "DAMAGE": "damage",
+        "WIRED": "wired",
+        "HP": "hp",
+        "ARMOR": "armor",
+        "UNIT_COUNT": "unit_count",
+        "ATTACKS": "attacks",
+        "WIRE": "wire_dirs",
+        "BOOSTS": "boosts",
+        "BOOST_TARGET": "boost_target",
+        "INITIATIVE": "iniciative",
+        "REAL_BOOST_TARGET": "real_boost_target",
+        "MEELE_BOOSTS": "meele_boosts",
+        "SHOOT_BOOSTS": "shoot_boosts",
+    }
+
     # chwilowo zadane np w trakcie bitwy
     wounds : list[int] = field(default_factory=list)
 
     def __post_init__(self):
-        # self.load()
+        self.load()
         self.rotate()
-        self.CLEVER_INICIATIVE = CleverIniciative(self.INITIATIVE)
-        self.REAL_BOOST_TARGET = self.BOOST_TARGET
+        self.clever_iniciative = CleverIniciative(self.iniciative)
+        self.real_boost_target = self.boost_target
 
     # ---------- reset ----------
 
@@ -57,13 +74,13 @@ class BoardToken(AbstractToken):
             attr_name = key.name if isinstance(key, Enum) else str(key)
             # print(f"attr_name {attr_name}")
             if attr_name.isidentifier():
-                setattr(self, attr_name, deepcopy(value))
+                setattr(self, self._LOAD_ATTR_MAP.get(attr_name, attr_name.lower()), deepcopy(value))
         # print("load finished")
 
     def reset(self):
-        self.ROTATION = 0
-        self.DAMAGE = 0
-        self.WIRED = False
+        self.rotation = 0
+        self.damage = 0
+        self.wired = False
 
         self.load()
 
@@ -76,33 +93,33 @@ class BoardToken(AbstractToken):
 
     @property
     def is_healer(self) -> bool:
-        return Boost.HEAL in self.BOOSTS.keys()
+        return Boost.HEAL in self.boosts.keys()
     
     @property
     def needs_heal(self) -> bool:
         return len(self.wounds) > 0
 
     def get_heal_direction(self) -> list[int]:
-        return self.BOOSTS.get(Boost.HEAL, [])
+        return self.boosts.get(Boost.HEAL, [])
 
     # ---------- wire ----------
 
     def is_wired(self):
-        return self.WIRED
+        return self.wired
     
     def wire(self):
-        self.WIRED = True
+        self.wired = True
 
     def unwire(self):
-        self.WIRED = False
+        self.wired = False
 
     def can_wire(self):
-        return len(self.WIRE) > 0
+        return len(self.wire_dirs) > 0
 
     def get_wire(self):
-        if self.WIRED:
+        if self.wired:
             return []
-        return self.WIRE
+        return self.wire_dirs
 
     # --------- rotation ----------
 
@@ -110,22 +127,22 @@ class BoardToken(AbstractToken):
         self.load()
 
         if direction is not None:
-            self.ROTATION = (self.ROTATION + direction) % 6
+            self.rotation = (self.rotation + direction) % 6
 
-        for attack_type, attack_list in self.ATTACKS.items():
-            self.ATTACKS[attack_type] = [
-                [(direction + self.ROTATION) % 6, power]
+        for attack_type, attack_list in self.attacks.items():
+            self.attacks[attack_type] = [
+                [(direction + self.rotation) % 6, power]
                 for direction, power in attack_list
             ]
         
-        for boost_type, boost_list in self.BOOSTS.items():
-            self.BOOSTS[boost_type] = [
-                (direction + self.ROTATION) % 6
+        for boost_type, boost_list in self.boosts.items():
+            self.boosts[boost_type] = [
+                (direction + self.rotation) % 6
                 for direction in boost_list
             ]
 
-        self.ARMOR = [(direction + self.ROTATION) % 6 for direction in self.ARMOR]
-        self.WIRE = [(direction + self.ROTATION) % 6 for direction in self.WIRE]
+        self.armor = [(direction + self.rotation) % 6 for direction in self.armor]
+        self.wire_dirs = [(direction + self.rotation) % 6 for direction in self.wire_dirs]
 
     # --------- hp and armor ----------
 
@@ -135,34 +152,24 @@ class BoardToken(AbstractToken):
         if direction is not None:
             direction = (direction + 3) % 6
 
-            if (blockable and self.ARMOR and direction in self.ARMOR):
+            if (blockable and self.armor and direction in self.armor):
                 damage -= 1
             
-        self.DAMAGE += max(damage, 0)
+        self.damage += max(damage, 0)
 
     # --------- attacks and boosts ----------
 
     # boosty bierzesz token.BOOSTS -> dict | None
 
     def get_boosts(self):
-        if self.WIRED:
+        if self.wired:
             return {}
-        return self.BOOSTS
+        return self.boosts
 
     def get_attacks(self, which_initiative) -> dict:      
-        if self.CLEVER_INICIATIVE.activate(which_initiative) or self.WIRED:
+        if self.clever_iniciative.activate(which_initiative) or self.wired:
             return {}
-        
-        # attacks = {}
-        # for attack_type, attack_list in self.ATTACKS.items():
-        #     boost_attr = self.BOOST_TO_ATTACK.get(attack_type)
-        #     boost = getattr(self, boost_attr, 0) if boost_attr is not None else 0
-        #     attacks[attack_type] = [
-        #         [direction, power + boost]
-        #         for direction, power in attack_list
-        #     ]
-        # return attacks
-        return self.ATTACKS
+        return self.attacks
     
     # --------- save and load ----------
 
@@ -170,9 +177,9 @@ class BoardToken(AbstractToken):
         data = {
             "name": self.name,
             "faction": self.faction,
-            "ROTATION": self.ROTATION,
-            "DAMAGE": self.DAMAGE,
-            "WIRED": self.WIRED,
+            "ROTATION": self.rotation,
+            "DAMAGE": self.damage,
+            "WIRED": self.wired,
             "ability_used" : self.ability_used
         }
         return data
@@ -181,11 +188,11 @@ class BoardToken(AbstractToken):
         data = {
             "name": self.name,
             "fraction": self.fraction,
-            "ROTATION": self.ROTATION,
-            "DAMAGE": self.DAMAGE,
-            "WIRED": self.WIRED,
+            "ROTATION": self.rotation,
+            "DAMAGE": self.damage,
+            "WIRED": self.wired,
             "ability_used" : self.ability_used,
-            "clever_iniciative": self.CLEVER_INICIATIVE.export_iniciative() if self.CLEVER_INICIATIVE else None
+            "clever_iniciative": self.clever_iniciative.export_iniciative() if self.clever_iniciative else None
         }
         return data
     
@@ -197,3 +204,115 @@ class BoardToken(AbstractToken):
                 "faction": data["faction"]
             }
         return Serializator.from_dict_dataclass(cls, data)
+
+    @property
+    def INITIATIVE(self):
+        return self.iniciative
+
+    @INITIATIVE.setter
+    def INITIATIVE(self, value):
+        self.iniciative = value
+
+    @property
+    def WIRE(self):
+        return self.wire_dirs
+
+    @WIRE.setter
+    def WIRE(self, value):
+        self.wire_dirs = value
+
+    @property
+    def ROTATION(self):
+        return self.rotation
+
+    @ROTATION.setter
+    def ROTATION(self, value):
+        self.rotation = value
+
+    @property
+    def DAMAGE(self):
+        return self.damage
+
+    @DAMAGE.setter
+    def DAMAGE(self, value):
+        self.damage = value
+
+    @property
+    def WIRED(self):
+        return self.wired
+
+    @WIRED.setter
+    def WIRED(self, value):
+        self.wired = value
+
+    @property
+    def ARMOR(self):
+        return self.armor
+
+    @ARMOR.setter
+    def ARMOR(self, value):
+        self.armor = value
+
+    @property
+    def ATTACKS(self):
+        return self.attacks
+
+    @ATTACKS.setter
+    def ATTACKS(self, value):
+        self.attacks = value
+
+    @property
+    def BOOSTS(self):
+        return self.boosts
+
+    @BOOSTS.setter
+    def BOOSTS(self, value):
+        self.boosts = value
+
+    @property
+    def BOOST_TARGET(self):
+        return self.boost_target
+
+    @BOOST_TARGET.setter
+    def BOOST_TARGET(self, value):
+        self.boost_target = value
+
+    @property
+    def MEELE_BOOSTS(self):
+        return self.meele_boosts
+
+    @MEELE_BOOSTS.setter
+    def MEELE_BOOSTS(self, value):
+        self.meele_boosts = value
+
+    @property
+    def SHOOT_BOOSTS(self):
+        return self.shoot_boosts
+
+    @SHOOT_BOOSTS.setter
+    def SHOOT_BOOSTS(self, value):
+        self.shoot_boosts = value
+
+    @property
+    def REAL_BOOST_TARGET(self):
+        return self.real_boost_target
+
+    @REAL_BOOST_TARGET.setter
+    def REAL_BOOST_TARGET(self, value):
+        self.real_boost_target = value
+
+    @property
+    def HP(self):
+        return self.hp
+
+    @HP.setter
+    def HP(self, value):
+        self.hp = value
+
+    @property
+    def CLEVER_INICIATIVE(self):
+        return self.clever_iniciative
+
+    @CLEVER_INICIATIVE.setter
+    def CLEVER_INICIATIVE(self, value):
+        self.clever_iniciative = value

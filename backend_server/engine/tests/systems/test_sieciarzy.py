@@ -13,16 +13,16 @@ class TestSieciarze:
         board = Board()
 
         # [0, 5]
-        board.import_token((2, 4), {"name": "sieciarz", "faction": "moloch", "ROTATION": 1, "DAMAGE": 0})
+        board.import_token((2, 4), {"name": "sieciarz", "faction": "moloch", "rotation": 1, "damage": 0})
 
-        board.import_token((0, 4), {"name": "sieciarz", "faction": "moloch", "ROTATION": 3, "DAMAGE": 0})
+        board.import_token((0, 4), {"name": "sieciarz", "faction": "moloch", "rotation": 3, "damage": 0})
 
         # [0]
-        board.import_token((1, 3), {"name": "sieciarz", "faction": "testowa", "ROTATION": 2, "DAMAGE": 0})
+        board.import_token((1, 3), {"name": "sieciarz", "faction": "testowa", "rotation": 2, "damage": 0})
 
-        board.import_token((2, 6), {"name": "sieciarz", "faction": "testowa", "ROTATION": 0, "DAMAGE": 0})
+        board.import_token((2, 6), {"name": "sieciarz", "faction": "testowa", "rotation": 0, "damage": 0})
 
-        board.import_token((1, 5), {"name": "sieciarz", "faction": "testowa", "ROTATION": 5, "DAMAGE": 0})
+        board.import_token((1, 5), {"name": "sieciarz", "faction": "testowa", "rotation": 5, "damage": 0})
 
         # pop = defaultdict(int, {(2, 4): 1, (0, 4): 1, (1, 5): 1, (1, 3): 1, (2, 6): 2})
         pop = {(2, 4): 1, (0, 4): 1, (1, 5): 1, (1, 3): 1, (2, 6): 2}
@@ -34,7 +34,7 @@ class TestSieciarze:
 
         assert data == pop
 
-        board.import_token((1, 1), {"name": "sieciarz", "faction": "moloch", "ROTATION": 1, "DAMAGE": 0})
+        board.import_token((1, 1), {"name": "sieciarz", "faction": "moloch", "rotation": 1, "damage": 0})
 
         # pop = defaultdict(int, {(1, 1): 1, (2, 4): 1, (0, 4): 1, (1, 5): 2, (1, 3): 2, (2, 6): 2})
         pop = {(1, 1): 1, (2, 4): 1, (0, 4): 1, (1, 5): 2, (1, 3): 2, (2, 6): 2}

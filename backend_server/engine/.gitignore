@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+
+# Virtual environments
+venv/
+venv*/
+.venv/
+.env/
+env/
+ENV/
+
+# Local tool state
+.codex/
+.copilot/
+.github/copilot/
+
+# Editor / OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs and local artifacts
+*.log
+dist/
+build/
+*.egg-info/
