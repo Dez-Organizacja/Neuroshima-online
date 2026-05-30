@@ -68,7 +68,7 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         5000,
         )
     }
-    function startNewGameAWFR(playersInRoom : string[], fractions : string[]){
+    function startNewGameAWFR(playersInRoom : string[], factions : string[]){
         const room = localStorage.getItem("room");
         // console.log(fractions);
         // const message : WebSocketMessage = {
@@ -83,7 +83,7 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
             messageType : "NEWGAME_REQUEST",
             roomId : room,
             scenario : {
-                fractions : fractions
+                factions : factions
             }
         },
         ["NEWGAME_RESPONSE", "ERROR"],

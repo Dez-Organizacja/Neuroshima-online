@@ -36,7 +36,7 @@ export function RoomScreen({onSwitchToGame, onSwitchToMenu} : RoomScreenProps){
         }
         if(latestMessage.messageType == "NEWGAME_RESPONSE" && typeof latestMessage.createdGameId === "string"){
             console.log("New game started");
-            localStorage.setItem("gameID", latestMessage.createdGameId);
+            localStorage.setItem("gameId", latestMessage.createdGameId);
             onSwitchToGame();
         }
         if(latestMessage.messageType == "GETROOMSTATUS_RESPONSE" &&
@@ -100,7 +100,11 @@ export function RoomScreen({onSwitchToGame, onSwitchToMenu} : RoomScreenProps){
     }
     async function HandleStartGame() {
         // RefreshPlayersInRoom();
-        if(playersInRoom.length == 2){
+        if(!playerFactions){
+            return;
+        }
+        const length = Object.keys(playerFactions).length;
+        if(playersInRoom.length == 2 && length == 2){
             try{
                 const response = await startNewGameAWFR(playersInRoom, factions);
                 if(response.messageType == "NEWGAME_RESPONSE" && typeof response.createdGameId === "string"){
