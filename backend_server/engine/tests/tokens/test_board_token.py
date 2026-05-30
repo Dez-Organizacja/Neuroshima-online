@@ -11,8 +11,8 @@ class TestBoardToken:
         assert token.name == "bloker"
         assert token.hp == 3
 
-        # token.HP = 5
-        # assert token.HP == 5
+        # token.hp = 5
+        # assert token.hp == 5
 
         assert token.armor == [0]
         assert token.wired is False
@@ -25,8 +25,8 @@ class TestBoardToken:
         assert token.name == "sztab"
         assert token.hp == 20
 
-        # token.HP = 15
-        # assert token.HP == 15
+        # token.hp = 15
+        # assert token.hp == 15
 
         print(token.get_boosts())
 

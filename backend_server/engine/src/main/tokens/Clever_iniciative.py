@@ -96,19 +96,3 @@ class CleverIniciative():
             for initiative, is_used, is_basic in data
             if is_basic
         ]
-
-    @property
-    def INICIATIVE(self):
-        return self.iniciative
-
-    @INICIATIVE.setter
-    def INICIATIVE(self, value):
-        self.iniciative = value
-
-    @property
-    def iniciativa(self):
-        return self.iniciative
-
-    @iniciativa.setter
-    def iniciativa(self, value):
-        self.iniciative = value

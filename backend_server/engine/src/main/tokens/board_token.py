@@ -34,26 +34,19 @@ class BoardToken(AbstractToken):
     meele_boosts: int = 0
     shoot_boosts: int = 0
 
+    _LOAD_ATTR_MAP = {
+        "INITIATIVE": "iniciative",
+        "MEELE_BOOSTS": "meele_boosts",
+        "SHOOT_BOOSTS": "shoot_boosts",
+        "BOOST_TARGET": "boost_target",
+        "REAL_BOOST_TARGET": "real_boost_target",
+        "UNIT_COUNT": "unit_count",
+        "WIRE": "wire_dirs",
+    }
+
     BOOST_TO_ATTACK = {
         Attack.MELEE: "MEELE_BOOSTS",
         Attack.SHOOT: "SHOOT_BOOSTS"
-    }
-
-    _LOAD_ATTR_MAP = {
-        "ROTATION": "rotation",
-        "DAMAGE": "damage",
-        "WIRED": "wired",
-        "HP": "hp",
-        "ARMOR": "armor",
-        "UNIT_COUNT": "unit_count",
-        "ATTACKS": "attacks",
-        "WIRE": "wire_dirs",
-        "BOOSTS": "boosts",
-        "BOOST_TARGET": "boost_target",
-        "INITIATIVE": "iniciative",
-        "REAL_BOOST_TARGET": "real_boost_target",
-        "MEELE_BOOSTS": "meele_boosts",
-        "SHOOT_BOOSTS": "shoot_boosts",
     }
 
     # chwilowo zadane np w trakcie bitwy
@@ -204,115 +197,3 @@ class BoardToken(AbstractToken):
                 "faction": data["faction"]
             }
         return Serializator.from_dict_dataclass(cls, data)
-
-    @property
-    def INITIATIVE(self):
-        return self.iniciative
-
-    @INITIATIVE.setter
-    def INITIATIVE(self, value):
-        self.iniciative = value
-
-    @property
-    def WIRE(self):
-        return self.wire_dirs
-
-    @WIRE.setter
-    def WIRE(self, value):
-        self.wire_dirs = value
-
-    @property
-    def ROTATION(self):
-        return self.rotation
-
-    @ROTATION.setter
-    def ROTATION(self, value):
-        self.rotation = value
-
-    @property
-    def DAMAGE(self):
-        return self.damage
-
-    @DAMAGE.setter
-    def DAMAGE(self, value):
-        self.damage = value
-
-    @property
-    def WIRED(self):
-        return self.wired
-
-    @WIRED.setter
-    def WIRED(self, value):
-        self.wired = value
-
-    @property
-    def ARMOR(self):
-        return self.armor
-
-    @ARMOR.setter
-    def ARMOR(self, value):
-        self.armor = value
-
-    @property
-    def ATTACKS(self):
-        return self.attacks
-
-    @ATTACKS.setter
-    def ATTACKS(self, value):
-        self.attacks = value
-
-    @property
-    def BOOSTS(self):
-        return self.boosts
-
-    @BOOSTS.setter
-    def BOOSTS(self, value):
-        self.boosts = value
-
-    @property
-    def BOOST_TARGET(self):
-        return self.boost_target
-
-    @BOOST_TARGET.setter
-    def BOOST_TARGET(self, value):
-        self.boost_target = value
-
-    @property
-    def MEELE_BOOSTS(self):
-        return self.meele_boosts
-
-    @MEELE_BOOSTS.setter
-    def MEELE_BOOSTS(self, value):
-        self.meele_boosts = value
-
-    @property
-    def SHOOT_BOOSTS(self):
-        return self.shoot_boosts
-
-    @SHOOT_BOOSTS.setter
-    def SHOOT_BOOSTS(self, value):
-        self.shoot_boosts = value
-
-    @property
-    def REAL_BOOST_TARGET(self):
-        return self.real_boost_target
-
-    @REAL_BOOST_TARGET.setter
-    def REAL_BOOST_TARGET(self, value):
-        self.real_boost_target = value
-
-    @property
-    def HP(self):
-        return self.hp
-
-    @HP.setter
-    def HP(self, value):
-        self.hp = value
-
-    @property
-    def CLEVER_INICIATIVE(self):
-        return self.clever_iniciative
-
-    @CLEVER_INICIATIVE.setter
-    def CLEVER_INICIATIVE(self, value):
-        self.clever_iniciative = value

@@ -233,7 +233,7 @@ class Board:
                         # akt.frakcja[0], 
                         # akt.zasiecowany,
                         akt.name, 
-                        akt.ROTATION,
+                        akt.rotation,
                     ))
                     # row.append(akt.zeton_to_json())
             print(row)

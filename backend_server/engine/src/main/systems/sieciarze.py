@@ -41,7 +41,7 @@ class Sieciarze:
                 if akt is None:
                     continue
                 
-                wires = akt.WIRE
+                wires = akt.wire_dirs
                 if len(wires) == 0:
                     continue
 
@@ -240,7 +240,7 @@ class Sieciarze:
                 akt.wire()    
                 continue
                 
-            for kier in (akt.WIRE or []):
+            for kier in (akt.wire_dirs or []):
                 nx, ny = self.board.go(i, kier)
                 cel = self.board.get_token((nx, ny))
 
