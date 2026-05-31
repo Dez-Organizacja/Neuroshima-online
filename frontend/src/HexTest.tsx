@@ -67,10 +67,11 @@ export default function HexTest(){
 
             if (field) {
                 const Path = field.unit.faction + "/" + field.unit.name;
+                const Rotation = field.unit.ROTATION * 60;
                 console.log("{" + y + ", " + x +  "}  " + Path);
 
                 Items.push(
-                    <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
+                    <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30 + Rotation} />
                 )
             }
 
