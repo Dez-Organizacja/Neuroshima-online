@@ -22,6 +22,7 @@ class WorkflowName(Enum):
     PLACE = "place"
     START_BATTLE = "start_battle"
     GAME = "game"
+    HEAL = "heal"
 
 ABILITY_WORKFLOW_REGISTRY = {
     Ability.MOVE : WorkflowName.MOVE,

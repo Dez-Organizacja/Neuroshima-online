@@ -1,5 +1,5 @@
 from main.state.contex import ActionContext
-from main.tokens.abstract_token import Token
+from main.tokens.board_token import BoardToken
 from typing import Callable
 
 def NOT(predicate):
@@ -13,7 +13,7 @@ def is_ally(faction : str):
         return token is not None and token.faction == faction
     return predicate
 
-def is_ally_of(unit : Token):
+def is_ally_of(unit : BoardToken):
     return is_ally(unit.faction)
 
 def is_enemy(faction : str):
@@ -22,7 +22,7 @@ def is_enemy(faction : str):
         return token is not None and token.faction != faction
     return predicate
 
-def is_enemy_of(unit : Token):
+def is_enemy_of(unit : BoardToken):
     return is_enemy(unit.faction)
 
 def is_empty_at(ctx : ActionContext, pos):
@@ -31,7 +31,7 @@ def is_empty_at(ctx : ActionContext, pos):
 def is_on_border(ctx : ActionContext, pos):
     return ctx.board.on_border(pos)
 
-def token_predicate(func : Callable[[Token], bool]):
+def token_predicate(func : Callable[[BoardToken], bool]):
     def predicate(ctx : ActionContext, pos):
         return func(ctx.board.get_token(pos))
     return predicate

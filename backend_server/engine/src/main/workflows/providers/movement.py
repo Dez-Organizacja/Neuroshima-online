@@ -19,7 +19,6 @@ class MoveProvider(WorkflowActionProvider):
         return self.rules.get_destinations(ctx, ctx.workflow_data.unit_pos)
     
     def get_available_buttons(self, ctx : ActionContext):
-        idx = ctx.workflow_instance.current_step_index
         result = []
         if not ctx.workflow_data.unit_pos: # odzrucanie przed wybraniem jednostki
             result = [Button.DISCARD]
@@ -27,11 +26,14 @@ class MoveProvider(WorkflowActionProvider):
             result.append(Button.CANCEL)
         return result
 
-    def get_available_positions(self, ctx):
+    def get_available_positions(self, ctx : ActionContext) -> list[tuple[int, int]]:
         if not ctx.workflow_data.unit_pos:
-            return self.get_available_sources
+            return self.get_available_sources(ctx)
         
-        return self.get_available_destinations
+        if not ctx.workflow_data.destination:
+            return self.get_available_destinations(ctx)
+    
+        return []
         
 
 
@@ -54,7 +56,6 @@ class PushProvider(WorkflowActionProvider):
         )
 
     def get_available_buttons(self, ctx : ActionContext):
-        idx = ctx.workflow_instance.current_step_index
         result = []
         if not ctx.workflow_data.unit_pos: 
             # mozna zdiscardowac przed wybraniem swojej jednostki(zrodła)
@@ -67,9 +68,14 @@ class PushProvider(WorkflowActionProvider):
     def get_available_positions(self, ctx):
         if not ctx.workflow_data.unit_pos:
             return self.get_available_sources(ctx)
+        
         if not ctx.workflow_data.target_pos:
             return self.get_available_targets(ctx)
-        return self.get_available_destinations(ctx)
+        
+        if not ctx.workflow_data.destination:
+            return self.get_available_destinations(ctx)
+        
+        return []
     
     def get_ui_state(self, ctx):
         if ctx.workflow_data.unit_pos and not ctx.workflow_data.target_pos:

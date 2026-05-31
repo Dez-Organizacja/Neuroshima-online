@@ -1,10 +1,24 @@
 from main.workflows.data import  WorkflowInstance
 from main.workflows.factory import WorkflowFactory
 from copy import deepcopy
-from .scenarios.data import Scenario
+from .scenarios.data import Scenario, StepCase
 from .fakes import FakeContext
+from main.state.serialization import Serializator
 
 class WorkflowTester:
+    def get_expected_ctx(self, before : FakeContext, step_case : StepCase) -> FakeContext:
+        expected_ctx = before
+        for key, value in step_case.data_delta.items():
+            # print(f"changing value of key {key} to {value}")
+            setattr(expected_ctx.workflow_data, key, value)
+
+        if step_case.faction_delta is not None:
+            # print("nie None")
+            expected_ctx.faction = step_case.faction_delta
+        # print(expected_ctx)
+        # print("getting exp ctx finished")
+        return Serializator.to_dict_dataclass(expected_ctx)
+
     def run(self, scenario: Scenario):
         ctx = FakeContext(
             workflow_instance=WorkflowInstance(
@@ -26,7 +40,7 @@ class WorkflowTester:
             if step_case.setup:
                 step_case.setup(ctx)
 
-            before = deepcopy(ctx.workflow_data)
+            before = deepcopy(ctx)
             # print(f"before step exe data state")
             # print(before)
 
@@ -38,6 +52,7 @@ class WorkflowTester:
             else:
                 print("WITHOUT ACTION")
                 result = step.execute(ctx)
+                
             print("END EXECUTING")
             print("after step exe result")
             print(result)
@@ -47,14 +62,12 @@ class WorkflowTester:
 
             assert result == step_case.expected_result
 
-            # print("after step exe data state")
-            # print(ctx.workflow_data)
+            print("after step exe state")
+            print(Serializator.to_dict_dataclass(ctx))
 
-            expected_data = before
-            for key, value in step_case.data_delta.items():
-                setattr(expected_data, key, value);
+            expected_ctx = self.get_expected_ctx(before, step_case)
+            print(f"expected ctx\n{expected_ctx}")
             
-            # print(f"expected data\n{expected_data}")
-            # assert ctx.workflow_data == expected_data
+            assert Serializator.to_dict_dataclass(ctx) == expected_ctx
 
             ctx.workflow_instance.current_step_index += 1

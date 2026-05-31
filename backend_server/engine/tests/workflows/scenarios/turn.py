@@ -27,6 +27,7 @@ def turn_scenario():
         .then_execution(
             effects=[ResetAbilityUsedEffect(positions=[]), DrawTokensEffect()],
         )
+        .then_faction("moloch")
 
         .tick()
         .then_execution(
@@ -51,5 +52,6 @@ def turn_scenario():
         .then_execution(
             flow_events=[EndTurnEvent()]
         )
+        .then_faction("")
 
     ).build()

@@ -4,31 +4,41 @@ from main.board.board_query import BoardQuery
 from main.rules.predicates import (
     token_predicate,
     is_empty_at,
-    NOT
+    is_ally_of,
+    is_ally,
+    NOT,
 )
 from main.tokens.board_token import BoardToken
 
 class HealRules(AbilityRules):
-    @staticmethod
-    def get_destinations(ctx, healer_pos : tuple[int, int]):
-        return BoardQuery(
-            [token_predicate(BoardToken.needs_heal)]
-        ).apply(ctx)
-
-    @staticmethod
-    def can_heal(ctx : ActionContext, pos : tuple[int, int]) -> bool:
-        token = ctx.board.get_token(pos)
-        return (
-            not token.is_wired()
-            and not token.needs_heal
-            and token.is_healer
-            and any(HealRules.get_destinations(ctx, pos))
+    def get_targets(self, ctx : ActionContext, healer_pos : tuple[int, int]):
+        # print(f"possible getting targets for {healer_pos}")
+        healer = ctx.board.get_token(healer_pos)
+        heal_directions = healer.get_heal_directions()
+        candidates = [
+            ctx.board.go(healer_pos, direction)
+            for direction in heal_directions
+        ]
+        # print(f"candidates {candidates}")
+        possible_targets = set(
+            BoardQuery([
+                NOT(is_empty_at),
+                is_ally_of(healer),
+                token_predicate(lambda t : t.needs_heal),
+            ]).apply(ctx)
         )
+        # print(f"posible targets {possible_targets}")
+        return [pos for pos in candidates if pos in possible_targets]
 
-    @staticmethod
-    def get_sources(ctx : ActionContext):
+    def get_sources(self, ctx : ActionContext, faction : str):
+        # print(f"getting heal sources for faction {faction}")
         positions = BoardQuery([
             NOT(is_empty_at),
-            NOT(token_predicate(BoardToken.is_wired)),
-            NOT(token_predicate(BoardToken.needs_heal))
+            is_ally(faction),
+            token_predicate(lambda t : not t.is_wired()),
+            token_predicate(lambda t : not t.needs_heal),
+            token_predicate(lambda t : t.is_healer)
         ]).apply(ctx)
+
+        # print(f"positions {positions}")        
+        return [pos for pos in positions if any(self.get_targets(ctx, pos))]

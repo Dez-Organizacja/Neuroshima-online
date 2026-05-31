@@ -113,21 +113,13 @@ class Board:
             if(self.on_board(neighbor)):
                adjacents.append(neighbor)
         return adjacents 
-
-    def is_wired(self, pos) -> bool:
-        if(self.is_empty(pos)):
-            return False
-        return self.get_token(pos).is_wired()
-
+    
     def on_border(self, pos) -> bool:
         x, y = pos
         if(not self.on_board(pos)):
             return False
         cx, cy = self.CENTER
         return (abs(cx - x) > 1 or abs(cy - y) > 2)
-
-    def is_hq(self, pos) -> bool:
-        return self.get_token(pos).is_HQ() if not self.is_empty(pos) else False
 
     def get_token_position(self, name, faction) -> tuple[int, int] | None:
         for pos in self.ALL_HEXES:
@@ -184,13 +176,6 @@ class Board:
     def is_empty(self, pos):
         return self.get_token(pos) is None
 
-    def deal_damage(self, pos, direction, damage, blockable=False):
-        if(self.is_empty(pos)):
-            return
-        x, y = pos
-        
-        self.tokens[self.board[x][y]].take_damage(direction, damage, blockable)
-
     def on_board(self, pos : tuple[int, int]):
         x, y = pos
         cx, cy = self.CENTER
@@ -204,13 +189,6 @@ class Board:
             return False
         
         return True
-
-    def eliminate_dead(self):
-        for pos in self.ALL_HEXES:
-            if(self.is_empty(pos)):
-                continue
-            if(not self.get_token(pos).is_alive()):
-                self.zdejmij_zeton(pos)
 
     def go(self, pos, direction):
         x, y = pos

@@ -54,7 +54,7 @@ def bomb_scenario():
         ScenarioBuilder(name3)
         .when(BoardAction(pos=(2, 4)))
         .given(setup_function)
-        .then_data_delta(target_pos=(2, 4))
+        .then_data_delta(target_pos=(2, 4), type=ActionType.BOARD)
         .tick()
         .then_execution(
             effects=damage_effects(),

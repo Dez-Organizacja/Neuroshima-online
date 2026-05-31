@@ -45,6 +45,7 @@ class TurnWorkflow(Workflow[TurnProvider]):
     
     @staticmethod
     def end_turn_resolve(ctx : ActionContext) -> ExecutionResult:
+        ctx.faction = ""
         return ExecutionResult(flow_events=[EndTurnEvent()])
 
     def build_init_step(self):
@@ -58,7 +59,9 @@ class TurnWorkflow(Workflow[TurnProvider]):
     
     def build_dispatch_step(self):
         def decision_function(ctx : ActionContext) -> WorkflowName:
-            if ctx.workflow_data.slot:
+            print("turn dispatch function")
+            print(f"workflow data {ctx.workflow_data}")
+            if ctx.workflow_data.slot is not None:
                 return WorkflowName.HAND
             else:
                 return WorkflowName.BOARD

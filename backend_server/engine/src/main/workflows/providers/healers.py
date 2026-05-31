@@ -1,27 +1,28 @@
 from main.workflows.providers.base import WorkflowActionProvider
-from main.board.board_query import BoardQuery
 from main.state.contex import ActionContext
 from main.input.data import Button
-from main.rules.predicates import (
-    token_predicate,
-    is_empty_at,
-    NOT
-)
+from main.rules.ability.heal import HealRules
 
 class HealersProvider(WorkflowActionProvider):
-    
+    def __init__(self):
+        self.rules = HealRules()
+        
     def get_available_buttons(self, ctx : ActionContext) -> list[Button]:
         if ctx.workflow_data.unit_pos:
             return [Button.CANCEL]
 
         return []
-    
-    def get_sources(self, ctx : ActionContext) -> list[tuple[int, int]]:
-        positions = BoardQuery(
-            NOT(is_empty_at),
-            token_predicate()
-        )
 
-    def get_available_positions(self, 
-                                ctx : ActionContext
+    def get_available_positions(
+            self,
+            ctx : ActionContext,
+            faction : str,
         ) -> list[tuple[int, int]]:
+
+        if not ctx.workflow_data.unit_pos:
+            return self.rules.get_sources(ctx, faction)
+        
+        if not ctx.workflow_data.target_pos:
+            return self.rules.get_targets(ctx, ctx.workflow_data.unit_pos)
+        
+        return []

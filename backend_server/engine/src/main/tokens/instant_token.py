@@ -7,9 +7,9 @@ from dataclasses import dataclass, field
 
 @dataclass
 class InstantToken(Token):
-    type : TokenType = field(default_factory=TokenType.INSTANT, init=False)
+    type : TokenType = TokenType.INSTANT
 
     def __post_init__(self):
-        fraction_config = allfractions.frakcje.get(self.faction, {})
-        token = fraction_config.get(self.name, {})
+        faction_config = allfractions.frakcje.get(self.faction, {})
+        token = faction_config.get(self.name, {})
         self.ability = token.get(TokenKey.ABILITY, Ability.NO_ABILITY)

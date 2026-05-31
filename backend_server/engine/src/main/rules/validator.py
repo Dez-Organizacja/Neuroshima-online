@@ -19,7 +19,7 @@ class FormatValidator():
 
     def validate_board_format(self, action) -> bool:
         pos = action[Key.POS]
-        if(not isinstance(pos, tuple)):
+        if(not isinstance(pos, list)):
             return False
         if(len(pos) != 2):
             return False

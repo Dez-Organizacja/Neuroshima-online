@@ -5,14 +5,7 @@ from main.events.data import Effect
 from main.workflows.data import WorkflowData
 from main.tokens.abstract_token import Token
 
-
-@dataclass
-class DiscardTokenEffect(Effect):
-    slot: int
-
-    def apply(self, ctx: ActionContext):
-        ctx.player.hand.remove(self.slot)
-
+# ----------- moving and placing -----------
 
 @dataclass
 class MoveEffect(Effect):
@@ -22,6 +15,14 @@ class MoveEffect(Effect):
     def apply(self, ctx: ActionContext):
         ctx.board.move_token(self.from_pos, self.to_pos)
 
+@dataclass
+class RotateEffect(Effect):
+    pos: tuple[int, int]
+    rotation: int
+    recompute_passive: ClassVar[bool] = True
+
+    def apply(self, ctx: ActionContext):
+        ctx.board.rotate_token(self.pos, self.rotation)
 
 @dataclass
 class PlaceEffect(Effect):
@@ -37,6 +38,7 @@ class PlaceEffect(Effect):
             faction=self.faction,
         )
 
+# ----------- damage -----------
 
 @dataclass
 class DamageProfile:
@@ -58,16 +60,7 @@ class DamageEffect(Effect):
             blockable=self.profile.blockable,
         )
 
-
-@dataclass
-class RotateEffect(Effect):
-    pos: tuple[int, int]
-    rotation: int
-    recompute_passive: ClassVar[bool] = True
-
-    def apply(self, ctx: ActionContext):
-        ctx.board.rotate_token(self.pos, self.rotation)
-
+# ----------- removing -----------
 
 @dataclass
 class DestroyEffect(Effect):
@@ -77,6 +70,16 @@ class DestroyEffect(Effect):
     def apply(self, ctx: ActionContext):
         ctx.board.destroy_token(self.pos)
 
+@dataclass
+class RemoveDeadUnitsEffect(Effect):
+    positions: list[tuple[int, int]]
+    recompute_passive: ClassVar[bool] = True
+
+    def apply(self, ctx: ActionContext):
+        for pos in self.positions:
+            ctx.board.remove_token(pos)
+
+# ----------- unit abilitis -----------
 
 @dataclass
 class MarkAbilityUsedEffect(Effect):
@@ -96,6 +99,24 @@ class ResetAbilityUsedEffect(Effect):
             token = ctx.board.get_token(pos)
             token.ability_used = False
 
+@dataclass
+class HealEffect(Effect):
+    source_pos : tuple[int, int]
+    target_pos : tuple[int, int]
+
+    def apply(self, ctx : ActionContext):
+        healer = ctx.board.get_token(self.source_pos)
+        target = ctx.board.get_token(self.target_pos)
+        healer.take_wounds(target.pop_highest_wound())
+
+# ----------- workflow data -----------
+
+@dataclass
+class ClearWorkflowDataEffect(Effect):
+    def apply(self, ctx):
+        ctx.workflow_data = WorkflowData()
+
+# ----------- hand -----------
 
 @dataclass
 class DrawTokensEffect(Effect):
@@ -110,16 +131,8 @@ class DrawTokensEffect(Effect):
 
 
 @dataclass
-class ClearWorkflowDataEffect(Effect):
-    def apply(self, ctx):
-        ctx.workflow_data = WorkflowData()
-
-
-@dataclass
-class RemoveDeadUnitsEffect(Effect):
-    positions: list[tuple[int, int]]
-    recompute_passive: ClassVar[bool] = True
+class DiscardTokenEffect(Effect):
+    slot: int
 
     def apply(self, ctx: ActionContext):
-        for pos in self.positions:
-            ctx.board.remove_token(pos)
+        ctx.player.hand.remove(self.slot)

@@ -39,6 +39,10 @@ class ScenarioBuilder:
         self._current_step.data_delta = kwargs
         return self
 
+    def then_faction(self, faction):
+        self._require_step()
+        self._current_step.faction_delta = faction
+        return self
 
     def then_execution(self, *, 
                        effects = None, 

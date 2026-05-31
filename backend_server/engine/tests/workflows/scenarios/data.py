@@ -11,6 +11,7 @@ SetupFn = Callable[[FakeContext], None]
 class StepCase:
     expected_result : StepResult = field(default_factory=StepResult)
     data_delta : dict = field(default_factory=dict)
+    faction_delta : str | None = None
     # expected_data : WorkflowData | None = None
     action : UserAction | None = None
     setup : SetupFn | None = None

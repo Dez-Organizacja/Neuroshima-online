@@ -54,6 +54,7 @@ class SetStepConfig(AutomaticStepConfig, Generic[A]):
 
 @dataclass
 class RepeatStepConfig(AutomaticStepConfig):
+    @staticmethod
     def no_check_func(ctx : ActionContext) -> bool:
         return True
     

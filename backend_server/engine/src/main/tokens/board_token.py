@@ -75,8 +75,12 @@ class BoardToken(AbstractToken):
     def needs_heal(self) -> bool:
         return len(self.wounds) > 0
 
-    def get_heal_direction(self) -> list[int]:
+    def get_heal_directions(self) -> list[int]:
         return self.boosts.get(Boost.HEAL, [])
+    
+    def pop_highest_wound(self):
+        self.wounds.sort()
+        return self.wounds.pop(-1)
 
     # ---------- wire ----------
 
@@ -122,6 +126,10 @@ class BoardToken(AbstractToken):
 
     # --------- hp and armor ----------
 
+    def take_wounds(self, damage):
+        if damage > 0:
+            self.wounds.append(damage)
+
     def take_damage(self, direction = None, damage = 1, blockable=False):
         # direction -> from where the attack is coming, 0-5
 
@@ -131,7 +139,7 @@ class BoardToken(AbstractToken):
             if (blockable and self.armor and direction in self.armor):
                 damage -= 1
             
-        self.damage += max(damage, 0)
+        self.take_wounds(damage)
 
     # --------- attacks and boosts ----------
 
@@ -157,12 +165,16 @@ class BoardToken(AbstractToken):
             "DAMAGE": self.damage,
             "WIRED": self.wired,
             "ability_used" : self.ability_used,
-            "clever_iniciative": self.clever_iniciative.export_state() if self.clever_iniciative else None,
+            "clever_iniciative" : self.clever_iniciative.export_state() if self.clever_iniciative else None
         }
         return data
     
     def to_dict_battle(self) -> dict:
         return self.to_dict()
+        # data = self.to_dict()
+        # if self.clever_iniciative:
+        #     data["clever_iniciative"] = self.clever_iniciative.export_state()
+        # return data
     
     @classmethod
     def from_dict(cls, data: dict) -> "BoardToken":
