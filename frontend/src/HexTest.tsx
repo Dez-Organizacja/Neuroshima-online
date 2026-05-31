@@ -135,13 +135,13 @@ export default function HexTest(){
 
     // ===== End Button ===== //
     Items.push(
-        <GameButton x={RightX - Size * 2 - 100} y={height / 16} height={height / 20} width={height / 8} text={"End Turn"} />
+        <GameButton x={RightX - Size * 2 - 100} y={height / 16} height={height / 20} width={height / 8} text={"End Turn"} sendAction={sendAction} />
     )
     Items.push(
-        <GameButton x={RightX - Size * 2 - 100} y={(height / 16) + (height / 20)} height={height / 20} width={height / 8} text={"Cancel"} />
+        <GameButton x={RightX - Size * 2 - 100} y={(height / 16) + (height / 20)} height={height / 20} width={height / 8} text={"Cancel"} sendAction={sendAction}/>
     )
     Items.push(
-        <GameButton x={RightX - Size * 2 - 100} y={(height / 16) + 2 * (height / 20)} height={height / 20} width={height / 8} text={"Discard"} />
+        <GameButton x={RightX - Size * 2 - 100} y={(height / 16) + 2 * (height / 20)} height={height / 20} width={height / 8} text={"Discard"} sendAction={sendAction}/>
     )
     // ===== ========== ===== //
 

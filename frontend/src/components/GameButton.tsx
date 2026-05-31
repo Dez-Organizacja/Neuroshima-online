@@ -8,11 +8,16 @@ interface GameButtonProps {
     width: number;
     height: number;
     text: string;
+    sendAction? : (action : ActionData) => void;
+    children?: React.ReactNode;
     onClick?: () => void;
 }
 
-export function ClickButton(text: string): void {
-    const {sendAction} = useGameSocketContext();
+export function ClickButton(text: string, sendAction : ((action : ActionData) => void) | undefined): void {
+    // const {sendAction} = useGameSocketContext();
+    if(!sendAction){
+        return;
+    }
     if(text === "End Turn") {
         console.log("Your turn has ended.")
         const action: ActionData = {
@@ -44,6 +49,8 @@ export default function GameButton({
     width,
     height,
     text,
+    sendAction,
+    children,
     onClick
 }: GameButtonProps) {
 
@@ -52,7 +59,7 @@ export default function GameButton({
             className="game-button"
 
             // onClick={onClick}
-            onClick={() => ClickButton(text)}
+            onClick={() => ClickButton(text, sendAction)}
 
             style={{
                 left: x,
@@ -62,6 +69,7 @@ export default function GameButton({
             }}
         >
             {text}
+            {children}
         </div>
     );
 }
