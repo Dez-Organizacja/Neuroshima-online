@@ -1,4 +1,4 @@
-from main.workflows.data import WorkflowName, TurnConfig
+from main.workflows.data import WorkflowName, WorkflowConfig
 from main.input.data import HandAction, ActionType
 from main.events.workflow import PushWorkflow, GoToStep
 from main.events.effects import (
@@ -21,7 +21,7 @@ def turn_scenario():
             ctx.player.hand.add(name)
 
     return (
-        ScenarioBuilder(name, config=TurnConfig("moloch"))
+        ScenarioBuilder(name, config=WorkflowConfig(faction="moloch"))
         .tick()
         .given(setup_function)
         .then_execution(

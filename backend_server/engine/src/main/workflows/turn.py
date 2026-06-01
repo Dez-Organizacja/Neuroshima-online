@@ -7,7 +7,7 @@ from main.steps.config import (
 )
 from main.workflows.base import Workflow
 from main.workflows.providers.turn import TurnProvider
-from main.workflows.data import WorkflowData, WorkflowName, TurnConfig
+from main.workflows.data import WorkflowData, WorkflowName, WorkflowConfig
 from main.events.data import ExecutionResult
 from main.events.effects import (
     ResetAbilityUsedEffect, 
@@ -25,9 +25,9 @@ from typing import Callable
 from main.input.action_handlers import ActionHandler
 
 class TurnWorkflow(Workflow[TurnProvider]):
-    def __init__(self, config : TurnConfig):
+    def __init__(self, config : WorkflowConfig):
         self.rules : TurnRules = TurnRules()
-        self.config : TurnConfig = config
+        self.config : WorkflowConfig = config
         super().__init__(action_provider=TurnProvider())
 
     def start_turn_resolve(self, ctx : ActionContext) -> ExecutionResult:

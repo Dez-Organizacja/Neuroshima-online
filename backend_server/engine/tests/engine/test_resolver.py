@@ -5,7 +5,12 @@ from main.state.game_state import GameState
 from main.rules.game import GameRules
 from main.engine.resolver import Resolver
 from main.events.data import ExecutionResult
-from main.workflows.data import WorkflowInstance, WorkflowName, TurnConfig, WorkflowData
+from main.workflows.data import (
+    WorkflowInstance, 
+    WorkflowName, 
+    WorkflowData, 
+    WorkflowConfig
+)
 
 class Tests:
     @staticmethod
@@ -25,7 +30,10 @@ class Tests:
         ctx.board.put_token((1, 5), "lowca", "moloch")
         ctx.state.workflow_data = WorkflowData(slot=0, unit_pos=(1, 5))
         ctx.state.workflow_stack.extend([
-            WorkflowInstance(name=WorkflowName.TURN, config=TurnConfig("moloch")),
+            WorkflowInstance(
+                name=WorkflowName.TURN, 
+                config=WorkflowConfig(faction="moloch")
+            ),
             WorkflowInstance(name=WorkflowName.PLACE, current_step_index=0),
         ])
 

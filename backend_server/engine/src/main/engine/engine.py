@@ -4,7 +4,7 @@ from main.workflows.factory import WorkflowFactory
 from main.engine.resolver import Resolver
 from main.events.data import ExecutionResult
 from main.events.workflow import PushWorkflow
-from main.workflows.data import GameConfig, WorkflowName
+from main.workflows.data import WorkflowConfig, WorkflowName
 from main.tokens.pile_factory import PileFactory
 from main.steps.step import Step
 from main.input.data import UserAction
@@ -15,7 +15,7 @@ class GameEngine:
         self,
         resolver : Resolver,
     ):
-        self.resolver           : Resolver = resolver
+        self.resolver : Resolver = resolver
 
     @staticmethod
     def _get_step(ctx : ActionContext) -> Step:
@@ -62,7 +62,7 @@ class GameEngine:
         shuffle(ctx.state.factions)
 
     def _create_game_workflow(self, ctx : ActionContext):
-        config = GameConfig(factions=ctx.state.factions)
+        config = WorkflowConfig(factions=ctx.state.factions)
         effect = PushWorkflow(name = WorkflowName.GAME, config=config)
         result = ExecutionResult(workflow_effects=[effect])
         self.resolver.excute(ctx, result)

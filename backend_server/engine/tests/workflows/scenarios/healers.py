@@ -1,5 +1,4 @@
-from main.workflows.data import WorkflowName
-from main.workflows.data import HealersConfig
+from main.workflows.data import WorkflowName, WorkflowConfig
 from .builder import ScenarioBuilder
 from .registry import register
 from main.state.contex import ActionContext
@@ -17,7 +16,7 @@ def heal_scenario():
         ctx.board.get_token((1, 1)).rotate(1)
 
     return (
-        ScenarioBuilder(name, config=HealersConfig("moloch"))
+        ScenarioBuilder(name, config=WorkflowConfig(faction="moloch"))
         .tick()
         .given(setup_function)
         .then_execution(

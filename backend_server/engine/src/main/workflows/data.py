@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-# from main.state.serialization import from_dict_dataclass, to_dict_dataclass
 from enum import Enum
 from main.input.data import ActionType
 from main.tokens.data import Ability
@@ -10,7 +9,7 @@ Hex = tuple[int, int]
     
 class WorkflowName(Enum):
     MOVE = "move"
-    PUSH = "Push"
+    PUSH = "push"
     ROTATE = "rotate"
     BOMB = "bomb"
     GRENADE = "grenade"
@@ -70,25 +69,11 @@ class WorkflowData:
 
 @dataclass
 class WorkflowConfig:
-    pass
-
-C = TypeVar("C", bound = WorkflowConfig)
+    faction : str = ""
+    factions : list[str] = field(default_factory=list)
 
 @dataclass
 class WorkflowInstance:
     name : WorkflowName
     current_step_index : int | None = None
-    config : C | None = None
-
-
-@dataclass
-class TurnConfig(WorkflowConfig):
-    faction : str
-
-@dataclass
-class GameConfig(WorkflowConfig):
-    factions : list[str]
-
-@dataclass
-class HealersConfig(WorkflowConfig):
-    faction : str
+    config : WorkflowConfig = field(default_factory=WorkflowConfig)

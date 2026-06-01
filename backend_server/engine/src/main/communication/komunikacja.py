@@ -1,7 +1,7 @@
 from main.main import Game
 import flask
 import json
-from main.communication.action_message import ActionMessage
+from main.communication.server_message import ServerMessage
 from main.state.serialization import Serializator
 
 app = flask.Flask(__name__)
@@ -28,7 +28,7 @@ def new_game():
 def action():
     data = flask.request.get_json()
     try:
-        data = ActionMessage(**data)
+        data = ServerMessage(**data)
         game = Game(data.gameState)
         game.handle_action(data.userAction)
         return flask.jsonify({

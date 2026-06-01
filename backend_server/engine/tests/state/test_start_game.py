@@ -3,7 +3,7 @@ from main.state.contex import ActionContext
 from main.state.game_state import GameState
 from main.rules.game import GameRules
 from main.engine.resolver import Resolver
-from main.workflows.data import WorkflowName, TurnConfig
+from main.workflows.data import WorkflowName, WorkflowConfig
 from main.state.player_state import PlayerState
 
 class Tests:
@@ -27,7 +27,7 @@ class Tests:
         assert len(ctx.state.workflow_stack) == 2
         assert ctx.workflow_instance.name == WorkflowName.TURN
         assert ctx.workflow_instance.current_step_index == 2
-        assert isinstance(ctx.workflow_instance.config, TurnConfig)
+        assert isinstance(ctx.workflow_instance.config, WorkflowConfig)
         assert ctx.workflow_instance.config.faction in ["moloch", "borgo"]
 
         instance = ctx.state.workflow_stack[0]

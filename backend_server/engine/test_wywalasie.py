@@ -1,5 +1,5 @@
 import json
-from main.communication.action_message import ActionMessage
+from main.communication.server_message import ServerMessage
 from main.main import Game
 
 def execute(data):
@@ -13,7 +13,7 @@ def wczytaj(name):
     data = json.loads(data)
     
     # print(type(data))
-    return ActionMessage(**data)
+    return ServerMessage(**data)
 
 
 def test2():

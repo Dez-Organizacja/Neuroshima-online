@@ -1,7 +1,7 @@
 from main.workflows.base import Workflow
+from main.workflows.data import WorkflowConfig
 from main.workflows.providers.healers import HealersProvider
 from main.workflows.step_builders import BoardSelectionMixin
-from main.workflows.data import HealersConfig
 from main.steps.config import ResolveStepConfig, RepeatStepConfig
 from main.state.contex import ActionContext
 from main.events.data import ExecutionResult
@@ -9,7 +9,7 @@ from main.events.workflow import PopWorkflow
 from main.events.effects import HealEffect, ClearWorkflowDataEffect
 
 class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
-    def __init__(self, config : HealersConfig):
+    def __init__(self, config : WorkflowConfig):
         super().__init__(HealersProvider())
         self.faction = config.faction
 

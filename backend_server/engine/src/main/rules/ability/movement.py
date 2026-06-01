@@ -33,7 +33,7 @@ class MoveRules(AbilityRules):
     
     @staticmethod
     def can_use(ctx : ActionContext, pos : tuple[int, int]) -> bool:
-        return not ctx.board.get_tile(pos).is_wired
+        return not ctx.board.get_token(pos).is_wired
     
 class PushRules(AbilityRules):
     @staticmethod
@@ -47,9 +47,9 @@ class PushRules(AbilityRules):
     @staticmethod
     def get_targets(ctx : ActionContext, pusher_pos):
         candidates = BoardQuery([
+            is_enemy_of(ctx.board.get_token(pusher_pos)),
             adjacent_to(pusher_pos),
             NOT(token_predicate(BoardToken.is_wired)),
-            is_enemy_of(ctx.board.get_tile(pusher_pos)),
         ]).apply(ctx)
         return [pos for pos in candidates
                 if any(PushRules.get_destinations(ctx, pusher_pos, pos))]
@@ -67,7 +67,7 @@ class PushRules(AbilityRules):
 
     @staticmethod
     def can_use(ctx : ActionContext, pos : tuple[int, int]) -> bool:
-        pusher = ctx.board.get_tile(pos)
+        pusher = ctx.board.get_token(pos)
         if pusher.is_wired:
             return False
         

@@ -2,7 +2,7 @@ import json
 from collections import deque
 
 from main.state.game_state import GameState
-from main.workflows.data import WorkflowInstance, TurnConfig, WorkflowName
+from main.workflows.data import WorkflowInstance, WorkflowConfig, WorkflowName
 from main.events.data import FlowEvent
 from main.utils.variable import Attack
 
@@ -21,7 +21,7 @@ def test_game_state_serialization_roundtrip():
     state.workflow_stack.append(
         WorkflowInstance(
             name=WorkflowName.TURN,
-            config=TurnConfig("borgo"),
+            config=WorkflowConfig(faction="borgo"),
             current_step_index=2
         )
     )
