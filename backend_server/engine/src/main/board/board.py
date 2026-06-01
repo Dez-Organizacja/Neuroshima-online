@@ -1,5 +1,6 @@
 from __future__ import annotations
 from main.tokens.board_token import BoardToken
+from main.tokens.data import BoardType
 from main.utils.variable import *
 from dataclasses import dataclass
 from main.state.serialization import Serializator
@@ -127,6 +128,9 @@ class Board:
             if token and token.name == name and token.faction == faction:
                 return pos
         return None
+    
+    def get_hq_pos(self, faction) -> tuple[int, int] | None:
+        return self.get_token_position(name=BoardType.HQ.value, faction=faction)
 
     # ----------- placing and moving tokens ----------
 

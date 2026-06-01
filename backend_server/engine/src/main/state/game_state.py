@@ -2,11 +2,10 @@ from dataclasses import dataclass, field
 from main.utils.variable import *
 from main.state.player_state import PlayerState
 from main.board.board import Board
-from main.events.data import FlowEvent
+from main.events.data import FlowEvent, Effect
 from collections import deque
 from main.workflows.data import WorkflowData, WorkflowInstance
 from main.state.serialization import Serializator
-from main.tokens.pile_factory import PileFactory
 
 def print_obj(obj, deepth):
     base_s = "\n" + "   " * deepth
@@ -42,11 +41,19 @@ def print_obj(obj, deepth):
 
 @dataclass
 class GameState:
+    # --------- factions ----------
     factions            : list[str]
     current_faction     : str = ""
+
+    # --------- tokens ----------
     players             : dict[str, PlayerState] = field(default_factory=dict)
     board               : Board = field(default_factory=Board)
+    
+    # --------- events ----------
     flow_queue          : deque[FlowEvent] = field(default_factory=deque)
+    # pending_damage      : list[Effect] = field(default_factory=list)
+
+    # --------- workflows ----------
     workflow_data       : WorkflowData = field(default_factory=WorkflowData)
     workflow_stack      : list[WorkflowInstance] = field(default_factory=list)
 

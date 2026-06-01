@@ -78,7 +78,7 @@ class PushProvider(WorkflowActionProvider):
         return []
     
     def get_ui_state(self, ctx):
-        if ctx.workflow_data.unit_pos and not ctx.workflow_data.target_pos:
+        if ctx.workflow_data.target_pos and ctx.workflow_data.destination is None:
             return StepUIState(faction=GameRules.get_enemy(ctx, ctx.faction))
         
         return super().get_ui_state(ctx)

@@ -1,23 +1,27 @@
 from main.workflows.base import Workflow
 from main.workflows.providers.placement import PlacementProvider
-from main.workflows.step_builders import BoardSelectionMixin
+from main.workflows.step_builders import BoardSelectionMixin, build_end_step
 from main.state.contex import ActionContext
+from main.workflows.data import WorkflowName
+from main.events.workflow import PushWorkflow
 from main.events.effects import PlaceEffect
 from main.events.data import ExecutionResult
-from main.workflows.step_builders import build_end_step
 
 class PlaceWorkflow(Workflow[PlacementProvider], BoardSelectionMixin, ):
     def __init__(self):
         super().__init__(action_provider=PlacementProvider())
 
     def resolve_function(self, ctx : ActionContext):
-        return ExecutionResult(effects=[
-            PlaceEffect(
-                pos = ctx.workflow_data.unit_pos,
-                name = ctx.player.hand.get(ctx.workflow_data.slot),
-                faction= ctx.faction
-            )
-        ])
+        return ExecutionResult(
+            effects=[
+                PlaceEffect(
+                    pos = ctx.workflow_data.unit_pos,
+                    name = ctx.player.hand.get(ctx.workflow_data.slot),
+                    faction= ctx.faction
+                )
+            ],
+            # workflow_effects=[PushWorkflow(name=WorkflowName.ROTATE)]
+        )
 
     def _build_steps(self):
         return [

@@ -15,7 +15,7 @@ class TargetProvider(ABC, WorkflowActionProvider):
         pass
 
     def get_available_positions(self, ctx):
-        return self.get_available_targets
+        return self.get_available_targets(ctx)
 
 class SniperProvider(TargetProvider):
     def get_available_targets(self, ctx : ActionContext):
@@ -34,8 +34,8 @@ class GrenadeProvider(TargetProvider):
     @staticmethod
     def get_available_targets(ctx : ActionContext):
         pos = ctx.board.get_hq_pos(ctx.faction)
-        hq = ctx.board.get_tile(pos)
-        if hq.is_wired:
+        hq = ctx.board.get_token(pos)
+        if hq.is_wired():
             return []
 
         return BoardQuery([

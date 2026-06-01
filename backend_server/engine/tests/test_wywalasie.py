@@ -1,6 +1,7 @@
 import json
 from main.communication.server_message import ServerMessage
 from main.main import Game
+from pathlib import Path
 
 def execute(data):
     game = Game(data.gameState)
@@ -8,7 +9,9 @@ def execute(data):
     return game
 
 def wczytaj(name):
-    with open(name, "r") as file:
+    current_dir = Path(__file__).parent
+    path = current_dir / name
+    with open(path, "r") as file:
         data = file.read()
     data = json.loads(data)
     
@@ -16,7 +19,7 @@ def wczytaj(name):
     return ServerMessage(**data)
 
 
-def test2():
+def test1():
     data = wczytaj("zle2.json")
     game = execute(data)
 

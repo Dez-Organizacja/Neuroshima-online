@@ -9,6 +9,10 @@ class BoosterSolver():
     boosts: list[tuple[int, Boost]] # (tokenID -> to, boost)]
     steal_boosts: list[tuple[int, Boost]] # (tokenID -> from, boost)]
     
+    @classmethod
+    def compute(cls, board : Board):
+        cls(board)
+
     def __init__(self, board: Board) -> None:
         self.board = board
         self.boosts = []

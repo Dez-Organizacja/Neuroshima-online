@@ -9,7 +9,7 @@ class Resolver():
         for event in events:
             event.apply(ctx)
             if event.recompute_passive:
-                dirty = True
+                dirty = True    
 
         if dirty:
             PassiveSystems.compute(ctx)

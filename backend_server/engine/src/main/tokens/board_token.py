@@ -163,6 +163,7 @@ class BoardToken(AbstractToken):
             "faction": self.faction,
             "ROTATION": self.rotation,
             "DAMAGE": self.damage,
+            "wounds": self.wounds,
             "WIRED": self.wired,
             "ability_used" : self.ability_used,
             "clever_iniciative" : self.clever_iniciative.export_state() if self.clever_iniciative else None

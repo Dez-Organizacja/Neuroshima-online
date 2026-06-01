@@ -29,7 +29,7 @@ ABILITY_WORKFLOW_REGISTRY = {
     Ability.GRENADE : WorkflowName.GRENADE,
     Ability.SNIPER : WorkflowName.SNIPER,
     Ability.PUSH : WorkflowName.PUSH,
-    Ability.BATTLE : WorkflowName.BATTLE,
+    Ability.BATTLE : WorkflowName.START_BATTLE,
 }
     
 @dataclass

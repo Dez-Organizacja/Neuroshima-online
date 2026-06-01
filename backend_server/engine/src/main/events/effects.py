@@ -60,6 +60,9 @@ class DamageEffect(Effect):
             blockable=self.profile.blockable,
         )
 
+    # def resolve(self, ctx : ActionContext):
+        
+
 # ----------- removing -----------
 
 @dataclass
