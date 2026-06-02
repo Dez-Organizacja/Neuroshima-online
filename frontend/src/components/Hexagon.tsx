@@ -4,6 +4,7 @@ import "./Hexagon.css";
 import { ActionData } from "./ActionTypes"
 import { useGameSocketContext } from "../websockets/gameSocketContext";
 import { useProcesedGameState, GameState } from "../Dlaigora";
+
 type HexagonProps = {
     x: number;
     y: number;

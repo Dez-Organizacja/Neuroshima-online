@@ -2,6 +2,8 @@ import React from "react";
 import "./GameButton.css";
 import { ActionData } from "./ActionTypes";
 import { useGameSocketContext } from "../websockets/gameSocketContext";
+import { GameState } from "../Dlaigora";
+
 interface GameButtonProps {
     x: number;
     y: number;
@@ -11,10 +13,14 @@ interface GameButtonProps {
     sendAction? : (action : ActionData) => void;
     children?: React.ReactNode;
     onClick?: () => void;
+    gameState: GameState;
 }
 
-export function ClickButton(text: string, sendAction : ((action : ActionData) => void) | undefined): void {
+export function ClickButton(text: string, sendAction : ((action : ActionData) => void) | undefined, gameState: GameState | undefined): void {
     // const {sendAction} = useGameSocketContext();
+    if(!gameState) return;
+    const field = gameState.view.availableActions.buttons.find(field => field === text);
+    if(!field) return;
     if(!sendAction){
         return;
     }
@@ -51,7 +57,8 @@ export default function GameButton({
     text,
     sendAction,
     children,
-    onClick
+    onClick,
+    gameState
 }: GameButtonProps) {
 
     return (
@@ -59,7 +66,7 @@ export default function GameButton({
             className="game-button"
 
             // onClick={onClick}
-            onClick={() => ClickButton(text, sendAction)}
+            onClick={() => ClickButton(text, sendAction, gameState)}
 
             style={{
                 left: x,
