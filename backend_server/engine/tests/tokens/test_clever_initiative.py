@@ -1,4 +1,4 @@
-from main.tokens.Clever_iniciative import CleverIniciative
+from main.tokens.clever_initiative import CleverInitiative
 
 def assert_activates(initiative, value):
     assert initiative.activate(value) is False
@@ -6,9 +6,9 @@ def assert_activates(initiative, value):
 def assert_does_not_activate(initiative, value):
     assert initiative.activate(value) is True
 
-class TestCleverIniciative:
+class TestCleverInitiative:
     def test_CI1(self):
-        initiative = CleverIniciative([2, 1])
+        initiative = CleverInitiative([2, 1])
 
         assert_activates(initiative, 2)
         assert_does_not_activate(initiative, 2)
@@ -17,7 +17,7 @@ class TestCleverIniciative:
         assert_does_not_activate(initiative, 1)
 
     def test_CI2(self):
-        initiative = CleverIniciative([2, 1])
+        initiative = CleverInitiative([2, 1])
         initiative.iniciative_boosts = 1
 
         assert_activates(initiative, 3)
@@ -25,7 +25,7 @@ class TestCleverIniciative:
         assert_does_not_activate(initiative, 1)
 
     def test_CI3(self):
-        initiative = CleverIniciative([0])
+        initiative = CleverInitiative([0])
         initiative.num_of_new = 1
         initiative.end_booster_faze()
         initiative.iniciative_boosts = 1
@@ -36,7 +36,7 @@ class TestCleverIniciative:
         assert_does_not_activate(initiative, -1)
 
     def test_CI4(self):
-        initiative = CleverIniciative([3, 1])
+        initiative = CleverInitiative([3, 1])
         initiative.iniciative_boosts = 2
         initiative.is_blocked_to_0 = True
 
@@ -46,7 +46,7 @@ class TestCleverIniciative:
 
 
     def test_CI5(self):
-        initiative = CleverIniciative([2])
+        initiative = CleverInitiative([2])
         initiative.num_of_new = 1
         initiative.end_booster_faze()
 
@@ -60,7 +60,7 @@ class TestCleverIniciative:
         assert_activates(initiative, 2)
 
     def test_import_export_preserves_used_and_basic_initiatives(self):
-        initiative = CleverIniciative([2])
+        initiative = CleverInitiative([2])
         initiative.num_of_new = 1
         initiative.end_booster_faze()
 
@@ -71,7 +71,7 @@ class TestCleverIniciative:
 
         assert_activates(initiative, 2)
 
-        restored = CleverIniciative([])
+        restored = CleverInitiative([])
         restored.import_state(initiative.export_state())
 
         assert restored.export_state() == initiative.export_state()
@@ -83,11 +83,11 @@ class TestCleverIniciative:
         assert restored.export_iniciative() == [[2, False, True]]
 
     def test_import_export_preserves_battle_modifiers(self):
-        initiative = CleverIniciative([3, 1])
+        initiative = CleverInitiative([3, 1])
         initiative.iniciative_boosts = 2
         initiative.is_blocked_to_0 = True
 
-        restored = CleverIniciative([])
+        restored = CleverInitiative([])
         restored.import_state(initiative.export_state())
 
         assert restored.iniciative_boosts == 2

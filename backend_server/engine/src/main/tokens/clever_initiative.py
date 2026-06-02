@@ -1,4 +1,4 @@
-class CleverIniciative():
+class CleverInitiative():
     initiative: list[int]
     is_used: list[bool]
     is_basic: list[bool]

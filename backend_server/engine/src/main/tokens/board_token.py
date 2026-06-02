@@ -4,7 +4,7 @@ from enum import Enum
 
 import main.frakcje.wszystkie_frakcje as allfractions
 from main.tokens.data import Ability
-from main.tokens.Clever_iniciative import CleverIniciative
+from main.tokens.clever_initiative import CleverInitiative
 from main.tokens.abstract_token import Token as AbstractToken
 from main.tokens.data import TokenKey, TokenType, TokenRelation
 from main.utils.variable import Attack, Boost
@@ -29,7 +29,7 @@ class BoardToken(AbstractToken):
     boost_target: TokenRelation | None = None
 
     initiative: list[int] = field(default_factory=list)
-    clever_iniciative: CleverIniciative | None = None
+    clever_initiative: CleverInitiative | None = None
 
     meele_boosts: int = 0
     shoot_boosts: int = 0
@@ -38,9 +38,16 @@ class BoardToken(AbstractToken):
     wounds : list[int] = field(default_factory=list)
 
     def __post_init__(self):
+        clever_initiative_data = self.clever_initiative
         self.load()
         self.rotate()
-        self.clever_iniciative = CleverIniciative(self.initiative)
+        
+        self.clever_initiative = CleverInitiative(self.initiative)
+        if clever_initiative_data is not None:
+            if isinstance(clever_initiative_data, CleverInitiative):
+                self.clever_initiative.import_state(clever_initiative_data.export_state())
+            else:
+                self.clever_initiative.import_state(clever_initiative_data)
         self.real_boost_target = self.boost_target
 
     # ---------- reset ----------
@@ -151,7 +158,7 @@ class BoardToken(AbstractToken):
         return self.boosts
 
     def get_attacks(self, which_initiative) -> dict:      
-        if self.clever_iniciative.activate(which_initiative) or self.wired:
+        if self.clever_initiative.activate(which_initiative) or self.wired:
             return {}
         return self.attacks
     
@@ -161,48 +168,30 @@ class BoardToken(AbstractToken):
         data = {
             "name": self.name,
             "faction": self.faction,
-            "ROTATION": self.rotation,
-            "DAMAGE": self.damage,
+            "hp": self.hp,
+            "rotation": self.rotation,
+            "damage": self.damage,
             "wounds": self.wounds,
-            "WIRED": self.wired,
-            "ability_used" : self.ability_used,
-            "clever_iniciative" : self.clever_iniciative.export_state() if self.clever_iniciative else None
+            "wired": self.wired,
         }
         return data
     
     def to_dict_battle(self) -> dict:
-        return self.to_dict()
-        # data = self.to_dict()
-        # if self.clever_iniciative:
-        #     data["clever_iniciative"] = self.clever_iniciative.export_state()
-        # return data
+        data = self.to_dict()
+
+        data["ability_used"] = self.ability_used
+        data["clever_iniciative"] = self.clever_initiative.export_state() if self.clever_initiative else None
+
+        return data
     
     @classmethod
     def from_dict(cls, data: dict) -> "BoardToken":
-        data = cls._normalize_dict(data)
-        clever_iniciative_data = data.pop("clever_iniciative", None)
-        token = Serializator.from_dict_dataclass(cls, data)
-        if clever_iniciative_data is not None and token.clever_iniciative is not None:
-            token.clever_iniciative.import_state(clever_iniciative_data)
-        return token
-
-    @staticmethod
-    def _normalize_dict(data: dict) -> dict:
         normalized = dict(data)
+        clever_initiative_data = normalized.pop("clever_initiative", None)
+        if clever_initiative_data is None:
+            clever_initiative_data = normalized.pop("clever_iniciative", None)
 
-        if "fraction" in normalized and "faction" not in normalized:
-            normalized["faction"] = normalized["fraction"]
-
-        if "clever_initiative" in normalized and "clever_iniciative" not in normalized:
-            normalized["clever_iniciative"] = normalized["clever_initiative"]
-
-        legacy_keys = {
-            "ROTATION": "rotation",
-            "DAMAGE": "damage",
-            "WIRED": "wired",
-        }
-        for legacy_key, field_name in legacy_keys.items():
-            if legacy_key in normalized and field_name not in normalized:
-                normalized[field_name] = normalized[legacy_key]
-
-        return normalized
+        token = Serializator.from_dict_dataclass(cls, normalized)
+        if clever_initiative_data is not None and token.clever_initiative is not None:
+            token.clever_initiative.import_state(clever_initiative_data)
+        return token

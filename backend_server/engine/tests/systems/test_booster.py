@@ -2,19 +2,19 @@ import pytest
 
 from main.board.board import Board
 from main.systems.boosters import BoosterSolver
-from main.tokens.Clever_iniciative import CleverIniciative
+from main.tokens.clever_initiative import CleverInitiative
 
 def solve_boosters(board):
     BoosterSolver(board)
 
 def initiatives(board, pos):
-    return board.get_token(pos).clever_iniciative.initiative
+    return board.get_token(pos).clever_initiative.initiative
 
 def activates_at(board, pos, initiative, can = False):
-    return can == board.get_token(pos).clever_iniciative.activate(initiative)
+    return can == board.get_token(pos).clever_initiative.activate(initiative)
 
 def can_activates_at(board, pos, initiative, can):
-    return can == board.get_token(pos).clever_iniciative.can_activate(initiative)
+    return can == board.get_token(pos).clever_initiative.can_activate(initiative)
 
 class TestBoost:
     def test_boost1(self):
@@ -68,9 +68,9 @@ class TestBoost:
 
         solve_boosters(board)
 
-        assert board.get_token((1, 5)).clever_iniciative.iniciative_boosts == 1
-        assert board.get_token((2, 6)).clever_iniciative.iniciative_boosts == 1
-        assert board.get_token((1, 3)).clever_iniciative.iniciative_boosts == 0
+        assert board.get_token((1, 5)).clever_initiative.iniciative_boosts == 1
+        assert board.get_token((2, 6)).clever_initiative.iniciative_boosts == 1
+        assert board.get_token((1, 3)).clever_initiative.iniciative_boosts == 0
 
 
     def test_boost4(self):
@@ -116,7 +116,7 @@ class TestBoost:
 
         board.import_token((2, 4), {"name": "klaun", "faction": "moloch", "rotation": 0})
         board.import_token((3, 3), {"name": "matka", "faction": "moloch", "rotation": 0})
-        board.get_token((2, 4)).clever_iniciative = CleverIniciative([3, 1])
+        board.get_token((2, 4)).clever_initiative = CleverInitiative([3, 1])
 
         solve_boosters(board)
 
@@ -158,7 +158,7 @@ class TestBoost:
         solve_boosters(board)
 
         assert initiatives(board, (2, 4)) == [2, 1]
-        assert board.get_token((2, 4)).clever_iniciative.iniciative_boosts == 1
+        assert board.get_token((2, 4)).clever_initiative.iniciative_boosts == 1
         assert activates_at(board, (2, 4), 3)
         assert activates_at(board, (2, 4), 2)
         assert not activates_at(board, (2, 4), 1)
@@ -175,11 +175,11 @@ class TestBoost:
         solve_boosters(board)
 
         assert initiatives(board, (2, 4)) == [0, -1]
-        assert board.get_token((2, 4)).clever_iniciative.iniciative_boosts == 1
+        assert board.get_token((2, 4)).clever_initiative.iniciative_boosts == 1
 
         solve_boosters(board)
 
-        assert board.get_token((2, 4)).clever_iniciative.iniciative_boosts == 1
+        assert board.get_token((2, 4)).clever_initiative.iniciative_boosts == 1
         assert activates_at(board, (2, 4), 1)
         assert activates_at(board, (2, 4), 0)
         assert not activates_at(board, (2, 4), -1)

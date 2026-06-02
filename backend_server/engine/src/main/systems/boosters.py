@@ -37,7 +37,7 @@ class BoosterSolver():
             token.boost_target = token.real_boost_target
             token.meele_boosts = 0
             token.shoot_boosts = 0
-            token.clever_iniciative.begin_iniciative()
+            token.clever_initiative.begin_iniciative()
 
     def is_valid_target(self, tokenID : int, relation : TokenRelation, my_fraction : str) -> bool:
         if (tokenID is None):
@@ -99,7 +99,7 @@ class BoosterSolver():
 
     def end_booster_faze(self):
         for token in self.board.tokens.values():
-            token.clever_iniciative.end_booster_faze()
+            token.clever_initiative.end_booster_faze()
 
     def melee(self, tokenID):
         self.board.tokens[tokenID].meele_boosts += 1
@@ -108,16 +108,16 @@ class BoosterSolver():
         self.board.tokens[tokenID].shoot_boosts += 1
 
     def initiative(self, tokenID):
-        self.board.tokens[tokenID].clever_iniciative.iniciative_boosts += 1
+        self.board.tokens[tokenID].clever_initiative.iniciative_boosts += 1
 
     def minus_initiative(self, tokenID):
-        self.board.tokens[tokenID].clever_iniciative.iniciative_boosts -= 1
+        self.board.tokens[tokenID].clever_initiative.iniciative_boosts -= 1
  
     def new_initiative(self, tokenID):
-        self.board.tokens[tokenID].clever_iniciative.num_of_new += 1
+        self.board.tokens[tokenID].clever_initiative.num_of_new += 1
 
     def set_initiative_to_0(self, tokenID):
-        self.board.tokens[tokenID].clever_iniciative.is_blocked_to_0 = True
+        self.board.tokens[tokenID].clever_initiative.is_blocked_to_0 = True
     
     def meele_to_shoot(self, tokenID):
         return NotImplemented

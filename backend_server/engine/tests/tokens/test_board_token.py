@@ -3,6 +3,7 @@ import pytest
 from main.tokens.board_token import BoardToken
 from main.tokens.data import *
 from main.utils.variable import *
+from main.state.serialization import Serializator
 
 class TestBoardToken:
     def test_board_token1(self):
@@ -80,6 +81,38 @@ class TestBoardToken:
         token = BoardToken.from_dict(data)
         # assert False
         assert data == token.to_dict()
+
+    def test_constructor_keeps_clever_initiative_state(self):
+        data = {
+            "name": "klaun",
+            "faction": "moloch",
+            "clever_initiative": {
+                "initiative": [[2, True, True], [1, False, False]],
+                "is_blocked_to_0": False,
+                "iniciative_boosts": 0,
+                "num_of_new": 1,
+            },
+        }
+
+        token = BoardToken(**data)
+
+        assert token.clever_initiative.export_state() == data["clever_initiative"]
+
+    def test_serializator_keeps_clever_initiative_state(self):
+        data = {
+            "name": "klaun",
+            "faction": "moloch",
+            "clever_initiative": {
+                "initiative": [[2, True, True], [1, False, False]],
+                "is_blocked_to_0": False,
+                "iniciative_boosts": 0,
+                "num_of_new": 1,
+            },
+        }
+
+        token = Serializator.from_dict_dataclass(BoardToken, data)
+
+        assert token.clever_initiative.export_state() == data["clever_initiative"]
 
     # def test_board_get_ability(self):
     #     token = BoardToken(name="biegacz", faction="posterunek")

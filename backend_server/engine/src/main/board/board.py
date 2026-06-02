@@ -238,6 +238,9 @@ class Board:
 
     def to_list(self) -> list:
         return [
-            Tile(pos=self.where_am_i[id], unit=token).to_dict()
+            {
+                "pos": list(self.where_am_i[id]),
+                "unit": token.to_dict_battle(),
+            }
             for id, token in self.tokens.items()
         ]
