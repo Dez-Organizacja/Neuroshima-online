@@ -17,6 +17,9 @@ interface GameButtonProps {
 }
 
 export function ClickButton(text: string, sendAction : ((action : ActionData) => void) | undefined, gameState: GameState | undefined): void {
+    if(text === "End Turn") {text="end_turn";}
+    if(text === "Cancel") {text="cancel";}
+    if(text === "Discard") {text="discard";}
     // const {sendAction} = useGameSocketContext();
     if(!gameState) return;
     const field = gameState.view.availableActions.buttons.find(field => field === text);
@@ -24,14 +27,14 @@ export function ClickButton(text: string, sendAction : ((action : ActionData) =>
     if(!sendAction){
         return;
     }
-    if(text === "End Turn") {
+    if(text === "end_turn") {
         console.log("Your turn has ended.")
         const action: ActionData = {
             type: "button",
             name: "end_turn"
         }
         sendAction(action);
-    } else if(text === "Cancel") {
+    } else if(text === "cancel") {
         console.log("Cancel.");
 
         const action: ActionData = {
@@ -39,7 +42,7 @@ export function ClickButton(text: string, sendAction : ((action : ActionData) =>
             name: "cancel"
         }
         sendAction(action);
-    } else if(text === "Discard") {
+    } else if(text === "discard") {
         console.log("Discard.");
         const action: ActionData = {
             type: "button",
