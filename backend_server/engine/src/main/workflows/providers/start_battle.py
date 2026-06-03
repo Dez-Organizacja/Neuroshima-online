@@ -4,7 +4,7 @@ from main.state.contex import ActionContext
 from main.input.data import Button
 
 class StartBattleProvider(WorkflowActionProvider):
-    def __int__(self):
+    def __init__(self):
         self.rules = BattleRules()
 
     def get_available_buttons(self, ctx : ActionContext):

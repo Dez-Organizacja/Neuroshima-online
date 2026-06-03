@@ -85,40 +85,40 @@ wlasciwosci = {
         },
         TokenStats.INITIATIVE: [2]
     },
-    "szerszen": {
-        TokenKey.TYPE : TokenType.BOARD,
-        TokenKey.UNIT_COUNT : 1,
-        TokenStats.HP: 1,
-        TokenStats.ATTACKS : {
-            Attack.MELEE: [[0, 2]],
-        },
-        TokenStats.INITIATIVE: [2]
-    },
-    "sieciarz": {
-        TokenKey.TYPE : TokenType.BOARD,
-        TokenKey.UNIT_COUNT : 1,
-        TokenStats.HP: 1,
-        TokenStats.WIRE: [0, 5]
-    },
-    "szturmowiec": {
-        TokenKey.TYPE : TokenType.BOARD,
-        TokenKey.UNIT_COUNT : 1,
-        TokenStats.HP: 2,
-        TokenStats.ATTACKS : {
-            Attack.SHOOT: [[0, 1]],
-        },
-        TokenStats.INITIATIVE: [1, 2]
-    },
-    "wartownik": {
-        TokenKey.TYPE : TokenType.BOARD,
-        TokenKey.UNIT_COUNT : 1,
-        TokenStats.HP: 1,
-        TokenStats.ARMOR: [0],
-        TokenStats.ATTACKS : {
-            Attack.SHOOT: [[1, 1], [5, 1]],
-        },
-        TokenStats.INITIATIVE: [2]
-    },
+    # "szerszen": {
+    #     TokenKey.TYPE : TokenType.BOARD,
+    #     TokenKey.UNIT_COUNT : 1,
+    #     TokenStats.HP: 1,
+    #     TokenStats.ATTACKS : {
+    #         Attack.MELEE: [[0, 2]],
+    #     },
+    #     TokenStats.INITIATIVE: [2]
+    # },
+    # "sieciarz": {
+    #     TokenKey.TYPE : TokenType.BOARD,
+    #     TokenKey.UNIT_COUNT : 1,
+    #     TokenStats.HP: 1,
+    #     TokenStats.WIRE: [0, 5]
+    # },
+    # "szturmowiec": {
+    #     TokenKey.TYPE : TokenType.BOARD,
+    #     TokenKey.UNIT_COUNT : 1,
+    #     TokenStats.HP: 2,
+    #     TokenStats.ATTACKS : {
+    #         Attack.SHOOT: [[0, 1]],
+    #     },
+    #     TokenStats.INITIATIVE: [1, 2]
+    # },
+    # "wartownik": {
+    #     TokenKey.TYPE : TokenType.BOARD,
+    #     TokenKey.UNIT_COUNT : 1,
+    #     TokenStats.HP: 1,
+    #     TokenStats.ARMOR: [0],
+    #     TokenStats.ATTACKS : {
+    #         Attack.SHOOT: [[1, 1], [5, 1]],
+    #     },
+    #     TokenStats.INITIATIVE: [2]
+    # },
     "sztab": {
         TokenKey.TYPE : TokenType.BOARD,
         TokenKey.UNIT_COUNT : 1,
@@ -152,34 +152,34 @@ wlasciwosci = {
         },
         TokenStats.BOOST_TARGET: TokenRelation.OWN
     },
-    "matka": {
-        TokenKey.TYPE : TokenType.BOARD,
-        TokenKey.UNIT_COUNT : 1,
-        TokenStats.HP: 1,
-        TokenStats.BOOSTS: {
-            Boost.NEW_INITIATIVE: [0]
-        },
-        TokenStats.BOOST_TARGET: TokenRelation.OWN
-    },
-    "medyk": {
-        TokenKey.TYPE : TokenType.BOARD,
-        TokenKey.UNIT_COUNT : 2,
-        TokenStats.HP: 1,
-        TokenStats.BOOSTS: {
-            Boost.HEAL: [0, 2, 4]
-        },
-        TokenStats.BOOST_TARGET: TokenRelation.OWN
-    },
-    "mozg": {
-        TokenKey.TYPE : TokenType.BOARD,
-        TokenKey.UNIT_COUNT : 1,
-        TokenStats.HP: 1,
-        TokenStats.BOOSTS: {
-            Boost.SHOOT: [0, 2, 4],
-            Boost.MELEE: [0, 2, 4]
-        },
-        TokenStats.BOOST_TARGET: TokenRelation.OWN
-    },
+    # "matka": {
+    #     TokenKey.TYPE : TokenType.BOARD,
+    #     TokenKey.UNIT_COUNT : 1,
+    #     TokenStats.HP: 1,
+    #     TokenStats.BOOSTS: {
+    #         Boost.NEW_INITIATIVE: [0]
+    #     },
+    #     TokenStats.BOOST_TARGET: TokenRelation.OWN
+    # },
+    # "medyk": {
+    #     TokenKey.TYPE : TokenType.BOARD,
+    #     TokenKey.UNIT_COUNT : 2,
+    #     TokenStats.HP: 1,
+    #     TokenStats.BOOSTS: {
+    #         Boost.HEAL: [0, 2, 4]
+    #     },
+    #     TokenStats.BOOST_TARGET: TokenRelation.OWN
+    # },
+    # "mozg": {
+    #     TokenKey.TYPE : TokenType.BOARD,
+    #     TokenKey.UNIT_COUNT : 1,
+    #     TokenStats.HP: 1,
+    #     TokenStats.BOOSTS: {
+    #         Boost.SHOOT: [0, 2, 4],
+    #         Boost.MELEE: [0, 2, 4]
+    #     },
+    #     TokenStats.BOOST_TARGET: TokenRelation.OWN
+    # },
     ############# natychmiastowe
     "bitwa": {
         TokenKey.ABILITY : Ability.BATTLE,

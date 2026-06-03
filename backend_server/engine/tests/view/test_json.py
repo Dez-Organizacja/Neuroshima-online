@@ -32,3 +32,9 @@ def test2():
     print(v["availableActions"])
     # assert v == expected_view
     # assert False
+
+def test3():
+    data = wczytaj("data3.json")
+    v = view(data)
+    print(v["availableActions"])
+    # assert False

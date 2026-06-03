@@ -7,8 +7,8 @@ from main.events.flow import StartBattleEvent, EndTurnEvent
 from main.input.action_handlers import ActionHandler
 
 class StartBattleWorkflow(Workflow[StartBattleProvider]):
-    def __int__(self):
-        super().__init__(action_provider=StartBattleProvider())
+    def __init__(self):
+        super().__init__(StartBattleProvider())
 
     def build_waiting_step(self):
         return WaitingStepConfig(

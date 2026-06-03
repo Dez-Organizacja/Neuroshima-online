@@ -1,0 +1,107 @@
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-02T17:16:00.29794254",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 2, 4 ],
+      "unit" : {
+        "DAMAGE" : 0,
+        "ROTATION" : 0,
+        "WIRED" : false,
+        "ability_used" : false,
+        "clever_iniciative" : {
+          "iniciative_boosts" : 0,
+          "initiative" : [ ],
+          "is_blocked_to_0" : false,
+          "num_of_new" : 0
+        },
+        "faction" : "moloch",
+        "name" : "matka",
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "DAMAGE" : 0,
+        "ROTATION" : 0,
+        "WIRED" : false,
+        "ability_used" : false,
+        "clever_iniciative" : {
+          "iniciative_boosts" : 0,
+          "initiative" : [ ],
+          "is_blocked_to_0" : false,
+          "num_of_new" : 0
+        },
+        "faction" : "borgo",
+        "name" : "zwiadowca",
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 1, 5 ],
+      "unit" : {
+        "DAMAGE" : 0,
+        "ROTATION" : 0,
+        "WIRED" : false,
+        "ability_used" : false,
+        "clever_iniciative" : {
+          "iniciative_boosts" : 1,
+          "initiative" : [ [ 2, false, true ] ],
+          "is_blocked_to_0" : false,
+          "num_of_new" : 0
+        },
+        "faction" : "borgo",
+        "name" : "silacz",
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "moloch",
+    "factions" : [ "moloch", "borgo" ],
+    "flow_queue" : [ ],
+    "players" : {
+      "borgo" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "nozownik", "mutek", "bitwa", "sieciarz", "ruch", "bitwa", "mutek", "ruch", "super-oficer", "bitwa", "sztab", "zabojca", "mutek", "nozownik", "bitwa", "granat", "zabojca", "mutek", "nozownik", "medyk", "super-mutant", "sieciarz", "silacz", "nozownik", "mutek", "ruch", "mutek", "zwiadowca", "bitwa", "oficer", "bitwa", "oficer" ]
+      },
+      "moloch" : {
+        "hand" : {
+          "tokens" : [ "bitwa", "bloker" ]
+        },
+        "pile" : [ "dzialkogaussa", "oficer", "medyk", "lowca", "bitwa", "opancerzonylowca", "sztab", "bitwa", "odepchniecie", "odepchniecie", "zwiadowca", "szturmowiec", "opancerzonywartownik", "hybryda", "ruch", "klaun", "medyk", "mozg", "wartownik", "lowca", "opancerzonylowca", "sieciarz", "szerszen", "bloker", "bitwa", "juggernaut", "odepchniecie", "obronca", "odepchniecie" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 0,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "moloch", "borgo" ]
+      },
+      "current_step_index" : 1,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "moloch",
+        "factions" : [ ]
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : null,
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : null,
+      "current_step_index" : 0,
+      "name" : "start_battle"
+    } ]
+  }
+}

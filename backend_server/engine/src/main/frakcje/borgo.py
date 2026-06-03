@@ -43,25 +43,25 @@ wlasciwosci = {
         TokenStats.ARMOR: [0, 1, 5],
         TokenStats.INITIATIVE: [2]
     },
-    "silacz": {
-        TokenKey.TYPE: TokenType.BOARD,
-        TokenKey.UNIT_COUNT: 2,
-        TokenStats.HP: 1,
-        TokenStats.ATTACKS: {
-            Attack.MELEE: [[0, 2]],
-        },
-        TokenStats.INITIATIVE: [2]
-    },
-    "zabojca": {
-        TokenKey.TYPE: TokenType.BOARD,
-        TokenKey.UNIT_COUNT: 2,
-        TokenStats.HP: 1,
-        TokenStats.ATTACKS: {
-            Attack.SHOOT: [[5, 1]],
-        },
-        "abilitki" : ["mobilność"],
-        TokenStats.INITIATIVE: [3]
-    },
+    # "silacz": {
+    #     TokenKey.TYPE: TokenType.BOARD,
+    #     TokenKey.UNIT_COUNT: 2,
+    #     TokenStats.HP: 1,
+    #     TokenStats.ATTACKS: {
+    #         Attack.MELEE: [[0, 2]],
+    #     },
+    #     TokenStats.INITIATIVE: [2]
+    # },
+    # "zabojca": {
+    #     TokenKey.TYPE: TokenType.BOARD,
+    #     TokenKey.UNIT_COUNT: 2,
+    #     TokenStats.HP: 1,
+    #     TokenStats.ATTACKS: {
+    #         Attack.SHOOT: [[5, 1]],
+    #     },
+    #     "abilitki" : ["mobilność"],
+    #     TokenStats.INITIATIVE: [3]
+    # },
     ############## sztab
     "sztab": {
         TokenKey.TYPE: TokenType.BOARD,
@@ -78,24 +78,24 @@ wlasciwosci = {
     },
 
     ############## moduły
-    "medyk": {
-        TokenKey.TYPE: TokenType.BOARD,
-        TokenKey.UNIT_COUNT: 1,
-        TokenStats.HP: 1,
-        TokenStats.BOOSTS: {
-            Boost.HEAL: [0, 1, 5]
-        },
-        TokenStats.BOOST_TARGET: TokenRelation.OWN
-    },
-    "oficer": {
-        TokenKey.TYPE: TokenType.BOARD,
-        TokenKey.UNIT_COUNT: 2,
-        TokenStats.HP: 1,
-        TokenStats.BOOSTS: {
-            Boost.MELEE: [0, 1, 5]
-        },
-        TokenStats.BOOST_TARGET: TokenRelation.OWN
-    },
+    # "medyk": {
+    #     TokenKey.TYPE: TokenType.BOARD,
+    #     TokenKey.UNIT_COUNT: 1,
+    #     TokenStats.HP: 1,
+    #     TokenStats.BOOSTS: {
+    #         Boost.HEAL: [0, 1, 5]
+    #     },
+    #     TokenStats.BOOST_TARGET: TokenRelation.OWN
+    # },
+    # "oficer": {
+    #     TokenKey.TYPE: TokenType.BOARD,
+    #     TokenKey.UNIT_COUNT: 2,
+    #     TokenStats.HP: 1,
+    #     TokenStats.BOOSTS: {
+    #         Boost.MELEE: [0, 1, 5]
+    #     },
+    #     TokenStats.BOOST_TARGET: TokenRelation.OWN
+    # },
     "super-oficer": {
         TokenKey.TYPE: TokenType.BOARD,
         TokenKey.UNIT_COUNT: 1,
@@ -126,9 +126,9 @@ wlasciwosci = {
         TokenKey.TYPE: TokenType.INSTANT,
         TokenKey.UNIT_COUNT: 4,
     },
-    "granat": {
-        TokenKey.ABILITY: Ability.GRENADE,
-        TokenKey.TYPE: TokenType.INSTANT,
-        TokenKey.UNIT_COUNT: 1,
-    }
+    # "granat": {
+    #     TokenKey.ABILITY: Ability.GRENADE,
+    #     TokenKey.TYPE: TokenType.INSTANT,
+    #     TokenKey.UNIT_COUNT: 1,
+    # }
 }

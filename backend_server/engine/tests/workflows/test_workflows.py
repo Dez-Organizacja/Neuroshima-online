@@ -9,6 +9,6 @@ from .scenarios import iter_scenarios
 )
 def test_workflows(scenario_builder):
     scenario = scenario_builder()
-    print("scenario\n")
-    print(scenario)
+#     print("scenario\n")
+#     print(scenario)
     WorkflowTester().run(scenario)
