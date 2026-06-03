@@ -8,6 +8,7 @@ import { useGameSocketContext } from "./websockets/gameSocketContext";
 // import { gameState } from "./components/gameState";
 // import { gameState } from "./components/gameState";
 import { useProcesedGameState, GameState } from "./Dlaigora";
+
 async function cos(name : string) {
   console.log(name);
 }
@@ -67,7 +68,7 @@ export default function HexTest(){
 
             if (field) {
                 const Path = field.unit.faction + "/" + field.unit.name;
-                const Rotation = field.unit.ROTATION * 60;
+                const Rotation = field.unit.rotation * 60;
                 console.log("{" + y + ", " + x +  "}  " + Path);
 
                 Items.push(

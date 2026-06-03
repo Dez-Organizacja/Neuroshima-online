@@ -6,9 +6,9 @@ type BoardCell = {
     unit : {
         name : string,
         faction : string,
-        ROTATION : number,
-        DAMAGE : number,
-        WIRED : number,
+        rotation : number,
+        damage : number,
+        wired : number,
         ability_used : boolean,
     }
 }

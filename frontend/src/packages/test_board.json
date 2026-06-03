@@ -9,7 +9,7 @@
                     "unit": {
                         "name": "silacz",
                         "fraction": "borgo",
-                        "ROTATION": 0,
+                        "rotation": 0,
                         "DAMAGE": 0,
                         "WIRED": 0,
                         "ability_used": false
@@ -20,7 +20,7 @@
                     "unit": {
                         "name": "sztab",
                         "fraction": "borgo",
-                        "ROTATION": 0,
+                        "rotation": 0,
                         "DAMAGE": 0,
                         "WIRED": 0,
                         "ability_used": false
