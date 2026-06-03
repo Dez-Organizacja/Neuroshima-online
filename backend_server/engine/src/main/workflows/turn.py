@@ -59,8 +59,8 @@ class TurnWorkflow(Workflow[TurnProvider]):
     
     def build_dispatch_step(self):
         def decision_function(ctx : ActionContext) -> WorkflowName:
-            print("turn dispatch function")
-            print(f"workflow data {ctx.workflow_data}")
+            # print("turn dispatch function")
+            # print(f"workflow data {ctx.workflow_data}")
             if ctx.workflow_data.slot is not None:
                 return WorkflowName.HAND
             else:

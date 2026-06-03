@@ -5,7 +5,7 @@ class ScenarioRegistry:
     _SCENARIOS : dict[str, Callable[[], Scenario]] = {}
 
     @classmethod
-    def registry(cls, name):
+    def register(cls, name):
         def decorator(func):
             cls._SCENARIOS[name] = func
             return func

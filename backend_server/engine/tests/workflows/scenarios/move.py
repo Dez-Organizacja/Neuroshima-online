@@ -20,8 +20,8 @@ def move_scenario():
         .tick()
         .then_execution(effects=[MoveEffect(from_pos=(1, 1), to_pos=(1, 3))])
         
-        .tick()
-        .then_execution(workflows=[PushWorkflow(WorkflowName.ROTATE)])  
+        # .tick()
+        # .then_execution(workflows=[PushWorkflow(WorkflowName.ROTATE)])  
 
         .tick()
         .then_execution(workflows=[PopWorkflow()])

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from main.state.contex import ActionContext
 from main.events.data import WorkflowEvent
 from main.workflows.data import WorkflowConfig, WorkflowName, WorkflowInstance
@@ -8,7 +8,7 @@ from main.workflows.data import WorkflowConfig, WorkflowName, WorkflowInstance
 class PushWorkflow(WorkflowEvent):
     name: WorkflowName
     as_child: bool = True
-    config: WorkflowConfig | None = None
+    config: WorkflowConfig = field(default_factory=WorkflowConfig)
 
     def apply(self, ctx: ActionContext):
         wf_instance = WorkflowInstance(

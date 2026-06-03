@@ -12,13 +12,14 @@ class Diff:
             print(message)
         print("----------------")
 
-
-    def compare(self, a, b):
-        status = self.diff(a, b)
+    @classmethod
+    def compare(cls, a, b):
+        obj = Diff()
+        status = obj.diff(a, b)
         if(not status):
             print("a:", a)
             print("b:", b)
-            self.print_stack()
+            obj.print_stack()
         return status
 
     def diff(self, a, b):

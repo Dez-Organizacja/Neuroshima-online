@@ -152,6 +152,10 @@ class BoardToken(AbstractToken):
 
     # boosty bierzesz token.BOOSTS -> dict | None
 
+    @property
+    def can_activate(self):
+        return self.clever_initiative.can_activate()
+
     def get_boosts(self):
         if self.wired:
             return {}
@@ -173,13 +177,12 @@ class BoardToken(AbstractToken):
             "damage": self.damage,
             "wounds": self.wounds,
             "wired": self.wired,
+            "ability_used" : self.ability_used,
         }
         return data
     
     def to_dict_battle(self) -> dict:
         data = self.to_dict()
-
-        data["ability_used"] = self.ability_used
         data["clever_iniciative"] = self.clever_initiative.export_state() if self.clever_initiative else None
 
         return data

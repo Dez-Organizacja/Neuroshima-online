@@ -32,8 +32,8 @@ class GameEngine:
             step : Step, 
             action : UserAction | None = None
         ):
-        print("executing step", step)
-        print(ctx.print_wf_stack())
+        # print("executing step", step)
+        # print(ctx.print_wf_stack())
         if action:
             result = step.execute(ctx, action)
         else:
@@ -53,7 +53,7 @@ class GameEngine:
         pass
 
     def execute_action(self, ctx : ActionContext, action : UserAction):
-        print(f"executing action {action}")
+        # print(f"executing action {action}")
         self.execute_step(ctx, step=self._get_step(ctx), action=action)
         self.run_until_input_required(ctx)
 

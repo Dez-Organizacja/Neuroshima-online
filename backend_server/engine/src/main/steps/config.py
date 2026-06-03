@@ -41,7 +41,7 @@ class InitStepConfig(AutomaticStepConfig):
     name          : StepName = field(default=StepName.INIT, init=False)
     wf_name       : WorkflowName | None = None
     decision_func : Callable[[ActionContext], WorkflowConfig] | None = None
-    wf_config     : WorkflowConfig | None = None
+    wf_config     : WorkflowConfig = field(default_factory=WorkflowConfig)
     as_child      : bool = True
 
 A = TypeVar("A", bound=UserAction)

@@ -57,6 +57,11 @@ class GameState:
     workflow_data       : WorkflowData = field(default_factory=WorkflowData)
     workflow_stack      : list[WorkflowInstance] = field(default_factory=list)
 
+    def __post_init__(self):
+        for faction in self.factions:
+            if not faction in self.players:
+                self.add_player(faction)
+
     @classmethod
     def from_dict(cls, data):
         return Serializator.from_dict_dataclass(cls, data)
