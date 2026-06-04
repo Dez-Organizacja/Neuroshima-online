@@ -38,7 +38,7 @@ class TurnWorkflow(Workflow[TurnProvider]):
         ]).apply(ctx)
         return [
                 ResetAbilityUsedEffect(positions),
-                DrawTokensEffect(),
+                DrawTokensEffect(hand_limit=self.config.hand_limit),
             ]
     
     @staticmethod

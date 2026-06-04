@@ -10,8 +10,7 @@ class Sieciarze:
 
     @classmethod
     def compute(cls, board):
-        pass
-        # cls(board).kwestia_sieciarzy()
+        cls(board).kwestia_sieciarzy()
 
     def dfs1(self, akt):
         self.odw.add(akt)

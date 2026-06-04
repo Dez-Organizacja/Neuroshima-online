@@ -22,6 +22,8 @@ class WorkflowName(Enum):
     START_BATTLE = "start_battle"
     GAME = "game"
     HEAL = "heal"
+    HEADQUARTER_TURN = "headquarter_turn"
+    HEADQUARTER_PLACE = "headquarter_place"
 
 ABILITY_WORKFLOW_REGISTRY = {
     Ability.MOVE : WorkflowName.MOVE,
@@ -71,6 +73,7 @@ class WorkflowData:
 class WorkflowConfig:
     faction : str = ""
     factions : list[str] = field(default_factory=list)
+    hand_limit : int = 3
 
 @dataclass
 class WorkflowInstance:

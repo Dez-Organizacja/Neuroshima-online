@@ -57,13 +57,15 @@ class ButtonHandler:
 
 position_setter = Callable[[WorkflowData, BoardAction], None]
 class ActionHandler:
-    def __init__(self, setter = None):
+    def __init__(self, setter = None, allowed_action_types = None, allow_buttons = True):
         self.button_handler = ButtonHandler
         self.setter : position_setter = setter or self.no_setter
+        self.allowed_action_types = allowed_action_types
+        self.allow_buttons = allow_buttons
         self.dispatch = {}
         self._build_dispatch()
 
-    def no_setter(self, action : BoardAction) -> None:
+    def no_setter(self, workflow_data : WorkflowData, value) -> None:
         pass
 
     def _build_dispatch(self):
@@ -89,7 +91,10 @@ class ActionHandler:
 
 
     def handle(self, ctx : ActionContext, action : UserAction) -> list[Event]:
-        if ButtonHandler.can_handle(ctx, action):
+        if self.allowed_action_types is not None and action.type not in self.allowed_action_types:
+            raise ValueError(f"akcja {action.type} nie jest dozwolona w aktualnym kroku")
+
+        if self.allow_buttons and ButtonHandler.can_handle(ctx, action):
             return ButtonHandler.handle(ctx, action)
 
         ctx.workflow_data.type = action.type
