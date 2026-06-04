@@ -4,7 +4,7 @@ from main.workflows.providers.healers import HealersProvider
 from main.workflows.step_builders import BoardSelectionMixin
 from main.steps.config import ResolveStepConfig, RepeatStepConfig
 from main.state.contex import ActionContext
-from main.events.data import ExecutionResult
+from main.events.data import Event
 from main.events.workflow import PopWorkflow
 from main.events.effects import HealEffect, ClearWorkflowDataEffect
 
@@ -15,9 +15,8 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
 
     def build_init_step(self):
         def func(ctx : ActionContext):
-            return ExecutionResult(
-                effects=[ClearWorkflowDataEffect()]
-            )
+            return [ClearWorkflowDataEffect()]
+        
         return ResolveStepConfig(resolve_func=func)
 
     def build_check_end_workflow_step(self):
@@ -27,7 +26,8 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
                 self.faction
             )
             if len(candidates) == 0:
-                return ExecutionResult(workflow_effects=[PopWorkflow()])
+                return [PopWorkflow()]
+            
         return ResolveStepConfig(resolve_func=func)
 
     def build_resolve_step(self):
@@ -36,9 +36,7 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
                 source_pos=ctx.workflow_data.unit_pos,
                 target_pos=ctx.workflow_data.target_pos
             )
-            return ExecutionResult(
-                effects=[heal],
-            )
+            return [heal]
             
         return ResolveStepConfig(resolve_func=func)
 

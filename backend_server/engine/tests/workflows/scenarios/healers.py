@@ -20,7 +20,7 @@ def heal_scenario():
         .tick()
         .given(setup_function)
         .then_execution(
-            effects=[ClearWorkflowDataEffect()]
+            events=[ClearWorkflowDataEffect()]
         )
 
         .tick()
@@ -33,12 +33,12 @@ def heal_scenario():
 
         .tick()
         .then_execution(
-            effects=[HealEffect(source_pos=(1, 1), target_pos=(1, 3))]
+            events=[HealEffect(source_pos=(1, 1), target_pos=(1, 3))]
         )
 
         .tick()
         .then_execution(
-            workflows=[GoToStep(index=1)],
+            events=[GoToStep(index=1)],
             advance=False
         )
     ).build()

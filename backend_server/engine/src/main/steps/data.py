@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 from enum import Enum
-from main.events.data import ExecutionResult
+from main.events.data import Event
 
 @dataclass
 class StepResult:
-    execution_result    : ExecutionResult = field(default_factory=ExecutionResult) 
+    execution_result    : list[Event] = field(default_factory=list) 
     advance             : bool = True
 
 class StepName(Enum):
@@ -14,4 +14,3 @@ class StepName(Enum):
     RESOLVE = "resolve"
     SET = "set"
     REPEAT = "repeat"
-

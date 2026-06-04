@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from main.events.data import ExecutionResult
+from main.events.data import Event
 from main.events.effects import DiscardTokenEffect, MarkAbilityUsedEffect
 
 from main.steps.config import InitStepConfig
@@ -23,7 +23,7 @@ class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
     
     @staticmethod
     @abstractmethod
-    def resolve_function(ctx : ActionContext) -> ExecutionResult:
+    def resolve_function(ctx : ActionContext) -> list[Event]:
         pass
 
     @staticmethod
@@ -76,10 +76,8 @@ class HandWorkflow(DispatchActionWorkflow):
         return self.get_workflow_for_ability(ability)
 
     @staticmethod
-    def resolve_function(ctx : ActionContext) -> ExecutionResult:
-        return ExecutionResult(
-            effects=[DiscardTokenEffect(ctx.workflow_data.slot)]
-        )
+    def resolve_function(ctx : ActionContext) -> list[Event]:
+        return [DiscardTokenEffect(ctx.workflow_data.slot)]
     
 class BoardWorkflow(DispatchActionWorkflow):
     def __init__(self):
@@ -90,7 +88,5 @@ class BoardWorkflow(DispatchActionWorkflow):
         return ctx.board.get_token(ctx.workflow_data.unit_pos)
 
     @staticmethod
-    def resolve_function(ctx : ActionContext):
-        return ExecutionResult(
-            effects=[MarkAbilityUsedEffect()]
-        )
+    def resolve_function(ctx : ActionContext) -> list[Event]:
+        return [MarkAbilityUsedEffect()]

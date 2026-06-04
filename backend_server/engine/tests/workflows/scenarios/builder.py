@@ -2,7 +2,7 @@ from main.workflows.data import WorkflowData, WorkflowConfig, WorkflowName
 from .data import StepCase, Scenario, SetupFn
 from main.input.data import UserAction
 from main.steps.data import StepResult
-from main.events.data import ExecutionResult
+from main.events.data import Event
 
 
 class ScenarioBuilder:
@@ -25,11 +25,6 @@ class ScenarioBuilder:
         self._require_step()
         self._current_step.setup = fn
         return self
-
-    # def then_data(self, **fileds):
-    #     self._require_step()
-    #     self._current_step.expected_data = WorkflowData(**fileds)
-    #     return self
     
     def then_data_delta(self, **kwargs):
         self._require_step()
@@ -45,18 +40,12 @@ class ScenarioBuilder:
         return self
 
     def then_execution(self, *, 
-                       effects = None, 
-                       flow_events = None, 
-                       workflows = None, 
+                       events : list[Event],
                        advance = True
         ):
         self._require_step()
         self._current_step.expected_result=StepResult(
-            execution_result=ExecutionResult(
-                effects=effects or [], 
-                flow_events = flow_events or [],
-                workflow_effects=workflows or []
-            ),
+            execution_result=events,
             advance=advance
         )
         return self

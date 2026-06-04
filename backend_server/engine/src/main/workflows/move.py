@@ -1,4 +1,4 @@
-from main.events.data import ExecutionResult
+from main.events.data import Event
 from main.events.effects import MoveEffect
 from main.state.contex import ActionContext
 from main.workflows.base import Workflow
@@ -7,7 +7,7 @@ from main.workflows.providers.movement import MoveProvider
 from main.steps.config import ResolveStepConfig, InitStepConfig
 from main.workflows.step_builders import BoardSelectionMixin, build_end_step
 
-class MoveWorkflow(BoardSelectionMixin[MoveProvider], Workflow[MoveProvider]):
+class MoveWorkflow(BoardSelectionMixin, Workflow[MoveProvider]):
     def __init__(self):
         super().__init__(action_provider=MoveProvider())
 
@@ -32,7 +32,7 @@ class MoveWorkflow(BoardSelectionMixin[MoveProvider], Workflow[MoveProvider]):
             from_pos=ctx.workflow_data.unit_pos,
             to_pos=ctx.workflow_data.destination
         )
-        return ExecutionResult(effects=[move])
+        return [move]
 
     @classmethod
     def get_first_step_index(cls, ctx : ActionContext):

@@ -3,10 +3,10 @@ from main.workflows.base import Workflow
 from main.workflows.providers.movement import PushProvider
 from main.steps.config import ResolveStepConfig
 from main.events.effects import MoveEffect
-from main.events.data import ExecutionResult
+from main.events.data import Event
 from main.workflows.step_builders import BoardSelectionMixin, build_end_step
 
-class PushWorkflow(BoardSelectionMixin[PushProvider], Workflow[PushProvider]):
+class PushWorkflow(BoardSelectionMixin, Workflow[PushProvider]):
     def __init__(self):
         super().__init__(action_provider=PushProvider())
 
@@ -25,12 +25,12 @@ class PushWorkflow(BoardSelectionMixin[PushProvider], Workflow[PushProvider]):
         ]
 
     @staticmethod
-    def resolve_push(ctx : ActionContext):
+    def resolve_push(ctx : ActionContext) -> list[Event]:
         move = MoveEffect(
             from_pos=ctx.workflow_data.target_pos,
             to_pos=ctx.workflow_data.destination
         )
-        return ExecutionResult(effects=[move])
+        return [move]
     
     def get_first_step_index(self, ctx : ActionContext):
         return 1 if ctx.workflow_data.unit_pos else 0

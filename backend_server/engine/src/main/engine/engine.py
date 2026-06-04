@@ -2,7 +2,7 @@ from random import shuffle
 from main.state.contex import ActionContext
 from main.workflows.factory import WorkflowFactory
 from main.engine.resolver import Resolver
-from main.events.data import ExecutionResult
+from main.events.data import Event
 from main.events.workflow import PushWorkflow
 from main.workflows.data import WorkflowConfig, WorkflowName
 from main.tokens.pile_factory import PileFactory
@@ -68,8 +68,7 @@ class GameEngine:
     def _create_game_workflow(self, ctx : ActionContext):
         config = WorkflowConfig(factions=ctx.state.factions)
         effect = PushWorkflow(name = WorkflowName.GAME, config=config)
-        result = ExecutionResult(workflow_effects=[effect])
-        self.resolver.excute(ctx, result)
+        self.resolver.excute(ctx, [effect])
 
     def start_game(self, ctx : ActionContext):
         self._setup_players(ctx)

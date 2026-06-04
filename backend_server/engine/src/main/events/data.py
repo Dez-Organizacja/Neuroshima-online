@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import ClassVar
-
+from enum import Enum
 
 @dataclass
 class Event(ABC):
@@ -23,19 +23,21 @@ class FlowEvent(Event, ABC):
 class WorkflowEvent(Event, ABC):
     pass
 
+class TargetingType(Enum):
+    FIRST_IN_LINE = "first_in_line"
+    ALL_IN_LINE = "all_in_line"
+    ADJACENT_DIRECTION = "adjacent_direction"
+
 @dataclass
-class ExecutionResult:
-    effects: list[Effect] = field(default_factory=list)
-    flow_events: list[FlowEvent] = field(default_factory=list)
-    workflow_effects: list[WorkflowEvent] = field(default_factory=list)
+class TargetedAttackIntent:
+    target_pos : tuple[int, int]
+    power : int = 1
 
-    def print(self):
-        print("flows")
-        for flow in self.flow_events:
-            print(type(flow).__name__)
-        
-        print("workflow_events")
-        for wf_event in self.workflow_effects:
-            print(type(wf_event).__name__)
+@dataclass
+class DirectedAttackIntent:
+    attaker_pos : tuple[int, int]
+    direction : int
+    targeting : TargetingType
+    power : int = 1
 
-        print("--------------------")
+AttackIntent = TargetedAttackIntent | DirectedAttackIntent

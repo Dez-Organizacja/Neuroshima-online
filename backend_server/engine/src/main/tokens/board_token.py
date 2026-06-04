@@ -143,7 +143,7 @@ class BoardToken(AbstractToken):
         if direction is not None:
             direction = (direction + 3) % 6
 
-            if (blockable and self.armor and direction in self.armor):
+            if (blockable and direction in self.armor):
                 damage -= 1
             
         self.take_wounds(damage)

@@ -18,12 +18,14 @@ def hand_scenario():
         .tick()
         .given(setup_function)
         .then_execution(
-            workflows=[PushWorkflow(WorkflowName.PLACE)]
+            events=[PushWorkflow(WorkflowName.PLACE)]
         )
 
         .tick()
         .then_execution(
-            effects=[DiscardTokenEffect(slot=1)],
-            workflows=[PopWorkflow()]
+            events=[
+                DiscardTokenEffect(slot=1),
+                PopWorkflow()
+            ]
         )
     ).build()

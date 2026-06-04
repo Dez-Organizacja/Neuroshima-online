@@ -1,6 +1,7 @@
 from main.workflows.data import WorkflowName
 from main.input.data import ButtonAction, Button, ActionType
-from main.events.flow import StartBattleEvent
+from main.events.flow import EndTurnEvent
+from main.events.workflow import PushWorkflow, PopWorkflow
 
 from .builder import ScenarioBuilder
 from .registry import register
@@ -15,6 +16,14 @@ def start_battle_scenario():
 
         .tick()
         .then_execution(
-            flow_events=[StartBattleEvent()]
+            events=[EndTurnEvent()]
+        )
+
+        .tick()
+        .then_execution(
+            events=[
+                PopWorkflow(),
+                PushWorkflow(name=WorkflowName.BATTLE)
+            ]
         )
     ).build()

@@ -8,7 +8,7 @@ from main.steps.config import (
 from main.workflows.base import Workflow
 from main.workflows.providers.turn import TurnProvider
 from main.workflows.data import WorkflowData, WorkflowName, WorkflowConfig
-from main.events.data import ExecutionResult
+from main.events.data import Event
 from main.events.effects import (
     ResetAbilityUsedEffect, 
     DrawTokensEffect,
@@ -30,23 +30,21 @@ class TurnWorkflow(Workflow[TurnProvider]):
         self.config : WorkflowConfig = config
         super().__init__(action_provider=TurnProvider())
 
-    def start_turn_resolve(self, ctx : ActionContext) -> ExecutionResult:
+    def start_turn_resolve(self, ctx : ActionContext) -> list[Event]:
         ctx.faction = self.config.faction
         positions = BoardQuery([
             is_ally(ctx.faction),
             has_ability
         ]).apply(ctx)
-        return ExecutionResult(
-            effects=[
+        return [
                 ResetAbilityUsedEffect(positions),
                 DrawTokensEffect(),
             ]
-        )
     
     @staticmethod
-    def end_turn_resolve(ctx : ActionContext) -> ExecutionResult:
+    def end_turn_resolve(ctx : ActionContext) -> list[Event]:
         ctx.faction = ""
-        return ExecutionResult(flow_events=[EndTurnEvent()])
+        return [EndTurnEvent()]
 
     def build_init_step(self):
         return ResolveStepConfig(resolve_func=self.start_turn_resolve)
@@ -54,7 +52,6 @@ class TurnWorkflow(Workflow[TurnProvider]):
     def build_waiting_step(self):
         return WaitingStepConfig(
             action_handler=ActionHandler(WorkflowData.set_unit_pos),
-            av_actions_provider=self.action_provider
         )
     
     def build_dispatch_step(self):
@@ -68,8 +65,8 @@ class TurnWorkflow(Workflow[TurnProvider]):
         return InitStepConfig(decision_func=decision_function)
 
     def build_clear_step(self):
-        def resolve_func(ctx : ActionContext):
-            return ExecutionResult(effects=[ClearWorkflowDataEffect()])
+        def resolve_func(ctx : ActionContext) -> list[Event]:
+            return [ClearWorkflowDataEffect()]
         return ResolveStepConfig(resolve_func=resolve_func)
 
     def build_repeat_step(self):

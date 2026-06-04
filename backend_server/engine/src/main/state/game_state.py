@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from main.utils.variable import *
 from main.state.player_state import PlayerState
 from main.board.board import Board
-from main.events.data import FlowEvent, Effect
+from main.events.data import Event, AttackIntent
 from collections import deque
 from main.workflows.data import WorkflowData, WorkflowInstance
 from main.state.serialization import Serializator
@@ -50,8 +50,8 @@ class GameState:
     board               : Board = field(default_factory=Board)
     
     # --------- events ----------
-    flow_queue          : deque[FlowEvent] = field(default_factory=deque)
-    # pending_damage      : list[Effect] = field(default_factory=list)
+    events_queue          : deque[Event] = field(default_factory=deque)
+    pending_attacks       : list[AttackIntent] = field(default_factory=list)
 
     # --------- workflows ----------
     workflow_data       : WorkflowData = field(default_factory=WorkflowData)

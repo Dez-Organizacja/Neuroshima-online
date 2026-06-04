@@ -1,10 +1,10 @@
 import main.events.effects as Ef
 import main.events.flow as F
+import main.events.workflow as Wf
 from main.state.contex import ActionContext
 from main.state.game_state import GameState
 from main.rules.game import GameRules
 from main.engine.resolver import Resolver
-from main.events.data import ExecutionResult
 from main.workflows.data import (
     WorkflowInstance, 
     WorkflowName, 
@@ -43,19 +43,18 @@ class Tests:
             Ef.PlaceEffect((2, 6), ctx.player.hand.get(0), "moloch"),
             Ef.MoveEffect(from_pos=(1, 3), to_pos=(2, 2)),
             Ef.MarkAbilityUsedEffect((2, 6)),
-            Ef.DamageEffect((1, 5), profile=Ef.DamageProfile()),
+            Ef.DamageEffect(pos=(1, 5)),
             Ef.RotateEffect(pos=(2, 2), rotation=1),
             Ef.ClearWorkflowDataEffect(),
-            Ef.RemoveDeadUnitsEffect(positions=[(1, 5)])
+            Ef.RemoveUnitsEffect(positions=[(1, 5)])
         ]
 
-        flows = [F.StartBattleEvent()]
-        result = ExecutionResult(
-            effects=effects,
-            flow_events=flows
-        )
+        flows = [F.EndTurnEvent()]
+        result = effects + flows
+        # print(result)
         resolver = Resolver()
         resolver.excute(ctx=ctx, result=result)
+        resolver.excute(ctx=ctx, result=[Wf.PushWorkflow(name=WorkflowName.BATTLE)])
 
         assert(ctx.player.hand.tokens == ["sieciarz", "lowca"])
         assert(ctx.player.pile.tokens == [])
@@ -77,3 +76,5 @@ class Tests:
 
         assert(ctx.workflow_data.slot is None)
         assert(ctx.workflow_data.unit_pos is None)
+
+        # assert(len(ctx.state.workflow_stack) == 1)

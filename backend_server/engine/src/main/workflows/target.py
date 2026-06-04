@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
-from main.events.data import ExecutionResult
+from typing import TypeVar
+
+from main.workflows.step_builders import BoardSelectionMixin, build_end_step
 from main.workflows.base import Workflow
 from main.workflows.providers.target import (
     TargetProvider,
@@ -8,34 +10,24 @@ from main.workflows.providers.target import (
     GrenadeProvider
 )
 from main.state.contex import ActionContext
-from main.steps.config import ResolveStepConfig
-from main.events.effects import(
-    DamageEffect, 
-    DamageProfile, 
-    DestroyEffect
-)
+
+from main.events.data import Event, TargetedAttackIntent
+from main.events.effects import DestroyEffect, EnqueueAttacksEffect
+from main.events.flow import ResolveAttacksEvent
 from main.board.board_query import BoardQuery
 import main.rules.predicates as pr
-from main.workflows.step_builders import BoardSelectionMixin, build_end_step
-from typing import TypeVar
 from main.tokens.board_token import BoardToken
 
 P = TypeVar("P", bound=TargetProvider)
 
-class TargetWorkflow(BoardSelectionMixin[P], Workflow[P], ABC):
+class TargetWorkflow(BoardSelectionMixin, Workflow[P], ABC):
     def __init__(self, action_provider : P):
         super().__init__(action_provider)
 
     @staticmethod
     @abstractmethod
-    def resolve_func(ctx : ActionContext) -> ExecutionResult:
+    def resolve_func(ctx : ActionContext) -> list[Event]:
         pass
-
-    def build_end_step(self):
-        return ResolveStepConfig(
-            resolve_func = self.resolve_func,
-            wf_finished=True
-        )
 
     def _build_steps(self):
         return [
@@ -49,11 +41,12 @@ class SniperWorkflow(TargetWorkflow[SniperProvider]):
 
     @staticmethod
     def resolve_func(ctx : ActionContext):
-        return ExecutionResult(
-            effects=[
-                DamageEffect(pos = ctx.workflow_data.target_pos)
-            ]
-        )
+        return [
+            EnqueueAttacksEffect(
+                [TargetedAttackIntent(target_pos=ctx.workflow_data.target_pos)]
+            ),
+            ResolveAttacksEvent(),
+        ]
     
 class GranadeWorkflow(TargetWorkflow):
     def __init__(self):
@@ -61,9 +54,7 @@ class GranadeWorkflow(TargetWorkflow):
 
     @staticmethod
     def resolve_func(ctx : ActionContext):
-        return ExecutionResult(
-            effects=[DestroyEffect(ctx.workflow_data.target_pos)]
-        )
+        return [DestroyEffect(ctx.workflow_data.target_pos)]
     
 class BombWorkflow(TargetWorkflow):
     def __init__(self):
@@ -83,9 +74,10 @@ class BombWorkflow(TargetWorkflow):
         if not pr.is_empty_at(ctx, pos):
             positions.append(pos)
 
-        return ExecutionResult(
-            effects=[
-                DamageEffect(pos)
-                for pos in positions       
-            ]
-        )
+        return [
+            EnqueueAttacksEffect([
+                TargetedAttackIntent(target_pos=pos)
+                for pos in positions
+            ]),
+            ResolveAttacksEvent()
+        ]

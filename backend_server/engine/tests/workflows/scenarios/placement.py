@@ -25,7 +25,9 @@ def placement_scenario():
 
         .tick()
         .then_execution(
-            effects = [PlaceEffect(pos=(1, 1), name="klaun", faction="moloch")],
-            workflows=[PopWorkflow()]
+            events = [
+                PlaceEffect(pos=(1, 1), name="klaun", faction="moloch"),
+                PopWorkflow()
+            ]
         )
     ).build()

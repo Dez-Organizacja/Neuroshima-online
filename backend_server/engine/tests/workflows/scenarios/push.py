@@ -23,7 +23,9 @@ def push_scenario():
 
         .tick()
         .then_execution(
-            effects=[MoveEffect(from_pos=(1, 3), to_pos=(1, 5))],
-            workflows=[PopWorkflow()]
+            events=[
+                MoveEffect(from_pos=(1, 3), to_pos=(1, 5)),
+                PopWorkflow()
+            ]
         )
     ).build()

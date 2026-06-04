@@ -1,6 +1,8 @@
 from main.workflows.data import WorkflowName
 from main.events.workflow import PopWorkflow
-from main.events.effects import DestroyEffect, DamageEffect, DamageProfile
+from main.events.effects import DestroyEffect, EnqueueAttacksEffect
+from main.events.data import TargetedAttackIntent
+from main.events.flow import ResolveAttacksEvent
 from .builder import ScenarioBuilder
 from .registry import register
 from main.input.data import BoardAction, ActionType
@@ -20,8 +22,10 @@ def granade_scenario():
         build_prescenario(name1)
         .tick()
         .then_execution(
-            effects=[DestroyEffect(pos=(2, 4))],
-            workflows=[PopWorkflow()]
+            events=[
+                DestroyEffect(pos=(2, 4)),
+                PopWorkflow()
+            ]
         )
     ).build()
 
@@ -32,18 +36,23 @@ def sniper_scenario():
         build_prescenario(name2)
         .tick()
         .then_execution(
-            effects=[DamageEffect(pos=(2, 4))],
-            workflows=[PopWorkflow()]
+            events=[
+                EnqueueAttacksEffect(
+                    [TargetedAttackIntent(target_pos=(2, 4))]
+                ),
+                ResolveAttacksEvent(),
+                PopWorkflow()
+            ]
         )
     ).build()
 
 name3 = WorkflowName.BOMB
 @register(name3)
 def bomb_scenario():
-    def damage_effects() -> list[DamageEffect]:
+    def damage_effects() -> list[TargetedAttackIntent]:
         return [
-            DamageEffect(pos=(1, 5)),
-            DamageEffect(pos=(2, 2)),
+            TargetedAttackIntent(target_pos=(1, 5)),
+            TargetedAttackIntent(target_pos=(2, 2)),
         ]
     def setup_function(ctx : ActionContext):
         ctx.board.put_token(pos=(2, 6), name="sztab", faction="moloch")
@@ -57,7 +66,10 @@ def bomb_scenario():
         .then_data_delta(target_pos=(2, 4), type=ActionType.BOARD)
         .tick()
         .then_execution(
-            effects=damage_effects(),
-            workflows=[PopWorkflow()]
+            events=[
+                EnqueueAttacksEffect(damage_effects()),
+                ResolveAttacksEvent(),
+                PopWorkflow(),
+            ]
         )
     ).build()

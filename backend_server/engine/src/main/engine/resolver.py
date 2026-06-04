@@ -1,31 +1,23 @@
-from main.events.data import ExecutionResult, Event
+from main.events.data import Event
 from main.state.contex import ActionContext
 from main.steps.data import StepResult
 from main.systems.passive_systems import PassiveSystems
 
 class Resolver():
-    def apply(self, ctx : ActionContext, events : list[Event]):
+    def excute(self, ctx : ActionContext, result : list[Event]):
         dirty = False
-        for event in events:
-            event.apply(ctx)
+        ctx.state.events_queue.extend(result)
+        while ctx.state.events_queue:
+            event = ctx.state.events_queue.popleft()
             if event.recompute_passive:
                 dirty = True    
 
+            result = event.apply(ctx) or []
+            ctx.state.events_queue.extend(result)
+
         if dirty:
             PassiveSystems.compute(ctx)
-
-    def excute(self, ctx : ActionContext, result : ExecutionResult):
-        self.apply(ctx, result.effects)
-
-        ctx.state.flow_queue.extend(result.flow_events)
-        while ctx.state.flow_queue:
-            event = ctx.state.flow_queue.popleft()
-            new_result : ExecutionResult = event.apply(ctx)
-            if new_result:
-                self.excute(ctx, new_result)
-        
-        self.apply(ctx, result.workflow_effects)
-
+    
     def resolve(self, ctx : ActionContext, result : StepResult):
         # print(f"resolving step result {result}")
         if result.advance:

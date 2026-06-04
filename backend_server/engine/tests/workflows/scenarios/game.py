@@ -16,17 +16,17 @@ def game_scenario():
         ScenarioBuilder(name, config=WorkflowConfig(factions=["moloch", "borgo"]))
         .tick()
         .then_execution(
-            workflows=[turn_execution("moloch")]
+            events=[turn_execution("moloch")]
         )
 
         .tick()
         .then_execution(
-            workflows=[turn_execution("borgo")]
+            events=[turn_execution("borgo")]
         )
 
         .tick()
         .then_execution(
-            workflows=[GoToStep(index=0)],
+            events=[GoToStep(index=0)],
             advance=False
         )
         

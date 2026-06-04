@@ -5,7 +5,7 @@ from main.steps.config import (
 from main.input.data import RotationAction
 from main.workflows.data import WorkflowData
 from main.state.contex import ActionContext
-from main.events.data import ExecutionResult
+from main.events.data import Event
 from main.events.effects import RotateEffect
 from main.workflows.providers.movement import RotateProvider
 from main.workflows.step_builders import build_end_step
@@ -19,13 +19,12 @@ class RotateWorkflow(Workflow[RotateProvider]):
         return WaitingStepConfig()
     
     @staticmethod
-    def resolve_function(ctx : ActionContext):
-        return ExecutionResult(effects=[
-            RotateEffect(
-                pos = ctx.workflow_data.unit_pos,
-                rotation=ctx.workflow_data.rotation
-            )
-        ])
+    def resolve_function(ctx : ActionContext) -> list[Event]:
+        rotate = RotateEffect(
+            pos = ctx.workflow_data.unit_pos,
+            rotation=ctx.workflow_data.rotation
+        )
+        return [rotate]
 
     def _build_steps(self):
         return [

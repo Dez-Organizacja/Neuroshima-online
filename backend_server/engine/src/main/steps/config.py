@@ -4,10 +4,10 @@ from main.actions.available.config import AvailableActionProvider
 from main.state.contex import ActionContext
 from main.input.data import UserAction
 from main.steps.data import StepResult, StepName
+from main.events.data import Event
 from main.workflows.data import WorkflowData, WorkflowConfig, WorkflowName
 from typing import Callable, TypeVar, Generic
 from main.input.action_handlers import ActionHandler
-from main.events.data import ExecutionResult
 
 @dataclass
 class StepConfig(ABC):
@@ -16,9 +16,7 @@ class StepConfig(ABC):
 
 @dataclass
 class WaitingStepConfig(StepConfig):
-    av_actions_provider : AvailableActionProvider = field(default_factory=AvailableActionProvider)
     action_handler     : ActionHandler = field(default_factory=ActionHandler)
-    consume_action     : bool = True
     name               : StepName = field(default=StepName.WAITING, init=False)
     
 @dataclass
@@ -26,12 +24,12 @@ class AutomaticStepConfig(StepConfig):
     pass
 
 
-def no_result_function(ctx : ActionContext) -> ExecutionResult:
-    return ExecutionResult()
+def no_result_function(ctx : ActionContext) -> list[Event]:
+    return []
 
 @dataclass
 class ResolveStepConfig(AutomaticStepConfig):
-    resolve_func : Callable[[ActionContext], ExecutionResult] = no_result_function
+    resolve_func : Callable[[ActionContext], list[Event]] = no_result_function
     wf_finished  : bool = False
     name         : StepName = field(default=StepName.RESOLVE, init=False)
 

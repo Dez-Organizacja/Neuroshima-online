@@ -1,7 +1,7 @@
 from main.input.data import ActionType, Button
 from typing import Callable
 from main.state.contex import ActionContext
-from main.events.data import ExecutionResult
+from main.events.data import Event
 from main.events.flow import EndTurnEvent, DeleteAbove
 from main.events.effects import ClearWorkflowDataEffect, DiscardTokenEffect
 from main.workflows.data import WorkflowName, WorkflowData
@@ -13,7 +13,7 @@ from main.input.data import(
     ButtonAction
 )
 
-button_handler = Callable[[ActionContext], ExecutionResult]
+button_handler = Callable[[ActionContext], list[Event]]
 BUTTON_DISPATCH = {}
 def button_register(button : Button):
     def wrapper(func : button_handler):
@@ -23,7 +23,7 @@ def button_register(button : Button):
 
 class ButtonHandler:
     @staticmethod
-    def handle(ctx : ActionContext, action : ButtonAction) -> ExecutionResult:
+    def handle(ctx : ActionContext, action : ButtonAction) -> list[Event]:
         return  BUTTON_DISPATCH[action.name](ctx)
     
     @staticmethod
@@ -35,25 +35,25 @@ class ButtonHandler:
 
     @staticmethod
     @button_register(Button.END_TURN)
-    def handle_end_turn(ctx : ActionContext) -> ExecutionResult:
-        return ExecutionResult(flow_events=[EndTurnEvent()])
+    def handle_end_turn(ctx : ActionContext) -> list[Event]:
+        return [EndTurnEvent()]
 
 
     @staticmethod
     @button_register(Button.CANCEL)
-    def handle_cancel(ctx : ActionContext) -> ExecutionResult:
-        return ExecutionResult(
-            workflow_effects=[DeleteAbove(name=WorkflowName.TURN)],
-            effects=[ClearWorkflowDataEffect()]
-        )
+    def handle_cancel(ctx : ActionContext) -> list[Event]:
+        return [
+            DeleteAbove(name=WorkflowName.TURN),
+            ClearWorkflowDataEffect()
+        ]
     
     @staticmethod
     @button_register(Button.DISCARD)
-    def handle_discard(ctx : ActionContext) -> ExecutionResult:
-        return ExecutionResult(
-            effects=[DiscardTokenEffect(ctx.workflow_data.slot)],
-            workflow_effects=[DeleteAbove(WorkflowName.TURN)]
-        )
+    def handle_discard(ctx : ActionContext) -> list[Event]:
+        return [
+            DiscardTokenEffect(ctx.workflow_data.slot),
+            DeleteAbove(WorkflowName.TURN)
+        ]
 
 position_setter = Callable[[WorkflowData, BoardAction], None]
 class ActionHandler:
@@ -88,10 +88,10 @@ class ActionHandler:
         ctx.workflow_data.button = action.name
 
 
-    def handle(self, ctx : ActionContext, action : UserAction) -> ExecutionResult:
+    def handle(self, ctx : ActionContext, action : UserAction) -> list[Event]:
         if ButtonHandler.can_handle(ctx, action):
             return ButtonHandler.handle(ctx, action)
 
         ctx.workflow_data.type = action.type
         self.dispatch[action.type](ctx, action)
-        return ExecutionResult()
+        return []

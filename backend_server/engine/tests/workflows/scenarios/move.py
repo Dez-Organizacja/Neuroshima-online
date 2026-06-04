@@ -18,11 +18,11 @@ def move_scenario():
         .then_data_delta(destination = (1, 3))
 
         .tick()
-        .then_execution(effects=[MoveEffect(from_pos=(1, 1), to_pos=(1, 3))])
+        .then_execution(events=[MoveEffect(from_pos=(1, 1), to_pos=(1, 3))])
         
         # .tick()
         # .then_execution(workflows=[PushWorkflow(WorkflowName.ROTATE)])  
 
         .tick()
-        .then_execution(workflows=[PopWorkflow()])
+        .then_execution(events=[PopWorkflow()])
     ).build()

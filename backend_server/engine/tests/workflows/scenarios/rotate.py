@@ -17,7 +17,9 @@ def rotate_scenario():
         
         .tick()
         .then_execution(
-            effects=[RotateEffect(pos=(1, 1), rotation=1)],
-            workflows=[PopWorkflow()]
+            events=[
+                RotateEffect(pos=(1, 1), rotation=1),
+                PopWorkflow()
+            ]
         )
     ).build()

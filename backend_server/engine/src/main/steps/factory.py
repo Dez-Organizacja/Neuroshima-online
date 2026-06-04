@@ -3,8 +3,8 @@ from main.steps.step import (
     ResolveStep,
     InitStep,
     WaitingStep,
-    SetStep,
     RepeatStep,
+    # SetStep,
     Step
 )
 
@@ -13,7 +13,7 @@ class StepFactory:
         StepName.RESOLVE : ResolveStep,
         StepName.INIT : InitStep,
         StepName.WAITING : WaitingStep,
-        StepName.SET : SetStep,
+        # StepName.SET : SetStep,
         StepName.REPEAT : RepeatStep
     }
     def __init__(self):

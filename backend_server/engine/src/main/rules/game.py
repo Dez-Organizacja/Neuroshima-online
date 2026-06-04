@@ -1,9 +1,6 @@
 from main.utils.variable import *
 
 class GameRules():
-    def is_hand_full(self, hand):
-        return hand.is_full()
-
     def is_hq_not_wired(self, ctx):
         return not ctx.board.is_wired(ctx, ctx.board.get_hq_pos(ctx.faction))
 

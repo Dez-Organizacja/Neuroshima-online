@@ -25,13 +25,13 @@ def turn_scenario():
         .tick()
         .given(setup_function)
         .then_execution(
-            effects=[ResetAbilityUsedEffect(positions=[]), DrawTokensEffect()],
+            events=[ResetAbilityUsedEffect(positions=[]), DrawTokensEffect()],
         )
         .then_faction("moloch")
 
         .tick()
         .then_execution(
-            effects=[ClearWorkflowDataEffect()]
+            events=[ClearWorkflowDataEffect()]
         )
 
         .when(HandAction(slot=1))
@@ -39,18 +39,18 @@ def turn_scenario():
 
         .tick()
         .then_execution(
-            workflows=[PushWorkflow(name=WorkflowName.HAND)]
+            events=[PushWorkflow(name=WorkflowName.HAND)]
         )
 
         .tick()
         .then_execution(
-            workflows=[GoToStep(index=1)],
+            events=[GoToStep(index=1)],
             advance=False
         )
 
         .tick()
         .then_execution(
-            flow_events=[EndTurnEvent()]
+            events=[EndTurnEvent()]
         )
         .then_faction("")
 

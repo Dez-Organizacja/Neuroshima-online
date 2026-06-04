@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from typing import ClassVar
 from main.state.contex import ActionContext
-from main.events.data import Effect
+from main.events.data import Effect, AttackIntent
 from main.workflows.data import WorkflowData
-from main.tokens.abstract_token import Token
 
 # ----------- moving and placing -----------
 
@@ -39,30 +38,27 @@ class PlaceEffect(Effect):
         )
 
 # ----------- damage -----------
+@dataclass
+class EnqueueAttacksEffect(Effect):
+    attack : list[AttackIntent]
+
+    def apply(self, ctx : ActionContext):
+        ctx.state.pending_attacks.extend(self.attack)
 
 @dataclass
-class DamageProfile:
+class DamageEffect(Effect):
+    pos : tuple[int, int]
     power: int = 1
     direction: int | None = None
     blockable: bool = False
 
-
-@dataclass
-class DamageEffect(Effect):
-    pos: tuple[int, int]
-    profile: DamageProfile = field(default_factory=DamageProfile)
-
     def apply(self, ctx: ActionContext):
         unit = ctx.board.get_token(self.pos)
         unit.take_damage(
-            direction=self.profile.direction,
-            damage=self.profile.power,
-            blockable=self.profile.blockable,
+            direction=self.direction,
+            damage=self.power,
+            blockable=self.blockable,
         )
-
-    # def resolve(self, ctx : ActionContext):
-        
-
 # ----------- removing -----------
 
 @dataclass
@@ -74,7 +70,7 @@ class DestroyEffect(Effect):
         ctx.board.destroy_token(self.pos)
 
 @dataclass
-class RemoveDeadUnitsEffect(Effect):
+class RemoveUnitsEffect(Effect):
     positions: list[tuple[int, int]]
     recompute_passive: ClassVar[bool] = True
 

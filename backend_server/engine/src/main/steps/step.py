@@ -13,7 +13,7 @@ from main.steps.config import (
 )
 
 from main.events.workflow import PopWorkflow, PushWorkflow, GoToStep
-from main.events.data import ExecutionResult
+from main.events.data import Event
 from main.steps.data import StepResult
 
 from typing import TypeVar, Generic
@@ -66,23 +66,23 @@ class ResolveStep(AutomaticStep[ResolveStepConfig]):
         super().__init__(config)
     
     def execute(self, ctx : ActionContext) -> StepResult:
-        res : ExecutionResult = self.config.resolve_func(ctx) or ExecutionResult()
+        res : list[Event] = self.config.resolve_func(ctx) or []
         if self.config.wf_finished:
-            res.workflow_effects.append(PopWorkflow())
+            res.append(PopWorkflow())
         return StepResult(execution_result=res)
 
 
 A = TypeVar("A", bound = UserAction)
    
-class SetStep(AutomaticStep[SetStepConfig], Generic[A]):
-    def __init__(self, config : SetStepConfig, action : A):
-        super().__init__(config)
-        self.action = action
+# class SetStep(AutomaticStep[SetStepConfig], Generic[A]):
+#     def __init__(self, config : SetStepConfig, action : A):
+#         super().__init__(config)
+#         self.action = action
 
-    def execute(self, ctx : ActionContext) -> StepResult:
-        value = self.config.getter(self.action)
-        self.config.setter(ctx.workflow_data, value)
-        return StepResult()
+#     def execute(self, ctx : ActionContext) -> StepResult:
+#         value = self.config.getter(self.action)
+#         self.config.setter(ctx.workflow_data, value)
+#         return StepResult()
 
 class InitStep(AutomaticStep[InitStepConfig]):
     def __init__(self, config : InitStepConfig):
@@ -96,9 +96,7 @@ class InitStep(AutomaticStep[InitStepConfig]):
             as_child=self.config.as_child,
             config = self.config.wf_config
         )
-        return StepResult(
-            execution_result=ExecutionResult(workflow_effects=[effect])
-        ) 
+        return StepResult(execution_result=[effect]) 
     
 class RepeatStep(AutomaticStep[RepeatStepConfig]):
     def __init__(self, config : RepeatStepConfig):
@@ -108,7 +106,7 @@ class RepeatStep(AutomaticStep[RepeatStepConfig]):
         res = StepResult()
         if self.config.check_func(ctx):
             effect = GoToStep(self.config.repeat_from_index)
-            res.execution_result.workflow_effects.append(effect)
+            res.execution_result.append(effect)
             res.advance = False
             
         return res
