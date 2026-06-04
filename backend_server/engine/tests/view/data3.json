@@ -9,8 +9,8 @@
         "ROTATION" : 0,
         "WIRED" : false,
         "ability_used" : false,
-        "clever_iniciative" : {
-          "iniciative_boosts" : 0,
+        "clever_initiative" : {
+          "initiative_boosts" : 0,
           "initiative" : [ ],
           "is_blocked_to_0" : false,
           "num_of_new" : 0
@@ -26,8 +26,8 @@
         "ROTATION" : 0,
         "WIRED" : false,
         "ability_used" : false,
-        "clever_iniciative" : {
-          "iniciative_boosts" : 0,
+        "clever_initiative" : {
+          "initiative_boosts" : 0,
           "initiative" : [ ],
           "is_blocked_to_0" : false,
           "num_of_new" : 0
@@ -43,8 +43,8 @@
         "ROTATION" : 0,
         "WIRED" : false,
         "ability_used" : false,
-        "clever_iniciative" : {
-          "iniciative_boosts" : 1,
+        "clever_initiative" : {
+          "initiative_boosts" : 1,
           "initiative" : [ [ 2, false, true ] ],
           "is_blocked_to_0" : false,
           "num_of_new" : 0

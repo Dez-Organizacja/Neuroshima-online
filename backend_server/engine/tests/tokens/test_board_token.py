@@ -89,14 +89,19 @@ class TestBoardToken:
             "clever_initiative": {
                 "initiative": [[2, True, True], [1, False, False]],
                 "is_blocked_to_0": False,
-                "iniciative_boosts": 0,
+                "initiative_boosts": 0,
                 "num_of_new": 1,
             },
         }
 
         token = BoardToken(**data)
 
-        assert token.clever_initiative.export_state() == data["clever_initiative"]
+        assert token.to_dict()["clever_initiative"] == {
+            "initiative": [2, 1],
+            "is_used": [True, False],
+            "is_basic": [True, False],
+            "num_of_old": 1,
+        }
 
     def test_serializator_keeps_clever_initiative_state(self):
         data = {
@@ -105,14 +110,19 @@ class TestBoardToken:
             "clever_initiative": {
                 "initiative": [[2, True, True], [1, False, False]],
                 "is_blocked_to_0": False,
-                "iniciative_boosts": 0,
+                "initiative_boosts": 0,
                 "num_of_new": 1,
             },
         }
 
         token = Serializator.from_dict_dataclass(BoardToken, data)
 
-        assert token.clever_initiative.export_state() == data["clever_initiative"]
+        assert token.to_dict()["clever_initiative"] == {
+            "initiative": [2, 1],
+            "is_used": [True, False],
+            "is_basic": [True, False],
+            "num_of_old": 1,
+        }
 
     # def test_board_get_ability(self):
     #     token = BoardToken(name="biegacz", faction="posterunek")

@@ -10,7 +10,7 @@ wlasciwosci = {
         TokenStats.HP: 3,
         TokenStats.ARMOR: [0]
     },
-    "hybryda": {
+    "cyborg": {
         TokenKey.TYPE : TokenType.BOARD,
         TokenKey.UNIT_COUNT : 2,
         TokenStats.HP: 1,
@@ -85,7 +85,7 @@ wlasciwosci = {
         },
         TokenStats.INITIATIVE: [2]
     },
-    "szerszen": {
+    "rozpruwacz": {
         TokenKey.TYPE : TokenType.BOARD,
         TokenKey.UNIT_COUNT : 1,
         TokenStats.HP: 1,

@@ -37,6 +37,23 @@ class BoardToken(AbstractToken):
     # chwilowo zadane np w trakcie bitwy
     wounds : list[int] = field(default_factory=list)
 
+    def _load_clever_initiative(self, data: CleverInitiative | dict) -> None:
+        if isinstance(data, CleverInitiative):
+            data = data.to_dict()
+
+        initiative_data = data.get("initiative", [])
+        state = dict(data)
+        if initiative_data and isinstance(initiative_data[0], list):
+            state["initiative"] = [entry[0] for entry in initiative_data]
+            state["is_used"] = [entry[1] for entry in initiative_data]
+            state["is_basic"] = [entry[2] for entry in initiative_data]
+
+        self.clever_initiative.from_dict(state)
+        self.clever_initiative.is_blocked_to_0 = data.get("is_blocked_to_0", False)
+        self.clever_initiative.initiative_boosts = data.get("initiative_boosts", 0)
+        self.clever_initiative.num_of_new = data.get("num_of_new", self.clever_initiative.num_of_new)
+        self.clever_initiative.num_of_old = data.get("num_of_old", self.clever_initiative.num_of_old)
+
     def __post_init__(self):
         clever_initiative_data = self.clever_initiative
         self.load()
@@ -44,10 +61,7 @@ class BoardToken(AbstractToken):
         
         self.clever_initiative = CleverInitiative(self.initiative)
         if clever_initiative_data is not None:
-            if isinstance(clever_initiative_data, CleverInitiative):
-                self.clever_initiative.import_state(clever_initiative_data.export_state())
-            else:
-                self.clever_initiative.import_state(clever_initiative_data)
+            self._load_clever_initiative(clever_initiative_data)
         self.real_boost_target = self.boost_target
 
     # ---------- reset ----------
@@ -162,7 +176,7 @@ class BoardToken(AbstractToken):
         return self.boosts
 
     def get_attacks(self, which_initiative) -> dict:      
-        if self.clever_initiative.activate(which_initiative) or self.wired:
+        if not self.clever_initiative.activate(which_initiative) or self.wired:
             return {}
         return self.attacks
     
@@ -178,23 +192,13 @@ class BoardToken(AbstractToken):
             "wounds": self.wounds,
             "wired": self.wired,
             "ability_used" : self.ability_used,
+            "clever_initiative": self.clever_initiative.to_dict() if self.clever_initiative else None,
         }
         return data
-    
-    def to_dict_battle(self) -> dict:
-        data = self.to_dict()
-        data["clever_iniciative"] = self.clever_initiative.export_state() if self.clever_initiative else None
 
-        return data
+    def to_dict_battle(self) -> dict:
+        return self.to_dict()
     
     @classmethod
     def from_dict(cls, data: dict) -> "BoardToken":
-        normalized = dict(data)
-        clever_initiative_data = normalized.pop("clever_initiative", None)
-        if clever_initiative_data is None:
-            clever_initiative_data = normalized.pop("clever_iniciative", None)
-
-        token = Serializator.from_dict_dataclass(cls, normalized)
-        if clever_initiative_data is not None and token.clever_initiative is not None:
-            token.clever_initiative.import_state(clever_initiative_data)
-        return token
+        return Serializator.from_dict_dataclass(cls, data)

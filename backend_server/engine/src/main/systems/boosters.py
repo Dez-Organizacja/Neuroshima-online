@@ -37,7 +37,7 @@ class BoosterSolver():
             token.boost_target = token.real_boost_target
             token.meele_boosts = 0
             token.shoot_boosts = 0
-            token.clever_initiative.begin_iniciative()
+            token.clever_initiative.begin_initiative()
 
     def is_valid_target(self, tokenID : int, relation : TokenRelation, my_fraction : str) -> bool:
         if (tokenID is None):
@@ -108,10 +108,10 @@ class BoosterSolver():
         self.board.tokens[tokenID].shoot_boosts += 1
 
     def initiative(self, tokenID):
-        self.board.tokens[tokenID].clever_initiative.iniciative_boosts += 1
+        self.board.tokens[tokenID].clever_initiative.initiative_boosts += 1
 
     def minus_initiative(self, tokenID):
-        self.board.tokens[tokenID].clever_initiative.iniciative_boosts -= 1
+        self.board.tokens[tokenID].clever_initiative.initiative_boosts -= 1
  
     def new_initiative(self, tokenID):
         self.board.tokens[tokenID].clever_initiative.num_of_new += 1

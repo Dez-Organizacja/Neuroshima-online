@@ -33,7 +33,7 @@ wlasciwosci = {
         TokenStats.WIRE : [2],
         TokenStats.INITIATIVE: [1]
     },
-    "super-mutant": {
+    "supermutant": {
         TokenKey.TYPE: TokenType.BOARD,
         TokenKey.UNIT_COUNT: 1,
         TokenStats.HP: 2,
@@ -96,7 +96,7 @@ wlasciwosci = {
         },
         TokenStats.BOOST_TARGET: TokenRelation.OWN
     },
-    "super-oficer": {
+    "superoficer": {
         TokenKey.TYPE: TokenType.BOARD,
         TokenKey.UNIT_COUNT: 1,
         TokenStats.HP: 2,

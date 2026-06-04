@@ -63,12 +63,12 @@ def test_game_state_serialization_preserves_battle_initiative_state():
     restored_token = restored_state.board.get_token((2, 4))
 
     # THEN
-    assert restored_token.clever_initiative.export_state() == token.clever_initiative.export_state()
+    assert restored_token.clever_initiative.to_dict() == token.clever_initiative.to_dict()
     assert restored_token.get_attacks(2) == {}
     assert restored_token.get_attacks(1) == {
         Attack.MELEE: [[0, 1], [5, 1]],
     }
 
-    restored_token.clever_initiative.begin_iniciative()
+    restored_token.clever_initiative.begin_initiative()
 
-    assert restored_token.clever_initiative.export_iniciative() == [[2, False, True]]
+    assert restored_token.get_attacks(1) == {}

@@ -10,7 +10,7 @@ def solve_boosters(board):
 def initiatives(board, pos):
     return board.get_token(pos).clever_initiative.initiative
 
-def activates_at(board, pos, initiative, can = False):
+def activates_at(board, pos, initiative, can = True):
     return can == board.get_token(pos).clever_initiative.activate(initiative)
 
 def can_activates_at(board, pos, initiative, can):
@@ -68,9 +68,9 @@ class TestBoost:
 
         solve_boosters(board)
 
-        assert board.get_token((1, 5)).clever_initiative.iniciative_boosts == 1
-        assert board.get_token((2, 6)).clever_initiative.iniciative_boosts == 1
-        assert board.get_token((1, 3)).clever_initiative.iniciative_boosts == 0
+        assert board.get_token((1, 5)).clever_initiative.initiative_boosts == 1
+        assert board.get_token((2, 6)).clever_initiative.initiative_boosts == 1
+        assert board.get_token((1, 3)).clever_initiative.initiative_boosts == 0
 
 
     def test_boost4(self):
@@ -116,11 +116,11 @@ class TestBoost:
 
         board.import_token((2, 4), {"name": "klaun", "faction": "moloch", "rotation": 0})
         board.import_token((3, 3), {"name": "matka", "faction": "moloch", "rotation": 0})
-        board.get_token((2, 4)).clever_initiative = CleverInitiative([3, 1])
+        board.get_token((2, 4)).clever_initiative = CleverInitiative([3, 2, 1])
 
         solve_boosters(board)
 
-        assert initiatives(board, (2, 4)) == [3, 2, 1]
+        assert initiatives(board, (2, 4)) == [3, 2, 1, 0]
         
 
     def test_boost6(self):
@@ -148,7 +148,7 @@ class TestBoost:
 
 
     def test_boost8(self):
-        # test aktywacji
+        # test aktywacji + test used
         board = Board()
 
         board.import_token((2, 4), {"name": "klaun", "faction": "moloch", "rotation": 0})
@@ -158,9 +158,13 @@ class TestBoost:
         solve_boosters(board)
 
         assert initiatives(board, (2, 4)) == [2, 1]
-        assert board.get_token((2, 4)).clever_initiative.iniciative_boosts == 1
+        assert board.get_token((2, 4)).clever_initiative.initiative_boosts == 1
         assert activates_at(board, (2, 4), 3)
         assert activates_at(board, (2, 4), 2)
+
+        board.destroy_token((1, 3))
+        solve_boosters(board)
+
         assert not activates_at(board, (2, 4), 1)
 
 
@@ -175,13 +179,13 @@ class TestBoost:
         solve_boosters(board)
 
         assert initiatives(board, (2, 4)) == [0, -1]
-        assert board.get_token((2, 4)).clever_initiative.iniciative_boosts == 1
+        assert board.get_token((2, 4)).clever_initiative.initiative_boosts == 1
 
         solve_boosters(board)
 
-        assert board.get_token((2, 4)).clever_initiative.iniciative_boosts == 1
+        assert board.get_token((2, 4)).clever_initiative.initiative_boosts == 1
         assert activates_at(board, (2, 4), 1)
-        assert activates_at(board, (2, 4), 0)
+        assert not activates_at(board, (2, 4), 0)
         assert not activates_at(board, (2, 4), -1)
 
 
@@ -195,7 +199,7 @@ class TestBoost:
         solve_boosters(board)
         solve_boosters(board)
 
-        assert initiatives(board, (2, 4)) == [2, 1]
+        assert initiatives(board, (2, 4)) == [2]
 
     def test_boost11(self):
         board = Board()
@@ -208,7 +212,7 @@ class TestBoost:
 
         assert can_activates_at(board, (2, 4), 3, True)
         assert can_activates_at(board, (2, 4), 2, False)
-        assert can_activates_at(board, (2, 4), 1, False)
+        assert can_activates_at(board, (2, 4), 1, True)
 
         assert activates_at(board, (2, 4), 2)
 
@@ -217,20 +221,20 @@ class TestBoost:
         solve_boosters(board)
 
         assert can_activates_at(board, (2, 4), 3, True)
-        assert can_activates_at(board, (2, 4), 2, False)
+        assert can_activates_at(board, (2, 4), 2, True)
         assert can_activates_at(board, (2, 4), 1, False)
-        assert can_activates_at(board, (2, 4), 0, False)
+        assert can_activates_at(board, (2, 4), 0, True)
 
         board.destroy_token((3, 3))
         solve_boosters(board)
 
         assert can_activates_at(board, (2, 4), 3, True)
-        assert can_activates_at(board, (2, 4), 2, False)
-        assert can_activates_at(board, (2, 4), 1, False)
+        assert can_activates_at(board, (2, 4), 2, True)
+        assert can_activates_at(board, (2, 4), 1, True)
         assert can_activates_at(board, (2, 4), 0, True)
 
-        assert activates_at(board, (2, 4), 2)
-        assert activates_at(board, (2, 4), 1)
+        assert not activates_at(board, (2, 4), 2)
+        assert not activates_at(board, (2, 4), 1)
 
         board.import_token((3, 3), {"name": "matka", "faction": "moloch", "rotation": 0})
         board.import_token((1, 3), {"name": "matka", "faction": "moloch", "rotation": 2})
@@ -238,7 +242,7 @@ class TestBoost:
         solve_boosters(board)
 
         assert can_activates_at(board, (2, 4), 3, True)
-        assert can_activates_at(board, (2, 4), 2, False)
+        assert can_activates_at(board, (2, 4), 2, True)
         assert can_activates_at(board, (2, 4), 1, False)
         assert can_activates_at(board, (2, 4), 0, False)
 
