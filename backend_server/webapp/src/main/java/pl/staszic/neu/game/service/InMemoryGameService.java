@@ -251,7 +251,7 @@ public class InMemoryGameService implements GameService {
         Game game = new Game();
 
         try {
-            Map<String, String> playerFactionsByClientId = room.getPlayerFactions();
+            Map<String, String> playerFactionsByClientId = room.getScenario();
         }
         catch (IllegalStateException e){
             throw new GameValidationException("Cannot start game: " + e.getMessage());

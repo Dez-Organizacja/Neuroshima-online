@@ -85,7 +85,7 @@ public class InMemoryRestService implements RestService {
             logger.error("Odpowiedź z {} nie jest poprawnym JSON-em: {}", url, e.getMessage());
             throw new RuntimeException("Serwer zwrócił odpowiedź, której nie da się sparsować jako JSON", e);
         } catch (RestClientException e) {
-            restClientErrorLogger.error("Błąd podczas POST request do {}: {}", url, e.getMessage(), e);
+            restClientErrorLogger.error("Błąd podczas POST request do {}: {}, request body: {}", url, e.getMessage(), requestBody, e);
             throw new RuntimeException("Nie udało się wysłać żądania POST do: " + url, e);
         }
     }
