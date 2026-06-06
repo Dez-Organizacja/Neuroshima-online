@@ -73,7 +73,7 @@ class HandWorkflow(DispatchActionWorkflow):
         ability = token.get_ability()
         # print(f"token {token}")
         # print(f"ability {ability}")
-        if ability is None:
+        if ability == Ability.NO_ABILITY:
             return WorkflowName.PLACE
         
         return self.get_workflow_for_ability(ability)
@@ -96,5 +96,9 @@ class BoardWorkflow(DispatchActionWorkflow):
 
         if ctx.board.get_token(pos) is None:
             pos = ctx.workflow_data.destination
+
+        token = ctx.board.get_token(pos)
+        if token is None:
+            raise ValueError("nie mozna oznaczyc uzycia abilki bez jednostki na planszy")
 
         return [MarkAbilityUsedEffect(pos)]

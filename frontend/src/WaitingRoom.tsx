@@ -28,12 +28,12 @@ export function RoomScreen({onSwitchToGame, onSwitchToMenu} : RoomScreenProps){
     const [playersInRoom, setPlayersInRoom] = useState<string[]>([]);
     const [playerFactions, setPlayerFactions] = useState<PlayerFactions>();
     const [currentReply, setCurrentReply] = useState<string>("");
-    const factions : string[] = ["borgo", "moloch"];
+    const factions : string[] = ["borgo", "moloch", "posterunek", "hegemonia"];
     const [faction, setFaction] = useState<string>("");
     useEffect(() => {
         if(!latestMessage){
             return ;
-        }
+        }       
         if(latestMessage.messageType == "NEWGAME_RESPONSE" && typeof latestMessage.createdGameId === "string"){
             console.log("New game started");
             localStorage.setItem("gameId", latestMessage.createdGameId);
@@ -103,10 +103,14 @@ export function RoomScreen({onSwitchToGame, onSwitchToMenu} : RoomScreenProps){
         if(!playerFactions){
             return;
         }
-        const length = Object.keys(playerFactions).length;
-        if(playersInRoom.length == 2 && length == 2){
+        // to robi to ze w selectedFacions sa tylko stringi wywala null'e czyli jest to lista z 2 frakcjami
+        const selectedFactions = playersInRoom
+            .map((player) => playerFactions[player])
+            .filter((faction): faction is string => typeof faction === "string");
+
+        if(playersInRoom.length == 2 && selectedFactions.length == 2){
             try{
-                const response = await startNewGameAWFR(playersInRoom, factions);
+                const response = await startNewGameAWFR(playersInRoom, selectedFactions);
                 if(response.messageType == "NEWGAME_RESPONSE" && typeof response.createdGameId === "string"){
                     console.log("New game started");
                     localStorage.setItem("gameId", response.createdGameId);
@@ -135,6 +139,8 @@ export function RoomScreen({onSwitchToGame, onSwitchToMenu} : RoomScreenProps){
             <DisplayText text = "Select Faction"></DisplayText>
             <Button onClick={() => {setFaction("borgo")}} text = "Borgo"></Button>
             <Button onClick={() => {setFaction("moloch")}} text = "Moloch"></Button>
+            <Button onClick={() => {setFaction("posterunek")}} text = "Posterunek"></Button>
+            <Button onClick={() => {setFaction("hegemonia")}} text = "Hegemonia"></Button>
             <Button onClick={HandleFaction} text = "Confirm"></Button>
             <DisplayText text = "Players and their factions"></DisplayText>
             <DisplayPlayerFactions playerFactions={playerFactions ?? {}}></DisplayPlayerFactions>

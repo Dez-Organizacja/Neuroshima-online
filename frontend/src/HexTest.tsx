@@ -34,6 +34,7 @@ export default function HexTest(){
         return <div>Loading game...</div>;
     }
 
+    const currentfaction = gameState.view.uiState.faction;
     const Items = [];
     // =============== //
 
@@ -43,7 +44,7 @@ export default function HexTest(){
 
                 console.log(gameState.view.state.board);
 
-                console.log(gameState.view.state.hands.borgo.tokens);
+                console.log(gameState.view.state.hands[currentfaction]?.tokens ?? []);
                 // =================== ================= =================== //
 
 
@@ -92,8 +93,6 @@ export default function HexTest(){
     const RightX = ScreenWidth - Size - 10;
     // vertically centered
     const StartY = CenterY - VerticalSpacing;
-
-    const currentfaction = gameState.view.uiState.faction;
 
     for (let i = -1; i <= 3; i+=2) {
         const FinalX = LeftX;
