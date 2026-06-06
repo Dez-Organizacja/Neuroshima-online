@@ -14,6 +14,16 @@ if [ ! -d "log" ]; then
     mkdir log
 fi
 
+if [ ! -d "webapp/db" ]; then
+    echo "Creating db directory..."
+    mkdir -p webapp/db
+fi
+
+if [ ! -f "webapp/db/users.db" ]; then
+    echo "Creating users.db..."
+    touch webapp/db/users.db
+fi
+
 echo "Building and starting Docker containers..."
 docker compose up -d --build
 echo "Backend services have been started in the background."

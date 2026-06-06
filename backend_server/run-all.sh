@@ -7,6 +7,16 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENGINE_DIR="$ROOT_DIR/engine"
 WEBAPP_DIR="$ROOT_DIR/webapp"
 
+if [ ! -d "$WEBAPP_DIR/db" ]; then
+    echo "Creating db directory..."
+    mkdir -p "$WEBAPP_DIR/db"
+fi
+
+if [ ! -f "$WEBAPP_DIR/db/users.db" ]; then
+    echo "Creating users.db..."
+    touch "$WEBAPP_DIR/db/users.db"
+fi
+
 PYTHON_PID=""
 
 cleanup() {

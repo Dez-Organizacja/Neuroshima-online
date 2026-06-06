@@ -1,0 +1,227 @@
+2026-06-06 20:02:49.337 [main] INFO  pl.staszic.neu.Main - Starting Main using Java 17.0.19 with PID 1 (/app/app.jar started by root in /app)
+2026-06-06 20:02:49.338 [main] INFO  pl.staszic.neu.Main - No active profile set, falling back to 1 default profile: "default"
+2026-06-06 20:02:49.605 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-06 20:02:49.634 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 25 ms. Found 1 JPA repository interfaces.
+2026-06-06 20:02:49.863 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2026-06-06 20:02:49.868 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-06 20:02:49.869 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-06 20:02:49.869 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.1]
+2026-06-06 20:02:49.903 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-06-06 20:02:49.903 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 547 ms
+2026-06-06 20:02:49.991 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-06 20:02:50.014 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.1.5.Final
+2026-06-06 20:02:50.089 [main] WARN  org.hibernate.orm.deprecation - HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+2026-06-06 20:02:50.144 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-06 20:02:50.219 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@492fc69e
+2026-06-06 20:02:50.220 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-06 20:02:50.231 [main] INFO  SQL dialect - HHH000400: Using dialect: org.hibernate.community.dialect.SQLiteDialect
+2026-06-06 20:02:50.521 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-06-06 20:02:50.524 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-06 20:02:50.726 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-06 20:02:50.818 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5e519ad3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7bc44ce8, org.springframework.security.web.context.SecurityContextHolderFilter@15400fff, org.springframework.security.web.header.HeaderWriterFilter@e57e5d6, org.springframework.web.filter.CorsFilter@59072e9d, org.springframework.security.web.authentication.logout.LogoutFilter@12fcc71f, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@455c1d8c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1e7ab390, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@77774571, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@58472096, org.springframework.security.web.session.SessionManagementFilter@561b61ed, org.springframework.security.web.access.ExceptionTranslationFilter@22a6e998, org.springframework.security.web.access.intercept.AuthorizationFilter@3c3a0032]
+2026-06-06 20:02:50.901 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-06 20:02:50.909 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2026-06-06 20:02:50.916 [main] INFO  pl.staszic.neu.Main - Started Main in 1.723 seconds (process running for 1.997)
+2026-06-06 20:03:25.735 [http-nio-8080-exec-1] INFO  o.a.coyote.http11.Http11Processor - Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+java.lang.IllegalArgumentException: Invalid character found in method name [0xff0xf40xff0xfd0x06...]. HTTP method names must be tokens
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:419)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:272)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:861)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1739)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2026-06-06 20:05:09.461 [http-nio-8080-exec-4] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-06 20:05:09.462 [http-nio-8080-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-06 20:05:09.462 [http-nio-8080-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2026-06-06 20:05:14.162 [http-nio-8080-exec-7] INFO  p.s.n.w.handler.WebSocketHandler - Authenticated client dawid1 connected as session: 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:05:14.163 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Authenticated client dawid1 connected as session: f94acc5e-8308-f091-64cf-4fda10af639e
+2026-06-06 20:05:14.166 [http-nio-8080-exec-3] ERROR p.s.n.w.handler.WebSocketHandler - WebSocket error for client f94acc5e-8308-f091-64cf-4fda10af639e: null
+java.io.EOFException: null
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.fillReadBuffer(NioEndpoint.java:1290)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.read(NioEndpoint.java:1177)
+	at org.apache.tomcat.websocket.server.WsFrameServer.onDataAvailable(WsFrameServer.java:75)
+	at org.apache.tomcat.websocket.server.WsFrameServer.doOnDataAvailable(WsFrameServer.java:183)
+	at org.apache.tomcat.websocket.server.WsFrameServer.notifyDataAvailable(WsFrameServer.java:162)
+	at org.apache.tomcat.websocket.server.WsHttpUpgradeHandler.upgradeDispatch(WsHttpUpgradeHandler.java:157)
+	at org.apache.coyote.http11.upgrade.UpgradeProcessorInternal.dispatch(UpgradeProcessorInternal.java:60)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:59)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:861)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1739)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2026-06-06 20:05:14.167 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Client disconnected: {"clientId":"f94acc5e-8308-f091-64cf-4fda10af639e","messageType":"DISCONNECTION","message":"Client disconnected with status: 1006","timestamp":"2026-06-06T20:05:14.167080266"}
+2026-06-06 20:06:29.125 [http-nio-8080-exec-9] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"CREATENEWROOM_REQUEST","roomId":"123","playerName":"dawid1"}
+2026-06-06 20:06:29.136 [http-nio-8080-exec-9] INFO  p.s.n.w.handler.WebSocketHandler - Room created: {"messageType":"CREATENEWROOM_RESPONSE","timestamp":"2026-06-06T20:06:29.129229194","clientId":"083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5","createdRoomId":"123","serverStatus":"STARTED room=123 player=dawid1"}
+2026-06-06 20:07:08.221 [http-nio-8080-exec-6] INFO  p.s.n.w.handler.WebSocketHandler - Authenticated client abc connected as session: 15823ca0-2f9e-5e12-173b-b2f60c21a7d2
+2026-06-06 20:07:08.221 [http-nio-8080-exec-6] ERROR p.s.n.w.handler.WebSocketHandler - WebSocket error for client 15823ca0-2f9e-5e12-173b-b2f60c21a7d2: null
+java.io.EOFException: null
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.fillReadBuffer(NioEndpoint.java:1290)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.read(NioEndpoint.java:1177)
+	at org.apache.tomcat.websocket.server.WsFrameServer.onDataAvailable(WsFrameServer.java:75)
+	at org.apache.tomcat.websocket.server.WsFrameServer.doOnDataAvailable(WsFrameServer.java:183)
+	at org.apache.tomcat.websocket.server.WsFrameServer.notifyDataAvailable(WsFrameServer.java:162)
+	at org.apache.tomcat.websocket.server.WsHttpUpgradeHandler.upgradeDispatch(WsHttpUpgradeHandler.java:157)
+	at org.apache.coyote.http11.upgrade.UpgradeProcessorInternal.dispatch(UpgradeProcessorInternal.java:60)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:59)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:861)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1739)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2026-06-06 20:07:08.221 [http-nio-8080-exec-6] INFO  p.s.n.w.handler.WebSocketHandler - Client disconnected: {"clientId":"15823ca0-2f9e-5e12-173b-b2f60c21a7d2","messageType":"DISCONNECTION","message":"Client disconnected with status: 1006","timestamp":"2026-06-06T20:07:08.221799562"}
+2026-06-06 20:07:08.230 [http-nio-8080-exec-2] INFO  p.s.n.w.handler.WebSocketHandler - Authenticated client abc connected as session: e8b72b0a-7dff-221f-5b7d-6a0fc9bfac0f
+2026-06-06 20:07:11.806 [http-nio-8080-exec-7] INFO  p.s.n.w.handler.WebSocketHandler - Message received from abc: {"messageType":"JOINROOM_REQUEST","roomId":"123","playerName":"abc"}
+2026-06-06 20:07:11.813 [http-nio-8080-exec-7] INFO  p.s.n.w.handler.WebSocketHandler - Room joined: {"messageType":"JOINROOM_RESPONSE","timestamp":"2026-06-06T20:07:11.809436837","clientId":"e8b72b0a-7dff-221f-5b7d-6a0fc9bfac0f","serverStatus":"JOINED room=123 player=abc"}
+2026-06-06 20:07:24.597 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"SETFACTION_REQUEST","faction":"hegemonia"}
+2026-06-06 20:07:24.604 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Faction selected: {"messageType":"SETFACTION_RESPONSE","timestamp":"2026-06-06T20:07:24.6007169","clientId":"083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5","serverStatus":"Faction succesfully selected","faction":"hegemonia"}
+2026-06-06 20:07:24.789 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"SETFACTION_REQUEST","faction":"hegemonia"}
+2026-06-06 20:07:24.794 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Faction selected: {"messageType":"SETFACTION_RESPONSE","timestamp":"2026-06-06T20:07:24.790359516","clientId":"083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5","serverStatus":"Faction succesfully selected","faction":"hegemonia"}
+2026-06-06 20:07:31.365 [http-nio-8080-exec-9] INFO  p.s.n.w.handler.WebSocketHandler - Message received from abc: {"messageType":"SETFACTION_REQUEST","faction":"posterunek"}
+2026-06-06 20:07:31.371 [http-nio-8080-exec-9] INFO  p.s.n.w.handler.WebSocketHandler - Faction selected: {"messageType":"SETFACTION_RESPONSE","timestamp":"2026-06-06T20:07:31.366905358","clientId":"e8b72b0a-7dff-221f-5b7d-6a0fc9bfac0f","serverStatus":"Faction succesfully selected","faction":"posterunek"}
+2026-06-06 20:07:35.474 [http-nio-8080-exec-10] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"NEWGAME_REQUEST","roomId":"123","scenario":{"factions":["posterunek","hegemonia"]}}
+2026-06-06 20:07:35.479 [http-nio-8080-exec-10] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima
+2026-06-06 20:07:35.500 [http-nio-8080-exec-10] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima
+2026-06-06 20:07:35.503 [http-nio-8080-exec-10] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:35.517 [http-nio-8080-exec-10] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:35.525 [http-nio-8080-exec-10] INFO  p.s.n.w.handler.WebSocketHandler - Game started: {"messageType":"NEWGAME_RESPONSE","timestamp":"2026-06-06T20:07:35.500357799","clientId":"083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5","createdGameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","roomId":"123","serverStatus":"STARTED game=123 in room=123 by=083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5","gameView":{"availableActions":{"board":[],"buttons":[],"hand":[true,false,false]},"state":{"board":[],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":["sztab"]},"posterunek":{"tokens":[]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}}}
+2026-06-06 20:07:43.506 [http-nio-8080-exec-1] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"hand","slot":0}}
+2026-06-06 20:07:43.512 [http-nio-8080-exec-1] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:43.516 [http-nio-8080-exec-1] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:43.518 [http-nio-8080-exec-1] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:43.526 [http-nio-8080-exec-1] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:43.526 [http-nio-8080-exec-1] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@7a9add6e
+2026-06-06 20:07:43.528 [http-nio-8080-exec-1] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:07:44.306 [http-nio-8080-exec-4] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"board","pos":[1,3]}}
+2026-06-06 20:07:44.307 [http-nio-8080-exec-4] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:44.316 [http-nio-8080-exec-4] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:44.316 [http-nio-8080-exec-4] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:44.318 [http-nio-8080-exec-4] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:44.318 [http-nio-8080-exec-4] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@4d100b41
+2026-06-06 20:07:44.319 [http-nio-8080-exec-4] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:07:46.499 [http-nio-8080-exec-5] INFO  p.s.n.w.handler.WebSocketHandler - Message received from abc: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"hand","slot":0}}
+2026-06-06 20:07:46.500 [http-nio-8080-exec-5] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:46.508 [http-nio-8080-exec-5] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:46.508 [http-nio-8080-exec-5] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:46.511 [http-nio-8080-exec-5] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:46.511 [http-nio-8080-exec-5] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@2f884e57
+2026-06-06 20:07:46.512 [http-nio-8080-exec-5] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client e8b72b0a-7dff-221f-5b7d-6a0fc9bfac0f
+2026-06-06 20:07:49.955 [http-nio-8080-exec-6] INFO  p.s.n.w.handler.WebSocketHandler - Message received from abc: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"board","pos":[3,3]}}
+2026-06-06 20:07:49.957 [http-nio-8080-exec-6] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:49.963 [http-nio-8080-exec-6] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:49.963 [http-nio-8080-exec-6] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:49.965 [http-nio-8080-exec-6] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:49.966 [http-nio-8080-exec-6] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@14957e25
+2026-06-06 20:07:49.966 [http-nio-8080-exec-6] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client e8b72b0a-7dff-221f-5b7d-6a0fc9bfac0f
+2026-06-06 20:07:53.963 [http-nio-8080-exec-2] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"hand","slot":0}}
+2026-06-06 20:07:53.963 [http-nio-8080-exec-2] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:53.970 [http-nio-8080-exec-2] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:53.970 [http-nio-8080-exec-2] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:53.972 [http-nio-8080-exec-2] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:53.972 [http-nio-8080-exec-2] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@273ab5bd
+2026-06-06 20:07:53.973 [http-nio-8080-exec-2] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:07:55.554 [http-nio-8080-exec-7] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"board","pos":[4,4]}}
+2026-06-06 20:07:55.555 [http-nio-8080-exec-7] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:55.562 [http-nio-8080-exec-7] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:55.562 [http-nio-8080-exec-7] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:55.564 [http-nio-8080-exec-7] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:55.564 [http-nio-8080-exec-7] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@6c45d5f0
+2026-06-06 20:07:55.564 [http-nio-8080-exec-7] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:07:59.089 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"button","name":"end_turn"}}
+2026-06-06 20:07:59.091 [http-nio-8080-exec-3] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:59.097 [http-nio-8080-exec-3] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:07:59.097 [http-nio-8080-exec-3] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:59.099 [http-nio-8080-exec-3] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:07:59.099 [http-nio-8080-exec-3] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@609228ca
+2026-06-06 20:07:59.099 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:08:01.159 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Message received from abc: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"hand","slot":1}}
+2026-06-06 20:08:01.160 [http-nio-8080-exec-8] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:01.167 [http-nio-8080-exec-8] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:01.167 [http-nio-8080-exec-8] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:01.169 [http-nio-8080-exec-8] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:01.169 [http-nio-8080-exec-8] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@4094c7a8
+2026-06-06 20:08:01.170 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client e8b72b0a-7dff-221f-5b7d-6a0fc9bfac0f
+2026-06-06 20:08:02.264 [http-nio-8080-exec-9] INFO  p.s.n.w.handler.WebSocketHandler - Message received from abc: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"board","pos":[3,3]}}
+2026-06-06 20:08:02.265 [http-nio-8080-exec-9] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:02.272 [http-nio-8080-exec-9] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:02.272 [http-nio-8080-exec-9] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:02.275 [http-nio-8080-exec-9] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:02.275 [http-nio-8080-exec-9] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@4a824f3d
+2026-06-06 20:08:02.276 [http-nio-8080-exec-9] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client e8b72b0a-7dff-221f-5b7d-6a0fc9bfac0f
+2026-06-06 20:08:03.191 [http-nio-8080-exec-10] INFO  p.s.n.w.handler.WebSocketHandler - Message received from abc: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"board","pos":[3,1]}}
+2026-06-06 20:08:03.193 [http-nio-8080-exec-10] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:03.200 [http-nio-8080-exec-10] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:03.200 [http-nio-8080-exec-10] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:03.203 [http-nio-8080-exec-10] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:03.203 [http-nio-8080-exec-10] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@2f38b8e4
+2026-06-06 20:08:03.203 [http-nio-8080-exec-10] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client e8b72b0a-7dff-221f-5b7d-6a0fc9bfac0f
+2026-06-06 20:08:05.599 [http-nio-8080-exec-1] INFO  p.s.n.w.handler.WebSocketHandler - Message received from abc: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"button","name":"end_turn"}}
+2026-06-06 20:08:05.601 [http-nio-8080-exec-1] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:05.609 [http-nio-8080-exec-1] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:05.610 [http-nio-8080-exec-1] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:05.615 [http-nio-8080-exec-1] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:05.615 [http-nio-8080-exec-1] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@6262700b
+2026-06-06 20:08:05.616 [http-nio-8080-exec-1] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client e8b72b0a-7dff-221f-5b7d-6a0fc9bfac0f
+2026-06-06 20:08:11.622 [http-nio-8080-exec-5] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"hand","slot":0}}
+2026-06-06 20:08:11.624 [http-nio-8080-exec-5] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:11.632 [http-nio-8080-exec-5] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:11.632 [http-nio-8080-exec-5] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:11.635 [http-nio-8080-exec-5] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:11.635 [http-nio-8080-exec-5] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@745d46d8
+2026-06-06 20:08:11.636 [http-nio-8080-exec-5] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:08:12.100 [http-nio-8080-exec-6] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"board","pos":[2,2]}}
+2026-06-06 20:08:12.101 [http-nio-8080-exec-6] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:12.108 [http-nio-8080-exec-6] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:12.108 [http-nio-8080-exec-6] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:12.110 [http-nio-8080-exec-6] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:12.110 [http-nio-8080-exec-6] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@2bc17fe0
+2026-06-06 20:08:12.110 [http-nio-8080-exec-6] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:08:21.412 [http-nio-8080-exec-2] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"hand","slot":1}}
+2026-06-06 20:08:21.413 [http-nio-8080-exec-2] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:21.420 [http-nio-8080-exec-2] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:21.420 [http-nio-8080-exec-2] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:21.421 [http-nio-8080-exec-2] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:21.422 [http-nio-8080-exec-2] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@21537ca3
+2026-06-06 20:08:21.422 [http-nio-8080-exec-2] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:08:21.892 [http-nio-8080-exec-7] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"board","pos":[2,6]}}
+2026-06-06 20:08:21.893 [http-nio-8080-exec-7] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:21.900 [http-nio-8080-exec-7] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:21.901 [http-nio-8080-exec-7] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:21.903 [http-nio-8080-exec-7] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:21.903 [http-nio-8080-exec-7] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@38c014de
+2026-06-06 20:08:21.904 [http-nio-8080-exec-7] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:08:24.219 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"hand","slot":0}}
+2026-06-06 20:08:24.222 [http-nio-8080-exec-3] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:24.229 [http-nio-8080-exec-3] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:24.229 [http-nio-8080-exec-3] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:24.231 [http-nio-8080-exec-3] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:24.231 [http-nio-8080-exec-3] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@11fcbf82
+2026-06-06 20:08:24.231 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:08:24.579 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"board","pos":[1,5]}}
+2026-06-06 20:08:24.580 [http-nio-8080-exec-8] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:24.584 [http-nio-8080-exec-8] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:24.584 [http-nio-8080-exec-8] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:24.586 [http-nio-8080-exec-8] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:24.586 [http-nio-8080-exec-8] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@170be2d2
+2026-06-06 20:08:24.586 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:08:27.828 [http-nio-8080-exec-9] INFO  p.s.n.w.handler.WebSocketHandler - Message received from dawid1: {"messageType":"ACTION_REQUEST","gameId":"7cfe0b1f-8192-4d99-b4a0-8077f2e2bb4d","actionData":{"type":"button","name":"end_turn"}}
+2026-06-06 20:08:27.829 [http-nio-8080-exec-9] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:27.836 [http-nio-8080-exec-9] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/action
+2026-06-06 20:08:27.836 [http-nio-8080-exec-9] INFO  p.s.n.r.service.InMemoryRestService - Wysyłam POST request na: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:27.838 [http-nio-8080-exec-9] INFO  p.s.n.r.service.InMemoryRestService - Otrzymano odpowiedź z: http://engine:5000/api/neuroshima/view
+2026-06-06 20:08:27.838 [http-nio-8080-exec-9] INFO  p.s.n.g.service.InMemoryGameService - Action processed: pl.staszic.neu.messages.ActionRequest@6e97076c
+2026-06-06 20:08:27.838 [http-nio-8080-exec-9] INFO  p.s.n.w.handler.WebSocketHandler - Action processed for client 083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5
+2026-06-06 20:09:25.475 [SpringApplicationShutdownHook] INFO  p.s.n.w.handler.WebSocketHandler - Client disconnected: {"clientId":"e8b72b0a-7dff-221f-5b7d-6a0fc9bfac0f","messageType":"DISCONNECTION","message":"Client disconnected with status: 1001","timestamp":"2026-06-06T20:09:25.475753749"}
+2026-06-06 20:09:25.476 [SpringApplicationShutdownHook] INFO  p.s.n.w.handler.WebSocketHandler - Client disconnected: {"clientId":"083f80ad-4d5c-7e90-9c7b-fbdc3e6df4a5","messageType":"DISCONNECTION","message":"Client disconnected with status: 1001","timestamp":"2026-06-06T20:09:25.476457532"}
+2026-06-06 20:09:25.491 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-06 20:09:25.495 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-06 20:09:25.498 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

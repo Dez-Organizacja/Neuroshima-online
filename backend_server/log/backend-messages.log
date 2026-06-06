@@ -1,0 +1,4624 @@
+2026-06-06 20:07:35.480 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima
+BODY:
+{
+  "factions" : [ "posterunek", "hegemonia" ]
+}
+======================================
+
+2026-06-06 20:07:35.499 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima
+STATUS: 200 OK
+BODY:
+{"board":[],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":["sztab"]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss","ganger","straznik","uniwersalnyzolnierz","uniwersalnyzolnierz"]},"posterunek":{"hand":{"tokens":[]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","sztab","biegacz","komandos","likwidator","ruch","bitwa"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":null,"target_pos":null,"type":null,"unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":1,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":3},"current_step_index":2,"name":"headquarter_turn"}]}
+
+================================
+
+2026-06-06 20:07:35.504 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:07:35.500563745",
+  "gameState" : {
+    "board" : [ ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "sztab" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "sztab", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "headquarter_turn"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:07:35.515 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[],"buttons":[],"hand":[true,false,false]},"state":{"board":[],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":["sztab"]},"posterunek":{"tokens":[]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:43.513 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:07:43.51176272",
+  "gameState" : {
+    "board" : [ ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "sztab" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "sztab", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "headquarter_turn"
+    } ]
+  },
+  "userAction" : {
+    "type" : "hand",
+    "slot" : 0
+  }
+}
+======================================
+
+2026-06-06 20:07:43.515 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":["sztab"]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss","ganger","straznik","uniwersalnyzolnierz","uniwersalnyzolnierz"]},"posterunek":{"hand":{"tokens":[]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","sztab","biegacz","komandos","likwidator","ruch","bitwa"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":0,"target_pos":null,"type":"hand","unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":1,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":3},"current_step_index":4,"name":"headquarter_turn"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":0,"name":"headquarter_place"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:43.518 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:07:43.518097525",
+  "gameState" : {
+    "board" : [ ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "sztab" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "sztab", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 0,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "headquarter_turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "headquarter_place"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:07:43.525 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[[0,2],[0,4],[0,6],[1,1],[1,3],[1,5],[1,7],[2,0],[2,2],[2,4],[2,6],[2,8],[3,1],[3,3],[3,5],[3,7],[4,2],[4,4],[4,6]],"buttons":[],"hand":[false,false,false]},"state":{"board":[],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":["sztab"]},"posterunek":{"tokens":[]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:44.308 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:07:44.306882056",
+  "gameState" : {
+    "board" : [ ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "sztab" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "sztab", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 0,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "headquarter_turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "headquarter_place"
+    } ]
+  },
+  "userAction" : {
+    "type" : "board",
+    "pos" : [ 1, 3 ]
+  }
+}
+======================================
+
+2026-06-06 20:07:44.316 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"posterunek","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":[]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss","ganger","straznik","uniwersalnyzolnierz","uniwersalnyzolnierz"]},"posterunek":{"hand":{"tokens":["sztab"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator","ruch","bitwa"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":null,"target_pos":null,"type":null,"unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":2,"name":"game"},{"config":{"faction":"posterunek","factions":[],"hand_limit":3},"current_step_index":2,"name":"headquarter_turn"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:44.316 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:07:44.316568355",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "sztab" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "headquarter_turn"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:07:44.318 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[],"buttons":[],"hand":[true,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":[]},"posterunek":{"tokens":["sztab"]}}},"uiState":{"faction":"posterunek","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:46.501 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:07:46.499755713",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "sztab" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "headquarter_turn"
+    } ]
+  },
+  "userAction" : {
+    "type" : "hand",
+    "slot" : 0
+  }
+}
+======================================
+
+2026-06-06 20:07:46.507 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"posterunek","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":[]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss","ganger","straznik","uniwersalnyzolnierz","uniwersalnyzolnierz"]},"posterunek":{"hand":{"tokens":["sztab"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator","ruch","bitwa"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":0,"target_pos":null,"type":"hand","unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":2,"name":"game"},{"config":{"faction":"posterunek","factions":[],"hand_limit":3},"current_step_index":4,"name":"headquarter_turn"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":0,"name":"headquarter_place"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:46.508 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:07:46.508390182",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "sztab" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 0,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "headquarter_turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "headquarter_place"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:07:46.511 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[[0,2],[0,4],[0,6],[1,1],[1,5],[1,7],[2,0],[2,2],[2,4],[2,6],[2,8],[3,1],[3,3],[3,5],[3,7],[4,2],[4,4],[4,6]],"buttons":[],"hand":[false,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":[]},"posterunek":{"tokens":["sztab"]}}},"uiState":{"faction":"posterunek","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:49.958 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:07:49.956358263",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "sztab" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 0,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "headquarter_turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "headquarter_place"
+    } ]
+  },
+  "userAction" : {
+    "type" : "board",
+    "pos" : [ 3, 3 ]
+  }
+}
+======================================
+
+2026-06-06 20:07:49.963 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":["uniwersalnyzolnierz"]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss","ganger","straznik","uniwersalnyzolnierz"]},"posterunek":{"hand":{"tokens":[]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator","ruch","bitwa"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":null,"target_pos":null,"type":null,"unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":3,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":1},"current_step_index":2,"name":"turn"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:49.963 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:07:49.963461572",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "uniwersalnyzolnierz" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 3,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 1
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:07:49.965 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[],"buttons":["end_turn"],"hand":[true,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":["uniwersalnyzolnierz"]},"posterunek":{"tokens":[]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:53.964 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:07:53.963605986",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "uniwersalnyzolnierz" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 3,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 1
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  },
+  "userAction" : {
+    "type" : "hand",
+    "slot" : 0
+  }
+}
+======================================
+
+2026-06-06 20:07:53.970 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":["uniwersalnyzolnierz"]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss","ganger","straznik","uniwersalnyzolnierz"]},"posterunek":{"hand":{"tokens":[]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator","ruch","bitwa"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":0,"target_pos":null,"type":"hand","unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":3,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":1},"current_step_index":4,"name":"turn"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":1,"name":"hand"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":0,"name":"place"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:53.971 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:07:53.970886072",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "uniwersalnyzolnierz" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 0,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 3,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 1
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "place"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:07:53.972 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[[0,2],[0,4],[0,6],[1,1],[1,5],[1,7],[2,0],[2,2],[2,4],[2,6],[2,8],[3,1],[3,5],[3,7],[4,2],[4,4],[4,6]],"buttons":["cancel","discard"],"hand":[false,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":["uniwersalnyzolnierz"]},"posterunek":{"tokens":[]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:55.556 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:07:55.555024464",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "uniwersalnyzolnierz" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 0,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 3,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 1
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "place"
+    } ]
+  },
+  "userAction" : {
+    "type" : "board",
+    "pos" : [ 4, 4 ]
+  }
+}
+======================================
+
+2026-06-06 20:07:55.562 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":[]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss","ganger","straznik","uniwersalnyzolnierz"]},"posterunek":{"hand":{"tokens":[]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator","ruch","bitwa"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":null,"target_pos":null,"type":null,"unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":3,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":1},"current_step_index":2,"name":"turn"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:55.562 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:07:55.562511708",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 3,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 1
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:07:55.564 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[],"buttons":["end_turn"],"hand":[false,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":[]},"posterunek":{"tokens":[]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:59.091 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:07:59.090549593",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator", "ruch", "bitwa" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 3,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 1
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  },
+  "userAction" : {
+    "type" : "button",
+    "name" : "end_turn"
+  }
+}
+======================================
+
+2026-06-06 20:07:59.097 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"posterunek","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":[]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss","ganger","straznik","uniwersalnyzolnierz"]},"posterunek":{"hand":{"tokens":["bitwa","ruch"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":null,"target_pos":null,"type":null,"unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":4,"name":"game"},{"config":{"faction":"posterunek","factions":[],"hand_limit":2},"current_step_index":2,"name":"turn"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:07:59.097 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:07:59.097405836",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa", "ruch" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 2
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:07:59.099 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[],"buttons":["end_turn"],"hand":[true,true,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":[]},"posterunek":{"tokens":["bitwa","ruch"]}}},"uiState":{"faction":"posterunek","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:01.161 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:08:01.160120919",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa", "ruch" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 2
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  },
+  "userAction" : {
+    "type" : "hand",
+    "slot" : 1
+  }
+}
+======================================
+
+2026-06-06 20:08:01.166 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"posterunek","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":[]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss","ganger","straznik","uniwersalnyzolnierz"]},"posterunek":{"hand":{"tokens":["bitwa","ruch"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":1,"target_pos":null,"type":"hand","unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":4,"name":"game"},{"config":{"faction":"posterunek","factions":[],"hand_limit":2},"current_step_index":4,"name":"turn"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":1,"name":"hand"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":0,"name":"move"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:01.167 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:08:01.167346944",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa", "ruch" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 1,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 2
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "move"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:08:01.169 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[[3,3]],"buttons":["discard","cancel"],"hand":[false,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":[]},"posterunek":{"tokens":["bitwa","ruch"]}}},"uiState":{"faction":"posterunek","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:02.266 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:08:02.265027079",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa", "ruch" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 1,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 2
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "move"
+    } ]
+  },
+  "userAction" : {
+    "type" : "board",
+    "pos" : [ 3, 3 ]
+  }
+}
+======================================
+
+2026-06-06 20:08:02.272 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"posterunek","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":[]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss","ganger","straznik","uniwersalnyzolnierz"]},"posterunek":{"hand":{"tokens":["bitwa","ruch"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":1,"target_pos":null,"type":"board","unit_pos":[3,3]},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":4,"name":"game"},{"config":{"faction":"posterunek","factions":[],"hand_limit":2},"current_step_index":4,"name":"turn"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":1,"name":"hand"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":1,"name":"move"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:02.273 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:08:02.272730575",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa", "ruch" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 1,
+      "target_pos" : null,
+      "type" : "board",
+      "unit_pos" : [ 3, 3 ]
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 2
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "move"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:08:02.275 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[[2,2],[2,4],[3,1],[3,5],[4,2],[3,3]],"buttons":["cancel"],"hand":[false,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":[]},"posterunek":{"tokens":["bitwa","ruch"]}}},"uiState":{"faction":"posterunek","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:03.194 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:08:03.19342376",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa", "ruch" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 1,
+      "target_pos" : null,
+      "type" : "board",
+      "unit_pos" : [ 3, 3 ]
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 2
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "move"
+    } ]
+  },
+  "userAction" : {
+    "type" : "board",
+    "pos" : [ 3, 1 ]
+  }
+}
+======================================
+
+2026-06-06 20:08:03.200 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"posterunek","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":[]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss","ganger","straznik","uniwersalnyzolnierz"]},"posterunek":{"hand":{"tokens":["bitwa"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":null,"target_pos":null,"type":null,"unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":4,"name":"game"},{"config":{"faction":"posterunek","factions":[],"hand_limit":2},"current_step_index":2,"name":"turn"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:03.201 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:08:03.200861861",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 2
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:08:03.203 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[],"buttons":["end_turn"],"hand":[true,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":[]},"posterunek":{"tokens":["bitwa"]}}},"uiState":{"faction":"posterunek","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:05.602 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:08:05.600849272",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss", "ganger", "straznik", "uniwersalnyzolnierz" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 2
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  },
+  "userAction" : {
+    "type" : "button",
+    "name" : "end_turn"
+  }
+}
+======================================
+
+2026-06-06 20:08:05.608 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":["uniwersalnyzolnierz","straznik","ganger"]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss"]},"posterunek":{"hand":{"tokens":["bitwa"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":null,"target_pos":null,"type":null,"unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":5,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":3},"current_step_index":2,"name":"turn"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:05.610 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:08:05.609865531",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "uniwersalnyzolnierz", "straznik", "ganger" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:08:05.614 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[],"buttons":["end_turn"],"hand":[true,true,true]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":["uniwersalnyzolnierz","straznik","ganger"]},"posterunek":{"tokens":["bitwa"]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:11.625 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:08:11.623800901",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "uniwersalnyzolnierz", "straznik", "ganger" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  },
+  "userAction" : {
+    "type" : "hand",
+    "slot" : 0
+  }
+}
+======================================
+
+2026-06-06 20:08:11.632 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":["uniwersalnyzolnierz","straznik","ganger"]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss"]},"posterunek":{"hand":{"tokens":["bitwa"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":0,"target_pos":null,"type":"hand","unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":5,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":3},"current_step_index":4,"name":"turn"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":1,"name":"hand"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":0,"name":"place"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:11.632 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:08:11.632627392",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "uniwersalnyzolnierz", "straznik", "ganger" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 0,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "place"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:08:11.635 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[[0,2],[0,4],[0,6],[1,1],[1,5],[1,7],[2,0],[2,2],[2,4],[2,6],[2,8],[3,3],[3,5],[3,7],[4,2],[4,6]],"buttons":["cancel","discard"],"hand":[false,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":["uniwersalnyzolnierz","straznik","ganger"]},"posterunek":{"tokens":["bitwa"]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:12.102 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:08:12.101067095",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "uniwersalnyzolnierz", "straznik", "ganger" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 0,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "place"
+    } ]
+  },
+  "userAction" : {
+    "type" : "board",
+    "pos" : [ 2, 2 ]
+  }
+}
+======================================
+
+2026-06-06 20:08:12.108 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":["straznik","ganger"]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss"]},"posterunek":{"hand":{"tokens":["bitwa"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":null,"target_pos":null,"type":null,"unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":5,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":3},"current_step_index":2,"name":"turn"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:12.108 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:08:12.108859306",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "straznik", "ganger" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:08:12.110 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[],"buttons":["end_turn"],"hand":[true,true,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":["straznik","ganger"]},"posterunek":{"tokens":["bitwa"]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:21.413 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:08:21.412819133",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "straznik", "ganger" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  },
+  "userAction" : {
+    "type" : "hand",
+    "slot" : 1
+  }
+}
+======================================
+
+2026-06-06 20:08:21.419 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":["straznik","ganger"]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss"]},"posterunek":{"hand":{"tokens":["bitwa"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":1,"target_pos":null,"type":"hand","unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":5,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":3},"current_step_index":4,"name":"turn"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":1,"name":"hand"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":0,"name":"place"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:21.420 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:08:21.420259582",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "straznik", "ganger" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 1,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "place"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:08:21.421 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[[0,2],[0,4],[0,6],[1,1],[1,5],[1,7],[2,0],[2,4],[2,6],[2,8],[3,3],[3,5],[3,7],[4,2],[4,6]],"buttons":["cancel","discard"],"hand":[false,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":["straznik","ganger"]},"posterunek":{"tokens":["bitwa"]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:21.893 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:08:21.893064523",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "straznik", "ganger" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 1,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "place"
+    } ]
+  },
+  "userAction" : {
+    "type" : "board",
+    "pos" : [ 2, 6 ]
+  }
+}
+======================================
+
+2026-06-06 20:08:21.900 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,6],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"ganger","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":["straznik"]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss"]},"posterunek":{"hand":{"tokens":["bitwa"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":null,"target_pos":null,"type":null,"unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":5,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":3},"current_step_index":2,"name":"turn"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:21.901 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:08:21.900894591",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 6 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "ganger",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "straznik" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:08:21.903 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[],"buttons":["end_turn"],"hand":[true,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,6],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"ganger","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":["straznik"]},"posterunek":{"tokens":["bitwa"]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:24.223 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:08:24.221777122",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 6 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "ganger",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "straznik" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  },
+  "userAction" : {
+    "type" : "hand",
+    "slot" : 0
+  }
+}
+======================================
+
+2026-06-06 20:08:24.229 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,6],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"ganger","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":["straznik"]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss"]},"posterunek":{"hand":{"tokens":["bitwa"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":0,"target_pos":null,"type":"hand","unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":5,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":3},"current_step_index":4,"name":"turn"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":1,"name":"hand"},{"config":{"faction":"","factions":[],"hand_limit":3},"current_step_index":0,"name":"place"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:24.229 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:08:24.229592838",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 6 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "ganger",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "straznik" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 0,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "place"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:08:24.231 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[[0,2],[0,4],[0,6],[1,1],[1,5],[1,7],[2,0],[2,4],[2,8],[3,3],[3,5],[3,7],[4,2],[4,6]],"buttons":["cancel","discard"],"hand":[false,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,6],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"ganger","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":["straznik"]},"posterunek":{"tokens":["bitwa"]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:24.581 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:08:24.579875911",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 6 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "ganger",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ "straznik" ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : 0,
+      "target_pos" : null,
+      "type" : "hand",
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 4,
+      "name" : "turn"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 0,
+      "name" : "place"
+    } ]
+  },
+  "userAction" : {
+    "type" : "board",
+    "pos" : [ 1, 5 ]
+  }
+}
+======================================
+
+2026-06-06 20:08:24.584 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,6],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"ganger","rotation":0,"wired":false,"wounds":[]}},{"pos":[1,5],"unit":{"ability_used":false,"clever_initiative":{"initiative":[2],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":2,"name":"straznik","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"hegemonia","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":[]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss"]},"posterunek":{"hand":{"tokens":["bitwa"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz","komandos","likwidator"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":null,"target_pos":null,"type":null,"unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":5,"name":"game"},{"config":{"faction":"hegemonia","factions":[],"hand_limit":3},"current_step_index":2,"name":"turn"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:24.584 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:08:24.584341024",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 6 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "ganger",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 1, 5 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 2 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 2,
+        "name" : "straznik",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:08:24.585 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[],"buttons":["end_turn"],"hand":[false,false,false]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,6],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"ganger","rotation":0,"wired":false,"wounds":[]}},{"pos":[1,5],"unit":{"ability_used":false,"clever_initiative":{"initiative":[2],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":2,"name":"straznik","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":[]},"posterunek":{"tokens":["bitwa"]}}},"uiState":{"faction":"hegemonia","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:27.830 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+BODY:
+{
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-06T20:08:27.829016708",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 6 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "ganger",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 1, 5 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 2 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 2,
+        "name" : "straznik",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "hegemonia",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz", "komandos", "likwidator" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 5,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "hegemonia",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  },
+  "userAction" : {
+    "type" : "button",
+    "name" : "end_turn"
+  }
+}
+======================================
+
+2026-06-06 20:08:27.836 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/action
+STATUS: 200 OK
+BODY:
+{"gameState":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,6],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"ganger","rotation":0,"wired":false,"wounds":[]}},{"pos":[1,5],"unit":{"ability_used":false,"clever_initiative":{"initiative":[2],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":2,"name":"straznik","rotation":0,"wired":false,"wounds":[]}}],"current_faction":"posterunek","events_queue":[],"factions":["hegemonia","posterunek"],"pending_attacks":[],"players":{"hegemonia":{"hand":{"tokens":[]},"pile":["transport","biegacz","ruch","ruch","biegacz","bitwa","zwiadowca","ganger","bitwa","bitwa","biegacz","sieciarz","ganger","ruch","oficer1","snajper","bitwa","uniwersalnyzolnierz","gladiator","sieciarz","kwatermistrz","bitwa","odepchniecie","bydlak","ganger","odepchniecie","oficer1","supersieciarz","oficer2","boss"]},"posterunek":{"hand":{"tokens":["bitwa","likwidator","komandos"]},"pile":["likwidator","ruch","pancerzwspomagany","ruch","medyk","bitwa","skoper","biegacz","ckm","bitwa","ruch","medyk","zwiadowca","ruch","bitwa","silacz","snajper","komandos","ruch","zwiadowca","centrumrozpoznania","bitwa","dywersant","oficer","komandos","komandos","ruch","komandos","bitwa","biegacz"]}},"workflow_data":{"button":null,"destination":null,"rotation":null,"slot":null,"target_pos":null,"type":null,"unit_pos":null},"workflow_stack":[{"config":{"faction":"","factions":["hegemonia","posterunek"],"hand_limit":3},"current_step_index":6,"name":"game"},{"config":{"faction":"posterunek","factions":[],"hand_limit":3},"current_step_index":2,"name":"turn"}]},"messageType":"GAMESTATUSCHANGE_RESPONSE"}
+
+================================
+
+2026-06-06 20:08:27.836 INFO  - ===== OUTGOING MESSAGE TO BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+BODY:
+{
+  "messageType" : "GAMEVIEW_REQUEST",
+  "timestamp" : "2026-06-06T20:08:27.836510569",
+  "gameState" : {
+    "board" : [ {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 3, 1 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 0 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "posterunek",
+        "hp" : 20,
+        "name" : "sztab",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 4, 4 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "uniwersalnyzolnierz",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 2, 6 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 3 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 1,
+        "name" : "ganger",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    }, {
+      "pos" : [ 1, 5 ],
+      "unit" : {
+        "ability_used" : false,
+        "clever_initiative" : {
+          "initiative" : [ 2 ],
+          "is_basic" : [ true ],
+          "is_used" : [ false ],
+          "num_of_old" : 0
+        },
+        "damage" : 0,
+        "faction" : "hegemonia",
+        "hp" : 2,
+        "name" : "straznik",
+        "rotation" : 0,
+        "wired" : false,
+        "wounds" : [ ]
+      }
+    } ],
+    "current_faction" : "posterunek",
+    "events_queue" : [ ],
+    "factions" : [ "hegemonia", "posterunek" ],
+    "pending_attacks" : [ ],
+    "players" : {
+      "hegemonia" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ "transport", "biegacz", "ruch", "ruch", "biegacz", "bitwa", "zwiadowca", "ganger", "bitwa", "bitwa", "biegacz", "sieciarz", "ganger", "ruch", "oficer1", "snajper", "bitwa", "uniwersalnyzolnierz", "gladiator", "sieciarz", "kwatermistrz", "bitwa", "odepchniecie", "bydlak", "ganger", "odepchniecie", "oficer1", "supersieciarz", "oficer2", "boss" ]
+      },
+      "posterunek" : {
+        "hand" : {
+          "tokens" : [ "bitwa", "likwidator", "komandos" ]
+        },
+        "pile" : [ "likwidator", "ruch", "pancerzwspomagany", "ruch", "medyk", "bitwa", "skoper", "biegacz", "ckm", "bitwa", "ruch", "medyk", "zwiadowca", "ruch", "bitwa", "silacz", "snajper", "komandos", "ruch", "zwiadowca", "centrumrozpoznania", "bitwa", "dywersant", "oficer", "komandos", "komandos", "ruch", "komandos", "bitwa", "biegacz" ]
+      }
+    },
+    "workflow_data" : {
+      "button" : null,
+      "destination" : null,
+      "rotation" : null,
+      "slot" : null,
+      "target_pos" : null,
+      "type" : null,
+      "unit_pos" : null
+    },
+    "workflow_stack" : [ {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "hegemonia", "posterunek" ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 6,
+      "name" : "game"
+    }, {
+      "config" : {
+        "faction" : "posterunek",
+        "factions" : [ ],
+        "hand_limit" : 3
+      },
+      "current_step_index" : 2,
+      "name" : "turn"
+    } ]
+  }
+}
+======================================
+
+2026-06-06 20:08:27.838 INFO  - ===== RESPONSE FROM BACKEND =====
+URL: http://engine:5000/api/neuroshima/view
+STATUS: 200 OK
+BODY:
+{"gameView":{"availableActions":{"board":[],"buttons":["end_turn"],"hand":[true,true,true]},"state":{"board":[{"pos":[1,3],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[3,1],"unit":{"ability_used":false,"clever_initiative":{"initiative":[0],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"posterunek","hp":20,"name":"sztab","rotation":0,"wired":false,"wounds":[]}},{"pos":[4,4],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,2],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"uniwersalnyzolnierz","rotation":0,"wired":false,"wounds":[]}},{"pos":[2,6],"unit":{"ability_used":false,"clever_initiative":{"initiative":[3],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":1,"name":"ganger","rotation":0,"wired":false,"wounds":[]}},{"pos":[1,5],"unit":{"ability_used":false,"clever_initiative":{"initiative":[2],"is_basic":[true],"is_used":[false],"num_of_old":0},"damage":0,"faction":"hegemonia","hp":2,"name":"straznik","rotation":0,"wired":false,"wounds":[]}}],"factions":["hegemonia","posterunek"],"hands":{"hegemonia":{"tokens":[]},"posterunek":{"tokens":["bitwa","likwidator","komandos"]}}},"uiState":{"faction":"posterunek","message":"","mode":"default"}},"messageType":"GAMEVIEW_RESPONSE"}
+
+================================
+
