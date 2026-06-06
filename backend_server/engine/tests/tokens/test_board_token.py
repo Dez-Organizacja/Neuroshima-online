@@ -124,10 +124,7 @@ class TestBoardToken:
             "num_of_old": 1,
         }
 
-    # def test_board_get_ability(self):
-    #     token = BoardToken(name="biegacz", faction="posterunek")
-    #     # print(token)
-    #     print(TokenKey.ABILITY.name)
-    #     assert TokenKey.ABILITY.name.isidentifier()
-    #     assert hasattr(token, TokenKey.ABILITY.name) 
-    #     assert token.get_ability() == Ability.MOVE
+    def test_board_get_ability(self):
+        token = BoardToken(name="pancerzwspomagany", faction="posterunek")
+
+        assert token.get_ability() == Ability.MOVE

@@ -59,7 +59,7 @@ wlasciwosci = {
         TokenStats.ATTACKS: {
             Attack.SHOOT: [[5, 1]],
         },
-        "abilitki" : ["mobilność"],
+        TokenKey.ABILITY : Ability.MOVE,
         TokenStats.INITIATIVE: [3]
     },
     ############## sztab
@@ -115,7 +115,7 @@ wlasciwosci = {
         TokenStats.BOOST_TARGET: TokenRelation.OWN
     },
 
-    ############# natychmiastowe
+    ############ natychmiastowe
     "bitwa": {
         TokenKey.ABILITY: Ability.BATTLE,
         TokenKey.TYPE: TokenType.INSTANT,

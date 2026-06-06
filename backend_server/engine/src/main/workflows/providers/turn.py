@@ -6,8 +6,10 @@ from main.rules.predicates import (
     is_ally,
     has_ability,
     NOT,
-    has_used_ability
+    has_used_ability,
+    token_predicate,
 )
+from main.tokens.board_token import BoardToken
 from main.board.board_query import BoardQuery
 
 class TurnProvider(WorkflowActionProvider):
@@ -21,11 +23,17 @@ class TurnProvider(WorkflowActionProvider):
             return []
         
     def get_available_positions(self, ctx : ActionContext):
-        return BoardQuery([
+        candidates = BoardQuery([
             is_ally(ctx.faction),
             has_ability,
-            NOT(has_used_ability)
+            NOT(has_used_ability),
+            NOT(token_predicate(BoardToken.is_wired))
         ]).apply(ctx)
+
+        return [
+            pos for pos in candidates
+            if self.rules.can_use_ability(ctx, pos)
+        ]
     
     def get_available_tokens(self, ctx : ActionContext):
         return [i for i in range(ctx.player.hand.size)]

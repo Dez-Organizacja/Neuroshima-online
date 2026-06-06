@@ -10,6 +10,7 @@ from main.workflows.data import WorkflowData
 class MoveEffect(Effect):
     from_pos: tuple[int, int]
     to_pos: tuple[int, int]
+    recompute_passive: ClassVar[bool] = True
 
     def apply(self, ctx: ActionContext):
         ctx.board.move_token(self.from_pos, self.to_pos)

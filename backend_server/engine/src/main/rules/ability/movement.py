@@ -33,7 +33,7 @@ class MoveRules(AbilityRules):
     
     @staticmethod
     def can_use(ctx : ActionContext, pos : tuple[int, int]) -> bool:
-        return not ctx.board.get_token(pos).is_wired
+        return not ctx.board.get_token(pos).is_wired()
     
 class PushRules(AbilityRules):
     @staticmethod
@@ -68,7 +68,7 @@ class PushRules(AbilityRules):
     @staticmethod
     def can_use(ctx : ActionContext, pos : tuple[int, int]) -> bool:
         pusher = ctx.board.get_token(pos)
-        if pusher.is_wired:
+        if pusher.is_wired():
             return False
         
         return any(PushRules.get_targets(ctx, pos))

@@ -2,7 +2,7 @@ from importlib import import_module
 from copy import deepcopy
 # import main.frakcje.moloch
 
-dostepne_frakcje = ["moloch", "borgo", "testowa"]
+dostepne_frakcje = ["moloch", "borgo", "testowa", "posterunek", "hegemonia"]
 path = "main.frakcje"
 frakcje : dict[str, dict] = {}
 

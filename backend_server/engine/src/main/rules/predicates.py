@@ -1,5 +1,6 @@
 from main.state.contex import ActionContext
 from main.tokens.board_token import BoardToken
+from main.tokens.data import Ability
 from typing import Callable
 
 def NOT(predicate):
@@ -43,7 +44,8 @@ def adjacent_to(my_pos):
 
 def has_ability(ctx : ActionContext, pos):
     token = ctx.board.get_token(pos)
-    return token.get_ability() is not None
+    ability = token.get_ability()
+    return ability is not None and ability != Ability.NO_ABILITY
 
 def has_used_ability(ctx : ActionContext, pos):
     token = ctx.board.get_token(pos)

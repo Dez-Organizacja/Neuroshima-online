@@ -6,7 +6,7 @@ from main.steps.config import InitStepConfig
 from main.state.contex import ActionContext
 
 from main.tokens.abstract_token import Token
-from main.tokens.data import Ability
+from main.tokens.data import Ability, TokenType
 from main.tokens.token_factory import TokenFactory
 
 from main.workflows.providers.base import WorkflowActionProvider
@@ -67,6 +67,9 @@ class HandWorkflow(DispatchActionWorkflow):
         # print("dispatch function")
         # print(f"ability {self.get_active_token(ctx).get_ability()}")
         token = self.get_active_token(ctx)
+        if token.type == TokenType.BOARD:
+            return WorkflowName.PLACE
+
         ability = token.get_ability()
         # print(f"token {token}")
         # print(f"ability {ability}")
@@ -89,4 +92,9 @@ class BoardWorkflow(DispatchActionWorkflow):
 
     @staticmethod
     def resolve_function(ctx : ActionContext) -> list[Event]:
-        return [MarkAbilityUsedEffect()]
+        pos = ctx.workflow_data.unit_pos
+
+        if ctx.board.get_token(pos) is None:
+            pos = ctx.workflow_data.destination
+
+        return [MarkAbilityUsedEffect(pos)]
