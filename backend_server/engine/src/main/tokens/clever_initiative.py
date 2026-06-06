@@ -68,9 +68,17 @@ class CleverInitiative():
              self.num_of_old -= 1
 
     def activate(self, initiative: int) -> bool:
-        if (initiative < 0): return False
+        if (initiative < 0 or len(self.initiative) == 0): 
+            return False
+        
         if (self.is_blocked_to_0):
             return initiative == 0
+        
+        if initiative == 0:
+            for initiative, is_used in zip(self.initiative, self.is_used):
+                if initiative <= 0 and is_used == False:
+                    return True
+            return False
         
         for i in range(len(self.initiative)):
             if self.initiative[i] == initiative - self.initiative_boosts and self.is_used[i] == False:
