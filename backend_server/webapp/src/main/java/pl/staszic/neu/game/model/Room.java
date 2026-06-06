@@ -80,20 +80,18 @@ public class Room {
         return players.get(clientId).getFaction();
     }
 
-    public Map<String, String> getScenario(){
-        Map<String, String> factions = new HashMap<>();
-        Set<String> uniqueFactions = new HashSet<>();
+    public Set<String> getFactions(){
+        Set<String> factions = new HashSet<>();
         int playerCount = 0;
         for(Map.Entry<String, RoomMember> entry : players.entrySet()) {
             if(entry.getValue().getStatus() != RoomMember.Status.ACTIVE) {
                 continue;
             }
             playerCount++;
-            factions.put(entry.getKey(), entry.getValue().getFaction());
-            uniqueFactions.add(entry.getValue().getFaction());
+            factions.add(entry.getValue().getFaction());
         }
 
-        if(playerCount != uniqueFactions.size()) {
+        if(playerCount != factions.size()) {
             throw new IllegalStateException("Players need to choose different factions");
         }
 

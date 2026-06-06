@@ -250,14 +250,17 @@ public class InMemoryGameService implements GameService {
 
         Game game = new Game();
 
+        ApiNewGameRequest apiNewGameRequest = new ApiNewGameRequest();
+        JsonNode scenarioNode;
         try {
-            Map<String, String> playerFactionsByClientId = room.getScenario();
-        }
-        catch (IllegalStateException e){
+            scenarioNode = objectMapper.valueToTree(room.getFactions());
+        } catch (IllegalStateException e) {
             throw new GameValidationException("Cannot start game: " + e.getMessage());
         }
 
-        game.setGameState(restService.postJson(gameStateServiceUrl, request.getScenario()));
+        apiNewGameRequest.setScenario(scenarioNode);
+
+        game.setGameState(restService.postJson(gameStateServiceUrl, objectMapper.valueToTree(apiNewGameRequest)));
         activeGames.put(game.getGameId(), game);
 
         room.setGameId(game.getGameId());

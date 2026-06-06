@@ -10,19 +10,8 @@ public class NewGameRequest extends WebSocketMessage {
     @JsonProperty("roomId")
     private String roomId;
 
-    @JsonProperty("scenario")
-    private JsonNode scenario;
-
     public NewGameRequest() {
         super(TYPE);
-    }
-
-    public JsonNode getScenario() {
-        return scenario;
-    }
-
-    public void setScenario(JsonNode scenario) {
-        this.scenario = scenario;
     }
 
     public String getRoomId() {
