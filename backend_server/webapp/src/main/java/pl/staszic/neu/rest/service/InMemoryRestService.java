@@ -21,6 +21,7 @@ import java.util.List;
 public class InMemoryRestService implements RestService {
     private static final Logger logger = LoggerFactory.getLogger(InMemoryRestService.class);
     private static final Logger backendMessageLogger = LoggerFactory.getLogger("BACKEND_MESSAGES");
+    private static final Logger restClientErrorLogger = LoggerFactory.getLogger("REST_CLIENT_ERRORS");
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
@@ -84,7 +85,7 @@ public class InMemoryRestService implements RestService {
             logger.error("Odpowiedź z {} nie jest poprawnym JSON-em: {}", url, e.getMessage());
             throw new RuntimeException("Serwer zwrócił odpowiedź, której nie da się sparsować jako JSON", e);
         } catch (RestClientException e) {
-            logger.error("Błąd podczas POST request do {}: {}", url, e.getMessage());
+            restClientErrorLogger.error("Błąd podczas POST request do {}: {}", url, e.getMessage(), e);
             throw new RuntimeException("Nie udało się wysłać żądania POST do: " + url, e);
         }
     }

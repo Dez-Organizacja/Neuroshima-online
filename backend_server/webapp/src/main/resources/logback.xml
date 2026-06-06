@@ -45,8 +45,26 @@
         </encoder>
     </appender>
 
+    <appender name="REST_CLIENT_ERRORS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/rest-client-errors.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/archive/rest-client-errors-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n%ex</pattern>
+        </encoder>
+    </appender>
+
     <logger name="BACKEND_MESSAGES" level="INFO" additivity="false">
         <appender-ref ref="BACKEND_MESSAGES_FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="REST_CLIENT_ERRORS" level="ERROR" additivity="false">
+        <appender-ref ref="REST_CLIENT_ERRORS_FILE"/>
         <appender-ref ref="CONSOLE"/>
     </logger>
     <!-- Logger dla WebSocket komponentów -->
