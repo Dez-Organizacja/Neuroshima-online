@@ -3,27 +3,16 @@ package pl.staszic.neu.game.model;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Room {
     private String roomId;
-    private String player1;
-    private String player2;
     private String gameId;
-    private final Map<String, String> playerFactions = new ConcurrentHashMap<>();
+    private final Map<String, RoomMember> players = new ConcurrentHashMap<>();
 
     public Room(String roomId) {
         this.roomId = roomId;
-        this.player1 = null;
-        this.player2 = null;
-    }
-
-    public Room(String roomId, String player1, String player2) {
-        this.roomId = roomId;
-        this.player1 = player1;
-        this.player2 = player2;
     }
 
     public String getRoomId() {
@@ -34,52 +23,30 @@ public class Room {
         this.roomId = roomId;
     }
 
-    public String getPlayer1() {
-        return player1;
-    }
-
     public void addPlayer(String player) throws Exception {
-        if(this.player1 == null) {
-            this.player1 = player;
+        if(players.containsKey(player)) {
+            throw new Exception("Player already in the room");
         }
-        else if(this.player2 == null) {
-            this.player2 = player;
-        }
-        else {
-            throw new Exception("Room is full");
-        }
+        players.put(player, new RoomMember(roomId, player, null));
     }
 
     public void removePlayer(String player) throws Exception {
-        if(Objects.equals(this.player1, player)) {
-            this.player1 = null;
+        if(!players.containsKey(player)) {
+            throw new Exception("Player not in the room");
         }
-        else if(Objects.equals(this.player2, player)) {
-            this.player2 = null;
-        }
-        else{
-            throw new Exception("There is no such player in the room");
-        }
-        playerFactions.remove(player);
+        players.remove(player);
     }
 
     public boolean isEmpty() {
-        return player1 == null && player2 == null;
+        return players.isEmpty();
     }
 
     public Set<String> getPlayerIds() {
         Set<String> playerIds = new HashSet<>();
-        if(player1 != null) {
-            playerIds.add(player1);
-        }
-        if(player2 != null) {
-            playerIds.add(player2);
+        for(Map.Entry<String, RoomMember> entry : players.entrySet()) {
+            playerIds.add(entry.getKey());
         }
         return playerIds;
-    }
-
-    public String getPlayer2() {
-        return player2;
     }
 
     public String getGameId() {
@@ -91,7 +58,7 @@ public class Room {
     }
 
     public boolean hasPlayer(String playerId) {
-        return Objects.equals(this.player1, playerId) || Objects.equals(this.player2, playerId);
+        return players.containsKey(playerId);
     }
 
     public boolean hasActiveGame() {
@@ -102,24 +69,32 @@ public class Room {
         this.gameId = null;
     }
 
-    public boolean isFactionSelectedByAnotherPlayer(String clientId, String faction) {
-        for (Map.Entry<String, String> entry : playerFactions.entrySet()) {
-            if (!Objects.equals(entry.getKey(), clientId) && Objects.equals(entry.getValue(), faction)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void setPlayerFaction(String clientId, String faction) {
-        playerFactions.put(clientId, faction);
+        if(!players.containsKey(clientId)) {
+            throw new IllegalArgumentException("Player not in the room");
+        }
+        players.get(clientId).setFaction(faction);
     }
 
     public String getPlayerFaction(String clientId) {
-        return playerFactions.get(clientId);
+        return players.get(clientId).getFaction();
     }
 
     public Map<String, String> getPlayerFactions() {
-        return new HashMap<>(playerFactions);
+        Map<String, String> factions = new HashMap<>();
+        int playerCount = 0;
+        for(Map.Entry<String, RoomMember> entry : players.entrySet()) {
+            if(entry.getValue().getStatus() != RoomMember.Status.ACTIVE) {
+                continue;
+            }
+            playerCount++;
+            factions.put(entry.getKey(), entry.getValue().getFaction());
+        }
+
+        if(playerCount != factions.size()) {
+            throw new IllegalStateException("Players have different factions");
+        }
+
+        return factions;
     }
 }

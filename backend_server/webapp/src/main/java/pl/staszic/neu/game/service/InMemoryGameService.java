@@ -209,11 +209,6 @@ public class InMemoryGameService implements GameService {
                 return response;
             }
 
-            if (room.isFactionSelectedByAnotherPlayer(clientId, faction)) {
-                response.setError("Faction already selected by another player");
-                return response;
-            }
-
             room.setPlayerFaction(clientId, faction);
         }
 
@@ -254,6 +249,14 @@ public class InMemoryGameService implements GameService {
         }
 
         Game game = new Game();
+
+        try {
+            Map<String, String> playerFactionsByClientId = room.getPlayerFactions();
+        }
+        catch (IllegalStateException e){
+            throw new GameValidationException("Cannot start game: " + e.getMessage());
+        }
+
         game.setGameState(restService.postJson(gameStateServiceUrl, request.getScenario()));
         activeGames.put(game.getGameId(), game);
 
