@@ -77,8 +77,15 @@ export default function HexTest(){
                 )
             }
 
+            let Color: string = "#d10606";
+            const Clickable = gameState.view.availableActions.board.find(Clickable =>
+                Clickable[0] === y &&
+                Clickable[1] === x
+            );
+            if(Clickable) Color = "#666666";
+
             Items.push(
-                <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={30} color="#d10606" gameState={gameState} sendAction={sendAction}> {y}, {x} </Hexagon>
+                <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={30} color={Color} opacity={0.5} gameState={gameState} sendAction={sendAction}> {y}, {x} </Hexagon>
             )
         }
     }

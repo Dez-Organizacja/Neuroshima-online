@@ -12,6 +12,7 @@ type HexagonProps = {
     poz2: number;
     size?: number;
     color?: string;
+    opacity?: number;
     rotation?: number;
     onClick?: () => void;
     children?: React.ReactNode;
@@ -62,6 +63,7 @@ const Hexagon: React.FC<HexagonProps> = ({
     poz2,
     size = 100,
     color = "#4CAF50",
+    opacity = 0.3,
     rotation = 0,
     onClick,
     children,
@@ -79,7 +81,8 @@ const Hexagon: React.FC<HexagonProps> = ({
         style={{
             width: size,
             height: height,
-            backgroundColor: color + "33",
+            backgroundColor: color,
+            opacity: opacity,
             position: "absolute",
             left: x - (size / 2),
             top: y - (height / 2),
