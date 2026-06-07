@@ -27,6 +27,7 @@ export function ClickButton(text: string, sendAction : ((action : ActionData) =>
     if(!sendAction){
         return;
     }
+    if(gameState.view.uiState.mode === "rotation") return;
     if(text === "end_turn") {
         console.log("Your turn has ended.")
         const action: ActionData = {

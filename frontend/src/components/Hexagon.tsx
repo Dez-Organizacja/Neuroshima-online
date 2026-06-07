@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import "./Hexagon.css";
 import { ActionData } from "./ActionTypes"
 import { useGameSocketContext } from "../websockets/gameSocketContext";
@@ -17,15 +17,29 @@ type HexagonProps = {
     onClick?: () => void;
     children?: React.ReactNode;
     sendAction? : (action : ActionData) => void;
-    gameState? : GameState;
+    gameState : GameState;
 };
 
-export function ClickCheck(x: number, y: number, gameState : GameState | undefined, sendAction : ((action : ActionData) => void) | undefined) : void {
+export function ClickCheck(x: number, y: number, gameState : GameState | undefined, sendAction : ((action : ActionData) => void) | undefined, rotation: number) : void {
     if(y === 999) return;
     if(!gameState){
         return;
     }
     if(!sendAction){
+        return;
+    }
+    if(gameState.view.uiState.mode === "rotation") {
+        const field = gameState.view.availableActions.board.find(field =>
+            field[0] === x &&
+            field[1] === y
+        );
+        if(!field) return;
+        
+        const action: ActionData = {
+            type: "rotate",
+            rotation: ((rotation - 30) / 60)
+        };
+        sendAction(action);
         return;
     }
     if(y === -1) {
@@ -70,14 +84,39 @@ const Hexagon: React.FC<HexagonProps> = ({
     sendAction,
     gameState,
 }) => {
+
     const height = size * 0.866;
+
+    const canRotate = gameState.view.uiState.mode === "rotation";
+    const [Rotation, setRotation] = useState(rotation);
+    useEffect(() => {
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if(!canRotate) return;
+
+            if (event.key === "ArrowLeft") {
+                setRotation(prev => (prev + 300) % 360);
+            }
+
+            if (event.key === "ArrowRight") {
+                setRotation(prev => (prev + 60) % 360);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+
+    }, [canRotate]);
 
     return (
         <div
             className="hexagon"
             // onClick={onClick}
             // onClick={() => console.log("Clicked hex:", { poz1, poz2 })}
-            onClick={() => ClickCheck(poz1, poz2, gameState, sendAction)}
+            onClick={() => ClickCheck(poz1, poz2, gameState, sendAction, Rotation)}
         style={{
             width: size,
             height: height,
@@ -86,7 +125,7 @@ const Hexagon: React.FC<HexagonProps> = ({
             position: "absolute",
             left: x - (size / 2),
             top: y - (height / 2),
-            transform: `rotate(${rotation}deg) scale(1)`,
+            transform: `rotate(${Rotation}deg) scale(1)`,
         }}
         >
         < div className="hexagon-content">{children}</div>

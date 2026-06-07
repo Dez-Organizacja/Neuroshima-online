@@ -108,9 +108,12 @@ export default function HexTest(){
         const Index = (i + 1) / 2;
         const TokenName = gameState.view.state.hands[currentfaction].tokens[Index];
         const Path = currentfaction + "/" + TokenName;
-        Items.push(
-            <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
-        )
+
+        if(TokenName !== undefined) {
+            Items.push(
+                <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
+            )
+        }
         Items.push(
             <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={-1} size={Size * 2 + 15} rotation={30} color="#00aaff" gameState={gameState} sendAction={sendAction} />
         )
@@ -130,9 +133,12 @@ export default function HexTest(){
         const Index = (i + 1) / 2;
         const TokenName = gameState.view.state.hands[enemyfaction].tokens[Index];
         const Path = enemyfaction + "/" + TokenName;
-        Items.push(
-            <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30}  />
-        )
+
+        if(TokenName !== undefined) {
+            Items.push(
+                <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30}  />
+            )
+        }
         Items.push(
             <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={999} size={Size * 2 + 15} rotation={30} color="#00aaff" gameState={gameState} sendAction={sendAction} />
         )
