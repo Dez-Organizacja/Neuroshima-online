@@ -160,7 +160,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private void handleSetInRoomAttributes(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
         SetInRoomAttributesRequest request = objectMapper.treeToValue(rootNode, SetInRoomAttributesRequest.class);
-        SetInRoomAttributesResponse response = gameService.setFaction(clientId, request);
+        SetInRoomAttributesResponse response = gameService.setInRoomAttributes(clientId, request);
         sendJson(session, response);
 
         String roomId = gameService.getAffiliation(clientId);

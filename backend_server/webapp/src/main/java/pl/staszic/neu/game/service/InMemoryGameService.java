@@ -179,7 +179,7 @@ public class InMemoryGameService implements GameService {
     }
 
     @Override
-    public SetInRoomAttributesResponse setFaction(String clientId, SetInRoomAttributesRequest request) {
+    public SetInRoomAttributesResponse setInRoomAttributes(String clientId, SetInRoomAttributesRequest request) {
         request.setClientId(clientId);
 
         SetInRoomAttributesResponse response = new SetInRoomAttributesResponse();
@@ -190,17 +190,13 @@ public class InMemoryGameService implements GameService {
         String StringStatus = request.getStatus() != null ? request.getStatus().trim() : null;
 
         if (StringStatus != null) {
-            switch (StringStatus) {
-                case "ACTIVE":
-                    status = RoomMember.Status.ACTIVE;
-                    break;
-                case "SPECTATING":
-                    status = RoomMember.Status.SPECTATING;
-                    break;
-                default:
-                    response.setError("Invalid status value: " + request.getStatus());
-                    return response;
-            }
+            status = switch (StringStatus) {
+                case "ACTIVE" -> RoomMember.Status.ACTIVE;
+                case "SPECTATING" -> RoomMember.Status.SPECTATING;
+                default -> RoomMember.Status.ACTIVE; //delete when client will be able to handle spectators
+//                    response.setError("Invalid status value: " + request.getStatus());
+//                    return response;
+            };
         }
 
         if (isBlank(faction)) {
