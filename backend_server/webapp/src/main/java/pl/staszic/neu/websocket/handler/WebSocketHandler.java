@@ -87,7 +87,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
             switch (messageType) {
                 case GetRoomStatusRequest.TYPE -> handleGetRoomStatus(session, clientId, rootNode);
-                case SetFactionRequest.TYPE -> handleSetFaction(session, clientId, rootNode);
+                case SetInRoomAttributesRequest.TYPE -> handleSetInRoomAttributes(session, clientId, rootNode);
                 case ActionRequest.TYPE -> handleActionRequest(clientId, rootNode);
                 case JoinRoomRequest.TYPE -> handleJoinRoom(session, clientId, rootNode);
                 case LeaveRoomRequest.TYPE -> handleLeaveRoom(session, clientId, rootNode);
@@ -158,9 +158,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
         logger.info("Room status: {}", objectMapper.writeValueAsString(response));
     }
 
-    private void handleSetFaction(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
-        SetFactionRequest request = objectMapper.treeToValue(rootNode, SetFactionRequest.class);
-        SetFactionResponse response = gameService.setFaction(clientId, request);
+    private void handleSetInRoomAttributes(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
+        SetInRoomAttributesRequest request = objectMapper.treeToValue(rootNode, SetInRoomAttributesRequest.class);
+        SetInRoomAttributesResponse response = gameService.setFaction(clientId, request);
         sendJson(session, response);
 
         String roomId = gameService.getAffiliation(clientId);
@@ -168,7 +168,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             broadcastRoomStatus(roomId);
         }
 
-        logger.info("Faction selected: {}", objectMapper.writeValueAsString(response));
+        logger.info("Attributes updated: {}", objectMapper.writeValueAsString(response));
     }
 
     private void handleStartNewGame(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {

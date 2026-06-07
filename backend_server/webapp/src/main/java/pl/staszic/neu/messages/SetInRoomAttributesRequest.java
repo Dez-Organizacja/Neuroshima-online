@@ -2,14 +2,17 @@ package pl.staszic.neu.messages;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SetFactionRequest extends WebSocketMessage {
+public class SetInRoomAttributesRequest extends RoomScopedWebSocketMessage {
 
     public static final String TYPE = "SETFACTION_REQUEST";
 
     @JsonProperty("faction")
     private String faction;
 
-    public SetFactionRequest() {
+    @JsonProperty("status")
+    private String status;
+
+    public SetInRoomAttributesRequest() {
         super(TYPE);
     }
 
@@ -19,5 +22,13 @@ public class SetFactionRequest extends WebSocketMessage {
 
     public void setFaction(String faction) {
         this.faction = faction;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

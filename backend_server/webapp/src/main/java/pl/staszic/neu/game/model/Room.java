@@ -69,11 +69,12 @@ public class Room {
         this.gameId = null;
     }
 
-    public void setPlayerFaction(String clientId, String faction) {
+    public void mergePlayerAttributes(String clientId, RoomMember roomMember) {
         if(!players.containsKey(clientId)) {
             throw new IllegalArgumentException("Player not in the room");
         }
-        players.get(clientId).setFaction(faction);
+        players.get(clientId).setFaction(roomMember.getFaction());
+        players.get(clientId).setStatus(roomMember.getStatus());
     }
 
     public String getPlayerFaction(String clientId) {

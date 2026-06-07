@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SetFactionResponse extends WebSocketMessage {
+public class SetInRoomAttributesResponse extends WebSocketMessage {
 
-    public static final String TYPE = "SETFACTION_RESPONSE";
+    public static final String TYPE = "SETROOMSTATUS_RESPONSE";
 
     @JsonProperty("serverStatus")
     private String serverStatus;
@@ -17,7 +17,10 @@ public class SetFactionResponse extends WebSocketMessage {
     @JsonProperty("faction")
     private String faction;
 
-    public SetFactionResponse() {
+    @JsonProperty("status")
+    private String status;
+
+    public SetInRoomAttributesResponse() {
         super(TYPE);
     }
 
@@ -43,5 +46,13 @@ public class SetFactionResponse extends WebSocketMessage {
 
     public void setFaction(String faction) {
         this.faction = faction;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

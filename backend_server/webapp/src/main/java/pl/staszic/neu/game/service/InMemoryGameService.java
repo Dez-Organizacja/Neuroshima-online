@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pl.staszic.neu.game.model.RoomMember;
 import pl.staszic.neu.messages.GameStatusChangeRequest;
 import pl.staszic.neu.game.model.Room;
 import pl.staszic.neu.game.model.Game;
@@ -178,13 +179,30 @@ public class InMemoryGameService implements GameService {
     }
 
     @Override
-    public SetFactionResponse setFaction(String clientId, SetFactionRequest request) {
+    public SetInRoomAttributesResponse setFaction(String clientId, SetInRoomAttributesRequest request) {
         request.setClientId(clientId);
 
-        SetFactionResponse response = new SetFactionResponse();
+        SetInRoomAttributesResponse response = new SetInRoomAttributesResponse();
         response.setClientId(clientId);
 
         String faction = request.getFaction();
+        RoomMember.Status status = null;
+        String StringStatus = request.getStatus() != null ? request.getStatus().trim() : null;
+
+        if (StringStatus != null) {
+            switch (StringStatus) {
+                case "ACTIVE":
+                    status = RoomMember.Status.ACTIVE;
+                    break;
+                case "SPECTATING":
+                    status = RoomMember.Status.SPECTATING;
+                    break;
+                default:
+                    response.setError("Invalid status value: " + request.getStatus());
+                    return response;
+            }
+        }
+
         if (isBlank(faction)) {
             response.setError("Faction is null or empty");
             return response;
@@ -192,6 +210,7 @@ public class InMemoryGameService implements GameService {
 
         faction = faction.trim();
         String roomId = affiliations.get(clientId);
+
         if (roomId == null) {
             response.setError("Client is not in a room");
             return response;
@@ -203,17 +222,28 @@ public class InMemoryGameService implements GameService {
             return response;
         }
 
+        if(room.hasActiveGame()) {
+            response.setError("Cannot change faction: game already started in room=" + roomId);
+            return response;
+        }
+
+        RoomMember newRoomMember = new RoomMember();
+        newRoomMember.setClientId(clientId);
+        newRoomMember.setFaction(faction);
+        newRoomMember.setStatus(status);
+
         synchronized (room) {
             if (!room.hasPlayer(clientId)) {
                 response.setError("Client is not a member of room=" + roomId);
                 return response;
             }
 
-            room.setPlayerFaction(clientId, faction);
+            room.mergePlayerAttributes(clientId, newRoomMember);
         }
 
+        response.setStatus(StringStatus);
         response.setFaction(faction);
-        response.setServerStatus("Faction succesfully selected");
+        response.setServerStatus("Attributes successfully changed in room=" + roomId);
         return response;
     }
 

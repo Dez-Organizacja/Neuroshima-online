@@ -81,6 +81,24 @@ def on_user_input(client: "WebSocketGameClient", user_text: str) -> None:
         except Exception as e:
             logger.info(f"nie wyszedles z pokoju: {e}")
 
+    elif (typ == "SETATTRIBUTES"):
+        if len(wejscie) < 3:
+            logger.warning("Uzycie: SETATTRIBUTES <faction> [status]")
+            return
+
+        message = {
+            "messageType": "SETINROOMATTRIBUTES_REQUEST",
+            "faction": wejscie[1],
+        }
+        if len(wejscie) > 2:
+            message["status"] = wejscie[2]
+
+        try:
+            client.send(message)
+            logger.info("Wyslano SETINROOMATTRIBUTES_REQUEST")
+        except Exception as e:
+            logger.info(f"nie udalo sie ustawic atrybutow: {e}")
+
     elif (typ == "NEWGAME"):
         if(len(wejscie) < 4):
             logger.warning("Uzycie: NEWGAME <roomId> <fracion1> <fracion2>")
@@ -137,4 +155,3 @@ def user_input_loop(client: "WebSocketGameClient") -> None:
             break
 
         on_user_input(client, user_text)
-

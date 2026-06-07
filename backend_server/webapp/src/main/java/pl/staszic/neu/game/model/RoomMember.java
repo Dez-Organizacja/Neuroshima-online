@@ -12,10 +12,9 @@ public class RoomMember {
     private String faction = null;
     private Status status = Status.SPECTATING;
 
-    RoomMember() {
-    }
+    public RoomMember() {}
 
-    RoomMember(String roomId, String clientId, String faction) {
+    public RoomMember(String roomId, String clientId, String faction) {
         this.roomId = roomId;
         this.clientId = clientId;
         this.faction = faction;
