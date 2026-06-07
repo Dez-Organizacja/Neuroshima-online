@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SetInRoomAttributesRequest extends RoomScopedWebSocketMessage {
 
-    public static final String TYPE = "SETFACTION_REQUEST";
+    public static final String TYPE = "SETINROOMATTRIBUTES_REQUEST";
 
     @JsonProperty("faction")
     private String faction;

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SetInRoomAttributesResponse extends WebSocketMessage {
 
-    public static final String TYPE = "SETROOMSTATUS_RESPONSE";
+    public static final String TYPE = "SETINROOMATTRIBUTES_RESPONSE";
 
     @JsonProperty("serverStatus")
     private String serverStatus;
