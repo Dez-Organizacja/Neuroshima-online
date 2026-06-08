@@ -78,6 +78,7 @@ class WorkflowData:
     def set_decision(self, value):
         self.decision = value
 
+
 @dataclass
 class WorkflowConfig:
     faction : str = ""

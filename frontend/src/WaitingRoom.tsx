@@ -1,150 +1,347 @@
-import {useState, useEffect, useContext} from "react";
+import { useEffect, useState } from "react";
 import Button from "./components/Button";
-import TextInput from "./components/TekstInput";
-import DisplayText from "./components/DisplayText";
 import { useGameSocketContext } from "./websockets/gameSocketContext";
-import DisplayStringList from "./components/DisplayStringList"
-import DisplayPlayerFactions from "./components/DisplayPlayerFactions"
-type RoomScreenProps = {
-    onSwitchToGame : () => void;
-    onSwitchToMenu : () => void;
-}
+import DisplayPlayerFactions from "./components/DisplayPlayerFactions";
+import { imagesByName } from "./Images";
+import "./styles/WaitingRoom.css";
 
-type PlayerFactions = Record<string, string | null>
+type RoomScreenProps = {
+  onSwitchToGame: () => void;
+  onSwitchToMenu: () => void;
+};
+
+type PlayerFactions = Record<string, string | null>;
+
+type FactionName = "borgo" | "moloch" | "posterunek" | "hegemonia";
+
+type FactionDetails = {
+  label: string;
+  description: string;
+};
+
+const factions: Record<FactionName, FactionDetails> = {
+  borgo: {
+    label: "Borgo",
+    description: "Mutants built for direct, overwhelming combat.",
+  },
+  moloch: {
+    label: "Moloch",
+    description: "A relentless machine army with strong ranged attacks.",
+  },
+  posterunek: {
+    label: "Posterunek",
+    description: "Mobile soldiers who control positioning and initiative.",
+  },
+  hegemonia: {
+    label: "Hegemonia",
+    description: "Fast gangs that dominate close-range encounters.",
+  },
+};
 
 function isPlayerFactions(value: unknown): value is PlayerFactions {
-    return (
-        typeof value === "object" &&
-        value !== null &&
-        !Array.isArray(value) &&
-        Object.values(value).every(
-            (faction) => typeof faction === "string" || faction === null
-        )
-    );
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value) &&
+    Object.values(value).every(
+      (faction) => typeof faction === "string" || faction === null,
+    )
+  );
 }
 
-export function RoomScreen({onSwitchToGame, onSwitchToMenu} : RoomScreenProps){
-    const {latestMessage, setFactionAWFR, leaveRoomAWFR, startNewGameAWFR} = useGameSocketContext();
-    const [playersInRoom, setPlayersInRoom] = useState<string[]>([]);
-    const [playerFactions, setPlayerFactions] = useState<PlayerFactions>();
-    const [currentReply, setCurrentReply] = useState<string>("");
-    const factions : string[] = ["borgo", "moloch", "posterunek", "hegemonia"];
-    const [faction, setFaction] = useState<string>("");
-    useEffect(() => {
-        if(!latestMessage){
-            return ;
-        }       
-        if(latestMessage.messageType == "NEWGAME_RESPONSE" && typeof latestMessage.createdGameId === "string"){
-            console.log("New game started");
-            localStorage.setItem("gameId", latestMessage.createdGameId);
-            onSwitchToGame();
-        }
-        if(latestMessage.messageType == "GETROOMSTATUS_RESPONSE" &&
-            Array.isArray(latestMessage.playersInRoom) &&
-                latestMessage.playersInRoom.every((player) => typeof player === "string") &&
-                isPlayerFactions(latestMessage.playerFactions)
-            ) {
-            console.log("Refreshed players")
-            setPlayersInRoom(latestMessage.playersInRoom);
-            setPlayerFactions(latestMessage.playerFactions)
-            if(typeof latestMessage.gameId === "string"){
-                onSwitchToGame();
-            }
-        }
+export function RoomScreen({
+  onSwitchToGame,
+  onSwitchToMenu,
+}: RoomScreenProps) {
+  const { latestMessage, setFactionAWFR, leaveRoomAWFR, startNewGameAWFR } =
+    useGameSocketContext();
 
-    }, [latestMessage])
-    async function HandleFaction(){
-        try{
-            if(faction != ""){
-                const response = await setFactionAWFR(faction);
-                if(response.messageType == "SETFACTION_RESPONSE"){
-                    if(typeof response.faction == "string" && typeof response.serverStatus == "string"){
-                        localStorage.setItem("faction", (response.faction));
-                        setCurrentReply(response.serverStatus);
-                        console.log("Response ok")
-                    }
-                    else if(typeof response.error == "string"){
-                        setCurrentReply(response.error);
-                        console.log("Response not ok")
-                    }
-                }
-                else if (response.messageType === "ERROR") {
-                    console.log("Could not set faction:", response.error);
-                }
-            }
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        }
-    }
-    async function HandleLeave() {
-        // RefreshPlayersInRoom()
-        try{
-            const response = await leaveRoomAWFR();
-            if(response.messageType == "LEAVEROOM_RESPONSE"){
-                console.log("Joined room")
-                localStorage.removeItem("room")
-                onSwitchToMenu();
-            }
-            else if (response.messageType === "ERROR") {
-               console.log("Could not leave room:", response.error);
-            }
-        } 
-        catch (error) {
-            if (error instanceof Error) {
-                console.log(error.message);
-            }
-        }
-    }
-    async function HandleStartGame() {
-        // RefreshPlayersInRoom();
-        if(!playerFactions){
-            return;
-        }
-        // to robi to ze w selectedFacions sa tylko stringi wywala null'e czyli jest to lista z 2 frakcjami
-        const selectedFactions = playersInRoom
-            .map((player) => playerFactions[player])
-            .filter((faction): faction is string => typeof faction === "string");
+  const [playersInRoom, setPlayersInRoom] = useState<string[]>([]);
+  const [playerFactions, setPlayerFactions] = useState<PlayerFactions>();
+  const [currentReply, setCurrentReply] = useState<string>("");
+  const [faction, setFaction] = useState<FactionName | "">("");
+  const [isSubmittingFaction, setIsSubmittingFaction] = useState(false);
 
-        if(playersInRoom.length == 2 && selectedFactions.length == 2){
-            try{
-                const response = await startNewGameAWFR(playersInRoom, selectedFactions);
-                if(response.messageType == "NEWGAME_RESPONSE" && typeof response.createdGameId === "string"){
-                    console.log("New game started");
-                    localStorage.setItem("gameId", response.createdGameId);
-                    onSwitchToGame();
-                    console.log("Could not start game");
-                }
-                else if (response.messageType === "ERROR"){
-                }
-            }
-            catch (error) {
-                if (error instanceof Error) {
-                    console.log(error.message);
-                }
-            }
-        }
-        else{
-            console.log("Players != 2");
-        }
+  const roomName = localStorage.getItem("room") ?? "Current room";
+
+  const selectedFactions = playersInRoom
+    .map((player) => playerFactions?.[player])
+    .filter((selected): selected is string => typeof selected === "string");
+
+  const canStartGame =
+    playersInRoom.length === 2 && selectedFactions.length === 2;
+
+  useEffect(() => {
+    if (!latestMessage) {
+      return;
     }
-    return (
-        <div>
-            <Button text = "Leave Room" onClick={HandleLeave}></Button>
-            {/* <Button text = "Refresh Players" onClick={RefreshPlayersInRoom}></Button> */}
-            {/* <DisplayStringList strings={playersInRoom}></DisplayStringList> */}
-            <Button text = "Start Game" onClick={HandleStartGame}></Button>
-            <DisplayText text = "Select Faction"></DisplayText>
-            <Button onClick={() => {setFaction("borgo")}} text = "Borgo"></Button>
-            <Button onClick={() => {setFaction("moloch")}} text = "Moloch"></Button>
-            <Button onClick={() => {setFaction("posterunek")}} text = "Posterunek"></Button>
-            <Button onClick={() => {setFaction("hegemonia")}} text = "Hegemonia"></Button>
-            <Button onClick={HandleFaction} text = "Confirm"></Button>
-            <DisplayText text = "Players and their factions"></DisplayText>
-            <DisplayPlayerFactions playerFactions={playerFactions ?? {}}></DisplayPlayerFactions>
-            <DisplayText text={currentReply}></DisplayText>
+
+    if (
+      latestMessage.messageType === "NEWGAME_RESPONSE" &&
+      typeof latestMessage.createdGameId === "string"
+    ) {
+      localStorage.setItem("gameId", latestMessage.createdGameId);
+      onSwitchToGame();
+    }
+
+    if (
+      latestMessage.messageType === "GETROOMSTATUS_RESPONSE" &&
+      Array.isArray(latestMessage.playersInRoom) &&
+      latestMessage.playersInRoom.every(
+        (player) => typeof player === "string",
+      ) &&
+      isPlayerFactions(latestMessage.playerFactions)
+    ) {
+      setPlayersInRoom(latestMessage.playersInRoom);
+      setPlayerFactions(latestMessage.playerFactions);
+
+      if (typeof latestMessage.gameId === "string") {
+        onSwitchToGame();
+      }
+    }
+  }, [latestMessage, onSwitchToGame]);
+
+  async function handleFaction() {
+    if (!faction || isSubmittingFaction) {
+      return;
+    }
+
+    setIsSubmittingFaction(true);
+    setCurrentReply("");
+
+    try {
+      const response = await setFactionAWFR(faction);
+
+      if (response.messageType === "SETFACTION_RESPONSE") {
+        if (
+          typeof response.faction === "string" &&
+          typeof response.serverStatus === "string"
+        ) {
+          localStorage.setItem("faction", response.faction);
+          setCurrentReply(response.serverStatus);
+        } else if (typeof response.error === "string") {
+          setCurrentReply(response.error);
+        }
+      } else if (response.messageType === "ERROR") {
+        setCurrentReply(
+          typeof response.error === "string"
+            ? response.error
+            : "Could not set faction.",
+        );
+      }
+    } catch (error) {
+      setCurrentReply(
+        error instanceof Error ? error.message : "Could not set faction.",
+      );
+    } finally {
+      setIsSubmittingFaction(false);
+    }
+  }
+
+  async function handleLeave() {
+    try {
+      const response = await leaveRoomAWFR();
+
+      if (response.messageType === "LEAVEROOM_RESPONSE") {
+        localStorage.removeItem("room");
+        onSwitchToMenu();
+      } else if (response.messageType === "ERROR") {
+        setCurrentReply(
+          typeof response.error === "string"
+            ? response.error
+            : "Could not leave room.",
+        );
+      }
+    } catch (error) {
+      setCurrentReply(
+        error instanceof Error ? error.message : "Could not leave room.",
+      );
+    }
+  }
+
+  async function handleStartGame() {
+    if (!playerFactions || !canStartGame) {
+      setCurrentReply(
+        "Two players must select factions before the game can start.",
+      );
+      return;
+    }
+
+    try {
+      const response = await startNewGameAWFR(playersInRoom, selectedFactions);
+
+      if (
+        response.messageType === "NEWGAME_RESPONSE" &&
+        typeof response.createdGameId === "string"
+      ) {
+        localStorage.setItem("gameId", response.createdGameId);
+        onSwitchToGame();
+      } else if (response.messageType === "ERROR") {
+        setCurrentReply(
+          typeof response.error === "string"
+            ? response.error
+            : "Could not start game.",
+        );
+      }
+    } catch (error) {
+      setCurrentReply(
+        error instanceof Error ? error.message : "Could not start game.",
+      );
+    }
+  }
+
+  return (
+    <main className="waiting-room">
+      <div className="waiting-room__noise" aria-hidden="true" />
+
+      <div className="waiting-room__shell">
+        <header className="waiting-room__header">
+          <div>
+            <p className="waiting-room__eyebrow">Neuroshima Hex</p>
+            <h1>Battle staging area</h1>
+            <p className="waiting-room__intro">
+              Choose your army, confirm your faction, and wait for your
+              opponent.
+            </p>
+          </div>
+
+          <div className="waiting-room__header-actions">
+            <div className="room-code" title={roomName}>
+              <span className="room-code__label">Room</span>
+              <strong>{roomName}</strong>
+            </div>
+
+            <Button
+              className="room-button room-button--ghost"
+              text="Leave room"
+              onClick={handleLeave}
+            />
+          </div>
+        </header>
+
+        <div className="waiting-room__layout">
+          <section className="war-panel war-panel--factions">
+            <div className="section-heading">
+              <div>
+                <p className="section-heading__number">01</p>
+                <h2>Select your faction</h2>
+              </div>
+              <p>Only one commander can claim each army.</p>
+            </div>
+
+            <div className="faction-grid">
+              {(
+                Object.entries(factions) as [FactionName, FactionDetails][]
+              ).map(([factionName, details]) => {
+                const isSelected = faction === factionName;
+
+                return (
+                  <Button
+                    key={factionName}
+                    className={`faction-card faction-card--${factionName}${
+                      isSelected ? " is-selected" : ""
+                    }`}
+                    onClick={() => {
+                      setFaction(factionName);
+                      setCurrentReply("");
+                    }}
+                    ariaPressed={isSelected}
+                    text={
+                      <>
+                        <span className="faction-card__hex">
+                          <img
+                            src={imagesByName[`${factionName}/sztab`]}
+                            alt=""
+                          />
+                        </span>
+
+                        <span className="faction-card__content">
+                          <span className="faction-card__topline">
+                            <strong>{details.label}</strong>
+                            <span className="faction-card__marker">
+                              {isSelected ? "Selected" : "Choose"}
+                            </span>
+                          </span>
+                          <span className="faction-card__description">
+                            {details.description}
+                          </span>
+                        </span>
+                      </>
+                    }
+                  />
+                );
+              })}
+            </div>
+
+            <div className="selection-bar">
+              <div className="selection-bar__status">
+                <span className="selection-bar__indicator" aria-hidden="true" />
+                <div>
+                  <span>Current selection</span>
+                  <strong>
+                    {faction ? factions[faction].label : "No faction selected"}
+                  </strong>
+                </div>
+              </div>
+
+              <Button
+                className="room-button room-button--primary"
+                text={isSubmittingFaction ? "Confirming…" : "Confirm faction"}
+                onClick={handleFaction}
+                disabled={!faction || isSubmittingFaction}
+              />
+            </div>
+          </section>
+
+          <aside className="war-panel war-panel--players">
+            <div className="section-heading section-heading--compact">
+              <div>
+                <p className="section-heading__number">02</p>
+                <h2>Commanders</h2>
+              </div>
+              <span className="player-count">
+                {playersInRoom.length}
+                <small>/2</small>
+              </span>
+            </div>
+
+            <DisplayPlayerFactions
+              playerFactions={playerFactions ?? {}}
+              playersInRoom={playersInRoom}
+            />
+
+            <div className={`readiness ${canStartGame ? "is-ready" : ""}`}>
+              <span className="readiness__icon" aria-hidden="true">
+                {canStartGame ? "✓" : "!"}
+              </span>
+              <div>
+                <strong>
+                  {canStartGame ? "Battle ready" : "Waiting for players"}
+                </strong>
+                <p>
+                  {canStartGame
+                    ? "Both commanders have locked in their factions."
+                    : "The match requires two confirmed factions."}
+                </p>
+              </div>
+            </div>
+
+            <Button
+              className="room-button room-button--start"
+              text="Start game"
+              onClick={handleStartGame}
+              disabled={!canStartGame}
+            />
+          </aside>
         </div>
-    )
+
+        {currentReply && (
+          <div className="room-message" role="status">
+            <span aria-hidden="true">◆</span>
+            {currentReply}
+          </div>
+        )}
+      </div>
+    </main>
+  );
 }

@@ -30,13 +30,13 @@ class GameWorkflow(Workflow[WorkflowActionProvider]):
             self.build_headquarter_turn_step(faction)
             for faction in self.config.factions
         ]
-        turn_steps = [
-            self.build_player_turn_step(faction)
-            for faction in self.config.factions
-        ]
         opening_turn_steps = [
             self.build_player_turn_step(faction, hand_limit=min(index + 1, 3))
             for index, faction in enumerate(self.config.factions)
+        ]
+        turn_steps = [
+            self.build_player_turn_step(faction)
+            for faction in self.config.factions
         ]
         steps = headquarter_steps + opening_turn_steps + turn_steps
         steps.append(self.build_repeat_step())

@@ -144,13 +144,10 @@ class DrawTokensEffect(Effect):
 @dataclass
 class DrawNamedTokenEffect(Effect):
     name: str
-    hand_limit: int = 1
 
     def apply(self, ctx: ActionContext):
         hand = ctx.player.hand
         pile = ctx.player.pile
-        if hand.size >= self.hand_limit or self.name in hand.tokens:
-            return
 
         if self.name not in pile.tokens:
             raise ValueError(f"nie znaleziono żetonu {self.name} w stosie gracza {ctx.faction}")

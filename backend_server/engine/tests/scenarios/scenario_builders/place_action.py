@@ -31,10 +31,13 @@ def place_action_scenario() -> Scenario:
         .when(BoardAction(pos=(2, 4)))
         .then(
             tile_place(pos=(2, 4), name="klaun", faction="moloch"),
-            hand_remove(faction="moloch", index=0),
-            wf_data_delta(slot=None, type=None),
-            stack_pop(), # pop place
-            stack_pop(), # pop hand
-            stack_index_change(index=2) # set turn wf index to waiting step
+            stack_index_change(index=2),
+            stack_add(name=WorkflowName.ROTATE, index=0),
+            wf_data_delta(unit_pos=(2, 4), type=ActionType.BOARD),
+            # hand_remove(faction="moloch", index=0),
+            # wf_data_delta(slot=None, type=None),
+            # stack_pop(), # pop place
+            # stack_pop(), # pop hand
+            # stack_index_change(index=2) # set turn wf index to waiting step
         )
     ).build()

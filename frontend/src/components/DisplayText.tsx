@@ -1,3 +1,5 @@
+import React from "react"
+
 type DisplayTextProps = {
     text : string;
     className? : string;
