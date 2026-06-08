@@ -1,0 +1,54 @@
+dla frontendu:
+{
+    "state": {
+        "fractions": ["borgo", "moloch"], 
+        "board": [
+            {
+                "pos": [1, 1], 
+                "unit": {
+                    "name": "klaun", 
+                    "fraction": "moloch", 
+                    "ROTATION": 0, 
+                    "DAMAGE": 0, 
+                    "WIRED": false, 
+                    "ability_used": false
+                }
+            }
+        ], 
+        "hands": {
+            "borgo": {"tokens": ["bitwa", "sztab", "zabojca"]}, 
+            "moloch": {"tokens": ["bitwa", "sztab", "zabojca"]}
+            }
+        }, 
+    "available_actions": {
+        "hand": [true, true, true], 
+        "board": [[1, 1], [1, 3]], 
+        "buttons": ["end_turn"]
+    }, 
+    "ui_state": {
+        "fraction": "borgo", 
+        "mode": "default"/"rotation"/"decision", 
+        "message": ""
+    }
+}
+
+dla engine:{
+    "messageType" : ("newgame" / "user_action")
+    "gameState" : cały poprzedni stan gry
+    "userAction" : format akcji
+}
+
+format akcji:
+{"type" : (hand/baord/bottom/rotate), ...}
+{"type" : "hand", "slot" : (0/1/2)}
+{"type" : "board", "pos": (int, int)}
+{"type" : "rotate", "rotation" : int}
+{"type" : "button", "name" : (
+    "end_turn"/
+    "discard"/
+    "use"/
+    "cancel"/
+    "yes"/
+    "no"/
+    )
+}

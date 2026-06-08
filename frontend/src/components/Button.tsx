@@ -1,22 +1,29 @@
 import type { ReactNode } from "react";
-import { CSSProperties } from "react";
 
 type ButtonProps = {
-    className? : string
-    text : ReactNode;
-    onClick? : () => void;
-    // style?: CSSProperties;
+  className?: string;
+  text: ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  ariaPressed?: boolean;
 };
 
 export default function Button({
-    className,
-    // style,
-    text,
-    onClick, 
-}:ButtonProps){
-    return <button className={className}
-        // style={style}
-    type="button" onClick={onClick}>
-        {text}
+  className,
+  text,
+  onClick,
+  disabled = false,
+  ariaPressed,
+}: ButtonProps) {
+  return (
+    <button
+      className={className}
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-pressed={ariaPressed}
+    >
+      {text}
     </button>
+  );
 }
