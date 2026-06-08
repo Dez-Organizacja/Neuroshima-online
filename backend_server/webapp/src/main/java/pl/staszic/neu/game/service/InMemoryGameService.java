@@ -158,7 +158,7 @@ public class InMemoryGameService implements GameService {
 
         Set<String> playerNamesInRoom = new HashSet<>();
         Map<String, String> playerFactionsByUsername = new LinkedHashMap<>();
-        Map<String, String> playerFactionsByClientId = room.getPlayerFactions();
+        Map<String, String> playerFactionsByClientId = room.getAllPlayerFactions();
 
         for (String id : room.getPlayerIds()) {
             String username = clientUsernames.getOrDefault(id, "Unknown");
@@ -286,6 +286,7 @@ public class InMemoryGameService implements GameService {
             throw new GameValidationException("Cannot start game: " + e.getMessage());
         }
 
+        game.setPlayerFactions(room.getActivePlayerFactions());
         apiNewGameRequest.setScenario(scenarioNode);
 
         game.setGameState(restService.postJson(gameStateServiceUrl, objectMapper.valueToTree(apiNewGameRequest)));
@@ -326,6 +327,19 @@ public class InMemoryGameService implements GameService {
         }
 
         Game game = activeGames.get(request.getGameId());
+
+        if(game.getCurrentFaction() != null) {
+            String playerFaction = game.getPlayerFaction(clientId);
+            if (playerFaction == null) {
+                throw new GameValidationException("Client is not a player in the game");
+            }
+            if (!playerFaction.equals(game.getCurrentFaction())) {
+                throw new GameValidationException("It's not the player's turn");
+            }
+        }
+        else{
+            logger.warn("Current faction in game is not defined, clientId={}, gameId={}, gameState={}", clientId, request.getGameId(), game.getGameState());
+        }
 
         GameStatusChangeRequest gameStatusChangeRequest = new GameStatusChangeRequest();
         gameStatusChangeRequest.setGameState(game.getGameState());

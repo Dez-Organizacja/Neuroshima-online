@@ -99,7 +99,19 @@ public class Room {
         return factions;
     }
 
-    public Map<String, String> getPlayerFactions() {
+    public Map<String, String> getActivePlayerFactions() {
+        Map<String, String> factions = new HashMap<>();
+        for(Map.Entry<String, RoomMember> entry : players.entrySet()) {
+            if(entry.getValue().getStatus() != RoomMember.Status.ACTIVE) {
+                continue;
+            }
+            factions.put(entry.getKey(), entry.getValue().getFaction());
+        }
+
+        return factions;
+    }
+
+    public Map<String, String> getAllPlayerFactions() {
         Map<String, String> factions = new HashMap<>();
         for(Map.Entry<String, RoomMember> entry : players.entrySet()) {
             factions.put(entry.getKey(), entry.getValue().getFaction());
