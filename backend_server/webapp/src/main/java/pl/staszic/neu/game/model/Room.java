@@ -10,6 +10,7 @@ public class Room {
     private String roomId;
     private String gameId;
     private final Map<String, RoomMember> players = new ConcurrentHashMap<>();
+    private final RoomProperties roomProperties = new RoomProperties();
 
     public Room(String roomId) {
         this.roomId = roomId;
@@ -30,11 +31,25 @@ public class Room {
         players.put(player, new RoomMember(roomId, player, null));
     }
 
+    private void moveHost() {
+        if(players.isEmpty()) {
+            roomProperties.setHost(null);
+            return;
+        }
+        String newHost = players.keySet().iterator().next();
+        roomProperties.setHost(newHost);
+    }
+
     public void removePlayer(String player) throws Exception {
         if(!players.containsKey(player)) {
             throw new Exception("Player not in the room");
         }
+
         players.remove(player);
+
+        if(player.equals(roomProperties.getHost())) {
+            moveHost();
+        }
     }
 
     public boolean isEmpty() {
@@ -75,6 +90,19 @@ public class Room {
         }
         players.get(clientId).setFaction(roomMember.getFaction());
         players.get(clientId).setStatus(roomMember.getStatus());
+    }
+
+    public void mergeRoomProperties(RoomProperties newProperties) {
+        if(newProperties.getHost() != null) {
+            roomProperties.setHost(newProperties.getHost());
+        }
+        if(newProperties.getVisibility() != null) {
+            roomProperties.setVisibility(newProperties.getVisibility());
+        }
+    }
+
+    public RoomProperties getRoomProperties() {
+        return roomProperties;
     }
 
     public String getPlayerFaction(String clientId) {

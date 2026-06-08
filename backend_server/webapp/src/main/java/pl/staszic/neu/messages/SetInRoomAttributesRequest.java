@@ -1,6 +1,7 @@
 package pl.staszic.neu.messages;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import pl.staszic.neu.game.model.RoomMember;
 
 public class SetInRoomAttributesRequest extends RoomScopedWebSocketMessage {
 
@@ -10,7 +11,7 @@ public class SetInRoomAttributesRequest extends RoomScopedWebSocketMessage {
     private String faction;
 
     @JsonProperty("status")
-    private String status;
+    private RoomMember.Status status;
 
     public SetInRoomAttributesRequest() {
         super(TYPE);
@@ -24,11 +25,11 @@ public class SetInRoomAttributesRequest extends RoomScopedWebSocketMessage {
         this.faction = faction;
     }
 
-    public String getStatus() {
+    public RoomMember.Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RoomMember.Status status) {
         this.status = status;
     }
 }

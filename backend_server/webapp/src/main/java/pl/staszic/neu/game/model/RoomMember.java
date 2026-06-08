@@ -1,10 +1,23 @@
 package pl.staszic.neu.game.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public class RoomMember {
 
     public enum Status {
-        ACTIVE,
-        SPECTATING
+        ACTIVE("active"),
+        SPECTATING("spectating");
+
+        private final String value;
+
+        Status(String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        public String getValue() {
+            return this.value;
+        }
     }
 
     private String roomId = null;

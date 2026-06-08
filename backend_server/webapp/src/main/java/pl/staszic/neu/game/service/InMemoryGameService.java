@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.staszic.neu.game.model.RoomMember;
+import pl.staszic.neu.game.model.RoomPropertiesView;
 import pl.staszic.neu.messages.GameStatusChangeRequest;
 import pl.staszic.neu.game.model.Room;
 import pl.staszic.neu.game.model.Game;
@@ -173,6 +174,10 @@ public class InMemoryGameService implements GameService {
         response.setRoomId(request.getRoomId());
         response.setGameId(room.getGameId());
 
+        RoomPropertiesView roomPropertiesView = new RoomPropertiesView();
+        roomPropertiesView.setHostUsername(clientUsernames.getOrDefault(room.getRoomProperties().getHost(), "Unknown"));
+        roomPropertiesView.setVisibility(room.getRoomProperties().getVisibility());
+        response.setRoomPropertiesView(roomPropertiesView);
 
         response.setPlayersInRoom(playerNamesInRoom);
         response.setPlayerFactions(playerFactionsByUsername);
@@ -188,18 +193,7 @@ public class InMemoryGameService implements GameService {
         response.setClientId(clientId);
 
         String faction = request.getFaction();
-        RoomMember.Status status = null;
-        String StringStatus = request.getStatus() != null ? request.getStatus().trim() : null;
-
-        if (StringStatus != null) {
-            status = switch (StringStatus) {
-                case "ACTIVE" -> RoomMember.Status.ACTIVE;
-                case "SPECTATING" -> RoomMember.Status.SPECTATING;
-                default -> RoomMember.Status.ACTIVE; //delete when client will be able to handle spectators
-//                    response.setError("Invalid status value: " + request.getStatus());
-//                    return response;
-            };
-        }
+        RoomMember.Status status = request.getStatus();
 
         if (isBlank(faction)) {
             response.setError("Faction is null or empty");
@@ -239,7 +233,7 @@ public class InMemoryGameService implements GameService {
             room.mergePlayerAttributes(clientId, newRoomMember);
         }
 
-        response.setStatus(StringStatus);
+        response.setStatus(status);
         response.setFaction(faction);
         response.setServerStatus("Attributes successfully changed in room=" + roomId);
         return response;
@@ -253,9 +247,6 @@ public class InMemoryGameService implements GameService {
             throw new GameValidationException("STARTNEWGAME_REQUEST requires roomId");
         }
 
-
-
-        //dodaj sprawdzenie poprawnosci scenario
 
         String affiliatedRoomId = affiliations.get(clientId);
         if (affiliatedRoomId == null) {
