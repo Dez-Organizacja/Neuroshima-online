@@ -6,6 +6,7 @@ from main.workflows.data import WorkflowName
 from main.events.workflow import PushWorkflow
 from main.events.effects import PlaceEffect
 from main.events.data import Event
+from main.steps.config import ResolveStepConfig
 
 class PlaceWorkflow(Workflow[PlacementProvider], BoardSelectionMixin):
     def __init__(self):
@@ -21,8 +22,12 @@ class PlaceWorkflow(Workflow[PlacementProvider], BoardSelectionMixin):
                 PushWorkflow(name=WorkflowName.ROTATE)
             ]
 
+    def build_resolve_step(self):
+        return ResolveStepConfig(resolve_func=self.resolve_function)
+
     def _build_steps(self):
         return [
             self.build_source_step(),
-            build_end_step(self.resolve_function)            
+            self.build_resolve_step(),
+            build_end_step()
         ]

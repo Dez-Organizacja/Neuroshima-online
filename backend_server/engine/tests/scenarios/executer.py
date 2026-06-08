@@ -28,6 +28,6 @@ class ScenarioExecuter:
             print("result state")
             print(result_state)
             expected_state = self.get_expected_state(before_state, step)
-            assert result_state == expected_state#, Diff.compare(result_state, expected_state)
+            assert result_state == expected_state, Diff.compare(result_state, expected_state)
 
             before_state = Serializator.from_dict_dataclass(GameState, expected_state)

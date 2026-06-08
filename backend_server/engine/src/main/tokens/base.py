@@ -1,4 +1,4 @@
-from main.tokens.data import Ability, BattleAbility
+from main.tokens.data import Ability, BattleAbility, BoardType
 from main.tokens.config import TokenConfigId, BoardTokenConfig
 # from main.tokens.state import 
 from dataclasses import dataclass
@@ -7,6 +7,10 @@ from main.tokens.registry import TokenConfigRegistry
 @dataclass
 class Token:
     config_id : TokenConfigId
+
+    @property
+    def is_HQ(self):
+        return self.config.name == BoardType.HQ.value
 
     @property
     def config(self) -> BoardTokenConfig:

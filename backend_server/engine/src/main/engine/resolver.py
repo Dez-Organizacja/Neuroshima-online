@@ -19,7 +19,7 @@ class Resolver():
             PassiveSystems.compute(ctx)
     
     def resolve(self, ctx : ActionContext, result : StepResult):
-        # print(f"resolving step result {result}")
+        print(f"resolving step result {result}")
         if result.advance:
             ctx.workflow_instance.current_step_index += 1
             

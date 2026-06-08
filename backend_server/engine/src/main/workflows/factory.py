@@ -8,7 +8,7 @@ from main.workflows.target import (
     GranadeWorkflow
 )
 from main.workflows.game import GameWorkflow
-from main.workflows.headquarter import HeadquarterPlaceWorkflow, HeadquarterTurnWorkflow
+from main.workflows.headquarter import HeadquarterTurnWorkflow
 from main.workflows.dispatch import HandWorkflow, BoardWorkflow
 from main.workflows.turn import TurnWorkflow
 from main.workflows.data import WorkflowInstance, WorkflowName
@@ -36,7 +36,7 @@ class WorkflowFactory:
         WorkflowName.HAND : WorkflowMeta(HandWorkflow, False),
         WorkflowName.BOARD : WorkflowMeta(BoardWorkflow, False),
         WorkflowName.START_BATTLE : WorkflowMeta(StartBattleWorkflow, False),
-        WorkflowName.HEADQUARTER_PLACE : WorkflowMeta(HeadquarterPlaceWorkflow, False),
+        # WorkflowName.HEADQUARTER_PLACE : WorkflowMeta(HeadquarterPlaceWorkflow, False),
 
         #configurable workflows
         WorkflowName.TURN : WorkflowMeta(TurnWorkflow, True),

@@ -5,7 +5,7 @@ from main.rules.game import GameRules
 from main.engine.resolver import Resolver
 from main.workflows.data import WorkflowName, WorkflowConfig
 from main.state.player_state import PlayerState
-from main.input.data import BoardAction, Button, ButtonAction, HandAction
+from main.input.data import BoardAction, Button, ButtonAction, HandAction, RotationAction
 
 class Tests:
     def place_current_headquarter(
@@ -19,10 +19,13 @@ class Tests:
         assert ctx.player.hand.tokens == ["sztab"]
 
         engine.execute_action(ctx, HandAction(slot=0))
-        assert ctx.workflow_instance.name == WorkflowName.HEADQUARTER_PLACE
+        assert ctx.workflow_instance.name == WorkflowName.PLACE
 
         engine.execute_action(ctx, BoardAction(pos=pos))
         assert ctx.board.get_hq_pos(faction) == pos
+
+        engine.execute_action(ctx, RotationAction(rotation=1))
+        # assert ctx.workflow_instance.name == WorkflowName.HEADQUARTER_TURN
         return faction
 
     def check_player(self, ctx : ActionContext, faction : str):
@@ -56,7 +59,7 @@ class Tests:
         self.check_player(ctx, "moloch")
         self.check_player(ctx, "borgo")
 
-    def test_hand_limits_in_frist_turns(self):
+    def test_hand_limits_in_first_turns(self):
         ctx = ActionContext(
             state=GameState(factions=["moloch", "borgo"]),
             rules=GameRules()

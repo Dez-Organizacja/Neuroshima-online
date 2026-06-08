@@ -16,11 +16,7 @@ class BoardToken(Token):
     def reset(self):
         self.state.reset()
 
-    # --------- HQ ----------
-
-    @property
-    def is_HQ(self):
-        return self.config.name == "sztab"
+    
 
     # --------- boosts ----------
     @property
