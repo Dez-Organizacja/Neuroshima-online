@@ -8,6 +8,7 @@ from copy import deepcopy
 from main.state.serialization import Serializator
 import main.frakcje.wszystkie_frakcje as allfractions
 from main.attacks.data import AttackConfig
+from main.tokens.data import TokenView
 
 @dataclass
 class BoardToken(Token):
@@ -148,3 +149,13 @@ class BoardToken(Token):
     @classmethod
     def from_dict(cls, data: dict) -> "BoardToken":
         return Serializator.from_dict_dataclass(cls, data)
+
+    def get_view(self) -> TokenView:
+        return TokenView(
+            faction= self.faction,
+            name= self.name,
+            rotation= self.rotation,
+            ability_used= self.ability_used,
+            damage= self.state.damage + sum(self.wounds),
+            wired= self.wired,
+        )

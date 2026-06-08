@@ -15,6 +15,7 @@ class MoveEffect(Effect):
 
     def apply(self, ctx: ActionContext):
         ctx.board.move_token(self.from_pos, self.to_pos)
+        ctx.workflow_data.set_unit_pos(ctx.workflow_data.destination)
 
 @dataclass
 class RotateEffect(Effect):

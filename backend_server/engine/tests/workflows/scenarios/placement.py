@@ -1,7 +1,7 @@
 from main.workflows.data import WorkflowName
 from main.input.data import BoardAction
 from main.events.effects import PlaceEffect
-from main.events.workflow import PopWorkflow
+from main.events.workflow import PopWorkflow, PushWorkflow
 from main.state.contex import ActionContext
 
 from .builder import ScenarioBuilder
@@ -27,7 +27,10 @@ def placement_scenario():
         .then_execution(
             events = [
                 PlaceEffect(pos=(1, 1), name="klaun", faction="moloch"),
-                PopWorkflow()
+                PushWorkflow(name=WorkflowName.ROTATE)
             ]
         )
+        
+        .tick()
+        .then_execution(events=[PopWorkflow()])
     ).build()

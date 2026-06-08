@@ -24,8 +24,8 @@ def headquarter_turn_scenario():
         )
         .tick()
         .given(setup_function)
-        .then_execution(events=[DrawNamedTokenEffect("sztab", hand_limit=1)])
-        .then_faction("moloch")
+        .then_execution(events=[DrawNamedTokenEffect("sztab")])
+        .then_faction("moloch")                                     
 
         .tick()
         .then_execution(events=[ClearWorkflowDataEffect()])
@@ -35,32 +35,32 @@ def headquarter_turn_scenario():
         .then_data_delta(type=ActionType.HAND, slot=0)
 
         .tick()
-        .then_execution(events=[PushWorkflow(name=WorkflowName.HEADQUARTER_PLACE)])
+        .then_execution(events=[PushWorkflow(name=WorkflowName.HAND)])
 
         .tick()
-        .then_execution(events=[ClearWorkflowDataEffect(), PopWorkflow()])
+        .then_execution(events=[PopWorkflow()])
         .then_faction("")
     ).build()
 
 
-@register(WorkflowName.HEADQUARTER_PLACE)
-def headquarter_place_scenario():
-    def setup_function(ctx: ActionContext):
-        ctx.workflow_data.set_slot(0)
-        ctx.player.hand.add("sztab")
+# @register(WorkflowName.HEADQUARTER_PLACE)
+# def headquarter_place_scenario():
+#     def setup_function(ctx: ActionContext):
+#         ctx.workflow_data.set_slot(0)
+#         ctx.player.hand.add("sztab")
 
-    return (
-        ScenarioBuilder(WorkflowName.HEADQUARTER_PLACE)
-        .when(BoardAction(pos=(1, 1)))
-        .given(setup_function)
-        .then_data_delta(type=ActionType.BOARD, unit_pos=(1, 1), slot=0)
+#     return (
+#         ScenarioBuilder(WorkflowName.HEADQUARTER_PLACE)
+#         .when(BoardAction(pos=(1, 1)))
+#         .given(setup_function)
+#         .then_data_delta(type=ActionType.BOARD, unit_pos=(1, 1), slot=0)
 
-        .tick()
-        .then_execution(
-            events=[
-                PlaceEffect(pos=(1, 1), name="sztab", faction="moloch"),
-                DiscardTokenEffect(slot=0),
-                PopWorkflow(),
-            ]
-        )
-    ).build()
+#         .tick()
+#         .then_execution(
+#             events=[
+#                 PlaceEffect(pos=(1, 1), name="sztab", faction="moloch"),
+#                 DiscardTokenEffect(slot=0),
+#                 PopWorkflow(),
+#             ]
+#         )
+#     ).build()

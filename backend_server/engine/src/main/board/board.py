@@ -5,27 +5,19 @@ from main.utils.variable import *
 from dataclasses import dataclass
 from main.state.serialization import Serializator
 from main.tokens.token_factory import TokenFactory
+from main.tokens.data import TokenView
 
 Hex = tuple[int, int]
 
 @dataclass
 class Tile:
     pos : Hex
-    unit : BoardToken
+    unit : BoardToken 
 
-    # @classmethod
-    # def from_dict(cls, data : dict) -> Tile:
-    #     unit = data["unit"]
-    #     if isinstance(unit, dict):
-    #         unit = BoardToken.from_dict(unit)
-
-    #     return cls(
-    #         pos=tuple(data["pos"]),
-    #         unit=unit,
-    #     )
-
-    # def to_dict(self):
-    #     return Serializator.to_dict_dataclass(self)
+@dataclass
+class TileView:
+    pos : Hex
+    unit : TokenView
 
 class Board:
     length = 9
@@ -125,9 +117,7 @@ class Board:
             pos = self.go(pos, direction)
 
         return line
-
-
-
+    
     def adjacent_hexes(self, pos : Hex):
         if not self.on_board(pos):
             return []
@@ -216,28 +206,14 @@ class Board:
         dist = abs(x1 - x2) + abs(y1 - y2)
         return dist == 2
 
-    def print_board(self):
-        # for pos in self.ALL_HEXES:
-
-        for i in range(self.width):
-            row = []
-            for j in range(self.length):
-                pos = (i, j)
-                if(not self.on_board(pos)):
-                    continue
-                if(self.board[i][j] is None):
-                    row.append(None)
-                else:
-                    # print(type(board.board[i][j]))
-                    akt = self.board[i][j]
-                    row.append((
-                        # akt.frakcja[0], 
-                        # akt.zasiecowany,
-                        akt.name, 
-                        akt.rotation,
-                    ))
-                    # row.append(akt.zeton_to_json())
-            print(row)
+    def get_tiles(self) -> list[Tile]:
+        return [
+            Tile(
+                    pos=self.where_am_i[id],
+                    unit=token
+                )
+            for id, token in self.tokens.items()
+        ]
 
     @classmethod
     def from_list(cls, data : list) -> Board:
@@ -250,11 +226,6 @@ class Board:
 
     def to_list(self) -> list:
         return [
-            Serializator.to_dict_dataclass(
-                Tile(
-                    pos=self.where_am_i[id],
-                    unit=token
-                )
-            )
-            for id, token in self.tokens.items()
+            Serializator.to_dict_dataclass(tile)
+            for tile in self.get_tiles()
         ]

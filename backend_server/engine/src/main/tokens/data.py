@@ -1,4 +1,5 @@
 from enum import Enum
+from dataclasses import dataclass
 
 class TokenKey(Enum):
     TYPE = "type"
@@ -60,3 +61,12 @@ class Boost(Enum):
     MEELE_TO_SHOOT = "meele_to_shoot"
     HEAL = "heal"
     STEAL_BOOST = "steal_boost"
+
+@dataclass
+class TokenView:
+    faction : str
+    name : str
+    rotation : int
+    wired : bool
+    ability_used : bool
+    damage : int

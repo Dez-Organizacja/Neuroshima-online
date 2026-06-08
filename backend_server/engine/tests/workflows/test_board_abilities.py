@@ -1,6 +1,6 @@
 from main.engine.engine import GameEngine
 from main.engine.resolver import Resolver
-from main.input.data import BoardAction
+from main.input.data import BoardAction, RotationAction
 from main.rules.game import GameRules
 from main.state.contex import ActionContext
 from main.state.game_state import GameState
@@ -35,11 +35,12 @@ def test_board_move_ability_moves_selected_unit_and_marks_it_used():
     assert ctx.workflow_instance.current_step_index == 1
 
     engine.execute_action(ctx, BoardAction(pos=(1, 3)))
-
+    engine.execute_action(ctx, RotationAction(rotation=1))
     moved = ctx.board.get_token((1, 3))
     assert ctx.board.get_token((1, 1)) is None
     assert moved.name == "biegacz"
     assert moved.ability_used is True
+    assert moved.rotation == 1
     assert ctx.workflow_instance.name == WorkflowName.TURN
 
 
