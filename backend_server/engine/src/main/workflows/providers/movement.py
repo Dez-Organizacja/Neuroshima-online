@@ -85,7 +85,7 @@ class PushProvider(WorkflowActionProvider):
     
 class RotateProvider(WorkflowActionProvider):
     def get_available_positions(self, ctx : ActionContext):
-        return [ctx.workflow_data.unit_pos]
+        return [ctx.workflow_data.destination]
     
     def get_ui_state(self, ctx):
         return StepUIState(faction=ctx.faction, mode=UIMode.ROTATION)
