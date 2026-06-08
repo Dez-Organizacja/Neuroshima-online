@@ -137,6 +137,10 @@ class Board:
     # ----------- placing and moving tokens ----------
 
     def add_token(self, pos : Hex, token : BoardToken):
+        # print("ADD TOKEN")
+        # print(token)
+        # print(f"pos {pos}")
+        # print("--------------")
         x, y = pos
         tokenID = self.get_new_id()
         self.tokens[tokenID] = token
@@ -219,8 +223,8 @@ class Board:
     def from_list(cls, data : list) -> Board:
         obj = cls()
         for tile_data in data:
-            tile = Serializator.from_dict_dataclass(Tile, tile_data)
-            obj.add_token(tile.pos, tile.unit)
+            tile : Tile = Serializator.from_dict_dataclass(Tile, tile_data)
+            obj.import_token(tile.pos, tile.unit)
 
         return obj
 

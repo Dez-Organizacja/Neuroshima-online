@@ -20,10 +20,10 @@ class AvailableActions:
             provider : AvailableActionProvider,
         ) -> AvailableStructure:
         # print(f"provider {provider}")
-        print(f"board function {provider.get_positions}")
-        print(f"board {provider.get_positions(ctx)}")
-        print(f"buttons function {provider.get_buttons}")
-        print(f"buttons {provider.get_buttons(ctx)}")
+        # print(f"board function {provider.get_positions}")
+        # print(f"board {provider.get_positions(ctx)}")
+        # print(f"buttons function {provider.get_buttons}")
+        # print(f"buttons {provider.get_buttons(ctx)}")
         actions : AvailableStructure = AvailableStructure()
         actions.board = provider.get_positions(ctx)
         actions.buttons = provider.get_buttons(ctx)
