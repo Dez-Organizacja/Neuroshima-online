@@ -8,8 +8,10 @@ from main.events.data import Event
 class ScenarioBuilder:
     def __init__(self, 
                  name : WorkflowName, 
-                 config : WorkflowConfig | None = None
+                 config : WorkflowConfig | None = None,
+                 factions : list[str] | None = None,
         ):
+        self.factions = factions or ["moloch", "borgo"]
         self.workflow_name = name
         self.workflow_config = config
         self.steps : list[StepCase] = []
@@ -34,9 +36,12 @@ class ScenarioBuilder:
         self._current_step.data_delta = kwargs
         return self
 
-    def then_faction(self, faction):
+    def then_faction(self, faction, turn : bool = False):
         self._require_step()
-        self._current_step.faction_delta = faction
+        if turn:
+            self._current_step.turn_faction_delta = faction
+        else:
+            self._current_step.faction_delta = faction
         return self
 
     def then_execution(self, *, 
@@ -59,6 +64,7 @@ class ScenarioBuilder:
 
     def build(self):
         return Scenario(
+            factions=self.factions,
             name= self.workflow_name,
             config= self.workflow_config,
             steps = self.steps,

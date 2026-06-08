@@ -1,26 +1,54 @@
 {
   "messageType" : "GAMESTATUSCHANGE_REQUEST",
-  "timestamp" : "2026-06-08T11:04:53.88821648",
+  "timestamp" : "2026-06-08T23:01:44.132580937",
   "gameState" : {
-    "board" : [ ],
-    "current_faction" : "moloch",
+    "active_faction" : "borgo",
+    "board" : [ {
+      "pos" : [ 2, 4 ],
+      "unit" : {
+        "config_id" : {
+          "faction" : "borgo",
+          "name" : "sztab"
+        },
+        "state" : {
+          "core" : {
+            "damage" : 0,
+            "rotation" : 0,
+            "wired" : false,
+            "wounds" : [ ]
+          },
+          "exection" : {
+            "used_ability" : false,
+            "used_battle_ability" : false
+          },
+          "modifiers" : {
+            "meele_boosts" : 0,
+            "shoot_boosts" : 0
+          },
+          "relations" : {
+            "real_boost_target" : null
+          }
+        }
+      }
+    } ],
     "events_queue" : [ ],
-    "factions" : [ "moloch", "borgo" ],
+    "factions" : [ "borgo", "moloch" ],
     "pending_attacks" : [ ],
     "players" : {
       "borgo" : {
         "hand" : {
-          "tokens" : [ ]
+          "tokens" : [ "sztab" ]
         },
-        "pile" : [ "zabojca", "mutek", "sieciarz", "mutek", "zabojca", "mutek", "mutek", "sieciarz", "sztab", "mutek", "mutek" ]
+        "pile" : [ "mutek", "sieciarz", "mutek", "zabojca", "mutek", "sieciarz", "mutek", "mutek", "mutek", "zabojca" ]
       },
       "moloch" : {
         "hand" : {
-          "tokens" : [ "sztab" ]
+          "tokens" : [ ]
         },
-        "pile" : [ "medyk", "cyborg", "bloker", "klaun", "sieciarz", "cyborg", "bloker", "medyk", "lowca", "lowca", "dzialkogaussa" ]
+        "pile" : [ "medyk", "sztab", "sieciarz", "lowca", "dzialkogaussa", "klaun", "lowca", "cyborg", "medyk", "bloker", "cyborg", "bloker" ]
       }
     },
+    "turn_faction" : "borgo",
     "workflow_data" : {
       "button" : null,
       "decision" : null,
@@ -28,13 +56,13 @@
       "rotation" : null,
       "slot" : 0,
       "target_pos" : null,
-      "type" : "hand",
-      "unit_pos" : null
+      "type" : "board",
+      "unit_pos" : [ 2, 4 ]
     },
     "workflow_stack" : [ {
       "config" : {
         "faction" : "",
-        "factions" : [ "moloch", "borgo" ],
+        "factions" : [ "borgo", "moloch" ],
         "hand_limit" : 3,
         "initiative" : null,
         "pos" : null
@@ -43,7 +71,7 @@
       "name" : "game"
     }, {
       "config" : {
-        "faction" : "moloch",
+        "faction" : "borgo",
         "factions" : [ ],
         "hand_limit" : 3,
         "initiative" : null,
@@ -59,12 +87,32 @@
         "initiative" : null,
         "pos" : null
       },
+      "current_step_index" : 1,
+      "name" : "hand"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3,
+        "initiative" : null,
+        "pos" : null
+      },
+      "current_step_index" : 2,
+      "name" : "place"
+    }, {
+      "config" : {
+        "faction" : "",
+        "factions" : [ ],
+        "hand_limit" : 3,
+        "initiative" : null,
+        "pos" : null
+      },
       "current_step_index" : 0,
-      "name" : "headquarter_place"
+      "name" : "rotate"
     } ]
   },
   "userAction" : {
-    "type" : "hand",
-    "slot" : 0
+    "type" : "rotate",
+    "rotation" : 0
   }
 }

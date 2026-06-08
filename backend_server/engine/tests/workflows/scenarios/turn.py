@@ -16,9 +16,10 @@ name = WorkflowName.TURN
 @register(name)
 def turn_scenario():
     def setup_function(ctx : ActionContext):
-        ctx.faction=""
+        ctx.faction="moloch"
         for name in ("szturmowiec", "wartownik", "klaun"):
             ctx.player.hand.add(name)
+        ctx.faction = ""
 
     return (
         ScenarioBuilder(name, config=WorkflowConfig(faction="moloch"))
@@ -28,6 +29,7 @@ def turn_scenario():
             events=[ResetAbilityUsedEffect(positions=[]), DrawTokensEffect()],
         )
         .then_faction("moloch")
+        .then_faction("moloch", turn=True)
 
         .tick()
         .then_execution(
@@ -53,5 +55,6 @@ def turn_scenario():
             events=[EndTurnEvent()]
         )
         .then_faction("")
+        .then_faction("", turn=True)
 
     ).build()

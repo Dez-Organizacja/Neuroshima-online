@@ -43,7 +43,8 @@ def print_obj(obj, deepth):
 class GameState:
     # --------- factions ----------
     factions            : list[str]
-    current_faction     : str = ""
+    turn_faction        : str = ""
+    active_faction      : str = ""
 
     # --------- tokens ----------
     players             : dict[str, PlayerState] = field(default_factory=dict)

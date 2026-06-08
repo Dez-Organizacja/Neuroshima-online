@@ -33,12 +33,14 @@ class HeadquarterTurnWorkflow(Workflow[HeadquarterTurnProvider]):
 
     def start_turn_resolve(self, ctx: ActionContext) -> list[Event]:
         ctx.faction = self.config.faction
+        ctx.state.turn_faction = self.config.faction
         return [DrawNamedTokenEffect(BoardType.HQ.value)]
 
  
     @staticmethod
     def end_turn_resolve(ctx: ActionContext) -> list[Event]:
         ctx.faction = ""
+        ctx.state.turn_faction = ""
         return []
 
     def build_init_step(self):

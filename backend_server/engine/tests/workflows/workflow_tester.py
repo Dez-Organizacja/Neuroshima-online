@@ -2,26 +2,40 @@ from main.workflows.data import  WorkflowInstance
 from main.workflows.factory import WorkflowFactory
 from copy import deepcopy
 from .scenarios.data import Scenario, StepCase
-from .fakes import FakeContext
+from main.state.contex import ActionContext
 from main.state.serialization import Serializator
+from main.state.game_state import GameState
+from main.utils.diff import Diff
 
 class WorkflowTester:
-    def get_expected_ctx(self, before : FakeContext, step_case : StepCase) -> FakeContext:
+    def get_expected_state(self, before : ActionContext, step_case : StepCase) -> ActionContext:
+        print("GETTING EXPECTED STATE")
         expected_ctx = before
         for key, value in step_case.data_delta.items():
             # print(f"changing value of key {key} to {value}")
             setattr(expected_ctx.workflow_data, key, value)
 
         if step_case.faction_delta is not None:
-            # print("nie None")
             expected_ctx.faction = step_case.faction_delta
-        # print(expected_ctx)
+            # print("nie None")
+        
+        print(f"step case turn faction delta {step_case.turn_faction_delta}")
+        if step_case.turn_faction_delta is not None:
+            print("turn faction is not None")
+            expected_ctx.state.turn_faction = step_case.turn_faction_delta
+            # print(expected_ctx)
         # print("getting exp ctx finished")
-        return Serializator.to_dict_dataclass(expected_ctx)
+        return Serializator.to_dict_dataclass(expected_ctx.state)
 
     def run(self, scenario: Scenario):
-        ctx = FakeContext(
-            workflow_instance=WorkflowInstance(
+        print("RUNING SECNARIO")
+        print(scenario)
+        print("---------------")
+        ctx = ActionContext(
+            state=GameState(factions=scenario.factions)
+        )
+        ctx.state.workflow_stack.append(
+            WorkflowInstance(
                 name=scenario.name,
                 current_step_index= scenario.current_step,
                 config=scenario.config,
@@ -63,11 +77,12 @@ class WorkflowTester:
             assert result == step_case.expected_result
 
             print("after step exe state")
-            print(Serializator.to_dict_dataclass(ctx))
+            print(Serializator.to_dict_dataclass(ctx.state))
 
-            expected_ctx = self.get_expected_ctx(before, step_case)
-            print(f"expected ctx\n{expected_ctx}")
-            
-            assert Serializator.to_dict_dataclass(ctx) == expected_ctx
+            expected_state = self.get_expected_state(before, step_case)
+            print(f"expected ctx\n{expected_state}")
+            current_state = Serializator.to_dict_dataclass(ctx.state)
+
+            assert current_state == expected_state, Diff.compare(current_state, expected_state)
 
             ctx.workflow_instance.current_step_index += 1

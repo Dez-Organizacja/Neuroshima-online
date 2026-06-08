@@ -15,6 +15,7 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
 
     def build_init_step(self):
         def func(ctx : ActionContext):
+            ctx.faction = self.faction
             return [ClearWorkflowDataEffect()]
         
         return ResolveStepConfig(resolve_func=func)
@@ -26,6 +27,7 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
                 self.faction
             )
             if len(candidates) == 0:
+                ctx.faction = ctx.state.turn_faction
                 return [PopWorkflow()]
             
         return ResolveStepConfig(resolve_func=func)

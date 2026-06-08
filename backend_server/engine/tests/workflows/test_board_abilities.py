@@ -12,7 +12,8 @@ from main.workflows.providers.turn import TurnProvider
 def make_ctx() -> ActionContext:
     state = GameState(
         factions=["posterunek", "moloch"],
-        current_faction="posterunek",
+        turn_faction="posterunek",
+        active_faction="posterunek"
     )
     return ActionContext(state=state, rules=GameRules())
 
@@ -55,7 +56,8 @@ def test_turn_provider_hides_wired_ability_units():
 def test_borgo_move_ability_is_visible_in_available_actions_board():
     state = GameState(
         factions=["borgo", "moloch"],
-        current_faction="borgo",
+        turn_faction="borgo",
+        active_faction="borgo",
     )
     ctx = ActionContext(state=state, rules=GameRules())
     ctx.board.put_token((1, 5), "zabojca", "borgo")

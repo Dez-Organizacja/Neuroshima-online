@@ -43,7 +43,7 @@ class FormatValidator():
         # return game.available_actions[UI.BUTTON][name]
 
     def validate_rotate_format(self, action):
-        rotation = action.get(Key.rotation, None)
+        rotation = action.get(Key.ROTATION, None)
         return isinstance(rotation, int)
 
     def is_valid_action(self, action) -> bool:

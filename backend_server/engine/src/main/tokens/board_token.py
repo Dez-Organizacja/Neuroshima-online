@@ -6,7 +6,6 @@ from main.tokens.config import BoardTokenConfig, BoostInstance, Boost
 from main.tokens.state import BoardTokenState
 from copy import deepcopy
 from main.state.serialization import Serializator
-import main.frakcje.wszystkie_frakcje as allfractions
 from main.attacks.data import AttackConfig
 from main.tokens.data import TokenView
 
@@ -114,7 +113,7 @@ class BoardToken(Token):
     def can_activate(self, initiative):
         return (
             not self.wired
-            and self.clever_initiative.can_activate(initiative)
+            # and self.clever_initiative.can_activate(initiative)
         )
 
     def mark_activated(self, initiative : int):

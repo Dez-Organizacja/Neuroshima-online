@@ -14,6 +14,7 @@ def placement_scenario():
     def setup_function(ctx : ActionContext):
         print(f"setup ctx {ctx}")
         ctx.workflow_data.set_slot(0)
+        ctx.faction = "moloch"
         ctx.player.hand.add("klaun")
 
     return (

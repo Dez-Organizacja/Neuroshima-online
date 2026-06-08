@@ -32,6 +32,7 @@ class TurnWorkflow(Workflow[TurnProvider]):
 
     def start_turn_resolve(self, ctx : ActionContext) -> list[Event]:
         ctx.faction = self.config.faction
+        ctx.state.turn_faction = self.config.faction
         positions = BoardQuery([
             is_ally(ctx.faction),
             has_ability
@@ -44,6 +45,7 @@ class TurnWorkflow(Workflow[TurnProvider]):
     @staticmethod
     def end_turn_resolve(ctx : ActionContext) -> list[Event]:
         ctx.faction = ""
+        ctx.state.turn_faction = ""
         return [EndTurnEvent()]
 
     def build_init_step(self):

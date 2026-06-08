@@ -12,7 +12,7 @@ from .registry import register
 def headquarter_turn_scenario():
     def setup_function(ctx: ActionContext):
         ctx.faction = ""
-        ctx.player.pile.add("sztab")
+        ctx.state.players["moloch"].pile.add("sztab")
 
     def setup_hand(ctx: ActionContext):
         ctx.player.hand.add("sztab")
@@ -25,7 +25,8 @@ def headquarter_turn_scenario():
         .tick()
         .given(setup_function)
         .then_execution(events=[DrawNamedTokenEffect("sztab")])
-        .then_faction("moloch")                                     
+        .then_faction("moloch")
+        .then_faction("moloch", turn=True)                              
 
         .tick()
         .then_execution(events=[ClearWorkflowDataEffect()])
@@ -40,6 +41,7 @@ def headquarter_turn_scenario():
         .tick()
         .then_execution(events=[PopWorkflow()])
         .then_faction("")
+        .then_faction("", turn=True)
     ).build()
 
 

@@ -16,6 +16,7 @@ def place_action_scenario() -> Scenario:
             stack_add_game_wf(factions),
             stack_add_turn_wf(faction="moloch"),
             faction_delta("moloch"),
+            faction_delta(faction="moloch", turn=True),
             hand_add(faction="moloch", card="klaun"),
             hand_add(faction="moloch", card="sieciarz"),
         )
@@ -39,10 +40,5 @@ def place_action_scenario() -> Scenario:
             # stack_pop(), # pop place
             # stack_pop(), # pop hand
             # stack_index_change(index=2) # set turn wf index to waiting step
-        )
-        
-        .when(RotationAction(rotation=1))
-        .then(
-            # tile_delta()
         )
     ).build()

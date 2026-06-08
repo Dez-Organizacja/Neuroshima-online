@@ -19,11 +19,11 @@ class ActionContext():
     
     @property
     def faction(self):
-        return self.state.current_faction
+        return self.state.active_faction
     
     @faction.setter
     def faction(self, value):
-        self.state.current_faction = value
+        self.state.active_faction = value
 
     @property
     def board(self):

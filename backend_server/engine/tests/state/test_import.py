@@ -9,7 +9,7 @@ def test_game_state_serialization_roundtrip():
     # GIVEN
     state = GameState(
         factions=["moloch", "borgo"],
-        current_faction="moloch"
+        turn_faction="moloch"
     )
 
     state.add_player("moloch")

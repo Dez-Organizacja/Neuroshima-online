@@ -10,6 +10,7 @@ name = WorkflowName.HAND
 @register(name)
 def hand_scenario():
     def setup_function(ctx : ActionContext):
+        ctx.faction = "moloch"
         ctx.player.hand.add("klaun")
         ctx.player.hand.add("sieciarz")
         ctx.workflow_data.slot = 1
@@ -39,7 +40,7 @@ def hand_board_token_with_ability_scenario():
         ctx.workflow_data.slot = 0
 
     return (
-        ScenarioBuilder(name)
+        ScenarioBuilder(name, factions=["posterunek", "moloch"])
         .tick()
         .given(setup_function)
         .then_execution(
@@ -63,7 +64,7 @@ def hand_instant_token_with_ability_scenario():
         ctx.workflow_data.slot = 0
 
     return (
-        ScenarioBuilder(name)
+        ScenarioBuilder(name, factions=["posterunek", "moloch"])
         .tick()
         .given(setup_function)
         .then_execution(

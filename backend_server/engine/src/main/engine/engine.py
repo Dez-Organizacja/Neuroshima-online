@@ -19,10 +19,10 @@ class GameEngine:
 
     @staticmethod
     def _get_step(ctx : ActionContext) -> Step:
-        ctx.print_wf_stack()
+        # ctx.print_wf_stack()
         wf = WorkflowFactory.create(ctx.workflow_instance)
-        print(f"current workflow {wf}")
-        print(f"workflow instance {ctx.workflow_instance}")
+        # print(f"current workflow {wf}")
+        # print(f"workflow instance {ctx.workflow_instance}")
         wf.build_steps()
         if ctx.workflow_instance.current_step_index is None:
             wf.start(ctx)
@@ -34,26 +34,26 @@ class GameEngine:
             step : Step, 
             action : UserAction | None = None
         ):
-        print("START STEP EXECUTION", step)
+        # print("START STEP EXECUTION", step)
         # print(ctx.print_wf_stack())
         if action:
             result = step.execute(ctx, action)
         else:
             result = step.execute(ctx)
         self.resolver.resolve(ctx, result)
-        print("after step execution")
-        ctx.print_wf_stack()
-        print(f"workflow instance {ctx.workflow_instance}")
-        print("STEP EXECUTION FINISHED")
+        # print("after step execution")
+        # ctx.print_wf_stack()
+        # print(f"workflow instance {ctx.workflow_instance}")
+        # print("STEP EXECUTION FINISHED")
 
 
     def run_until_input_required(self, ctx : ActionContext):
         while True:
             step = self._get_step(ctx)
-            print(f"current_step {step}")
+            # print(f"current_step {step}")
             if step.requires_input:
-                print(f"INPUT NEEDED EXECUTING STEP FINISED")
-                print(f"workflow instance {ctx.workflow_instance}")
+                # print(f"INPUT NEEDED EXECUTING STEP FINISED")
+                # print(f"workflow instance {ctx.workflow_instance}")
                 break
 
             self.execute_step(ctx=ctx, step=step)
@@ -62,9 +62,9 @@ class GameEngine:
         pass
 
     def execute_action(self, ctx : ActionContext, action : UserAction):
-        print("########################")
-        print(f"EXECUTING ACTION {action}")
-        print("########################")
+        # print("########################")
+        # print(f"EXECUTING ACTION {action}")
+        # print("########################")
         self.execute_step(ctx, step=self._get_step(ctx), action=action)
         self.run_until_input_required(ctx)
 

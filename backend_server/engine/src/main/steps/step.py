@@ -66,12 +66,12 @@ class ResolveStep(AutomaticStep[ResolveStepConfig]):
         super().__init__(config)
     
     def execute(self, ctx : ActionContext) -> StepResult:
-        print(f"EXECUTING RESOLVE STEP")
+        # print(f"EXECUTING RESOLVE STEP")
         res : list[Event] = self.config.resolve_func(ctx) or []
         if self.config.wf_finished:
             res.append(PopWorkflow())
-            print("finished workflow effect pushed")
-        print("FINISHED EXECUTING RESOLVE STEP")
+        #     print("finished workflow effect pushed")
+        # print("FINISHED EXECUTING RESOLVE STEP")
         return StepResult(execution_result=res)
 
 

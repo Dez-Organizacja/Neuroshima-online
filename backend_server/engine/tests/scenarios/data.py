@@ -84,11 +84,15 @@ class Delta:
     wf_data_delta : dict = field(default_factory=dict)
     stack_delta : list[StackChange] = field(default_factory=list)
     faction_delta : str | None = None
+    turn_faction_delta : str | None = None
 
     def apply(self, state : GameState):
         if self.faction_delta is not None:
-            state.current_faction = self.faction_delta
+            state.active_faction = self.faction_delta
         
+        if self.turn_faction_delta is not None:
+            state.turn_faction = self.turn_faction_delta
+
         for tile in self.board_delta:
             tile.apply(state)
 

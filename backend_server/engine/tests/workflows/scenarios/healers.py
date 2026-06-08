@@ -22,6 +22,7 @@ def heal_scenario():
         .then_execution(
             events=[ClearWorkflowDataEffect()]
         )
+        .then_faction("moloch")
 
         .tick()
 

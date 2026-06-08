@@ -89,8 +89,10 @@ def stack_add_turn_wf(faction : str):
     )
 
 
-def faction_delta(faction: str):
+def faction_delta(faction: str, turn : bool = False):
     def apply(delta: Delta):
+        if turn:
+            delta.turn_faction_delta = faction
         delta.faction_delta = faction
 
     return apply

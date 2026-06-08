@@ -17,8 +17,8 @@ class Diff:
         obj = Diff()
         status = obj.diff(a, b)
         if(not status):
-            print("a:", a)
-            print("b:", b)
+            # print("a:", a)
+            # print("b:", b)
             obj.print_stack()
         return status
 

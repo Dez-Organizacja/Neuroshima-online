@@ -14,6 +14,8 @@ class ScenarioExecuter:
 
     def run(self, scenario: Scenario):
         before_state = GameState(factions=scenario.factions)
+        print("SETUP")
+        print(scenario.setup)
         scenario.setup.apply(before_state)
         # print("before game state")
         # before_state.print_game_state()

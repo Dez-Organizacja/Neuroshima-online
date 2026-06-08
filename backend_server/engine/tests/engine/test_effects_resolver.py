@@ -17,7 +17,8 @@ class Tests:
     def contex_maker() -> ActionContext:
         state = GameState(
             factions=["moloch", "borgo"],
-            current_faction="moloch",
+            turn_faction="moloch",
+            active_faction="moloch",
         )
         return ActionContext(state=state, rules=GameRules())
 
