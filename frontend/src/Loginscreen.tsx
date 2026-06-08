@@ -22,6 +22,7 @@ export default function LoginScreen({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  
   async function handleLogin() {
     if (!username.trim() || !password || isSubmitting) {
       return;
@@ -32,7 +33,6 @@ export default function LoginScreen({
 
     try {
       const data = await Login(username.trim(), password, url);
-
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("username", username.trim());

@@ -3,6 +3,7 @@ import { imagesByName } from "../Images";
 type DisplayPlayerFactionsProps = {
   playerFactions: Record<string, string | null>;
   playersInRoom?: string[];
+  hostUsername?: string;
 };
 
 function displayFactionName(faction: string) {
@@ -12,6 +13,7 @@ function displayFactionName(faction: string) {
 export default function DisplayPlayerFactions({
   playerFactions,
   playersInRoom = Object.keys(playerFactions),
+  hostUsername,
 }: DisplayPlayerFactionsProps) {
   const players = playersInRoom.length
     ? playersInRoom
@@ -36,9 +38,13 @@ export default function DisplayPlayerFactions({
         const factionImage = faction
           ? imagesByName[`${faction}/sztab`]
           : undefined;
+        const isHost = Boolean(hostUsername && player === hostUsername);
 
         return (
-          <div className="player-row" key={player}>
+          <div
+            className={`player-row${isHost ? " is-host" : ""}`}
+            key={player}
+          >
             <span className="player-row__number">0{index + 1}</span>
 
             <span
@@ -52,7 +58,15 @@ export default function DisplayPlayerFactions({
             </span>
 
             <span className="player-row__identity">
-              <strong>{player}</strong>
+              <span className="player-row__name-line">
+                <strong>{player}</strong>
+                {isHost && (
+                  <span className="player-row__host-badge">
+                    <span aria-hidden="true">◆</span>
+                    Host
+                  </span>
+                )}
+              </span>
               <small>
                 {faction ? displayFactionName(faction) : "Choosing faction…"}
               </small>
