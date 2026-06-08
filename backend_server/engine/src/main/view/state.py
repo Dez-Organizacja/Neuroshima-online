@@ -11,10 +11,14 @@ class StateViewBuilder:
         }
 
     def build_board_view(self, ctx : ActionContext):
+
         tiles = [
-            TileView(pos=tile.pos, unit=tile.unit)
+            TileView(pos=tile.pos, unit=tile.unit.get_view())
             for tile in ctx.board.get_tiles()
         ]
+        # print("TILES")
+        # print(tiles)
+        # print("---------------")
 
         return [
             Serializator.to_dict_dataclass(tile)

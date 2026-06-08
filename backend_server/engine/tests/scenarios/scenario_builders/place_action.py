@@ -1,7 +1,7 @@
 from ..builder import ScenarioBuilder
 from ..registry import ScenarioRegistry
 from ..data import Scenario
-from main.input.data import BoardAction, HandAction, ActionType
+from main.input.data import BoardAction, HandAction, ActionType, RotationAction
 from main.state.game_state import GameState
 from main.state.contex import ActionContext
 from main.workflows.data import WorkflowName, WorkflowConfig
@@ -39,5 +39,10 @@ def place_action_scenario() -> Scenario:
             # stack_pop(), # pop place
             # stack_pop(), # pop hand
             # stack_index_change(index=2) # set turn wf index to waiting step
+        )
+        
+        .when(RotationAction(rotation=1))
+        .then(
+            # tile_delta()
         )
     ).build()
