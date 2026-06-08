@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.staszic.neu.game.model.RoomMember;
-import pl.staszic.neu.game.model.RoomPropertiesView;
+import pl.staszic.neu.game.model.RoomPolicyView;
 import pl.staszic.neu.messages.GameStatusChangeRequest;
 import pl.staszic.neu.game.model.Room;
 import pl.staszic.neu.game.model.Game;
@@ -20,8 +20,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static org.apache.logging.log4j.util.Strings.isBlank;
 
 @Service
 public class InMemoryGameService implements GameService {
@@ -174,10 +172,16 @@ public class InMemoryGameService implements GameService {
         response.setRoomId(request.getRoomId());
         response.setGameId(room.getGameId());
 
-        RoomPropertiesView roomPropertiesView = new RoomPropertiesView();
-        roomPropertiesView.setHostUsername(clientUsernames.getOrDefault(room.getRoomProperties().getHost(), "Unknown"));
-        roomPropertiesView.setVisibility(room.getRoomProperties().getVisibility());
-        response.setRoomPropertiesView(roomPropertiesView);
+        RoomPolicyView roomPolicyView = new RoomPolicyView();
+        try {
+            roomPolicyView.setHostUsername(clientUsernames.getOrDefault(room.getRoomPolicy().getHost(), "Unknown"));
+        }
+        catch (Exception e){
+            logger.error("Error getting host username for roomId={}: {}", request.getRoomId(), e.getMessage());
+            roomPolicyView.setHostUsername("Unknown");
+        }
+        roomPolicyView.setVisibility(room.getRoomPolicy().getVisibility());
+        response.setRoomPolicyView(roomPolicyView);
 
         response.setPlayersInRoom(playerNamesInRoom);
         response.setPlayerFactions(playerFactionsByUsername);

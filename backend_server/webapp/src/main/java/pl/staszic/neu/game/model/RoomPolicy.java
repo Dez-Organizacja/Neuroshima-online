@@ -2,7 +2,7 @@ package pl.staszic.neu.game.model;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public class RoomProperties {
+public class RoomPolicy {
 
     public enum Visibility {
         PUBLIC("public"),
@@ -24,9 +24,9 @@ public class RoomProperties {
 
     private String host = null;
 
-    public RoomProperties() {}
+    public RoomPolicy() {}
 
-    public RoomProperties(Visibility visibility) {
+    public RoomPolicy(Visibility visibility) {
         this.visibility = visibility;
     }
 
@@ -38,7 +38,6 @@ public class RoomProperties {
         this.visibility = visibility;
     }
 
-    // Getter i setter dla hosta
     public String getHost() {
         return host;
     }

@@ -10,7 +10,7 @@ public class Room {
     private String roomId;
     private String gameId;
     private final Map<String, RoomMember> players = new ConcurrentHashMap<>();
-    private final RoomProperties roomProperties = new RoomProperties();
+    private final RoomPolicy roomPolicy = new RoomPolicy();
 
     public Room(String roomId) {
         this.roomId = roomId;
@@ -29,15 +29,18 @@ public class Room {
             throw new Exception("Player already in the room");
         }
         players.put(player, new RoomMember(roomId, player, null));
+        if(players.size() == 1) {
+            roomPolicy.setHost(player);
+        }
     }
 
     private void moveHost() {
         if(players.isEmpty()) {
-            roomProperties.setHost(null);
+            roomPolicy.setHost(null);
             return;
         }
         String newHost = players.keySet().iterator().next();
-        roomProperties.setHost(newHost);
+        roomPolicy.setHost(newHost);
     }
 
     public void removePlayer(String player) throws Exception {
@@ -47,7 +50,7 @@ public class Room {
 
         players.remove(player);
 
-        if(player.equals(roomProperties.getHost())) {
+        if(player.equals(roomPolicy.getHost())) {
             moveHost();
         }
     }
@@ -92,17 +95,17 @@ public class Room {
         players.get(clientId).setStatus(roomMember.getStatus());
     }
 
-    public void mergeRoomProperties(RoomProperties newProperties) {
-        if(newProperties.getHost() != null) {
-            roomProperties.setHost(newProperties.getHost());
+    public void mergeRoomPolicy(RoomPolicy newPolicy) {
+        if(newPolicy.getHost() != null) {
+            roomPolicy.setHost(newPolicy.getHost());
         }
-        if(newProperties.getVisibility() != null) {
-            roomProperties.setVisibility(newProperties.getVisibility());
+        if(newPolicy.getVisibility() != null) {
+            roomPolicy.setVisibility(newPolicy.getVisibility());
         }
     }
 
-    public RoomProperties getRoomProperties() {
-        return roomProperties;
+    public RoomPolicy getRoomPolicy() {
+        return roomPolicy;
     }
 
     public String getPlayerFaction(String clientId) {

@@ -237,6 +237,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             }
 
             try {
+                logger.info("Broadcasting room status to client {} in room {}", targetClientId, roomId);
                 GetRoomStatusRequest statusRequest = new GetRoomStatusRequest();
                 statusRequest.setRoomId(roomId);
 

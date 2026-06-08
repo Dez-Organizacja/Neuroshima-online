@@ -1,9 +1,7 @@
 package pl.staszic.neu.messages;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
-import pl.staszic.neu.game.model.RoomProperties;
-import pl.staszic.neu.game.model.RoomPropertiesView;
+import pl.staszic.neu.game.model.RoomPolicyView;
 
 import java.util.Map;
 import java.util.Set;
@@ -27,8 +25,8 @@ public class GetRoomStatusResponse extends WebSocketMessage {
     @JsonProperty("gameId")
     private String gameId;
 
-    @JsonProperty("roomProperties")
-    private RoomPropertiesView roomPropertiesView;
+    @JsonProperty("roomPolicy")
+    private RoomPolicyView roomPolicyView;
 
     public GetRoomStatusResponse() {
         super(TYPE);
@@ -72,11 +70,11 @@ public class GetRoomStatusResponse extends WebSocketMessage {
         return gameId;
     }
 
-    public RoomPropertiesView getRoomPropertiesView() {
-        return roomPropertiesView;
+    public RoomPolicyView getRoomPolicyView() {
+        return roomPolicyView;
     }
 
-    public void setRoomPropertiesView(RoomPropertiesView roomPropertiesView) {
-        this.roomPropertiesView = roomPropertiesView;
+    public void setRoomPolicyView(RoomPolicyView roomPolicyView) {
+        this.roomPolicyView = roomPolicyView;
     }
 }
