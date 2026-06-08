@@ -1,6 +1,6 @@
 from main.rules.ability.base import AbilityRules
 from main.state.contex import ActionContext
-from main.board.board_query import BoardQuery
+from main.board.query import BoardQuery
 from main.tokens.board_token import BoardToken
 from main.rules.predicates import (
     adjacent_to,
@@ -16,8 +16,8 @@ class MoveRules(AbilityRules):
     def get_sources(ctx : ActionContext):
         candidates = BoardQuery([
             is_ally(ctx.faction),
-            NOT(token_predicate(BoardToken.is_wired)),
-        ]).apply(ctx)
+            NOT(token_predicate(BoardToken.wired)),
+        ]).apply(ctx.board)
 
         return [pos for pos in candidates 
                 if any(MoveRules.get_destinations(ctx, pos))
@@ -29,11 +29,11 @@ class MoveRules(AbilityRules):
             adjacent_to(unit_pos),
             is_empty_at
         ])
-        return query.apply(ctx) + [unit_pos] 
+        return query.apply(ctx.board) + [unit_pos] 
     
     @staticmethod
     def can_use(ctx : ActionContext, pos : tuple[int, int]) -> bool:
-        return not ctx.board.get_token(pos).is_wired()
+        return not ctx.board.get_token(pos).wired
     
 class PushRules(AbilityRules):
     @staticmethod
@@ -42,15 +42,15 @@ class PushRules(AbilityRules):
             is_empty_at,
             adjacent_to(target_pos),
             NOT(adjacent_to(pusher_pos))
-        ]).apply(ctx)
+        ]).apply(ctx.board)
 
     @staticmethod
     def get_targets(ctx : ActionContext, pusher_pos):
         candidates = BoardQuery([
             is_enemy_of(ctx.board.get_token(pusher_pos)),
             adjacent_to(pusher_pos),
-            NOT(token_predicate(BoardToken.is_wired)),
-        ]).apply(ctx)
+            NOT(token_predicate(lambda t : t.wired)),
+        ]).apply(ctx.board)
         return [pos for pos in candidates
                 if any(PushRules.get_destinations(ctx, pusher_pos, pos))]
     
@@ -58,8 +58,8 @@ class PushRules(AbilityRules):
     def get_sources(ctx):
         candidates = BoardQuery([
             is_ally(ctx.faction),
-            NOT(token_predicate(BoardToken.is_wired)),
-        ]).apply(ctx)
+            NOT(token_predicate(lambda t : t.wired)),
+        ]).apply(ctx.board)
 
         return [pos for pos in candidates 
                 if any(PushRules.get_targets(ctx, pos))
@@ -68,7 +68,7 @@ class PushRules(AbilityRules):
     @staticmethod
     def can_use(ctx : ActionContext, pos : tuple[int, int]) -> bool:
         pusher = ctx.board.get_token(pos)
-        if pusher.is_wired():
+        if pusher.wired:
             return False
         
         return any(PushRules.get_targets(ctx, pos))

@@ -1,5 +1,5 @@
 from main.state.contex import ActionContext
-from main.board.board_query import BoardQuery
+from main.board.query import BoardQuery
 from main.rules.predicates import is_empty_at
 from main.rules.ability.movement import MoveRules, PushRules
 from main.tokens.data import Ability
@@ -25,4 +25,4 @@ class TurnRules:
     
     @staticmethod
     def end_turn_check(ctx : ActionContext) -> bool:
-        return any(BoardQuery([is_empty_at]).apply(ctx))
+        return any(BoardQuery([is_empty_at]).apply(ctx.board))

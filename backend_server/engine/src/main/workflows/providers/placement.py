@@ -1,7 +1,7 @@
 from main.workflows.providers.base import WorkflowActionProvider
 from main.input.data import Button
 from main.state.contex import ActionContext
-from main.board.board_query import BoardQuery
+from main.board.query import BoardQuery
 from main.rules.predicates import is_empty_at
 
 class PlacementProvider(WorkflowActionProvider):
@@ -11,4 +11,4 @@ class PlacementProvider(WorkflowActionProvider):
     def get_available_positions(self, ctx : ActionContext):
         # print("available positions")
         # print(BoardQuery([is_empty_at]).apply(ctx))
-        return BoardQuery([is_empty_at]).apply(ctx)
+        return BoardQuery([is_empty_at]).apply(ctx.board)

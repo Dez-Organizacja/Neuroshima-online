@@ -19,6 +19,15 @@ class TileDelta:
                 setattr(token, k, v)
 
 @dataclass
+class TilePlace:
+    pos : tuple[int, int]
+    name : str
+    faction : str
+
+    def apply(self, state : GameState):
+        state.board.put_token(pos=self.pos, name=self.name, faction=self.faction)
+
+@dataclass
 class TileRemove:
     pos : tuple[int, int]
 

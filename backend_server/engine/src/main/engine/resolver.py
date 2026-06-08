@@ -4,7 +4,7 @@ from main.steps.data import StepResult
 from main.systems.passive_systems import PassiveSystems
 
 class Resolver():
-    def excute(self, ctx : ActionContext, result : list[Event]):
+    def execute(self, ctx : ActionContext, result : list[Event]):
         dirty = False
         ctx.state.events_queue.extend(result)
         while ctx.state.events_queue:
@@ -23,4 +23,4 @@ class Resolver():
         if result.advance:
             ctx.workflow_instance.current_step_index += 1
             
-        self.excute(ctx, result.execution_result)
+        self.execute(ctx, result.execution_result)

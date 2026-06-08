@@ -30,7 +30,7 @@ def place_action_scenario() -> Scenario:
 
         .when(BoardAction(pos=(2, 4)))
         .then(
-            tile_delta(pos=(2, 4), name="klaun", faction="moloch"),
+            tile_place(pos=(2, 4), name="klaun", faction="moloch"),
             hand_remove(faction="moloch", index=0),
             wf_data_delta(slot=None, type=None),
             stack_pop(), # pop place

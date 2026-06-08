@@ -5,7 +5,7 @@ from main.events.effects import DiscardTokenEffect, MarkAbilityUsedEffect
 from main.steps.config import InitStepConfig
 from main.state.contex import ActionContext
 
-from main.tokens.abstract_token import Token
+from main.tokens.base import Token
 from main.tokens.data import Ability, TokenType
 from main.tokens.token_factory import TokenFactory
 

@@ -1,7 +1,7 @@
 from main.workflows.providers.base import WorkflowActionProvider
 from abc import ABC, abstractmethod
 from main.input.data import Button
-from main.board.board_query import BoardQuery
+from main.board.query import BoardQuery
 import main.rules.predicates as pr
 from main.state.contex import ActionContext
 from main.tokens.board_token import BoardToken
@@ -23,12 +23,12 @@ class SniperProvider(TargetProvider):
             pr.NOT(pr.token_predicate(BoardToken.is_wired)),
             pr.is_enemy(ctx.faction)
         ])
-        return query.apply(ctx)
+        return query.apply(ctx.board)
 
 class BombProvider(TargetProvider):
     def get_available_targets(self, ctx : ActionContext):
         query = BoardQuery([pr.NOT(pr.is_on_border)])
-        return query.apply(ctx)
+        return query.apply(ctx.board)
 
 class GrenadeProvider(TargetProvider):
     @staticmethod
@@ -42,4 +42,4 @@ class GrenadeProvider(TargetProvider):
             pr.adjacent_to(pos),
             pr.is_enemy_of(hq),
             pr.NOT(pr.token_predicate(BoardToken.is_wired))
-        ]).apply(ctx)
+        ]).apply(ctx.board)

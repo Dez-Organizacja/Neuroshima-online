@@ -1,6 +1,5 @@
 from collections import defaultdict
 
-from main.tokens.data import Token
 from main.board.board import Board
 
 class Sieciarze:
@@ -40,8 +39,8 @@ class Sieciarze:
                 if akt is None:
                     continue
                 
-                wires = akt.wire
-                if len(wires) == 0:
+                wires = akt.wires
+                if not akt.can_wire():
                     continue
 
                 self.wszyscy_sieciarze.add((x, y))
@@ -230,23 +229,23 @@ class Sieciarze:
                 cel = self.board.get_token((i, j))
                 
                 if (cel != None):
-                    cel.unwire()
+                    cel.set_wire(False)
 
         for i in self.status_sieciarzy:
             akt = self.board.get_token(i)
             
             if self.status_sieciarzy[i] != 1:
-                akt.set_wire()    
+                akt.set_wire(True)    
                 continue
                 
-            for kier in (akt.wire or []):
+            for kier in (akt.wired or []):
                 nx, ny = self.board.go(i, kier)
                 cel = self.board.get_token((nx, ny))
 
                 if (not self.board.is_valid_target((nx, ny), akt.faction)) or cel.can_wire() == True:
                     continue
 
-                cel.set_wire()
+                cel.set_wire(True)
 
         self.status_sieciarzy = dict(self.status_sieciarzy)
 

@@ -1,4 +1,4 @@
-from main.board.board_query import BoardQuery
+from main.board.query import BoardQuery
 from main.events.data import Event
 from main.events.effects import (
     ClearWorkflowDataEffect,

@@ -14,6 +14,8 @@ from main.workflows.turn import TurnWorkflow
 from main.workflows.data import WorkflowInstance, WorkflowName
 from main.workflows.start_battle import StartBattleWorkflow
 from main.workflows.healers import HealersWorkflow
+from main.workflows.battle import BattleWorkflow
+from main.workflows.explosion import ExpolsionWorkflow
 from main.workflows.base import Workflow
 from dataclasses import dataclass
 
@@ -41,6 +43,11 @@ class WorkflowFactory:
         WorkflowName.GAME : WorkflowMeta(GameWorkflow, True),
         WorkflowName.HEAL : WorkflowMeta(HealersWorkflow, True),
         WorkflowName.HEADQUARTER_TURN : WorkflowMeta(HeadquarterTurnWorkflow, True),
+        WorkflowName.BATTLE : WorkflowMeta(BattleWorkflow, True),
+        WorkflowName.HEAL   : WorkflowMeta(HealersWorkflow, True),
+        WorkflowName.TURN   : WorkflowMeta(TurnWorkflow, True),
+        WorkflowName.GAME   : WorkflowMeta(GameWorkflow, True),
+        WorkflowName.EXPLOSION : WorkflowMeta(ExpolsionWorkflow, True),
     }
     @classmethod
     def create(cls, instance : WorkflowInstance) -> Workflow:

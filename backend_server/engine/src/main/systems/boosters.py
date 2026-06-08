@@ -1,8 +1,5 @@
 from main.board.board import Board
-from main.tokens.board_token import BoardToken
-# from main.tokens.ability import Ability
-from main.tokens.data import TokenRelation
-from main.utils.variable import Boost, Attack
+from main.tokens.data import TokenRelation, Boost
 
 class BoosterSolver():
     board: Board

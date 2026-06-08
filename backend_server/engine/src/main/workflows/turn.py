@@ -15,7 +15,7 @@ from main.events.effects import (
     ClearWorkflowDataEffect,
 )
 from main.events.flow import EndTurnEvent
-from main.board.board_query import BoardQuery
+from main.board.query import BoardQuery
 from main.rules.predicates import (
     is_ally,
     has_ability
@@ -35,7 +35,7 @@ class TurnWorkflow(Workflow[TurnProvider]):
         positions = BoardQuery([
             is_ally(ctx.faction),
             has_ability
-        ]).apply(ctx)
+        ]).apply(ctx.board)
         return [
                 ResetAbilityUsedEffect(positions),
                 DrawTokensEffect(hand_limit=self.config.hand_limit),

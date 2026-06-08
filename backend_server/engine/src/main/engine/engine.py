@@ -49,7 +49,7 @@ class GameEngine:
 
             self.execute_step(ctx=ctx, step=step)
 
-    def vaildate_action(self, ctx : ActionContext, action : UserAction):
+    def validate_action(self, ctx : ActionContext, action : UserAction):
         pass
 
     def execute_action(self, ctx : ActionContext, action : UserAction):
@@ -68,7 +68,7 @@ class GameEngine:
     def _create_game_workflow(self, ctx : ActionContext):
         config = WorkflowConfig(factions=ctx.state.factions)
         effect = PushWorkflow(name = WorkflowName.GAME, config=config)
-        self.resolver.excute(ctx, [effect])
+        self.resolver.execute(ctx, [effect])
 
     def start_game(self, ctx : ActionContext):
         self._setup_players(ctx)

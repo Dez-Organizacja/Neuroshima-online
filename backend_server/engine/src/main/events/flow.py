@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from main.events.data import FlowEvent, Event
+from main.events.data import FlowEvent, Effect, Event
 from main.events.workflow import PushWorkflow, PopWorkflow, DeleteAbove
 from main.state.contex import ActionContext
 from main.workflows.data import WorkflowName
-
+from main.attacks.resolver import AttackResolver
 
 @dataclass
 class EndTurnEvent(FlowEvent):
@@ -14,12 +14,13 @@ class EndTurnEvent(FlowEvent):
         ]
 
 @dataclass
-class ResolveAttacksEvent:
-    def apply(ctx : ActionContext):
-        pass
-        # while ctx.state.pending_attacks:
-        #     attack = ctx.state.pending_attacks.pop()
-
+class ResolvePendingAttacksEvent:
+    def apply(ctx : ActionContext) -> list[Effect]:
+        return [
+            effect
+            for attack in ctx.state.pending_attacks
+            for effect in AttackResolver.resolve(attack, ctx.board)
+        ]    
 
 # @dataclass
 # class StartBattleEvent(FlowEvent):

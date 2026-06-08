@@ -1,203 +1,153 @@
 from dataclasses import dataclass, field
-from copy import deepcopy
-from enum import Enum
 
-import main.frakcje.wszystkie_frakcje as allfractions
-from main.tokens.data import Ability
-from main.tokens.clever_initiative import CleverInitiative
-from main.tokens.abstract_token import Token as AbstractToken
-from main.tokens.data import TokenKey, TokenType, TokenRelation
-from main.utils.variable import Attack, Boost
+from main.tokens.base import Token
 from main.state.serialization import Serializator
+from main.tokens.config import BoardTokenConfig, BoostInstance, Boost
+from main.tokens.state import BoardTokenState
+from copy import deepcopy
+from main.state.serialization import Serializator
+import main.frakcje.wszystkie_frakcje as allfractions
+from main.attacks.data import AttackConfig
 
 @dataclass
-class BoardToken(AbstractToken):
-    # name: str | dict = "default"
-    type: TokenType = field(default=TokenType.BOARD, init=False)
-
-    rotation: int = 0
-    damage: int = 0
-    wired: bool = False
-    hp: int = 0
-    armor: list[int] = field(default_factory=list)
-    unit_count: int | None = None
-    attacks: dict = field(default_factory=dict)
-    wire: list[int] = field(default_factory=list)
-    boosts: dict = field(default_factory=dict)
-
-    real_boost_target: TokenRelation | None = None
-    boost_target: TokenRelation | None = None
-
-    initiative: list[int] = field(default_factory=list)
-    clever_initiative: CleverInitiative | None = None
-
-    meele_boosts: int = 0
-    shoot_boosts: int = 0
-
-    # chwilowo zadane np w trakcie bitwy
-    wounds : list[int] = field(default_factory=list)
-
-    def _load_clever_initiative(self, data: CleverInitiative | dict) -> None:
-        if isinstance(data, CleverInitiative):
-            data = data.to_dict()
-
-        initiative_data = data.get("initiative", [])
-        state = dict(data)
-        if initiative_data and isinstance(initiative_data[0], list):
-            state["initiative"] = [entry[0] for entry in initiative_data]
-            state["is_used"] = [entry[1] for entry in initiative_data]
-            state["is_basic"] = [entry[2] for entry in initiative_data]
-
-        self.clever_initiative.from_dict(state)
-        self.clever_initiative.is_blocked_to_0 = data.get("is_blocked_to_0", False)
-        self.clever_initiative.initiative_boosts = data.get("initiative_boosts", 0)
-        self.clever_initiative.num_of_new = data.get("num_of_new", self.clever_initiative.num_of_new)
-        self.clever_initiative.num_of_old = data.get("num_of_old", self.clever_initiative.num_of_old)
-
-    def __post_init__(self):
-        clever_initiative_data = self.clever_initiative
-        self.load()
-        self.rotate()
-        
-        self.clever_initiative = CleverInitiative(self.initiative)
-        if clever_initiative_data is not None:
-            self._load_clever_initiative(clever_initiative_data)
-        self.real_boost_target = self.boost_target
-
-    # ---------- reset ----------
-
-    def load(self):
-        # print(f"loading token {self.name}")
-        data = allfractions.frakcje.get(self.faction, {}).get(self.name, {})
-        for key, value in data.items():
-            attr_name = key.name if isinstance(key, Enum) else str(key)
-            if attr_name.isidentifier():
-                setattr(self, attr_name.lower(), deepcopy(value))
+class BoardToken(Token):
+    state : BoardTokenState = field(default_factory=BoardTokenState)
 
     def reset(self):
-        self.rotation = 0
-        self.damage = 0
-        self.wired = False
-
-        self.load()
+        self.state.reset()
 
     # --------- HQ ----------
 
+    @property
     def is_HQ(self):
-        return self.name == "sztab"
+        return self.config.name == "sztab"
 
+    # --------- boosts ----------
+    @property
+    def boosts(self) -> dict[Boost, BoostInstance]:
+        return self.config.boosts
+
+    def has_boost(self, boost : Boost) -> bool:
+        return boost in self.boosts
+
+    def get_boost_directions(self, boost : Boost) -> list[int]:
+        b = self.boosts.get(boost)
+        return self.rotate_list(b.directions) if b else []
+
+    def get_boosts(self):
+        if self.wired:
+            return {}
+        return self.boosts
     # --------- healer ----------
 
     @property
     def is_healer(self) -> bool:
-        return Boost.HEAL in self.boosts.keys()
+        return self.has_boost(Boost.HEAL)
     
     @property
     def needs_heal(self) -> bool:
         return len(self.wounds) > 0
 
     def get_heal_directions(self) -> list[int]:
-        return self.boosts.get(Boost.HEAL, [])
+        return self.get_boost_directions(Boost.HEAL)
     
-    def pop_highest_wound(self):
-        self.wounds.sort()
-        return self.wounds.pop(-1)
+    def pop_highest_wound(self) -> int:
+        max_w = max(self.state.wounds)
+        self.state.wounds.remove(max_w)
+        return max_w
 
     # ---------- wire ----------
-
-    def is_wired(self):
-        return self.wired
+    @property
+    def wired(self) -> bool:
+        return self.state.wired
     
-    def set_wire(self):
-        self.wired = True
+    @property
+    def wires(self) -> list[int]:
+        return self.config.wire
+    
+    def set_wire(self, value : bool = True) -> None:
+        return self.state.set_wired(value)
 
-    def unwire(self):
-        self.wired = False
+    def can_wire(self) -> bool:
+        return len(self.wires) > 0
 
-    def can_wire(self):
-        return len(self.wire) > 0
-
-    def get_wire(self):
-        if self.wired:
-            return []
-        return self.wire
+    def get_wire_directions(self) -> list:
+        return self.wires
 
     # --------- rotation ----------
 
-    def rotate(self, direction = None):
-        self.load()
+    @property
+    def rotation(self) -> int:
+        return self.state.rotation
 
-        if direction is not None:
-            self.rotation = (self.rotation + direction) % 6
+    def set_rotation(self, rotation):
+        self.state.set_rotation(rotation)
+    
+    def get_real_direction(self, int) -> int:
+        return (int + self.rotation) % 6
 
-        for attack_type, attack_list in self.attacks.items():
-            self.attacks[attack_type] = [
-                [(direction + self.rotation) % 6, power]
-                for direction, power in attack_list
-            ]
-        
-        for boost_type, boost_list in self.boosts.items():
-            self.boosts[boost_type] = [
-                (direction + self.rotation) % 6
-                for direction in boost_list
-            ]
-
-        self.armor = [(direction + self.rotation) % 6 for direction in self.armor]
-        self.wire = [(direction + self.rotation) % 6 for direction in self.wire]
-
+    def rotate_list(self, arr : list[int]) -> list[int]:
+        return [
+            self.get_real_direction(direction)
+            for direction in arr
+        ]
     # --------- hp and armor ----------
+    @property
+    def wounds(self) -> list[int]:
+        return self.state.wounds
 
-    def take_wounds(self, damage):
-        if damage > 0:
-            self.wounds.append(damage)
+    def add_wounds(self, wounds : int):
+        self.state.core.wounds.append(wounds)
 
-    def take_damage(self, direction = None, damage = 1, blockable=False):
-        # direction -> from where the attack is coming, 0-5
+    def claer_wounds(self):
+        self.state.core.wounds = []
 
-        if direction is not None:
-            direction = (direction + 3) % 6
-
-            if (blockable and direction in self.armor):
-                damage -= 1
-            
-        self.take_wounds(damage)
-
-    # --------- attacks and boosts ----------
-
-    # boosty bierzesz token.BOOSTS -> dict | None
+    def add_damage(self, damage : int):
+        self.state.core.damage += damage
 
     @property
-    def can_activate(self):
-        return self.clever_initiative.can_activate()
+    def is_alive(self) -> bool:
+        return self.config.hp > self.state.damage
 
-    def get_boosts(self):
-        if self.wired:
-            return {}
-        return self.boosts
+    # --------- initiative ----------
+    @property
+    def clever_initiative(self):
+        return self.state.clever_initiative
 
-    def get_attacks(self, which_initiative) -> dict:      
-        if not self.clever_initiative.activate(which_initiative) or self.wired:
-            return {}
-        return self.attacks
+    def can_activate(self, initiative):
+        return (
+            not self.wired
+            and self.clever_initiative.can_activate(initiative)
+        )
+
+    def mark_activated(self, initiative : int):
+        self.clever_initiative.mark_activated(initiative)
+
+    # --------- attacks ----------
+
+    @property
+    def attacks(self):
+        return self.config.attacks
+
+    def get_attacks(self) -> list[AttackConfig]:
+        attacks = deepcopy(self.attacks)
+        for attack in attacks:
+            attack.direction = self.get_real_direction(attack.direction)
+        return attacks
     
+    # --------- attacks ----------
+    @property
+    def ability_used(self):
+        return self.state.exection.used_ability
+    
+    @ability_used.setter
+    def ability_used(self, value):
+        self.state.exection.used_ability = value
+
     # --------- save and load ----------
 
     def to_dict(self) -> dict:
-        data = {
-            "name": self.name,
-            "faction": self.faction,
-            "hp": self.hp,
-            "rotation": self.rotation,
-            "damage": self.damage,
-            "wounds": self.wounds,
-            "wired": self.wired,
-            "ability_used" : self.ability_used,
-            "clever_initiative": self.clever_initiative.to_dict() if self.clever_initiative else None,
-        }
-        return data
-
-    def to_dict_battle(self) -> dict:
-        return self.to_dict()
+        return Serializator.to_dict_dataclass(self)
     
     @classmethod
     def from_dict(cls, data: dict) -> "BoardToken":
