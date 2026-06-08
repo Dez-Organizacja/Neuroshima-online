@@ -112,7 +112,7 @@ export function RoomScreen({
     try {
       const response = await setFactionAWFR(faction);
 
-      if (response.messageType === "SETFACTION_RESPONSE") {
+      if (response.messageType === "SETINROOMATTRIBUTES_RESPONSE") {
         if (
           typeof response.faction === "string" &&
           typeof response.serverStatus === "string"

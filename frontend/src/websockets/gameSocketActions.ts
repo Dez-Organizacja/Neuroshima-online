@@ -93,7 +93,7 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
     function setFactionAWFR(Faction : string){
         return sendAWFR({
             messageType : "SETINROOMATTRIBUTES_REQUEST",
-            status : "ACTIVE",
+            status : "active",
             faction : Faction,
         },
         ["SETINROOMATTRIBUTES_RESPONSE", "ERROR"],
