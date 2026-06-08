@@ -1,3 +1,5 @@
+from dataclasses import dataclass, field
+
 class CleverInitiative():
     initiative: list[int]
     is_used: list[bool]
@@ -66,6 +68,9 @@ class CleverInitiative():
         while (self.num_of_old > self.num_of_new):
              self.remove_initiative()
              self.num_of_old -= 1
+
+    def mark_activated(self, initiative : int) -> None:
+        self.activate(initiative)
 
     def activate(self, initiative: int) -> bool:
         if (initiative < 0 or len(self.initiative) == 0): 

@@ -34,10 +34,16 @@ class Serializator:
         if origin is dict and isinstance(value, dict):
             key_type, value_type = get_args(target_type)
 
-            return {
-                k: Serializator.convert_value(v, value_type, key=k)
-                for k, v in value.items()
-            }
+            result = {}
+            for k, v in value.items():
+
+                # enum key handling
+                if isinstance(key_type, type) and issubclass(key_type, Enum):
+                    k = key_type(k)
+
+                result[k] = Serializator.convert_value(v, value_type)
+
+            return result
 
         # ---------- list ----------
         if origin is list:

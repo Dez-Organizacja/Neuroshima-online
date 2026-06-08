@@ -6,4 +6,4 @@ class PassiveSystems:
     @staticmethod
     def compute(ctx : ActionContext):
         Sieciarze.compute(ctx.board)
-        BoosterSolver.compute(ctx.board)
+        # BoosterSolver.compute(ctx.board)

@@ -4,25 +4,28 @@ from main.tokens.data import BoardType
 from main.utils.variable import *
 from dataclasses import dataclass
 from main.state.serialization import Serializator
+from main.tokens.token_factory import TokenFactory
+
+Hex = tuple[int, int]
 
 @dataclass
 class Tile:
-    pos : tuple[int, int]
+    pos : Hex
     unit : BoardToken
 
-    @classmethod
-    def from_dict(cls, data : dict) -> Tile:
-        unit = data["unit"]
-        if isinstance(unit, dict):
-            unit = BoardToken.from_dict(unit)
+    # @classmethod
+    # def from_dict(cls, data : dict) -> Tile:
+    #     unit = data["unit"]
+    #     if isinstance(unit, dict):
+    #         unit = BoardToken.from_dict(unit)
 
-        return cls(
-            pos=tuple(data["pos"]),
-            unit=unit,
-        )
+    #     return cls(
+    #         pos=tuple(data["pos"]),
+    #         unit=unit,
+    #     )
 
-    def to_dict(self):
-        return Serializator.to_dict_dataclass(self)
+    # def to_dict(self):
+    #     return Serializator.to_dict_dataclass(self)
 
 class Board:
     length = 9
@@ -84,14 +87,14 @@ class Board:
     
     # ----------- board state and actions -----------
 
-    def gen_tokenID(self, pos) -> int | None:
+    def gen_tokenID(self, pos : Hex) -> int | None:
         x, y = pos
         return self.board[x][y]
     
     def get_position(self, tokenID) -> tuple[int, int]:
         return self.where_am_i.get(tokenID)
 
-    def remove_token(self, pos):
+    def remove_token(self, pos : Hex):
         if not self.on_board(pos):
             return
         x, y = pos
@@ -99,28 +102,11 @@ class Board:
         del self.where_am_i[self.board[x][y]]
         self.board[x][y] = None
 
-    def get_token(self, pos) -> BoardToken:
+    def get_token(self, pos : Hex) -> BoardToken:
         if not self.on_board(pos):
             return None
         x, y = pos
         return self.tokens[self.board[x][y]] if self.board[x][y] is not None else None
-
-    def adjacent_hexes(self, pos):
-        if not self.on_board(pos):
-            return []
-        adjacents = []
-        for diretion in self.rose.keys():
-            neighbor = self.go(pos, diretion)
-            if(self.on_board(neighbor)):
-               adjacents.append(neighbor)
-        return adjacents 
-    
-    def on_border(self, pos) -> bool:
-        x, y = pos
-        if(not self.on_board(pos)):
-            return False
-        cx, cy = self.CENTER
-        return (abs(cx - x) > 1 or abs(cy - y) > 2)
 
     def get_token_position(self, name, faction) -> tuple[int, int] | None:
         for pos in self.ALL_HEXES:
@@ -132,30 +118,56 @@ class Board:
     def get_hq_pos(self, faction) -> tuple[int, int] | None:
         return self.get_token_position(name=BoardType.HQ.value, faction=faction)
 
+    def get_line(self, pos : Hex, direction : int) -> list[Hex]:
+        line = []
+        while self.on_board(pos):
+            line.append(pos)
+            pos = self.go(pos, direction)
+
+        return line
+
+
+
+    def adjacent_hexes(self, pos : Hex):
+        if not self.on_board(pos):
+            return []
+        adjacents = []
+        for diretion in self.rose.keys():
+            neighbor = self.go(pos, diretion)
+            if(self.on_board(neighbor)):
+               adjacents.append(neighbor)
+        return adjacents 
+    
+    def on_border(self, pos : Hex) -> bool:
+        x, y = pos
+        if(not self.on_board(pos)):
+            return False
+        cx, cy = self.CENTER
+        return (abs(cx - x) > 1 or abs(cy - y) > 2)
     # ----------- placing and moving tokens ----------
 
-    def add_token(self, pos : tuple[int, int], token : BoardToken):
+    def add_token(self, pos : Hex, token : BoardToken):
         x, y = pos
         tokenID = self.get_new_id()
         self.tokens[tokenID] = token
         self.board[x][y] = tokenID
         self.where_am_i[tokenID] = pos
 
-    def import_token(self, pos : tuple[int, int], data : dict):
+    def import_token(self, pos : Hex, data : dict):
         self.add_token(pos, BoardToken.from_dict(data))
 
-    def put_token(self, pos, name, faction = None):
+    def put_token(self, pos : Hex, name, faction = None):
         # mozna wywolac albo put_token(pos, data) albo put_token(pos, name, faction)
         if not self.on_board(pos):
             return
         
-        token = BoardToken(name, faction)
+        token = TokenFactory.create(name, faction)
         self.add_token(pos, token)
 
-    def destroy_token(self, pos):
+    def destroy_token(self, pos : Hex):
         self.remove_token(pos)
 
-    def move_token(self, old_pos, new_pos):
+    def move_token(self, old_pos : Hex, new_pos : Hex):
         if(old_pos == new_pos):
             return
         
@@ -169,18 +181,18 @@ class Board:
         self.board[x1][y1] = None
         self.where_am_i[self.board[x2][y2]] = (x2, y2)
 
-    def rotate_token(self, pos, rotation):
+    def rotate_token(self, pos : Hex, rotation : int):
         x, y = pos
         self.tokens[self.board[x][y]].rotate(rotation)
 
-    def is_valid_target(self, pos, frakcja, czy_sztab=False):
+    def is_valid_target(self, pos : Hex, frakcja : str, czy_sztab : bool=False):
         x, y = pos
         return not (not self.on_board(pos) or self.is_empty(pos) or self.tokens[self.board[x][y]].faction == frakcja or (czy_sztab and self.get_token(pos).is_HQ()))
 
-    def is_empty(self, pos):
+    def is_empty(self, pos : Hex):
         return self.get_token(pos) is None
 
-    def on_board(self, pos : tuple[int, int]):
+    def on_board(self, pos : Hex):
         x, y = pos
         cx, cy = self.CENTER
         dx = abs(x - cx)
@@ -194,11 +206,11 @@ class Board:
         
         return True
 
-    def go(self, pos, direction):
+    def go(self, pos : Hex, direction : int):
         x, y = pos
         return (x + self.rose[direction]["x"], y + self.rose[direction]["y"])
     
-    def is_adjacent(self, pos1, pos2):
+    def is_adjacent(self, pos1 : Hex, pos2 : Hex):
         x1, y1 = pos1
         x2, y2 = pos2
         dist = abs(x1 - x2) + abs(y1 - y2)
@@ -231,16 +243,18 @@ class Board:
     def from_list(cls, data : list) -> Board:
         obj = cls()
         for tile_data in data:
-            tile = Tile.from_dict(tile_data)
+            tile = Serializator.from_dict_dataclass(Tile, tile_data)
             obj.add_token(tile.pos, tile.unit)
 
         return obj
 
     def to_list(self) -> list:
         return [
-            {
-                "pos": list(self.where_am_i[id]),
-                "unit": token.to_dict_battle(),
-            }
+            Serializator.to_dict_dataclass(
+                Tile(
+                    pos=self.where_am_i[id],
+                    unit=token
+                )
+            )
             for id, token in self.tokens.items()
         ]

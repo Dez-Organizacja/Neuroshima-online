@@ -11,12 +11,13 @@ from main.workflows.providers.target import (
 )
 from main.state.contex import ActionContext
 
-from main.events.data import Event, TargetedAttackIntent
+from main.events.data import Event
+from main.attacks.data import TargetedIntent
 from main.events.effects import DestroyEffect, EnqueueAttacksEffect
-from main.events.flow import ResolveAttacksEvent
-from main.board.board_query import BoardQuery
+from main.events.flow import ResolvePendingAttacksEvent
+from main.board.query import BoardQuery
 import main.rules.predicates as pr
-from main.tokens.board_token import BoardToken
+
 
 P = TypeVar("P", bound=TargetProvider)
 
@@ -43,9 +44,9 @@ class SniperWorkflow(TargetWorkflow[SniperProvider]):
     def resolve_func(ctx : ActionContext):
         return [
             EnqueueAttacksEffect(
-                [TargetedAttackIntent(target_pos=ctx.workflow_data.target_pos)]
+                [TargetedIntent(target_pos=ctx.workflow_data.target_pos)]
             ),
-            ResolveAttacksEvent(),
+            ResolvePendingAttacksEvent(),
         ]
     
 class GranadeWorkflow(TargetWorkflow):
@@ -66,18 +67,18 @@ class BombWorkflow(TargetWorkflow):
         positions = BoardQuery([
             pr.adjacent_to(pos),
             pr.NOT(pr.is_empty_at),
-            pr.NOT(pr.token_predicate(BoardToken.is_HQ))
-        ]).apply(ctx)
+            pr.NOT(pr.token_predicate(lambda t : t.is_HQ))
+        ]).apply(ctx.board)
 
         print(f"postitions {positions}")
 
-        if not pr.is_empty_at(ctx, pos):
+        if not pr.is_empty_at(ctx.board, pos):
             positions.append(pos)
 
         return [
             EnqueueAttacksEffect([
-                TargetedAttackIntent(target_pos=pos)
+                TargetedIntent(target_pos=pos)
                 for pos in positions
             ]),
-            ResolveAttacksEvent()
+            ResolvePendingAttacksEvent()
         ]

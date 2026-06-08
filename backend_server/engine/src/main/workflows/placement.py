@@ -18,7 +18,7 @@ class PlaceWorkflow(Workflow[PlacementProvider], BoardSelectionMixin):
                     name = ctx.player.hand.get(ctx.workflow_data.slot),
                     faction= ctx.faction
                 ),
-                # workflow_effects=[PushWorkflow(name=WorkflowName.ROTATE)]
+                PushWorkflow(name=WorkflowName.ROTATE)
             ]
 
     def _build_steps(self):

@@ -11,9 +11,9 @@ name = WorkflowName.HEAL
 def heal_scenario():
     def setup_function(ctx : ActionContext):
         ctx.board.put_token(pos=(1, 3), name="klaun", faction="moloch")
-        ctx.board.get_token((1, 3)).take_wounds(1)
+        ctx.board.get_token((1, 3)).add_wounds(1)
         ctx.board.put_token(pos=(1, 1), name="medyk", faction="moloch")
-        ctx.board.get_token((1, 1)).rotate(1)
+        ctx.board.get_token((1, 1)).set_rotation(1)
 
     return (
         ScenarioBuilder(name, config=WorkflowConfig(faction="moloch"))

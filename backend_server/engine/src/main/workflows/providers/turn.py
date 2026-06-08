@@ -10,7 +10,7 @@ from main.rules.predicates import (
     token_predicate,
 )
 from main.tokens.board_token import BoardToken
-from main.board.board_query import BoardQuery
+from main.board.query import BoardQuery
 
 class TurnProvider(WorkflowActionProvider):
     def __init__(self):
@@ -27,8 +27,8 @@ class TurnProvider(WorkflowActionProvider):
             is_ally(ctx.faction),
             has_ability,
             NOT(has_used_ability),
-            NOT(token_predicate(BoardToken.is_wired))
-        ]).apply(ctx)
+            NOT(token_predicate(lambda t : t.wired))
+        ]).apply(ctx.board)
 
         return [
             pos for pos in candidates

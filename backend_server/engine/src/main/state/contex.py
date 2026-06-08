@@ -6,10 +6,10 @@ class ActionContext():
     def __init__(
             self, 
             state : GameState, 
-            rules : GameRules, 
+            rules : GameRules | None = None, 
         ):
         self.state = state
-        self.rules = rules
+        self.rules = rules or GameRules()
         self.consumed_input : bool = False
 
     #shortcuts

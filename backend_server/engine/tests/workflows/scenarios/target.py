@@ -1,8 +1,8 @@
 from main.workflows.data import WorkflowName
 from main.events.workflow import PopWorkflow
 from main.events.effects import DestroyEffect, EnqueueAttacksEffect
-from main.events.data import TargetedAttackIntent
-from main.events.flow import ResolveAttacksEvent
+from main.attacks.data import TargetedIntent
+from main.events.flow import ResolvePendingAttacksEvent
 from .builder import ScenarioBuilder
 from .registry import register
 from main.input.data import BoardAction, ActionType
@@ -38,9 +38,9 @@ def sniper_scenario():
         .then_execution(
             events=[
                 EnqueueAttacksEffect(
-                    [TargetedAttackIntent(target_pos=(2, 4))]
+                    [TargetedIntent(target_pos=(2, 4))]
                 ),
-                ResolveAttacksEvent(),
+                ResolvePendingAttacksEvent(),
                 PopWorkflow()
             ]
         )
@@ -49,10 +49,10 @@ def sniper_scenario():
 name3 = WorkflowName.BOMB
 @register(name3)
 def bomb_scenario():
-    def damage_effects() -> list[TargetedAttackIntent]:
+    def damage_effects() -> list[TargetedIntent]:
         return [
-            TargetedAttackIntent(target_pos=(1, 5)),
-            TargetedAttackIntent(target_pos=(2, 2)),
+            TargetedIntent(target_pos=(1, 5)),
+            TargetedIntent(target_pos=(2, 2)),
         ]
     def setup_function(ctx : ActionContext):
         ctx.board.put_token(pos=(2, 6), name="sztab", faction="moloch")
@@ -68,7 +68,7 @@ def bomb_scenario():
         .then_execution(
             events=[
                 EnqueueAttacksEffect(damage_effects()),
-                ResolveAttacksEvent(),
+                ResolvePendingAttacksEvent(),
                 PopWorkflow(),
             ]
         )

@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
-from main.utils.variable import *
+from collections import deque
 from main.state.player_state import PlayerState
 from main.board.board import Board
-from main.events.data import Event, AttackIntent
-from collections import deque
+from main.events.data import Event
+from main.attacks.data import AttackIntent
 from main.workflows.data import WorkflowData, WorkflowInstance
 from main.state.serialization import Serializator
 

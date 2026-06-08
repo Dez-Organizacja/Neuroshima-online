@@ -10,7 +10,6 @@ class TokenKey(Enum):
     FACTION = "frakcja"
     WIRED = "zasieciowany"
     UNIT_COUNT = "liczbajednostek"
-    ABILITY = "ability"
 
 class TokenRelation(Enum):
     OWN = "own"
@@ -32,6 +31,15 @@ class TokenStats(Enum):
     BOOSTS = "modul"
     BOOST_TARGET = "boost_target"
     INITIATIVE = "inicjatywa"
+    ABILITIES = "abilities"
+
+class AbilityType(Enum):
+    ABILITY = "ability"
+    BATTLE_ABILITY = "battle_ability"
+
+class BattleAbility(Enum):
+    EXPLOSIN = "explosion"
+    NO_ABILITY = "none"
 
 class Ability(Enum):
     BATTLE = "bitwa"
@@ -42,21 +50,13 @@ class Ability(Enum):
     PUSH = "odepchniecie"
     NO_ABILITY = "none"
 
-class Token:
-    TYPE = TokenKey.TYPE
-    X = TokenKey.X
-    Y = TokenKey.Y
-    NAME = TokenKey.NAME
-    ROTATION = TokenKey.ROTATION
-    DAMAGE = TokenKey.DAMAGE
-    FACTION = TokenKey.FACTION
-    WIRED = TokenKey.WIRED
-
-    class Stats:
-        ARMOR = TokenStats.ARMOR
-        WIRE = TokenStats.WIRE
-        HP = TokenStats.HP
-        ATTACKS = TokenStats.ATTACKS
-        BOOSTS = TokenStats.BOOSTS
-        BOOST_TARGET = TokenStats.BOOST_TARGET
-        INITIATIVE = TokenStats.INITIATIVE
+class Boost(Enum):
+    MELEE = "melee"
+    SHOOT = "shoot"
+    INITIATIVE = "initiative"
+    MINUS_INITIATIVE = "minus_initiative"
+    SET_INITIATIVE_TO_0 = "set_initiative_to_0"
+    NEW_INITIATIVE = "new_initiative"
+    MEELE_TO_SHOOT = "meele_to_shoot"
+    HEAL = "heal"
+    STEAL_BOOST = "steal_boost"

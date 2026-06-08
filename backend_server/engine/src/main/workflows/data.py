@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
 from main.input.data import ActionType
-from main.tokens.data import Ability
+from main.tokens.data import Ability, BattleAbility
 from main.input.data import Button
 from typing import TypeVar
 
@@ -24,6 +24,8 @@ class WorkflowName(Enum):
     HEAL = "heal"
     HEADQUARTER_TURN = "headquarter_turn"
     HEADQUARTER_PLACE = "headquarter_place"
+    INITIATIVE = "initiative"
+    EXPLOSION = "explosion"
 
 ABILITY_WORKFLOW_REGISTRY = {
     Ability.MOVE : WorkflowName.MOVE,
@@ -32,6 +34,9 @@ ABILITY_WORKFLOW_REGISTRY = {
     Ability.SNIPER : WorkflowName.SNIPER,
     Ability.PUSH : WorkflowName.PUSH,
     Ability.BATTLE : WorkflowName.START_BATTLE,
+}
+BATTLE_ABILITY_WORKFLOW_REGISTRY = {
+    BattleAbility.EXPLOSIN : WorkflowName.EXPLOSION   
 }
     
 @dataclass
@@ -43,6 +48,7 @@ class WorkflowData:
     rotation    : int | None = None
     type        : ActionType | None = None
     button      : Button | None = None
+    decision    : bool | None = None
 
     # @classmethod
     # def from_dict(cls, data):
@@ -69,11 +75,16 @@ class WorkflowData:
     def set_rotation(self, value):
         self.rotation = value
 
+    def set_decision(self, value):
+        self.decision = value
+
 @dataclass
 class WorkflowConfig:
     faction : str = ""
     factions : list[str] = field(default_factory=list)
     hand_limit : int = 3
+    pos : tuple[int, int] | None = None
+    initiative : int | None = None
 
 @dataclass
 class WorkflowInstance:

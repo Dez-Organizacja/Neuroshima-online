@@ -1,16 +1,19 @@
 from main.tokens.board_token import BoardToken
-from main.tokens.instant_token import InstantToken
+from main.tokens.base import Token
 from main.tokens.data import TokenKey, TokenType
 import main.frakcje.wszystkie_frakcje as allfractions
+from main.tokens.registry import TokenConfigRegistry
+from main.tokens.config import TokenConfigId
 
 class TokenFactory():
     @staticmethod
-    def create(name, faction, data={}):
+    def create(name, faction):
         # print(f"create token request of name {name} and faction {faction}")
-        stats = allfractions.frakcje.get(faction, {}).get(name, {})
-        token_type = stats.get(TokenKey.TYPE)
-        if(token_type == TokenType.INSTANT):
-            return InstantToken(name, faction)
-        elif(token_type == TokenType.BOARD):
-            return BoardToken(name, faction, data)
+        config = TokenConfigRegistry.get(faction, name)
+        config_id = TokenConfigId(name, faction)
+
+        if(config.type == TokenType.INSTANT):
+            return Token(config_id=config_id)
+        elif(config.type == TokenType.BOARD):
+            return BoardToken(config_id=config_id)
         raise ValueError(f"nie znaleziono żetonu o nazwie {name} z frakcji {faction}")

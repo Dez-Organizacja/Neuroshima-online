@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from typing import ClassVar
 from main.state.contex import ActionContext
-from main.events.data import Effect, AttackIntent
+from main.events.data import Effect
+from main.attacks.data import AttackIntent
 from main.workflows.data import WorkflowData
 
 # ----------- moving and placing -----------
@@ -22,7 +23,7 @@ class RotateEffect(Effect):
     recompute_passive: ClassVar[bool] = True
 
     def apply(self, ctx: ActionContext):
-        ctx.board.rotate_token(self.pos, self.rotation)
+        ctx.board.get_token(self.pos).set_rotation(self.rotation)
 
 @dataclass
 class PlaceEffect(Effect):
@@ -49,17 +50,25 @@ class EnqueueAttacksEffect(Effect):
 @dataclass
 class DamageEffect(Effect):
     pos : tuple[int, int]
-    power: int = 1
-    direction: int | None = None
-    blockable: bool = False
+    damage : int = 1
 
     def apply(self, ctx: ActionContext):
         unit = ctx.board.get_token(self.pos)
-        unit.take_damage(
-            direction=self.direction,
-            damage=self.power,
-            blockable=self.blockable,
-        )
+        if self.damage > 0:
+            unit.add_wounds(self.damage)
+
+@dataclass
+class ResolveUnitsDamageEffect(Effect):
+    positions: list[tuple[int, int]]
+    recompute_passive: ClassVar[bool] = True
+
+    def apply(self, ctx: ActionContext):
+        for pos in self.positions:
+            token = ctx.board.get_token(pos)
+            token.add_damage(sum(token.wounds))
+            token.claer_wounds()
+            if not token.is_alive:
+                ctx.board.remove_token(pos)
 # ----------- removing -----------
 
 @dataclass
@@ -70,14 +79,6 @@ class DestroyEffect(Effect):
     def apply(self, ctx: ActionContext):
         ctx.board.destroy_token(self.pos)
 
-@dataclass
-class RemoveUnitsEffect(Effect):
-    positions: list[tuple[int, int]]
-    recompute_passive: ClassVar[bool] = True
-
-    def apply(self, ctx: ActionContext):
-        for pos in self.positions:
-            ctx.board.remove_token(pos)
 
 # ----------- unit abilitis -----------
 
@@ -97,7 +98,7 @@ class ResetAbilityUsedEffect(Effect):
     def apply(self, ctx: ActionContext):
         for pos in self.positions:
             token = ctx.board.get_token(pos)
-            token.ability_used = False
+            token.state.exection.used_ability = False
 
 @dataclass
 class HealEffect(Effect):
@@ -107,7 +108,17 @@ class HealEffect(Effect):
     def apply(self, ctx : ActionContext):
         healer = ctx.board.get_token(self.source_pos)
         target = ctx.board.get_token(self.target_pos)
-        healer.take_wounds(target.pop_highest_wound())
+        healer.add_wounds(target.pop_highest_wound())
+
+@dataclass
+class MarkActivatedUnitsEffect(Effect):
+    positions : list[tuple[int, int]]
+    initiative : int
+
+    def apply(self, ctx : ActionContext):
+        for pos in self.positions:
+            token = ctx.board.get_token(pos)
+            token.mark_activated(self.initiative)
 
 # ----------- workflow data -----------
 

@@ -1,5 +1,5 @@
 from random import shuffle
-import main.frakcje.wszystkie_frakcje as allfractions
+from main.tokens.registry import TokenConfigRegistry
 from main.tokens.data import TokenKey
 from main.tokens.pile import Pile
 
@@ -8,10 +8,9 @@ class PileFactory:
     def create_pile(faction : str) -> Pile:
         pile = Pile()
 
-        config = allfractions.frakcje.get(faction, {})
-        for name, data in config.items():
-
-            for _ in range(data[TokenKey.UNIT_COUNT]):
+        for name in TokenConfigRegistry.get_faction_units(faction):
+            config = TokenConfigRegistry.get(faction, name)
+            for _ in range(config.unit_count):
                 pile.add(name)
 
         shuffle(pile.tokens)

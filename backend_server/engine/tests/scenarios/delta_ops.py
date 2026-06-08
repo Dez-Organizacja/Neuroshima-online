@@ -2,6 +2,7 @@ from .data import (
     Delta,
     TileDelta,
     TileRemove,
+    TilePlace,
     HandAdd,
     HandRemove,
     StackPush,
@@ -15,6 +16,11 @@ def tile_delta(pos : tuple[int, int], **data):
         delta.board_delta.append(TileDelta(pos=pos, unit=data))
     return apply
     
+def tile_place(pos : tuple[int, int], name : str, faction : str):
+    def apply(delta : Delta):
+        delta.board_delta.append(TilePlace(pos, name, faction))
+    return apply
+
 def tile_remove(pos: tuple[int, int]):
     def apply(delta: Delta):
         delta.board_delta.append(TileRemove(pos=pos))
