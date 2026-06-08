@@ -40,9 +40,9 @@ export function ClickCheck(x: number, y: number, gameState : GameState | undefin
             rotation: ((rotation - 30) / 60)
         };
         sendAction(action);
-        return;
-    }
-    if(y === -1) {
+    } else if(y === -1) {
+        console.log("CLICK: " + x + " --HAND");
+
         if(gameState.view.availableActions.hand[x]) {
             console.log("Click accepted (hand) : ", { x, y });
             const action: ActionData = {
@@ -87,36 +87,12 @@ const Hexagon: React.FC<HexagonProps> = ({
 
     const height = size * 0.866;
 
-    const canRotate = gameState.view.uiState.mode === "rotation";
-    const [Rotation, setRotation] = useState(rotation);
-    useEffect(() => {
-
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if(!canRotate) return;
-
-            if (event.key === "ArrowLeft") {
-                setRotation(prev => (prev + 300) % 360);
-            }
-
-            if (event.key === "ArrowRight") {
-                setRotation(prev => (prev + 60) % 360);
-            }
-        };
-
-        window.addEventListener("keydown", handleKeyDown);
-
-        return () => {
-            window.removeEventListener("keydown", handleKeyDown);
-        };
-
-    }, [canRotate]);
-
     return (
         <div
             className="hexagon"
             // onClick={onClick}
             // onClick={() => console.log("Clicked hex:", { poz1, poz2 })}
-            onClick={() => ClickCheck(poz1, poz2, gameState, sendAction, Rotation)}
+            onClick={() => ClickCheck(poz1, poz2, gameState, sendAction, rotation)}
         style={{
             width: size,
             height: height,
@@ -125,7 +101,7 @@ const Hexagon: React.FC<HexagonProps> = ({
             position: "absolute",
             left: x - (size / 2),
             top: y - (height / 2),
-            transform: `rotate(${Rotation}deg) scale(1)`,
+            transform: `rotate(${rotation}deg) scale(1)`,
         }}
         >
         < div className="hexagon-content">{children}</div>

@@ -73,7 +73,7 @@ export default function HexTest(){
                 console.log("{" + y + ", " + x +  "}  " + Path);
 
                 Items.push(
-                    <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30 + Rotation} />
+                    <Image imageName={Path} x={FinalX} y={FinalY} poz1={y} poz2={x} height={((Size * 2 + 15) * 0.866)} rotation={30 + Rotation} gameState={gameState} />
                 )
             }
 
@@ -111,7 +111,7 @@ export default function HexTest(){
 
         if(TokenName !== undefined) {
             Items.push(
-                <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30} />
+                <Image imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={-1} height={((Size * 2 + 15) * 0.866)} rotation={30} gameState={gameState} />
             )
         }
         Items.push(
@@ -136,7 +136,7 @@ export default function HexTest(){
 
         if(TokenName !== undefined) {
             Items.push(
-                <Image imageName={Path} x={FinalX} y={FinalY} height={((Size * 2 + 15) * 0.866)} rotation={30}  />
+                <Image imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={999} height={((Size * 2 + 15) * 0.866)} rotation={30} gameState={gameState} />
             )
         }
         Items.push(
