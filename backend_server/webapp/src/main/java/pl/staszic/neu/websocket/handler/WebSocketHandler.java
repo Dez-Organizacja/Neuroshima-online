@@ -193,8 +193,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private void handleEndGame(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
         EndGameRequest request = objectMapper.treeToValue(rootNode, EndGameRequest.class);
         EndGameResponse response = gameService.endGame(clientId, request);
-        sendJson(session, response);
         logger.info("Game ended: {}", objectMapper.writeValueAsString(response));
+
+        String roomId = gameService.getAffiliation(clientId);
+
+        broadcastToRoom(response, roomId);
     }
 
     private void broadcastMessage(Object message, String excludeRoomId) {

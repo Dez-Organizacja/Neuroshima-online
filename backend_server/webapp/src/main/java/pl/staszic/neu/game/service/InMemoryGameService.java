@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.apache.logging.log4j.util.Strings.isBlank;
+
 @Service
 public class InMemoryGameService implements GameService {
     private static final Logger logger = LoggerFactory.getLogger(InMemoryGameService.class);
@@ -343,29 +345,31 @@ public class InMemoryGameService implements GameService {
     }
 
     @Override
-    public EndGameResponse endGame(String clientId, EndGameRequest request) { //do zrobienia
-//        request.setClientId(clientId);
-//
-//        if (isBlank(request.getGameId())) {
-//            throw new GameValidationException("ENDGAME_REQUEST requires gameId");
-//        }
-//        if (!activeGames.containsKey(request.getGameId())) {
-//            throw new GameValidationException("Unknown gameId: " + request.getGameId());
-//        }
-//
-//        String roomId = activeGames.remove(game.getGameId());
-//        if (roomId != null) {
-//            Room room = activeRooms.get(roomId);
-//            if (room != null && request.getGameId().equals(room.getGameId())) {
-//                room.clearGame();
-//            }
-//        }
-//
+    public EndGameResponse endGame(String clientId, EndGameRequest request) {
+        request.setClientId(clientId);
+
+        if (isBlank(request.getGameId())) {
+            throw new GameValidationException("ENDGAME_REQUEST requires gameId");
+        }
+        if (!activeGames.containsKey(request.getGameId())) {
+            throw new GameValidationException("Unknown gameId: " + request.getGameId());
+        }
+        if(!affiliations.containsKey(clientId)){
+            throw new GameValidationException("Client is not in a room");
+        }
+        Room room = activeRooms.get(affiliations.get(clientId));
+
+        if(room.getGameId() != null && !request.getGameId().equals(room.getGameId())){
+            throw new GameValidationException("Client is not affiliated with gameId=" + request.getGameId());
+        }
+
+        room.clearGame();
+
+        activeGames.remove(request.getGameId());
+
         EndGameResponse response = new EndGameResponse();
-//        response.setClientId(clientId);
-//        response.setGameId(request.getGameId());
-//        response.setEnded(true);
-//        response.setSummary("Game ended. Winner=" + request.getWinnerId() + ", reason=" + request.getReason());
+        response.setClientId(clientId);
+        response.setGameId(request.getGameId());
         return response;
     }
 
