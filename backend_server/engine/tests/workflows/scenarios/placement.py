@@ -1,6 +1,6 @@
 from main.workflows.data import WorkflowName
 from main.input.data import BoardAction
-from main.events.effects import PlaceEffect
+from main.events.effects import ClearSelectedHandSlotEffect, DiscardTokenEffect, PlaceEffect
 from main.events.workflow import PopWorkflow, PushWorkflow
 from main.state.contex import ActionContext
 
@@ -27,6 +27,8 @@ def placement_scenario():
         .then_execution(
             events = [
                 PlaceEffect(pos=(1, 1), name="klaun", faction="moloch"),
+                DiscardTokenEffect(slot=0),
+                ClearSelectedHandSlotEffect(),
                 PushWorkflow(name=WorkflowName.ROTATE)
             ]
         )

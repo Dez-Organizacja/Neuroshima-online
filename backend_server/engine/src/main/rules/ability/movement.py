@@ -1,7 +1,6 @@
 from main.rules.ability.base import AbilityRules
 from main.state.contex import ActionContext
 from main.board.query import BoardQuery
-from main.tokens.board_token import BoardToken
 from main.rules.predicates import (
     adjacent_to,
     is_ally, 
@@ -16,7 +15,7 @@ class MoveRules(AbilityRules):
     def get_sources(ctx : ActionContext):
         candidates = BoardQuery([
             is_ally(ctx.faction),
-            NOT(token_predicate(BoardToken.wired)),
+            NOT(token_predicate(lambda t: t.wired)),
         ]).apply(ctx.board)
 
         return [pos for pos in candidates 

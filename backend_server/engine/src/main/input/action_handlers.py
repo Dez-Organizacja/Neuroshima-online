@@ -60,8 +60,12 @@ class ActionHandler:
     def __init__(self, setter = None, allowed_action_types = None, allow_buttons = True):
         # self.button_handler = ButtonHandler
         self.setter : position_setter = setter or self.no_setter
-        # self.allowed_action_types = allowed_action_types
-        # self.allow_buttons = allow_buttons
+        self.allowed_action_types = (
+            set(allowed_action_types)
+            if allowed_action_types is not None
+            else None
+        )
+        self.allow_buttons = allow_buttons
         self.dispatch = {}
         self._build_dispatch()
 
@@ -91,8 +95,10 @@ class ActionHandler:
 
 
     def handle(self, ctx : ActionContext, action : UserAction) -> list[Event]:
-        # if self.allowed_action_types is not None and action.type not in self.allowed_action_types:
-        #     raise ValueError(f"akcja {action.type} nie jest dozwolona w aktualnym kroku")
+        if self.allowed_action_types is not None:
+            is_allowed_button = action.type is ActionType.BUTTON and self.allow_buttons
+            if not is_allowed_button and action.type not in self.allowed_action_types:
+                raise ValueError(f"akcja {action.type} nie jest dozwolona w aktualnym kroku")
 
         if action.type is ActionType.BUTTON and ButtonHandler.can_handle(ctx, action):
             return ButtonHandler.handle(ctx, action)

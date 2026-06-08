@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import ClassVar
 from main.events.data import FlowEvent, Effect, Event
 from main.events.workflow import PushWorkflow, PopWorkflow, DeleteAbove
 from main.state.contex import ActionContext
@@ -14,13 +15,17 @@ class EndTurnEvent(FlowEvent):
         ]
 
 @dataclass
-class ResolvePendingAttacksEvent:
-    def apply(ctx : ActionContext) -> list[Effect]:
-        return [
+class ResolvePendingAttacksEvent(FlowEvent):
+    recompute_passive: ClassVar[bool] = False
+
+    def apply(self, ctx : ActionContext) -> list[Effect]:
+        effects = [
             effect
             for attack in ctx.state.pending_attacks
             for effect in AttackResolver.resolve(attack, ctx.board)
-        ]    
+        ]
+        ctx.state.pending_attacks.clear()
+        return effects
 
 # @dataclass
 # class StartBattleEvent(FlowEvent):

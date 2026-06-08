@@ -1,4 +1,3 @@
-
 from importlib import import_module
 from main.tokens.registry import TokenConfigRegistry
 _BOOTSTRAPED = False
@@ -9,6 +8,7 @@ def register_factions():
         "borgo",
         "testowa",
         "posterunek",
+        "hegemonia",
     ]
 
     path = "main.frakcje"

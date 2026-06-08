@@ -23,6 +23,7 @@ from main.rules.predicates import (
 from main.rules.turn import TurnRules
 from typing import Callable
 from main.input.action_handlers import ActionHandler
+from main.input.data import ActionType
 
 class TurnWorkflow(Workflow[TurnProvider]):
     def __init__(self, config : WorkflowConfig):
@@ -51,7 +52,10 @@ class TurnWorkflow(Workflow[TurnProvider]):
 
     def build_waiting_step(self):
         return WaitingStepConfig(
-            action_handler=ActionHandler(WorkflowData.set_unit_pos),
+            action_handler=ActionHandler(
+                WorkflowData.set_unit_pos,
+                allowed_action_types=[ActionType.BOARD, ActionType.HAND],
+            ),
         )
     
     def build_dispatch_step(self):

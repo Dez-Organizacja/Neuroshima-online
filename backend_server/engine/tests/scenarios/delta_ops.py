@@ -3,6 +3,7 @@ from .data import (
     TileDelta,
     TileRemove,
     TilePlace,
+    TileRotate,
     HandAdd,
     HandRemove,
     StackPush,
@@ -24,6 +25,11 @@ def tile_place(pos : tuple[int, int], name : str, faction : str):
 def tile_remove(pos: tuple[int, int]):
     def apply(delta: Delta):
         delta.board_delta.append(TileRemove(pos=pos))
+    return apply
+
+def tile_rotate(pos: tuple[int, int], rotation: int):
+    def apply(delta: Delta):
+        delta.board_delta.append(TileRotate(pos=pos, rotation=rotation))
     return apply
 
 def hand_add(faction: str, card: str):

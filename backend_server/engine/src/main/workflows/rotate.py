@@ -10,13 +10,19 @@ from main.events.effects import RotateEffect
 from main.workflows.providers.movement import RotateProvider
 from main.workflows.step_builders import build_end_step
 from main.input.action_handlers import ActionHandler
+from main.input.data import ActionType
 
 class RotateWorkflow(Workflow[RotateProvider]):
     def __init__(self):
         super().__init__(action_provider=RotateProvider())
 
     def build_waiting_step(self):
-        return WaitingStepConfig()
+        return WaitingStepConfig(
+            action_handler=ActionHandler(
+                allowed_action_types=[ActionType.ROTATE],
+                allow_buttons=False,
+            )
+        )
     
     @staticmethod
     def resolve_function(ctx : ActionContext) -> list[Event]:

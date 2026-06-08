@@ -35,6 +35,14 @@ class TileRemove:
         state.board.remove_token(self.pos)
 
 @dataclass
+class TileRotate:
+    pos : tuple[int, int]
+    rotation : int
+
+    def apply(self, state : GameState):
+        state.board.get_token(self.pos).set_rotation(self.rotation)
+
+@dataclass
 class StackPush:
     instance: WorkflowInstance
     def apply(self, state: GameState):
@@ -72,7 +80,7 @@ class HandRemove:
         state.players[self.faction].hand.remove(self.index)
 
 StackChange = StackPush | StackPop | StackSetIndex
-BoardDelta = TileDelta | TileRemove
+BoardDelta = TileDelta | TileRemove | TileRotate
 HandDelta = HandAdd | HandRemove
 
 @dataclass

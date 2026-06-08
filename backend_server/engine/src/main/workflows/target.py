@@ -70,8 +70,6 @@ class BombWorkflow(TargetWorkflow):
             pr.NOT(pr.token_predicate(lambda t : t.is_HQ))
         ]).apply(ctx.board)
 
-        print(f"postitions {positions}")
-
         if not pr.is_empty_at(ctx.board, pos):
             positions.append(pos)
 

@@ -1,5 +1,4 @@
 from main.events.effects import DamageEffect, DestroyEffect, Effect
-from main.events.data import Effect
 from main.attacks.data import (
     AttackIntent,
     DirectedIntent,
@@ -20,17 +19,26 @@ class TargetedResolver:
     def reduce_damage(self, attack : TargetedIntent):
         if attack.blockable and attack.from_direction is not None:
             unit = self.board.get_token(attack.target_pos)
+            if unit is None:
+                return 0
             if self.reverse_direction(attack.from_direction) in unit.get_armor():
                 return max(attack.power - 1, 0)
 
         return attack.power
     
-    def resolve(self, attack : TargetedIntent, board : Board) -> list[Effect]:
+    def resolve(self, attack : TargetedIntent) -> list[Effect]:
+        unit = self.board.get_token(attack.target_pos)
+        if unit is None:
+            return []
+
         if attack.destroy:
             return [DestroyEffect(attack.target_pos)]
 
-        power = self.resolve
-        return [DamageEffect(pos=attack.attaker_pos, damage=power)]
+        power = self.reduce_damage(attack)
+        if power <= 0:
+            return []
+
+        return [DamageEffect(pos=attack.target_pos, damage=power)]
 
 class DirectedResolver:
     @classmethod

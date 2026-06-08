@@ -1,5 +1,6 @@
 import json
 
+from main.main import Game
 from main.state.game_state import GameState
 from main.workflows.data import WorkflowInstance, WorkflowConfig, WorkflowName
 from main.attacks.data import AttackType
@@ -37,6 +38,37 @@ def test_game_state_serialization_roundtrip():
     restored_data = restored_state.to_dict()
 
     assert restored_data == data
+
+
+def test_game_can_reimport_exported_state_after_placing_token():
+    game = Game({"factions": ["moloch", "hegemonia"]})
+    game.start_game()
+
+    game = Game(game.export())
+    game.handle_action({"type": "hand", "slot": 0})
+
+    game = Game(game.export())
+    game.handle_action({"type": "board", "pos": [2, 4]})
+
+    game = Game(game.export())
+    view = game.build_user_view()
+
+    assert view["state"]["board"] == [
+        {
+            "pos": [2, 4],
+            "unit": {
+                "faction": view["uiState"]["faction"],
+                "name": "sztab",
+                "rotation": 0,
+                "wired": False,
+                "ability_used": False,
+                "damage": 0,
+            },
+        }
+    ]
+    assert view["state"]["hands"][view["uiState"]["faction"]]["tokens"] == []
+    assert view["uiState"]["mode"] == "rotation"
+    assert view["availableActions"]["board"] == [[2, 4]]
 
 
 # def test_game_state_serialization_preserves_battle_initiative_state():

@@ -2,6 +2,7 @@ from main.steps.config import (
     ResolveStepConfig,
     WaitingStepConfig,
 )
+from main.input.data import ActionType
 from main.workflows.data import WorkflowData
 from main.state.contex import ActionContext
 from main.events.data import Event
@@ -17,7 +18,12 @@ def build_end_step(resolve_function : resolve_func_type | None = None):
 
 class BoardSelectionMixin():
     def build_input_step(self, setter):
-        return WaitingStepConfig(action_handler=ActionHandler(setter))
+        return WaitingStepConfig(
+            action_handler=ActionHandler(
+                setter,
+                allowed_action_types=[ActionType.BOARD],
+            )
+        )
 
     def build_source_step(self):
         return self.build_input_step(WorkflowData.set_unit_pos)

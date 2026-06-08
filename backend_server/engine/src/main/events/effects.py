@@ -55,7 +55,7 @@ class DamageEffect(Effect):
 
     def apply(self, ctx: ActionContext):
         unit = ctx.board.get_token(self.pos)
-        if self.damage > 0:
+        if unit is not None and self.damage > 0:
             unit.add_wounds(self.damage)
 
 @dataclass
@@ -78,7 +78,8 @@ class DestroyEffect(Effect):
     recompute_passive: ClassVar[bool] = True
 
     def apply(self, ctx: ActionContext):
-        ctx.board.destroy_token(self.pos)
+        if ctx.board.get_token(self.pos) is not None:
+            ctx.board.destroy_token(self.pos)
 
 
 # ----------- unit abilitis -----------
@@ -127,6 +128,11 @@ class MarkActivatedUnitsEffect(Effect):
 class ClearWorkflowDataEffect(Effect):
     def apply(self, ctx):
         ctx.workflow_data = WorkflowData()
+
+@dataclass
+class ClearSelectedHandSlotEffect(Effect):
+    def apply(self, ctx):
+        ctx.workflow_data.slot = None
 
 # ----------- hand -----------
 

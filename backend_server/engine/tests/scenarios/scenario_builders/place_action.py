@@ -31,11 +31,10 @@ def place_action_scenario() -> Scenario:
         .when(BoardAction(pos=(2, 4)))
         .then(
             tile_place(pos=(2, 4), name="klaun", faction="moloch"),
+            hand_remove(faction="moloch", index=0),
             stack_index_change(index=2),
             stack_add(name=WorkflowName.ROTATE, index=0),
-            wf_data_delta(unit_pos=(2, 4), type=ActionType.BOARD),
-            # hand_remove(faction="moloch", index=0),
-            # wf_data_delta(slot=None, type=None),
+            wf_data_delta(slot=None, unit_pos=(2, 4), type=ActionType.BOARD),
             # stack_pop(), # pop place
             # stack_pop(), # pop hand
             # stack_index_change(index=2) # set turn wf index to waiting step
@@ -43,6 +42,20 @@ def place_action_scenario() -> Scenario:
         
         .when(RotationAction(rotation=1))
         .then(
-            # tile_delta()
+            tile_rotate(pos=(2, 4), rotation=1),
+            stack_pop(),
+            stack_pop(),
+            stack_pop(),
+            stack_index_change(index=2),
+            wf_data_delta(
+                slot=None,
+                unit_pos=None,
+                target_pos=None,
+                destination=None,
+                rotation=None,
+                type=None,
+                button=None,
+                decision=None,
+            ),
         )
     ).build()

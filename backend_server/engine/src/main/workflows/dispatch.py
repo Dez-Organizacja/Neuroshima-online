@@ -80,6 +80,8 @@ class HandWorkflow(DispatchActionWorkflow):
 
     @staticmethod
     def resolve_function(ctx : ActionContext) -> list[Event]:
+        if ctx.workflow_data.slot is None:
+            return []
         return [DiscardTokenEffect(ctx.workflow_data.slot)]
     
 class BoardWorkflow(DispatchActionWorkflow):
