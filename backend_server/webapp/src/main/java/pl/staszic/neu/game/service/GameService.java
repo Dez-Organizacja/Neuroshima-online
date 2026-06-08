@@ -13,6 +13,10 @@ public interface GameService {
 
     SetInRoomAttributesResponse setInRoomAttributes(String clientId, SetInRoomAttributesRequest request);
 
+    SetRoomPolicyResponse setRoomPolicy(String clientId, SetRoomPolicyRequest request);
+
+    GetRoomsListResponse getRoomsList(String clientId, GetRoomsListRequest request);
+
     NewGameResponse startNewGame(String clientId, NewGameRequest request);
 
     ActionResponse processAction(String clientId, ActionRequest request);

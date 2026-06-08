@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pl.staszic.neu.game.model.RoomMember;
-import pl.staszic.neu.game.model.RoomPolicyView;
+import pl.staszic.neu.game.clientData.service.ClientDataException;
+import pl.staszic.neu.game.clientData.service.ClientDataService;
+import pl.staszic.neu.game.clientData.service.model.ClientData;
+import pl.staszic.neu.game.model.*;
 import pl.staszic.neu.messages.GameStatusChangeRequest;
-import pl.staszic.neu.game.model.Room;
-import pl.staszic.neu.game.model.Game;
 import pl.staszic.neu.messages.*;
 import pl.staszic.neu.rest.service.RestService;
 
@@ -28,7 +28,8 @@ public class InMemoryGameService implements GameService {
     private final Map<String, Room> activeRooms = new ConcurrentHashMap<>();
     private final Map<String, String> affiliations = new ConcurrentHashMap<>();
     private final Map<String, Game> activeGames = new ConcurrentHashMap<>();
-    private final Map<String, String> clientUsernames = new ConcurrentHashMap<>();
+
+    private final ClientDataService clientDataService;
 
     //nwm czy to jest dobre miejsce na restService i url, ale na na razie tak zostanie
     private final RestService restService;
@@ -37,9 +38,10 @@ public class InMemoryGameService implements GameService {
 
     @Autowired
     public InMemoryGameService(
-            RestService restService,
+            ClientDataService clientDataService, RestService restService,
             @Value("${game.state-service.url:http://127.0.0.1:5000/api/neuroshima}") String gameStateServiceUrl, ObjectMapper objectMapper
     ) {
+        this.clientDataService = clientDataService;
         this.restService = restService;
         this.gameStateServiceUrl = gameStateServiceUrl;
         this.objectMapper = objectMapper;
@@ -73,7 +75,7 @@ public class InMemoryGameService implements GameService {
         CreateNewRoomResponse response = new CreateNewRoomResponse();
         response.setClientId(clientId);
         response.setCreatedRoomId(roomId);
-        response.setServerStatus("STARTED room=" + request.getRoomId() + " player=" + clientUsernames.get(clientId));
+        response.setServerStatus("STARTED room=" + request.getRoomId() + " player=" + clientDataService.getClientData(clientId).getUsername());
         return response;
     }
 
@@ -102,7 +104,7 @@ public class InMemoryGameService implements GameService {
 
         JoinRoomResponse response = new JoinRoomResponse();
         response.setClientId(clientId);
-        response.setServerStatus("JOINED room=" + request.getRoomId() + " player=" + clientUsernames.get(clientId));
+        response.setServerStatus("JOINED room=" + request.getRoomId() + " player=" + clientDataService.getUsernameBySessionId(clientId));
         return response;
     }
 
@@ -138,7 +140,7 @@ public class InMemoryGameService implements GameService {
 
         LeaveRoomResponse response = new LeaveRoomResponse();
         response.setClientId(clientId);
-        response.setServerStatus("LEFT room=" + request.getRoomId() + " player=" + clientUsernames.get(clientId));
+        response.setServerStatus("LEFT room=" + request.getRoomId() + " player=" + clientDataService.getUsernameBySessionId(clientId));
         return response;
     }
 
@@ -160,7 +162,7 @@ public class InMemoryGameService implements GameService {
         Map<String, String> playerFactionsByClientId = room.getAllPlayerFactions();
 
         for (String id : room.getPlayerIds()) {
-            String username = clientUsernames.getOrDefault(id, "Unknown");
+            String username = clientDataService.getUsernameBySessionId(id);
             playerNamesInRoom.add(username);
 
             String faction = playerFactionsByClientId.get(id);
@@ -174,7 +176,7 @@ public class InMemoryGameService implements GameService {
 
         RoomPolicyView roomPolicyView = new RoomPolicyView();
         try {
-            roomPolicyView.setHostUsername(clientUsernames.getOrDefault(room.getRoomPolicy().getHost(), "Unknown"));
+            roomPolicyView.setHostUsername(clientDataService.getUsernameBySessionIdOrDefault(room.getRoomPolicy().getHost(), "Unknown"));
         }
         catch (Exception e){
             logger.error("Error getting host username for roomId={}: {}", request.getRoomId(), e.getMessage());
@@ -241,6 +243,87 @@ public class InMemoryGameService implements GameService {
         response.setFaction(faction);
         response.setServerStatus("Attributes successfully changed in room=" + roomId);
         return response;
+    }
+
+    @Override
+    public SetRoomPolicyResponse setRoomPolicy(String clientId, SetRoomPolicyRequest request) {
+        request.setClientId(clientId);
+
+        SetRoomPolicyResponse response = new SetRoomPolicyResponse();
+        response.setClientId(clientId);
+
+        String roomId = affiliations.get(clientId);
+        if (roomId == null) {
+            response.setError("Client is not in a room");
+            return response;
+        }
+
+        Room room = activeRooms.get(roomId);
+        if (room == null) {
+            response.setError("Room does not exist");
+            return response;
+        }
+
+        RoomPolicy newPolicy = null;
+        try {
+            newPolicy = new RoomPolicy(request.getVisibility(), clientDataService.findSessionIdByUsername(request.getHostUsername()));
+        }
+        catch (ClientDataException e){
+            response.setError("Error setting room policy: " + e.getMessage());
+            return response;
+        }
+
+        synchronized (room) {
+            if (!room.hasPlayer(clientId)) {
+                response.setError("Client is not a member of room=" + roomId);
+                return response;
+            }
+            if (!clientDataService.getUsernameBySessionId(clientId).equals(clientDataService.getUsernameBySessionId(room.getRoomPolicy().getHost()))) {
+                response.setError("Only the host can change the room policy");
+                return response;
+            }
+
+            room.mergeRoomPolicy(newPolicy);
+        }
+
+        response.setHostUsername(clientDataService.getUsernameBySessionIdOrDefault(room.getRoomPolicy().getHost(), "Unknown"));
+        response.setVisibility(room.getRoomPolicy().getVisibility());
+        response.setServerStatus("Room policy successfully changed in room=" + roomId);
+        return response;
+    }
+
+    public GetRoomsListResponse getRoomsList(String clientId, GetRoomsListRequest request){
+        request.setClientId(clientId);
+
+        GetRoomsListResponse response = new GetRoomsListResponse();
+        response.setClientId(clientId);
+
+        Set<RoomBrowserView> roomsList = new HashSet<>();
+
+        synchronized (activeRooms) {
+            for (Room room : activeRooms.values()) {
+                if (room.hasActiveGame()) {
+                    continue;
+                }
+                if (room.getRoomPolicy().getVisibility() == RoomPolicy.Visibility.PRIVATE) {
+                    continue;
+                }
+
+                RoomBrowserView roomBrowserView = new RoomBrowserView();
+                roomBrowserView.setRoomId(room.getRoomId());
+                roomBrowserView.setMembersCount(room.getRoomSize());
+                roomBrowserView.setVisibility(room.getRoomPolicy().getVisibility());
+                roomBrowserView.setHostUsername(clientDataService.getUsernameBySessionIdOrDefault(room.getRoomPolicy().getHost(), "Unknown"));
+
+                roomsList.add(roomBrowserView);
+            }
+        }
+
+        response.setRoomsList(roomsList);
+        response.setServerStatus("Rooms list generated by clientId: " + clientId);
+
+        return response;
+
     }
 
     @Override
@@ -386,7 +469,7 @@ public class InMemoryGameService implements GameService {
 
     @Override
     public void handleClientDisconnect(String clientId) {
-        clientUsernames.remove(clientId);
+        clientDataService.removeClientData(clientId);
         String roomId = affiliations.remove(clientId);
         if (roomId == null) {
             return;
@@ -419,7 +502,7 @@ public class InMemoryGameService implements GameService {
 
     @Override
     public void registerClientUsername(String clientId, String username) {
-        clientUsernames.put(clientId, username);
+        clientDataService.addClientData(clientId, new ClientData(username));
     }
 
     @Override

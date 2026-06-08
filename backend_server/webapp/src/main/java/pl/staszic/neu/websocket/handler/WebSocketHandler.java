@@ -88,12 +88,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
             switch (messageType) {
                 case GetRoomStatusRequest.TYPE -> handleGetRoomStatus(session, clientId, rootNode);
                 case SetInRoomAttributesRequest.TYPE -> handleSetInRoomAttributes(session, clientId, rootNode);
+                case SetRoomPolicyRequest.TYPE -> handleSetRoomPolicy(session, clientId, rootNode);
                 case ActionRequest.TYPE -> handleActionRequest(clientId, rootNode);
                 case JoinRoomRequest.TYPE -> handleJoinRoom(session, clientId, rootNode);
                 case LeaveRoomRequest.TYPE -> handleLeaveRoom(session, clientId, rootNode);
                 case CreateNewRoomRequest.TYPE -> handleCreateNewRoom(session, clientId, rootNode);
                 case NewGameRequest.TYPE -> handleStartNewGame(session, clientId, rootNode);
                 case EndGameRequest.TYPE -> handleEndGame(session, clientId, rootNode);
+                case GetRoomsListRequest.TYPE -> handleGetRoomsList(session, clientId, rootNode);
                 default -> sendError(session, clientId, "Unsupported messageType: " + messageType);
             }
         } catch (GameValidationException e) {
@@ -169,6 +171,29 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
 
         logger.info("Attributes updated: {}", objectMapper.writeValueAsString(response));
+    }
+
+    private void handleSetRoomPolicy(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
+        SetRoomPolicyRequest request = objectMapper.treeToValue(rootNode, SetRoomPolicyRequest.class);
+        SetRoomPolicyResponse response = gameService.setRoomPolicy(clientId, request);
+        sendJson(session, response);
+
+        String roomId = gameService.getAffiliation(clientId);
+
+        sendJson(session, response);
+        if (response.getError() == null && roomId != null) {
+            broadcastRoomStatus(roomId);
+        }
+
+        logger.info("Room policy updated: {}", objectMapper.writeValueAsString(response));
+    }
+
+    private void handleGetRoomsList(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
+        GetRoomsListRequest request = objectMapper.treeToValue(rootNode, GetRoomsListRequest.class);
+        GetRoomsListResponse response = gameService.getRoomsList(clientId, request);
+        sendJson(session, response);
+
+        logger.info("Rooms list sent to client {}", clientId);
     }
 
     private void handleStartNewGame(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {

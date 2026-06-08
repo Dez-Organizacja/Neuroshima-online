@@ -26,8 +26,9 @@ public class RoomPolicy {
 
     public RoomPolicy() {}
 
-    public RoomPolicy(Visibility visibility) {
+    public RoomPolicy(Visibility visibility, String host) {
         this.visibility = visibility;
+        this.host = host;
     }
 
     public Visibility getVisibility() {
