@@ -59,6 +59,10 @@ public class Room {
         return players.isEmpty();
     }
 
+    public Integer getRoomSize(){
+        return players.size();
+    }
+
     public Set<String> getPlayerIds() {
         Set<String> playerIds = new HashSet<>();
         for(Map.Entry<String, RoomMember> entry : players.entrySet()) {

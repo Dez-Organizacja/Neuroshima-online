@@ -40,7 +40,7 @@ class BoardTokenConfigBuilder(TokenConfigBuilder):
         return self
     
     def initiatives(self, initiatives : list[int]):
-        self.config.initiative = self.initiatives
+        self.config.initiative = initiatives
         return self
 
     def boosts(

@@ -3,6 +3,7 @@ import Button from "./components/Button";
 import TextInput from "./components/TekstInput";
 import { imagesByName } from "./Images";
 import { useGameSocketContext } from "./websockets/gameSocketContext";
+import type { WebSocketMessage } from "./websockets/websocketClient";
 import "./styles/Menu.css";
 
 type MenuScreenProps = {
@@ -14,7 +15,67 @@ type Feedback = {
   tone: "neutral" | "error" | "success";
 };
 
+type RoomProps = {
+  roomId: string;
+  membersCount: number;
+  host: string;
+  visibility: string;
+};
+
 const factionInsignia = ["borgo", "moloch", "posterunek", "hegemonia"];
+
+function normaliseRoom(value: unknown): RoomProps | null {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    return null;
+  }
+
+  const room = value as Record<string, unknown>;
+  const roomId =
+    typeof room.roomId === "string"
+      ? room.roomId
+      : typeof room.id === "string"
+        ? room.id
+        : null;
+
+  if (!roomId) {
+    return null;
+  }
+
+  const membersCount =
+    typeof room.membersCount === "number"
+      ? room.membersCount
+      : typeof room.playerCount === "number"
+        ? room.playerCount
+        : 0;
+
+  const host =
+    typeof room.host === "string"
+      ? room.host
+      : typeof room.hostUsername === "string"
+        ? room.hostUsername
+        : "Unknown commander";
+
+  return {
+    roomId,
+    membersCount,
+    host,
+    visibility:
+      typeof room.visibility === "string" ? room.visibility : "public",
+  };
+}
+
+function extractRoomList(response: WebSocketMessage): RoomProps[] {
+  const rawList = Array.isArray(response.roomList)
+    ? response.roomList
+    : Array.isArray(response.roomsList)
+      ? response.roomsList
+      : [];
+
+  return rawList
+    .map(normaliseRoom)
+    .filter((room): room is RoomProps => room !== null)
+    .sort((first, second) => first.roomId.localeCompare(second.roomId));
+}
 
 export default function MenuScreen({
   onSwitchToWaitingRoom,
@@ -24,13 +85,21 @@ export default function MenuScreen({
   const [activeRequest, setActiveRequest] = useState<"join" | "create" | null>(
     null,
   );
+  const [joiningRoomId, setJoiningRoomId] = useState<string | null>(null);
+  const [isRefreshingRooms, setIsRefreshingRooms] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>({
     message: "Choose an existing room or establish a new battle channel.",
     tone: "neutral",
   });
+  const [currentRoomList, setCurrentRoomList] = useState<RoomProps[]>([]);
 
-  const { latestMessage, createRoomAWFR, joinRoomAWFR, isConnected } =
-    useGameSocketContext();
+  const {
+    latestMessage,
+    createRoomAWFR,
+    joinRoomAWFR,
+    getRoomListAWFR,
+    isConnected,
+  } = useGameSocketContext();
 
   const username = localStorage.getItem("username") ?? "Commander";
 
@@ -43,14 +112,72 @@ export default function MenuScreen({
     }
   }, [latestMessage]);
 
-  async function handleJoin() {
-    const roomName = joinRoomName.trim();
+  async function handleRefresh(quiet = false) {
+      if (!isConnected || isRefreshingRooms) {
+        return;
+      }
+
+      setIsRefreshingRooms(true);
+
+      try {
+        const response = await getRoomListAWFR();
+
+        if (
+          response.messageType === "GETROOMSLIST_RESPONSE" ||
+          response.messageType === "GETROOMLIST_RESPONSE"
+        ) {
+          const rooms = extractRoomList(response);
+          setCurrentRoomList(rooms);
+
+          if (!quiet) {
+            setFeedback({
+              message:
+                rooms.length > 0
+                  ? `Tactical scan complete. ${rooms.length} open ${rooms.length === 1 ? "room" : "rooms"} found.`
+                  : "Tactical scan complete. No public rooms are open.",
+              tone: "success",
+            });
+          }
+        } else if (response.messageType === "ERROR") {
+          setFeedback({
+            message:
+              typeof response.error === "string"
+                ? response.error
+                : "Could not refresh room list.",
+            tone: "error",
+          });
+        }
+      } catch (error) {
+        setFeedback({
+          message:
+            error instanceof Error
+              ? error.message
+              : "Could not refresh room list.",
+          tone: "error",
+        });
+      } finally {
+        setIsRefreshingRooms(false);
+      }
+  }
+
+  useEffect(() => {
+    if (isConnected) {
+      void handleRefresh(true);
+    }
+    // Refresh once when the socket becomes available.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected]);
+
+  async function handleJoin(roomNameOverride?: string) {
+    const roomName = (roomNameOverride ?? joinRoomName).trim();
 
     if (!roomName || activeRequest) {
       return;
     }
 
     setActiveRequest("join");
+    setJoiningRoomId(roomName);
+    setJoinRoomName(roomName);
     setFeedback({ message: "Contacting room host…", tone: "neutral" });
 
     try {
@@ -77,6 +204,7 @@ export default function MenuScreen({
       });
     } finally {
       setActiveRequest(null);
+      setJoiningRoomId(null);
     }
   }
 
@@ -142,9 +270,7 @@ export default function MenuScreen({
 
           <div className="menu-profile">
             <span
-              className={`menu-profile__signal${
-                isConnected ? " is-online" : ""
-              }`}
+              className={`menu-profile__signal${isConnected ? " is-online" : ""}`}
               aria-hidden="true"
             />
             <div>
@@ -164,10 +290,7 @@ export default function MenuScreen({
             <div className="menu-insignia" aria-hidden="true">
               {factionInsignia.map((factionName) => (
                 <span className="menu-insignia__hex" key={factionName}>
-                  <img
-                    src={imagesByName[`${factionName}/sztab`]}
-                    alt=""
-                  />
+                  <img src={imagesByName[`${factionName}/sztab`]} alt="" />
                 </span>
               ))}
             </div>
@@ -205,6 +328,11 @@ export default function MenuScreen({
                         });
                       }
                     }}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        void handleJoin();
+                      }
+                    }}
                     placeholder="e.g. OUTPOST-07"
                   />
                   <span className="menu-field__corner" aria-hidden="true" />
@@ -213,7 +341,7 @@ export default function MenuScreen({
 
               <Button
                 className="menu-action-button menu-action-button--secondary"
-                onClick={handleJoin}
+                onClick={() => void handleJoin()}
                 disabled={!joinRoomName.trim() || activeRequest !== null}
                 text={
                   <>
@@ -227,7 +355,9 @@ export default function MenuScreen({
             </article>
 
             <div className="menu-divider" aria-hidden="true">
-              <span><b>OR</b></span>
+              <span>
+                <b>OR</b>
+              </span>
             </div>
 
             <article className="operation-card operation-card--create">
@@ -242,7 +372,7 @@ export default function MenuScreen({
               </div>
 
               <p className="operation-card__description">
-                Establish a private staging area and invite another commander.
+                Establish a staging area and invite another commander.
               </p>
 
               <label className="menu-field">
@@ -261,6 +391,11 @@ export default function MenuScreen({
                         });
                       }
                     }}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        void handleCreate();
+                      }
+                    }}
                     placeholder="Name your battle room"
                   />
                   <span className="menu-field__corner" aria-hidden="true" />
@@ -269,14 +404,12 @@ export default function MenuScreen({
 
               <Button
                 className="menu-action-button menu-action-button--primary"
-                onClick={handleCreate}
+                onClick={() => void handleCreate()}
                 disabled={!createRoomName.trim() || activeRequest !== null}
                 text={
                   <>
                     <span>
-                      {activeRequest === "create"
-                        ? "Creating…"
-                        : "Create room"}
+                      {activeRequest === "create" ? "Creating…" : "Create room"}
                     </span>
                     <span aria-hidden="true">+</span>
                   </>
@@ -284,6 +417,108 @@ export default function MenuScreen({
               />
             </article>
           </div>
+
+          <section className="room-browser" aria-labelledby="room-browser-title">
+            <div className="room-browser__header">
+              <div>
+                <p className="menu-section-number">02 / Tactical scan</p>
+                <h2 id="room-browser-title">Open battle channels</h2>
+                <p className="room-browser__copy">
+                  Public staging rooms detected by the command network.
+                </p>
+              </div>
+
+              <Button
+                className="room-browser__refresh"
+                onClick={() => void handleRefresh(false)}
+                disabled={!isConnected || isRefreshingRooms}
+                text={
+                  <>
+                    <span
+                      className={`room-browser__refresh-icon${isRefreshingRooms ? " is-spinning" : ""}`}
+                      aria-hidden="true"
+                    >
+                      ↻
+                    </span>
+                    {isRefreshingRooms ? "Scanning…" : "Refresh"}
+                  </>
+                }
+              />
+            </div>
+
+            {currentRoomList.length === 0 ? (
+              <div className="room-browser__empty">
+                <span className="room-browser__empty-hex" aria-hidden="true">
+                  ∅
+                </span>
+                <div>
+                  <strong>No public rooms detected</strong>
+                  <p>
+                    Refresh the tactical scan or establish a new battle channel.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="room-browser__grid">
+                {currentRoomList.map((room, index) => {
+                  const roomIsFull = room.membersCount >= 2;
+                  const isJoiningThisRoom = joiningRoomId === room.roomId;
+
+                  return (
+                    <article className="room-list-card" key={room.roomId}>
+                      <div className="room-list-card__index" aria-hidden="true">
+                        {String(index + 1).padStart(2, "0")}
+                      </div>
+
+                      <div className="room-list-card__body">
+                        <div className="room-list-card__topline">
+                          <span className="room-list-card__visibility">
+                            <span aria-hidden="true" />
+                            {room.visibility}
+                          </span>
+                          <span
+                            className={`room-list-card__capacity${roomIsFull ? " is-full" : ""}`}
+                          >
+                            {room.membersCount}/2 commanders
+                          </span>
+                        </div>
+
+                        <h3 title={room.roomId}>{room.roomId}</h3>
+
+                        <div className="room-list-card__host">
+                          <span className="room-list-card__host-mark" aria-hidden="true">
+                            H
+                          </span>
+                          <span>
+                            <small>Room host</small>
+                            <strong>{room.host}</strong>
+                          </span>
+                        </div>
+                      </div>
+
+                      <Button
+                        className="room-list-card__join"
+                        onClick={() => void handleJoin(room.roomId)}
+                        disabled={roomIsFull || activeRequest !== null}
+                        text={
+                          <>
+                            <span>
+                              {roomIsFull
+                                ? "Room full"
+                                : isJoiningThisRoom
+                                  ? "Joining…"
+                                  : "Join"}
+                            </span>
+                            {!roomIsFull && <span aria-hidden="true">→</span>}
+                          </>
+                        }
+                      />
+                    </article>
+                  );
+                })}
+              </div>
+            )}
+          </section>
 
           <div className={`menu-feedback menu-feedback--${feedback.tone}`}>
             <span className="menu-feedback__indicator" aria-hidden="true" />

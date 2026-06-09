@@ -14,10 +14,6 @@ class ActionContext():
 
     #shortcuts
     @property
-    def selected(self):
-        return self.state.selected
-    
-    @property
     def faction(self):
         return self.state.active_faction
     
@@ -34,10 +30,6 @@ class ActionContext():
         return self.state.players[self.faction]
 
     @property
-    def ui_state(self):
-        return self.state.interaction_state
-    
-    @property
     def workflow_data(self):
         return self.state.workflow_data
     
@@ -48,7 +40,11 @@ class ActionContext():
     @property
     def workflow_instance(self):
         return self.state.workflow_stack[-1]
-    
+
+    @property
+    def pending_attacks(self):
+        return self.state.pending_attacks
+
     def print_wf_stack(self):
         print("stack")
         for instance in self.state.workflow_stack:

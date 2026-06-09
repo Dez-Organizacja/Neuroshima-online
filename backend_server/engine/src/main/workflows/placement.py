@@ -4,7 +4,7 @@ from main.workflows.step_builders import BoardSelectionMixin, build_end_step
 from main.state.contex import ActionContext
 from main.workflows.data import WorkflowName
 from main.events.workflow import PushWorkflow
-from main.events.effects import PlaceEffect
+from main.events.effects import ClearSelectedHandSlotEffect, DiscardTokenEffect, PlaceEffect
 from main.events.data import Event
 from main.steps.config import ResolveStepConfig
 
@@ -19,6 +19,8 @@ class PlaceWorkflow(Workflow[PlacementProvider], BoardSelectionMixin):
                     name = ctx.player.hand.get(ctx.workflow_data.slot),
                     faction= ctx.faction
                 ),
+                DiscardTokenEffect(ctx.workflow_data.slot),
+                ClearSelectedHandSlotEffect(),
                 PushWorkflow(name=WorkflowName.ROTATE)
             ]
 

@@ -5,19 +5,22 @@ from main.state.contex import GameState
 from main.input.data import UserAction
 
 @dataclass
-class TileDelta:
+class TileDamage:
     pos : tuple[int, int]
-    unit : dict
+    damage : int = 1
+    
+    def apply(self, state : GameState):
+        state.board.get_token(self.pos).add_damage(self.damage)
+
+@dataclass
+class TileWounds:
+    pos : tuple[int, int]
+    wounds : list[int]
 
     def apply(self, state : GameState):
-        if state.board.is_empty(self.pos):
-            state.board.import_token(self.pos, self.unit)
-        
-        else:
-            token = state.board.get_token(self.pos) 
-            for k, v in self.unit.items():
-                setattr(token, k, v)
-
+        for amount in self.wounds:
+            state.board.get_token(self.pos).add_wounds(amount)
+            
 @dataclass
 class TilePlace:
     pos : tuple[int, int]
@@ -33,6 +36,14 @@ class TileRemove:
 
     def apply(self, state : GameState):
         state.board.remove_token(self.pos)
+
+@dataclass
+class TileRotate:
+    pos : tuple[int, int]
+    rotation : int
+
+    def apply(self, state : GameState):
+        state.board.get_token(self.pos).set_rotation(self.rotation)
 
 @dataclass
 class StackPush:
@@ -72,7 +83,7 @@ class HandRemove:
         state.players[self.faction].hand.remove(self.index)
 
 StackChange = StackPush | StackPop | StackSetIndex
-BoardDelta = TileDelta | TileRemove
+BoardDelta = TileRemove | TileRotate
 HandDelta = HandAdd | HandRemove
 
 @dataclass

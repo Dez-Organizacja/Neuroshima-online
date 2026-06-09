@@ -1,8 +1,7 @@
-from main.workflows.data import WorkflowName
-from main.events.workflow import PopWorkflow
+from main.workflows.data import WorkflowName, WorkflowConfig
+from main.events.workflow import PopWorkflow, PushWorkflow
 from main.events.effects import DestroyEffect, EnqueueAttacksEffect
 from main.attacks.data import TargetedIntent
-from main.events.flow import ResolvePendingAttacksEvent
 from .builder import ScenarioBuilder
 from .registry import register
 from main.input.data import BoardAction, ActionType
@@ -21,15 +20,15 @@ def granade_scenario():
     return (
         build_prescenario(name1)
         .tick()
-        .then_execution(
-            events=[
-                DestroyEffect(pos=(2, 4)),
-                PopWorkflow()
-            ]
-        )
+        .then_execution(events=[DestroyEffect(pos=(2, 4))])
+
+        .tick()
+        .then_execution(events=[PopWorkflow()])
+        
     ).build()
 
 name2 = WorkflowName.SNIPER
+factions=["moloch", "borgo"]
 @register(name2)
 def sniper_scenario():
     return (
@@ -40,10 +39,16 @@ def sniper_scenario():
                 EnqueueAttacksEffect(
                     [TargetedIntent(target_pos=(2, 4))]
                 ),
-                ResolvePendingAttacksEvent(),
-                PopWorkflow()
+                PushWorkflow(
+                    name=WorkflowName.DAMAGE_RESOLVE,
+                    config=WorkflowConfig(factions=factions)
+                ),
             ]
         )
+
+        .tick()
+        .then_execution(events=[PopWorkflow()])
+    
     ).build()
 
 name3 = WorkflowName.BOMB
@@ -68,8 +73,14 @@ def bomb_scenario():
         .then_execution(
             events=[
                 EnqueueAttacksEffect(damage_effects()),
-                ResolvePendingAttacksEvent(),
-                PopWorkflow(),
+                PushWorkflow(
+                    name=WorkflowName.DAMAGE_RESOLVE,
+                    config=WorkflowConfig(factions=factions)
+                ),
             ]
         )
+
+        .tick()
+        .then_execution(events=[PopWorkflow()])
+    
     ).build()

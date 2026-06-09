@@ -37,7 +37,8 @@ def is_on_border(board : Board, pos : Hex):
 
 def token_predicate(func : Callable[[BoardToken], bool]):
     def predicate(board : Board, pos : Hex):
-        return func(board.get_token(pos))
+        token = board.get_token(pos)
+        return token is not None and func(token)
     return predicate
 
 def adjacent_to(my_pos):
@@ -52,8 +53,8 @@ def in_line_to(my_pos : Hex, direction : int):
 
 def has_ability(board : Board, pos : Hex):
     token = board.get_token(pos)
-    return token.get_ability() is not None
+    return token is not None and token.get_ability() is not None
 
 def has_used_ability(board : Board, pos : Hex):
     token = board.get_token(pos)
-    return has_ability(board, pos) and token.ability_used
+    return token is not None and has_ability(board, pos) and token.ability_used

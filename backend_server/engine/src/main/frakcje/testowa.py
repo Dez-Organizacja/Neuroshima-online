@@ -1,27 +1,20 @@
+from main.frakcje.base import Faction
+from main.tokens.data import Ability
 
-# from main.tokens.data import TokenKey, TokenType, TokenStats, Ability, AbilityType
+unit = Faction("testowa")
 
 units = [
-    
+    unit.board("sieciarz", unit_count=10)
+    .hp(1)
+    .directions_of(wire=[0])
+    .build(),
+
+    unit.board("dwu-sieciarz", unit_count=10)
+    .hp(1)
+    .directions_of(wire=[0, 1])
+    .build(),
+
+    unit.instant("snajper", unit_count=1)
+    .ability(Ability.SNIPER)
+    .build(),
 ]
-# wlasciwosci = {
-#     "sieciarz": {
-#         TokenKey.TYPE: TokenType.BOARD,
-#         TokenKey.UNIT_COUNT: 10,
-#         TokenStats.HP: 1,
-#         TokenStats.WIRE: [0],
-#         },
-#     "dwu-sieciarz": {
-#         TokenKey.TYPE: TokenType.BOARD,
-#         TokenKey.UNIT_COUNT: 10,
-#         TokenStats.HP: 1,
-#         TokenStats.WIRE: [0, 1],
-#     },
-#     "snajper": {
-#         TokenStats.ABILITIES : {
-#             AbilityType.ABILITY : Ability.SNIPER
-#         },
-#         TokenKey.TYPE : TokenType.INSTANT,
-#         TokenKey.UNIT_COUNT : 1,
-#     }
-# }

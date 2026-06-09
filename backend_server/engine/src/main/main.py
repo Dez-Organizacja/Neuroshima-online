@@ -15,7 +15,7 @@ from main.bootstrap import bootstrap
 class Game:
     def __init__(self, data : dict):
         bootstrap()
-        self.state = GameState.from_dict(data)
+        self.state : GameState = GameState.from_dict(data)
         self.rules = GameRules()
         self.build_game_engine()
 

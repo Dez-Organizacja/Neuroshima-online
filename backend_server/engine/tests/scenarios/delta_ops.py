@@ -1,8 +1,9 @@
 from .data import (
     Delta,
-    TileDelta,
     TileRemove,
     TilePlace,
+    TileRotate,
+    TileDamage,
     HandAdd,
     HandRemove,
     StackPush,
@@ -10,25 +11,34 @@ from .data import (
     StackSetIndex,
 )
 from main.workflows.data import WorkflowName, WorkflowInstance, WorkflowConfig
-
-def tile_delta(pos : tuple[int, int], **data):
-    def apply(delta : Delta):
-        delta.board_delta.append(TileDelta(pos=pos, unit=data))
-    return apply
+from main.input.data import ActionType
+from typing import Callable
     
 def tile_place(pos : tuple[int, int], name : str, faction : str):
     def apply(delta : Delta):
         delta.board_delta.append(TilePlace(pos, name, faction))
     return apply
 
-def tile_remove(pos: tuple[int, int]):
+def tiles_remove(positions : list[tuple[int, int]]):
     def apply(delta: Delta):
-        delta.board_delta.append(TileRemove(pos=pos))
+        for pos in positions:
+            delta.board_delta.append(TileRemove(pos=pos))
     return apply
 
-def hand_add(faction: str, card: str):
+def tile_rotate(pos: tuple[int, int], rotation: int):
     def apply(delta: Delta):
-        delta.hand_delta.append(HandAdd(faction=faction, card=card))
+        delta.board_delta.append(TileRotate(pos=pos, rotation=rotation))
+    return apply
+
+def tile_damage(pos : tuple[int, int], damage : int = 1):
+    def apply(delta : Delta):
+        delta.board_delta.append(TileDamage(pos, damage))
+    return apply
+
+def hand_add(faction: str, cards: list[str]):
+    def apply(delta: Delta):
+        for card in cards:
+            delta.hand_delta.append(HandAdd(faction=faction, card=card))
     return apply
 
 def hand_remove(faction: str, index: int):
@@ -88,7 +98,6 @@ def stack_add_turn_wf(faction : str):
         config=WorkflowConfig(faction=faction),
     )
 
-
 def faction_delta(faction: str, turn : bool = False):
     def apply(delta: Delta):
         if turn:
@@ -102,3 +111,37 @@ def expected_step_index(index: int):
         delta.expected_step_index = index
 
     return apply
+
+def composed_function(*funcs : list[Callable[[Delta], None]]):
+    def apply(delta : Delta):
+        for func in funcs:
+            func(delta)
+    return apply
+
+def pushing_hand_wf_changes(slot : int):
+    return composed_function(
+        wf_data_delta(slot=0, type=ActionType.HAND),
+        stack_index_change(index=4),
+        stack_add(name=WorkflowName.HAND, index=1),
+    )
+
+def setup_turn(factions : list[str]):
+    return composed_function(
+        stack_add_game_wf(factions),
+        stack_add_turn_wf(factions[0]),
+        faction_delta(faction=factions[0], turn=True),
+    )
+
+def wf_data_clear():
+    return composed_function(
+        wf_data_delta(
+            slot=None,
+            unit_pos=None,
+            target_pos=None,
+            destination=None,
+            rotation=None,
+            type=None,
+            button=None,
+            decision=None,
+        )
+    )

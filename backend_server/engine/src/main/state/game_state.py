@@ -64,7 +64,7 @@ class GameState:
                 self.add_player(faction)
 
     @classmethod
-    def from_dict(cls, data):
+    def from_dict(cls, data) -> GameState:
         return Serializator.from_dict_dataclass(cls, data)
     
     def to_dict(self):

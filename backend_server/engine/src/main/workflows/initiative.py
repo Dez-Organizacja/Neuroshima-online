@@ -74,28 +74,17 @@ class InitiativeWorkflow(Workflow):
     def build_attacks_gathering(self):
         return ResolveStepConfig(resolve_func=self.enqueue_attacks)
 
-    def build_healer_setp(self, faction : str):
+    
+    def build_damage_resolve_step(self):
         return InitStepConfig(
-            wf_name=WorkflowName.HEAL,
-            wf_config=WorkflowConfig(faction=faction),
+            wf_name=WorkflowName.DAMAGE_RESOLVE,
+            wf_config=WorkflowConfig(factions=self.factions)
         )
     
-    def resolve_func(self, ctx : ActionContext):
-        return [
-            ResolveUnitsDamageEffect(
-                positions=BoardQuery([
-                    NOT(is_empty_at)
-                ]).apply(ctx.board)
-            )
-        ]
-
     def _build_steps(self):
-        steps = [
+        return [
             self.build_decisions_step(),
             self.build_attacks_gathering(),
-        ] 
-        for faction in self.factions:
-            steps.append(self.build_healer_setp(faction))
-
-        steps.append(build_end_step(self.resolve_func))
-        return steps
+            self.build_damage_resolve_step(),
+            build_end_step(),
+        ]

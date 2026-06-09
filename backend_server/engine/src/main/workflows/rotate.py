@@ -10,6 +10,7 @@ from main.events.effects import RotateEffect
 from main.workflows.providers.movement import RotateProvider
 from main.workflows.step_builders import build_end_step
 from main.input.action_handlers import ActionHandler
+from main.input.data import ActionType
 
 class RotateWorkflow(Workflow[RotateProvider]):
     def __init__(self):

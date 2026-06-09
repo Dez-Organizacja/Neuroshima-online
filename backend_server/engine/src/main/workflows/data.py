@@ -26,6 +26,7 @@ class WorkflowName(Enum):
     HEADQUARTER_PLACE = "headquarter_place"
     INITIATIVE = "initiative"
     EXPLOSION = "explosion"
+    DAMAGE_RESOLVE = "damage_resolve"
 
 ABILITY_WORKFLOW_REGISTRY = {
     Ability.MOVE : WorkflowName.MOVE,

@@ -13,32 +13,35 @@ def place_action_scenario() -> Scenario:
     return (
         ScenarioBuilder(factions)
         .given(
-            stack_add_game_wf(factions),
-            stack_add_turn_wf(faction="moloch"),
-            faction_delta("moloch"),
-            faction_delta(faction="moloch", turn=True),
-            hand_add(faction="moloch", card="klaun"),
-            hand_add(faction="moloch", card="sieciarz"),
+            setup_turn(factions),
+            hand_add(faction="moloch", cards=["klaun", "sieciarz"]),
         )
 
         .when(HandAction(slot=0))
         .then(
-            wf_data_delta(slot=0, type=ActionType.HAND),
-            stack_index_change(index=4),
-            stack_add(name=WorkflowName.HAND, index=1),
+            pushing_hand_wf_changes(slot=0), #wf data tez wrzuca
             stack_add(name=WorkflowName.PLACE, index=0),
         )
 
         .when(BoardAction(pos=(2, 4)))
         .then(
             tile_place(pos=(2, 4), name="klaun", faction="moloch"),
+            hand_remove(faction="moloch", index=0),
             stack_index_change(index=2),
             stack_add(name=WorkflowName.ROTATE, index=0),
-            wf_data_delta(unit_pos=(2, 4), type=ActionType.BOARD),
-            # hand_remove(faction="moloch", index=0),
-            # wf_data_delta(slot=None, type=None),
+            wf_data_delta(slot=None, unit_pos=(2, 4), type=ActionType.BOARD),
             # stack_pop(), # pop place
             # stack_pop(), # pop hand
             # stack_index_change(index=2) # set turn wf index to waiting step
+        )
+        
+        .when(RotationAction(rotation=1))
+        .then(
+            tile_rotate(pos=(2, 4), rotation=1),
+            stack_pop(),
+            stack_pop(),
+            stack_pop(),
+            stack_index_change(index=2),
+            wf_data_clear(),
         )
     ).build()

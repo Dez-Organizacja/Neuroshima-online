@@ -68,6 +68,7 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         5000,
         )
     }
+
     function startNewGameAWFR(playersInRoom : string[], factions : string[]){
         const room = localStorage.getItem("room");
         // console.log(fractions);
@@ -112,6 +113,15 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
             actionData: action,
         });
     }
+    function getRoomListAWFR(){
+        return sendAWFR({
+            messageType : "GETROOMSLIST_REQUEST",
+        },
+        ["GETROOMSLIST_RESPONSE", "ERROR"],
+        5000,
+        )
+    }
+
     return{
         createRoomAWFR,
         joinRoomAWFR,
@@ -120,5 +130,6 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         startNewGameAWFR,
         sendAction,
         setFactionAWFR,
+        getRoomListAWFR,
     }
 }

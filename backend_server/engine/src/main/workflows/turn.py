@@ -21,7 +21,6 @@ from main.rules.predicates import (
     has_ability
 )
 from main.rules.turn import TurnRules
-from typing import Callable
 from main.input.action_handlers import ActionHandler
 
 class TurnWorkflow(Workflow[TurnProvider]):

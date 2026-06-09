@@ -40,7 +40,6 @@ class PlaceEffect(Effect):
             faction=self.faction,
         )
 
-# ----------- damage -----------
 @dataclass
 class EnqueueAttacksEffect(Effect):
     attack : list[AttackIntent]
@@ -49,13 +48,21 @@ class EnqueueAttacksEffect(Effect):
         ctx.state.pending_attacks.extend(self.attack)
 
 @dataclass
+class ClearPendingAttacksEffect(Effect):
+    
+    def apply(self, ctx : ActionContext):
+        ctx.pending_attacks.clear()
+
+# ----------- damage -----------
+
+@dataclass
 class DamageEffect(Effect):
     pos : tuple[int, int]
     damage : int = 1
 
     def apply(self, ctx: ActionContext):
         unit = ctx.board.get_token(self.pos)
-        if self.damage > 0:
+        if unit is not None and self.damage > 0:
             unit.add_wounds(self.damage)
 
 @dataclass
@@ -70,6 +77,19 @@ class ResolveUnitsDamageEffect(Effect):
             token.claer_wounds()
             if not token.is_alive:
                 ctx.board.remove_token(pos)
+
+# ----------- heal -----------
+
+@dataclass
+class HealEffect(Effect):
+    source_pos : tuple[int, int]
+    target_pos : tuple[int, int]
+
+    def apply(self, ctx : ActionContext):
+        healer = ctx.board.get_token(self.source_pos)
+        target = ctx.board.get_token(self.target_pos)
+        healer.add_wounds(target.pop_highest_wound())
+
 # ----------- removing -----------
 
 @dataclass
@@ -78,7 +98,8 @@ class DestroyEffect(Effect):
     recompute_passive: ClassVar[bool] = True
 
     def apply(self, ctx: ActionContext):
-        ctx.board.destroy_token(self.pos)
+        if ctx.board.get_token(self.pos) is not None:
+            ctx.board.destroy_token(self.pos)
 
 
 # ----------- unit abilitis -----------
@@ -101,15 +122,8 @@ class ResetAbilityUsedEffect(Effect):
             token = ctx.board.get_token(pos)
             token.state.exection.used_ability = False
 
-@dataclass
-class HealEffect(Effect):
-    source_pos : tuple[int, int]
-    target_pos : tuple[int, int]
 
-    def apply(self, ctx : ActionContext):
-        healer = ctx.board.get_token(self.source_pos)
-        target = ctx.board.get_token(self.target_pos)
-        healer.add_wounds(target.pop_highest_wound())
+# ----------- activation -----------
 
 @dataclass
 class MarkActivatedUnitsEffect(Effect):
@@ -127,6 +141,11 @@ class MarkActivatedUnitsEffect(Effect):
 class ClearWorkflowDataEffect(Effect):
     def apply(self, ctx):
         ctx.workflow_data = WorkflowData()
+
+@dataclass
+class ClearSelectedHandSlotEffect(Effect):
+    def apply(self, ctx):
+        ctx.workflow_data.slot = None
 
 # ----------- hand -----------
 

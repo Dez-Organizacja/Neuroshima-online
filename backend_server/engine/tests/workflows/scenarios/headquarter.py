@@ -25,7 +25,6 @@ def headquarter_turn_scenario():
         .tick()
         .given(setup_function)
         .then_execution(events=[DrawNamedTokenEffect("sztab")])
-        .then_faction("moloch")
         .then_faction("moloch", turn=True)                              
 
         .tick()
@@ -40,7 +39,6 @@ def headquarter_turn_scenario():
 
         .tick()
         .then_execution(events=[PopWorkflow()])
-        .then_faction("")
         .then_faction("", turn=True)
     ).build()
 

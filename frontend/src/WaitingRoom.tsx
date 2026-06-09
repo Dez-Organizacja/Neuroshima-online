@@ -61,8 +61,11 @@ export function RoomScreen({
   const [currentReply, setCurrentReply] = useState<string>("");
   const [faction, setFaction] = useState<FactionName | "">("");
   const [isSubmittingFaction, setIsSubmittingFaction] = useState(false);
+  const [hostUsername, setHostUsername] = useState("");
 
   const roomName = localStorage.getItem("room") ?? "Current room";
+  const username = localStorage.getItem("username") ?? "Commander";
+  const isHost = Boolean(hostUsername && hostUsername === username);
 
   const selectedFactions = playersInRoom
     .map((player) => playerFactions?.[player])
@@ -94,6 +97,18 @@ export function RoomScreen({
     ) {
       setPlayersInRoom(latestMessage.playersInRoom);
       setPlayerFactions(latestMessage.playerFactions);
+
+      const roomPolicy = latestMessage.roomPolicy;
+      if (typeof roomPolicy === "object" && roomPolicy !== null) {
+        const policy = roomPolicy as Record<string, unknown>;
+        const host =
+          typeof policy.host === "string"
+            ? policy.host
+            : typeof policy.hostUsername === "string"
+              ? policy.hostUsername
+              : "";
+        setHostUsername(host);
+      }
 
       if (typeof latestMessage.gameId === "string") {
         onSwitchToGame();
@@ -206,9 +221,25 @@ export function RoomScreen({
           </div>
 
           <div className="waiting-room__header-actions">
-            <div className="room-code" title={roomName}>
-              <span className="room-code__label">Room</span>
-              <strong>{roomName}</strong>
+            <div className="room-meta">
+              <div className="room-code" title={roomName}>
+                <span className="room-code__label">Room</span>
+                <strong>{roomName}</strong>
+              </div>
+
+              <div
+                className={`room-host${isHost ? " is-current-user" : ""}`}
+                title={hostUsername || "Host not reported yet"}
+              >
+                <span className="room-host__mark" aria-hidden="true">
+                  ◆
+                </span>
+                <span className="room-host__content">
+                  <span className="room-code__label">Room host</span>
+                  <strong>{hostUsername || "Awaiting status…"}</strong>
+                  {isHost && <small>You control this room</small>}
+                </span>
+              </div>
             </div>
 
             <Button
@@ -308,6 +339,7 @@ export function RoomScreen({
             <DisplayPlayerFactions
               playerFactions={playerFactions ?? {}}
               playersInRoom={playersInRoom}
+              hostUsername={hostUsername}
             />
 
             <div className={`readiness ${canStartGame ? "is-ready" : ""}`}>

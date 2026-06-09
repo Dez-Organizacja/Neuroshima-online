@@ -40,8 +40,7 @@ class ScenarioBuilder:
         self._require_step()
         if turn:
             self._current_step.turn_faction_delta = faction
-        else:
-            self._current_step.faction_delta = faction
+        self._current_step.faction_delta = faction
         return self
 
     def then_execution(self, *, 

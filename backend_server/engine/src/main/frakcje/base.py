@@ -20,10 +20,10 @@ class Faction:
         sztab = (
             self.board("sztab", unit_count=1)
             .hp(hp)
-            .attacks(melee(directions=[i for i in range(0)]))
+            .attacks(melee(directions=[0, 1, 2, 3, 4, 5]))
             .initiatives(initiatives)
         )
         if boost is not None:
-            sztab.boosts(types=[boost], directions=[i for i in range(0)])
+            sztab.boosts(types=[boost], directions=[0, 1, 2, 3, 4, 5])
 
         return sztab 

@@ -1,4 +1,3 @@
-from __future__ import annotations
 from main.tokens.board_token import BoardToken
 from main.tokens.data import BoardType
 from main.utils.variable import *
@@ -148,7 +147,8 @@ class Board:
         self.where_am_i[tokenID] = pos
 
     def import_token(self, pos : Hex, data : dict):
-        self.add_token(pos, BoardToken.from_dict(data))
+        token = data if isinstance(data, BoardToken) else BoardToken.from_dict(data)
+        self.add_token(pos, token)
 
     def put_token(self, pos : Hex, name, faction = None):
         # mozna wywolac albo put_token(pos, data) albo put_token(pos, name, faction)

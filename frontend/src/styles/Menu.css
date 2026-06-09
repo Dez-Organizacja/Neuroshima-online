@@ -22,7 +22,8 @@
 .menu-screen {
   position: relative;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   padding: clamp(20px, 3vw, 48px);
   color: var(--menu-text);
   background:
@@ -507,6 +508,314 @@
   transform: rotate(-45deg);
 }
 
+
+.room-browser {
+  margin-top: clamp(30px, 4vw, 48px);
+  padding-top: clamp(26px, 3vw, 38px);
+  border-top: 1px solid var(--menu-line);
+}
+
+.room-browser__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.room-browser__copy {
+  max-width: 560px;
+  margin: 8px 0 0;
+  color: var(--menu-muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.room-browser__refresh {
+  display: inline-flex;
+  min-height: 44px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 16px;
+  border: 1px solid var(--menu-line-strong);
+  color: var(--menu-accent-bright);
+  background: rgba(215, 180, 91, 0.07);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.room-browser__refresh:not(:disabled):hover {
+  transform: translateY(-2px);
+  border-color: var(--menu-accent-bright);
+  background: rgba(215, 180, 91, 0.12);
+}
+
+.room-browser__refresh:focus-visible,
+.room-list-card__join:focus-visible {
+  outline: 2px solid var(--menu-accent-bright);
+  outline-offset: 3px;
+}
+
+.room-browser__refresh:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.room-browser__refresh-icon {
+  display: inline-block;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.room-browser__refresh-icon.is-spinning {
+  animation: room-scan-spin 850ms linear infinite;
+}
+
+.room-browser__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.room-list-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: stretch;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(197, 182, 137, 0.17);
+  background:
+    linear-gradient(110deg, rgba(215, 180, 91, 0.055), transparent 58%),
+    rgba(6, 9, 8, 0.64);
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  transition: transform 170ms ease, border-color 170ms ease, background 170ms ease, box-shadow 170ms ease;
+}
+
+.room-list-card::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 54px;
+  height: 1px;
+  content: "";
+  background: linear-gradient(to left, var(--menu-accent), transparent);
+  opacity: 0.45;
+}
+
+.room-list-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(215, 180, 91, 0.45);
+  background:
+    linear-gradient(110deg, rgba(215, 180, 91, 0.09), transparent 62%),
+    rgba(10, 14, 12, 0.88);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+}
+
+.room-list-card__index {
+  display: grid;
+  place-items: center;
+  border-right: 1px solid rgba(197, 182, 137, 0.13);
+  color: rgba(215, 180, 91, 0.55);
+  background: rgba(215, 180, 91, 0.035);
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.room-list-card__body {
+  min-width: 0;
+  padding: 15px 16px;
+}
+
+.room-list-card__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.room-list-card__visibility,
+.room-list-card__capacity {
+  font-size: 0.59rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.room-list-card__visibility {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #b6cda4;
+}
+
+.room-list-card__visibility > span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--menu-success);
+  box-shadow: 0 0 8px rgba(130, 164, 103, 0.55);
+}
+
+.room-list-card__capacity {
+  color: var(--menu-muted);
+}
+
+.room-list-card__capacity.is-full {
+  color: #d89487;
+}
+
+.room-list-card h3 {
+  max-width: 100%;
+  overflow: hidden;
+  margin: 0 0 13px;
+  color: var(--menu-text);
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.room-list-card__host {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.room-list-card__host-mark {
+  display: grid;
+  width: 31px;
+  aspect-ratio: 126 / 110;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #15170f;
+  background: linear-gradient(145deg, var(--menu-accent-bright), #9f7b30);
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.room-list-card__host > span:last-child {
+  min-width: 0;
+}
+
+.room-list-card__host small,
+.room-list-card__host strong {
+  display: block;
+}
+
+.room-list-card__host small {
+  margin-bottom: 2px;
+  color: var(--menu-muted);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.room-list-card__host strong {
+  overflow: hidden;
+  color: #dcd5c2;
+  font-size: 0.76rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.room-list-card__join {
+  display: flex;
+  min-width: 105px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 15px;
+  border: 0;
+  border-left: 1px solid rgba(215, 180, 91, 0.18);
+  color: #14170f;
+  background: linear-gradient(145deg, var(--menu-accent-bright), #a78134);
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: filter 150ms ease, padding 150ms ease;
+}
+
+.room-list-card__join:not(:disabled):hover {
+  padding-right: 11px;
+  filter: brightness(1.1);
+}
+
+.room-list-card__join:disabled {
+  color: rgba(240, 234, 216, 0.38);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: not-allowed;
+}
+
+.room-browser__empty {
+  display: flex;
+  min-height: 112px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 22px;
+  border: 1px dashed rgba(197, 182, 137, 0.2);
+  color: var(--menu-muted);
+  background: rgba(6, 9, 8, 0.36);
+  text-align: left;
+}
+
+.room-browser__empty-hex {
+  display: grid;
+  width: 52px;
+  aspect-ratio: 126 / 110;
+  flex: 0 0 auto;
+  place-items: center;
+  color: rgba(215, 180, 91, 0.72);
+  background: rgba(215, 180, 91, 0.07);
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 1.25rem;
+}
+
+.room-browser__empty strong {
+  display: block;
+  color: #d7d0bd;
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.room-browser__empty p {
+  margin: 5px 0 0;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+@keyframes room-scan-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .menu-feedback {
   display: flex;
   align-items: center;
@@ -599,6 +908,10 @@
   .operation-card__description {
     min-height: 0;
   }
+
+  .room-browser__grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 660px) {
@@ -645,6 +958,26 @@
 
   .operation-card {
     padding: 21px 18px;
+  }
+
+  .room-browser__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .room-browser__refresh {
+    width: 100%;
+  }
+
+  .room-list-card {
+    grid-template-columns: 28px minmax(0, 1fr);
+  }
+
+  .room-list-card__join {
+    grid-column: 2;
+    min-height: 46px;
+    border-top: 1px solid rgba(215, 180, 91, 0.18);
+    border-left: 0;
   }
 
   .menu-footer {
