@@ -22,12 +22,10 @@
 #     return ServerMessage(**data)
 
 # def test1():
-#     expected = {'state': {'factions': ['borgo', 'moloch'], 'board': [{'pos': [2, 4], 'unit': {'faction': 'borgo', 'name': 'sztab', 'rotation': 0, 'wired': False, 'ability_used': False, 'damage': 0}}], 'hands': {'borgo': {'tokens': ['sztab']}, 'moloch': {'tokens': []}}}, 'availableActions': {'hand': [False, False, False], 'board': [[2, 4]], 'buttons': []}, 'uiState': {'mode': 'rotation', 'message': '', 'faction': 'borgo'}}
 #     data = wczytaj("data.json")
 #     v = view(data)
 #     print(v)
-#     # assert False
-#     assert v == expected, Diff.compare(v, expected)
+#     assert False
 
 # def test2():
 #     data = wczytaj("data2.json")

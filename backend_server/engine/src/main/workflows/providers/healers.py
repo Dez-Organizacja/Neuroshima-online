@@ -13,14 +13,11 @@ class HealersProvider(WorkflowActionProvider):
 
         return []
 
-    def get_available_positions(
-            self,
-            ctx : ActionContext,
-            faction : str,
-        ) -> list[tuple[int, int]]:
+    
+    def get_available_positions(self, ctx : ActionContext) -> list[tuple[int, int]]:
 
         if not ctx.workflow_data.unit_pos:
-            return self.rules.get_sources(ctx, faction)
+            return self.rules.get_sources(ctx, ctx.faction)
         
         if not ctx.workflow_data.target_pos:
             return self.rules.get_targets(ctx, ctx.workflow_data.unit_pos)

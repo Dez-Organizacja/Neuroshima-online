@@ -5,6 +5,7 @@ from main.tokens.data import Ability, Boost, TokenRelation
 unit = Faction("posterunek")
 
 units = [
+    unit.HQ(boost=Boost.NEW_INITIATIVE).build(),
     unit.board("biegacz", unit_count=2)
     .hp(1)
     .attacks(shoot(directions=[5]))
@@ -46,12 +47,6 @@ units = [
     .initiatives([3])
     .build(),
 
-    unit.board("sztab", unit_count=1)
-    .hp(20)
-    .attacks(melee(directions=[0, 1, 2, 3, 4, 5]))
-    .boosts(types=[Boost.NEW_INITIATIVE], directions=[0, 1, 2, 3, 4, 5])
-    .initiatives([0])
-    .build(),
 
     unit.board("centrumrozpoznania", unit_count=1)
     .hp(1)

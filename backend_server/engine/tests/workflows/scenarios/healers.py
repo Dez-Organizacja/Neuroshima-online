@@ -39,7 +39,7 @@ def heal_scenario():
 
         .tick()
         .then_execution(
-            events=[GoToStep(index=1)],
+            events=[GoToStep(index=0)],
             advance=False
         )
     ).build()

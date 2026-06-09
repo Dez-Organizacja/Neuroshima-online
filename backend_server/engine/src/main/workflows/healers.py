@@ -22,10 +22,7 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
 
     def build_check_end_workflow_step(self):
         def func(ctx : ActionContext):
-            candidates = self.action_provider.get_available_positions(
-                ctx, 
-                self.faction
-            )
+            candidates = self.action_provider.get_available_positions(ctx)
             if len(candidates) == 0:
                 ctx.faction = ctx.state.turn_faction
                 return [PopWorkflow()]
@@ -43,7 +40,7 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
         return ResolveStepConfig(resolve_func=func)
 
     def build_repeat_step(self):
-        return RepeatStepConfig(repeat_from_index=1)
+        return RepeatStepConfig(repeat_from_index=0)
 
     def _build_steps(self):
         return [

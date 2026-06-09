@@ -82,7 +82,7 @@ class BombWorkflow(TargetWorkflow):
     
     def resolve_func(self, ctx : ActionContext) -> list[Effect]:
         pos = ctx.workflow_data.target_pos
-        print(f"BOMB AT {pos}")
+        # print(f"BOMB AT {pos}")
         positions = BoardQuery([
             pr.adjacent_to(pos),
             pr.NOT(pr.is_empty_at),
@@ -90,7 +90,8 @@ class BombWorkflow(TargetWorkflow):
         ]).apply(ctx.board)
 
         if not pr.is_empty_at(ctx.board, pos):
-            positions.append(pos)
+            if not ctx.board.get_token(pos).is_HQ:
+                positions.append(pos)
 
         return self.resolve_attacks(
             attack_intents=[
