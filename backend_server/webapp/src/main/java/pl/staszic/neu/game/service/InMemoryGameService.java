@@ -353,6 +353,9 @@ public class InMemoryGameService implements GameService {
         if (room.hasActiveGame()) {
             throw new GameValidationException("Room already has active game: " + room.getGameId());
         }
+        if(!clientId.equals(room.getRoomPolicy().getHost())){
+            throw new GameValidationException("Only host can start new game.");
+        }
 
         Game game = new Game();
 
