@@ -39,6 +39,9 @@ export function ClickCheck(x: number, y: number, gameState : GameState | undefin
             type: "rotate",
             rotation: ((rotation - 30) / 60)
         };
+
+        console.log("ROTATION SENT: " + ((rotation - 30) / 60));
+
         sendAction(action);
     } else if(y === -1) {
         console.log("CLICK: " + x + " --HAND");
@@ -101,7 +104,7 @@ const Hexagon: React.FC<HexagonProps> = ({
             position: "absolute",
             left: x - (size / 2),
             top: y - (height / 2),
-            transform: `rotate(${rotation}deg) scale(1)`,
+            transform: `rotate(${30}deg) scale(1)`,
         }}
         >
         < div className="hexagon-content">{children}</div>
