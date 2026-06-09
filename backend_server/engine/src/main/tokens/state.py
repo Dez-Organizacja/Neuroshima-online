@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from main.tokens.data import TokenRelation
-from main.tokens.clever_initiative import CleverInitiative
 
 @dataclass
 class TokenCoreState:
@@ -12,7 +11,15 @@ class TokenCoreState:
 @dataclass
 class TokenModifiers:
     meele_boosts: int = 0
-    shoot_boosts: int = 0
+
+    initiatives: list[int] = field(default_factory=list)
+    is_used: list[bool] = field(default_factory=list)
+    is_basic: list[bool] = field(default_factory=list)
+    num_of_old: int = 0
+    
+    is_blocked_to_0: bool = False
+    initiative_boosts: int = 0
+    num_of_new: int = 0
 
 @dataclass
 class TokenRelations:
@@ -62,7 +69,7 @@ class BoardTokenState:
     # --------- initiative ----------
     @property
     def clever_initiative(self):
-        return self.modifiers.clever_initiative
+        return self.modifiers
 
     # --------- reset ----------
     def reset(self):

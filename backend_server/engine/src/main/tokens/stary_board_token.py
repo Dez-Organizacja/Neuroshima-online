@@ -34,7 +34,6 @@ class BoardToken(Token):
     clever_initiative: CleverInitiative | None = None
 
     meele_boosts: int = 0
-    shoot_boosts: int = 0
 
     # chwilowo zadane np w trakcie bitwy
     wounds : list[int] = field(default_factory=list)

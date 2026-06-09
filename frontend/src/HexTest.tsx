@@ -8,6 +8,7 @@ import { useGameSocketContext } from "./websockets/gameSocketContext";
 // import { gameState } from "./components/gameState";
 // import { gameState } from "./components/gameState";
 import { useProcesedGameState, GameState } from "./Dlaigora";
+import Tile from "./components/Tile"
 
 async function cos(name : string) {
   console.log(name);
@@ -67,14 +68,17 @@ export default function HexTest(){
                 field.pos[1] === x
             );
 
-            if (field) {
-                const Path = field.unit.faction + "/" + field.unit.name;
-                const Rotation = field.unit.rotation * 60;
-                console.log("{" + y + ", " + x +  "}  " + Path);
+            let Path: string = "undefined/undefined";
+            let Rotation: number = 0;
 
-                Items.push(
-                    <Image imageName={Path} x={FinalX} y={FinalY} poz1={y} poz2={x} height={((Size * 2 + 15) * 0.866)} rotation={30 + Rotation} gameState={gameState} />
-                )
+            if (field) {
+                Path = field.unit.faction + "/" + field.unit.name;
+                Rotation = field.unit.rotation * 60;
+                console.log("{" + y + ", " + x +  "}  " + Path + "     R: " + Rotation);
+
+                // Items.push(
+                //     <Image imageName={Path} x={FinalX} y={FinalY} poz1={y} poz2={x} height={((Size * 2 + 15) * 0.866)} rotation={30 + Rotation} gameState={gameState} />
+                // )
             }
 
             let Color: string = "#d10606";
@@ -85,8 +89,12 @@ export default function HexTest(){
             if(Clickable) Color = "#666666";
 
             Items.push(
-                <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={30} color={Color} opacity={0.5} gameState={gameState} sendAction={sendAction}> {y}, {x} </Hexagon>
+                <Tile imageName={Path} x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={Rotation + 30} color={Color} opacity={0.5} gameState={gameState} sendAction={sendAction} />
             )
+
+            // Items.push(
+            //     <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={30} color={Color} opacity={0.5} gameState={gameState} sendAction={sendAction}> {y}, {x} </Hexagon>
+            // )
         }
     }
 
