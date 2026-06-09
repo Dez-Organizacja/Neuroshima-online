@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 
 from main.tokens.base import Token
 from main.state.serialization import Serializator
+from main.tokens.clever_initiative import CleverInitiative
 from main.tokens.config import BoardTokenConfig, BoostInstance, Boost
 from main.tokens.state import BoardTokenState
 from copy import deepcopy
@@ -112,13 +113,10 @@ class BoardToken(Token):
         return self.state.clever_initiative
 
     def can_activate(self, initiative):
-        return (
-            not self.wired
-            and self.clever_initiative.can_activate(initiative)
-        )
+        return not self.wired and CleverInitiative.can_activate(self, initiative)
 
     def mark_activated(self, initiative : int):
-        self.clever_initiative.mark_activated(initiative)
+        return CleverInitiative.mark_activated(self, initiative)
 
     # --------- attacks ----------
 

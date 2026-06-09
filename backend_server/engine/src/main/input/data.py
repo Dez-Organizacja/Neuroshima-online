@@ -1,7 +1,13 @@
 from dataclasses import dataclass, field
 from abc import ABC
-from enum import StrEnum, Enum
+from enum import Enum
 from main.state.serialization import Serializator
+
+try:
+    from enum import StrEnum
+except ImportError:  # pragma: no cover - Python < 3.11
+    class StrEnum(str, Enum):
+        pass
 
 class ActionType(StrEnum):
     BOARD = "board"

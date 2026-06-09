@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from main.tokens.data import Ability, BattleAbility, TokenType, TokenRelation, Boost
 from main.attacks.data import AttackConfig

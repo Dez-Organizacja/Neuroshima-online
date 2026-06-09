@@ -21,8 +21,7 @@
             "used_battle_ability" : false
           },
           "modifiers" : {
-            "meele_boosts" : 0,
-            "shoot_boosts" : 0
+            "meele_boosts" : 0
           },
           "relations" : {
             "real_boost_target" : null

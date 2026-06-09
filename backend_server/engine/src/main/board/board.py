@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from main.tokens.board_token import BoardToken
 from main.tokens.data import BoardType
 from main.utils.variable import *

@@ -1,5 +1,6 @@
 from main.board.board import Board
 from main.tokens.data import TokenRelation, Boost
+from main.systems.clever_initiative import CleverInitiative
 
 class BoosterSolver():
     board: Board
@@ -31,10 +32,11 @@ class BoosterSolver():
                 continue
 
             token = self.board.tokens[tokenID]
-            token.boost_target = token.real_boost_target
-            token.meele_boosts = 0
-            token.shoot_boosts = 0
-            token.clever_initiative.begin_initiative()
+            relations = token.state.relations
+            relations.real_boost_target = token.config.boost_target
+
+            token.state.modifiers.meele_boosts = 0
+            CleverInitiative.begin_initiative(token)
 
     def is_valid_target(self, tokenID : int, relation : TokenRelation, my_fraction : str) -> bool:
         if (tokenID is None):
@@ -54,20 +56,20 @@ class BoosterSolver():
                 continue
 
             token = self.board.tokens[tokenID]
-            if len(token.boosts) > 0 and Boost.STEAL_BOOST in token.boosts and not token.is_wired():
-                for direction in token.boosts[Boost.STEAL_BOOST]:
+            if Boost.STEAL_BOOST in token.boosts and not token.wired:
+                for direction in token.get_boost_directions(Boost.STEAL_BOOST):
                     target_pos = self.board.go(board_hex, direction)
                     if not self.board.on_board(target_pos):
                         continue
                     target_tokenID = self.board.gen_tokenID(target_pos)
-                    if self.is_valid_target(target_tokenID, token.boost_target, token.faction):
+                    if self.is_valid_target(target_tokenID, token.state.relations.real_boost_target, token.faction):
                         self.steal_boosts.append((target_tokenID, Boost.STEAL_BOOST))
 
     def solve_steal_boosts(self):
         for tokenID, boost in self.steal_boosts:
             token = self.board.tokens[tokenID]
             if token is not None:
-                token.boost_target = TokenRelation.ENEMY
+                token.state.relations.real_boost_target = TokenRelation.ENEMY
 
     def collect_boosts(self, list_of_boosts : list):
         for board_hex in self.board.ALL_HEXES:
@@ -76,16 +78,16 @@ class BoosterSolver():
                 continue
 
             token = self.board.tokens[tokenID]
-            if not token.is_wired():
-                for boost_type, boosts in token.boosts.items():
+            if not token.wired:
+                for boost_type in token.boosts.keys():
                     if boost_type == Boost.STEAL_BOOST:
                         continue
-                    for direction in boosts:
+                    for direction in token.get_boost_directions(boost_type):
                         target_pos = self.board.go(board_hex, direction)
                         if not self.board.on_board(target_pos):
                             continue
                         target_tokenID = self.board.gen_tokenID(target_pos)
-                        if self.is_valid_target(target_tokenID, token.boost_target, token.faction):
+                        if self.is_valid_target(target_tokenID, token.state.relations.real_boost_target, token.faction):
                             list_of_boosts.append((target_tokenID, boost_type))
 
     def solve_all(self):
@@ -96,13 +98,10 @@ class BoosterSolver():
 
     def end_booster_faze(self):
         for token in self.board.tokens.values():
-            token.clever_initiative.end_booster_faze()
+            CleverInitiative.end_booster_faze(token)
 
     def melee(self, tokenID):
-        self.board.tokens[tokenID].meele_boosts += 1
-
-    def shoot(self, tokenID):
-        self.board.tokens[tokenID].shoot_boosts += 1
+        self.board.tokens[tokenID].state.modifiers.meele_boosts += 1
 
     def initiative(self, tokenID):
         self.board.tokens[tokenID].clever_initiative.initiative_boosts += 1
