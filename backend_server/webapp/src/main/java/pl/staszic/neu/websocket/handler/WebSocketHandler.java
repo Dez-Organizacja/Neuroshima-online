@@ -180,7 +180,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         String roomId = gameService.getAffiliation(clientId);
 
-        sendJson(session, response);
         if (response.getError() == null && roomId != null) {
             broadcastRoomStatus(roomId);
         }
