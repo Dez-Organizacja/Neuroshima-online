@@ -6,6 +6,7 @@ from main.utils.diff import Diff
 from main.view.state import StateViewBuilder
 from main.view.step import StepViewBuilder
 from main.actions.available.data import AvailableStructure
+from main.systems.passive_systems import PassiveSystems
 
 class ScenarioExecuter:
     def __init__(self):
@@ -47,6 +48,11 @@ class ScenarioExecuter:
         # print("SETUP")
         # print(scenario.setup)
         scenario.setup.apply(before_state)
+        PassiveSystems.compute(before_state.board)
+
+        print("AT (1, 3)", before_state.board.get_token((1, 3)))
+        print("is wired:", before_state.board.get_token((1, 3)).wired)
+
         # print("before game state")
         # before_state.print_game_state()
         # print("----------------")

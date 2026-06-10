@@ -16,10 +16,11 @@ from typing import Callable
 from main.actions.available.data import AvailableStructure
 
 # ----------- State Delta -----------
-def tile_place(pos : tuple[int, int], name : str, faction : str):
+def tile_place(pos : tuple[int, int], name : str, faction : str, rotation : int = 0):
     def apply(delta : Delta):
-        delta.board_delta.append(TilePlace(pos, name, faction))
+        delta.board_delta.append(TilePlace(pos, name, faction, rotation))
     return apply
+
 
 def tiles_remove(positions : list[tuple[int, int]]):
     def apply(delta: Delta):
@@ -80,16 +81,17 @@ def stack_index_change(index: int):
 
     return apply
 
-def stack_pop():
+def stack_pop(count : int = 1):
     def apply(delta: Delta):
-        delta.stack_delta.append(StackPop())
+        for i in range(count):
+            delta.stack_delta.append(StackPop())
 
     return apply
 
 def stack_add_game_wf(factions : list[str]):
     return stack_add(
         name=WorkflowName.GAME,
-        index=1,
+        index=5, # znaznik ustawinoy na ture drugiej frakcji (tury frakcji indexy 4-5)
         config=WorkflowConfig(factions=factions),
     )
 
@@ -148,6 +150,20 @@ def wf_data_clear():
         )
     )
 
+def faction_tiles_place(
+        faction : str,
+        positions : list[tuple[int, int]],
+        names : list[str],
+        rotations : list[int],
+):
+    if len(positions) != len(names) or len(names) != len(rotations):
+        raise ValueError("Faction tile placment wrong arrays sizes")
+    
+    return composed_function(
+        *[tile_place(pos, name, faction, rotation)
+        for pos, name,rotation in zip(positions, names, rotations)]
+    )
+            
 
 # ----------- Available Actions -----------
 def board(*positions : tuple[int, int]):
@@ -167,3 +183,4 @@ def buttons(*buttons : Button):
     def apply(actions : AvailableStructure):
         actions.buttons = list(buttons)
     return apply
+

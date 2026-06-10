@@ -27,9 +27,11 @@ class TilePlace:
     pos : tuple[int, int]
     name : str
     faction : str
+    rotation : int = 0
 
     def apply(self, state : GameState):
         state.board.put_token(pos=self.pos, name=self.name, faction=self.faction)
+        state.board.get_token(self.pos).set_rotation(self.rotation)
 
 @dataclass
 class TileRemove:

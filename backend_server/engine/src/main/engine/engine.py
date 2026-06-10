@@ -36,6 +36,7 @@ class GameEngine:
         ):
         # print("START STEP EXECUTION", step)
         # print(ctx.print_wf_stack())
+        # print(f"top {ctx.workflow_instance.name}")
         if action:
             result = step.execute(ctx, action)
         else:
@@ -43,7 +44,6 @@ class GameEngine:
         self.resolver.resolve(ctx, result)
         # print("after step execution")
         # ctx.print_wf_stack()
-        # print(f"workflow instance {ctx.workflow_instance}")
         # print("STEP EXECUTION FINISHED")
 
 
@@ -58,8 +58,6 @@ class GameEngine:
 
             self.execute_step(ctx=ctx, step=step)
 
-    def validate_action(self, ctx : ActionContext, action : UserAction):
-        pass
 
     def execute_action(self, ctx : ActionContext, action : UserAction):
         # print("########################")

@@ -1,10 +1,10 @@
-from main.state.contex import ActionContext
 from main.systems.sieciarze import Sieciarze
 from main.systems.boosters import BoosterSolver
+from main.board.board import Board
 
 class PassiveSystems:
     @staticmethod
-    def compute(ctx : ActionContext):
+    def compute(board : Board):
         # print("PASSIVE SYSTEMS RECOMPUTING")
-        Sieciarze.compute(ctx.board)
-        BoosterSolver.compute(ctx.board)
+        Sieciarze.compute(board)
+        BoosterSolver.compute(board)

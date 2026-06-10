@@ -2,26 +2,11 @@ from main.workflows.base import Workflow
 from main.workflows.data import (
     WorkflowConfig,
     WorkflowName, 
-    BATTLE_ABILITY_WORKFLOW_REGISTRY
 )
-from main.board.query import BoardQuery
-from main.rules.predicates import(
-    token_predicate,
-    NOT,
-    is_empty_at,
-)
-from main.state.contex import ActionContext
-from main.events.workflow import PushWorkflow
-from main.events.data import Event
-from main.steps.config import ResolveStepConfig, InitStepConfig
-from main.events.effects import (
-    EnqueueAttacksEffect,
-    ResolveUnitsDamageEffect,
-    MarkActivatedUnitsEffect,
-)
-from main.attacks.data import DirectedIntent
-from main.workflows.step_builders import build_end_step
+from main.steps.config import InitStepConfig
+from main.workflows.step_builders import build_end_step, build_resolve_step
 from main.systems.combat import CombatSystem
+from main.state.contex import ActionContext
 
 class InitiativeWorkflow(Workflow):
     def __init__(self, config : WorkflowConfig):
@@ -29,62 +14,19 @@ class InitiativeWorkflow(Workflow):
         self.initiative = config.initiative
         self.factions = config.factions
 
-
-    def resolve_battle_abilites(self, ctx : ActionContext) -> list[Event]:
-        positions = [
-            pos   
-            for pos in CombatSystem.get_activating_positions(ctx.board, self.initiative)
-            if ctx.board.get_token(pos).has_battle_ability
-        ]
-        
-        result = [
-            MarkActivatedUnitsEffect(
-                positions=positions, 
-                initiative=self.initiative
-            )
-        ]
-        for pos in positions:
-            ability = ctx.board.get_token(pos).get_battle_ability()
-            wf_name = BATTLE_ABILITY_WORKFLOW_REGISTRY[ability]
-            effect = PushWorkflow(name=wf_name, config=WorkflowConfig(pos=pos))
-            result.append(effect)
-        return result
-    
-    def build_decisions_step(self):
-        return ResolveStepConfig(resolve_func=self.resolve_battle_abilites)
-
-
-    def enqueue_attacks(self, ctx : ActionContext) -> list[Event]:
-        board = ctx.board
-        positions = CombatSystem.get_activating_positions(board, self.initiative)
-        attack_intents = [
-            CombatSystem.build_attack_intent(attack, pos)
-            for pos in positions
-            for attack in board.get_token(pos).get_attacks()
-        ]
-
-        return [
-            EnqueueAttacksEffect(attack_intents),
-            MarkActivatedUnitsEffect(
-                positions=positions,
-                initiative=self.initiative
-            )
-        ]
-
-    def build_attacks_gathering(self):
-        return ResolveStepConfig(resolve_func=self.enqueue_attacks)
-
     
     def build_damage_resolve_step(self):
         return InitStepConfig(
             wf_name=WorkflowName.DAMAGE_RESOLVE,
             wf_config=WorkflowConfig(factions=self.factions)
         )
-    
+
+    def resolv_attack_declaration(self, ctx : ActionContext):
+        return CombatSystem.resolve_attack_declaration(ctx, self.initiative)
+
     def _build_steps(self):
         return [
-            self.build_decisions_step(),
-            self.build_attacks_gathering(),
+            build_resolve_step(self.resolv_attack_declaration),
             self.build_damage_resolve_step(),
             build_end_step(),
         ]

@@ -102,6 +102,9 @@ class BoardToken(Token):
     def add_damage(self, damage : int):
         self.state.core.damage += damage
 
+    def get_armor(self):
+        return self.rotate_list(self.config.armor)
+
     @property
     def is_alive(self) -> bool:
         return self.config.hp > self.state.damage
@@ -111,8 +114,8 @@ class BoardToken(Token):
     def clever_initiative(self):
         return self.state.clever_initiative
 
-    def can_activate(self, initiative):
-        return not self.wired and CleverInitiative.can_activate(self, initiative)
+    # def can_activate(self, initiative):
+    #     return not self.wired and CleverInitiative.can_activate(self, initiative)
 
     def mark_activated(self, initiative : int):
         return CleverInitiative.mark_activated(self, initiative)

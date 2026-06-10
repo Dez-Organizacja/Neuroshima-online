@@ -3,9 +3,10 @@ from main.attacks.data import (
     AttackIntent,
     DirectedIntent,
     TargetedIntent,
-    
+    AttackConfig,   
 )
-from main.board.board import Board
+from main.rules.combat import CombatRules
+from main.board.board import Board, Hex
 from main.attacks.targeting.factory import TargetingFactory
 
 class TargetedResolver:
@@ -58,6 +59,7 @@ class DirectedResolver:
                 from_direction=attack.direction,
             )
             for t in targets
+            if CombatRules.is_valid_attack(attack, t, board)
         ]
     
 class AttackResolver:

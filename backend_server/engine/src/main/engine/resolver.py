@@ -16,7 +16,7 @@ class Resolver():
             ctx.state.events_queue.extend(result)
 
         if dirty:
-            PassiveSystems.compute(ctx)
+            PassiveSystems.compute(ctx.board)
     
     def resolve(self, ctx : ActionContext, result : StepResult):
         # print(f"resolving step result {result}")
