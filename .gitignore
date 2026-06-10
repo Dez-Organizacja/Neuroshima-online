@@ -7,3 +7,5 @@ webapp.zip
 frontend.zip
 backend_server.zip
 nomodules/
+
+backend_server/log/
