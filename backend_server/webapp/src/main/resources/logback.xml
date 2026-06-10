@@ -22,8 +22,8 @@
             <fileNamePattern>${LOG_ARCHIVE_DIR}/websocket-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <!-- Maksymalny rozmiar pliku -->
             <maxFileSize>10MB</maxFileSize>
-            <!-- Maksymalna historia - trzymaj logi przez 30 dni -->
-            <maxHistory>30</maxHistory>
+            <!-- Maksymalna historia - trzymaj logi przez 7 dni -->
+            <maxHistory>7</maxHistory>
         </rollingPolicy>
 
         <encoder>
@@ -37,7 +37,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>logs/archive/backend-messages-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
-            <maxHistory>30</maxHistory>
+            <maxHistory>7</maxHistory>
         </rollingPolicy>
 
         <encoder>
@@ -51,7 +51,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>logs/archive/rest-client-errors-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
-            <maxHistory>30</maxHistory>
+            <maxHistory>7</maxHistory>
         </rollingPolicy>
 
         <encoder>

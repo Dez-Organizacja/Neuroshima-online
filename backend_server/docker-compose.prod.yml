@@ -8,6 +8,8 @@ services:
   webapp:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      # Wymuszenie captchy przy rejestracji (Spring relaxed binding -> captcha.required).
+      - CAPTCHA_REQUIRED=true
     restart: unless-stopped
 
   engine:
