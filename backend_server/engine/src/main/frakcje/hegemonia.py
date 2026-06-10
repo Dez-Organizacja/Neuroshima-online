@@ -71,7 +71,7 @@ units = [
 
     unit.board("kwatermistrz", unit_count=1)
     .hp(1)
-    .boosts(types=[Boost.MEELE_TO_SHOOT], directions=[0])
+    .boosts(types=[Boost.MELEE_TO_SHOOT], directions=[0])
     .build(),
 
     unit.board("oficer1", unit_count=2)

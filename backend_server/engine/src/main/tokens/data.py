@@ -58,7 +58,7 @@ class Boost(Enum):
     MINUS_INITIATIVE = "minus_initiative"
     SET_INITIATIVE_TO_0 = "set_initiative_to_0"
     NEW_INITIATIVE = "new_initiative"
-    MEELE_TO_SHOOT = "meele_to_shoot"
+    MELEE_TO_SHOOT = "melee_to_shoot"
     MOVE_ABILITY = "move_ability"
     HEAL = "heal"
     STEAL_BOOST = "steal_boost"

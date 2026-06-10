@@ -27,15 +27,12 @@ class BoosterSolver():
 
     def kastrando_las_boosten(self):
         for board_hex in self.board.ALL_HEXES:
-            tokenID = self.board.gen_tokenID(board_hex)
-            if tokenID is None:
+            token = self.board.tokens.get(self.board.gen_tokenID(board_hex))
+            if token is None:
                 continue
 
-            token = self.board.tokens[tokenID]
-            relations = token.state.relations
-            relations.real_boost_target = token.config.boost_target
-
-            token.state.modifiers.meele_boosts = 0
+            token.state.reset_modifiers()
+            token.state.relations.real_boost_target = token.config.boost_target
             CleverInitiative.begin_initiative(token)
 
     def is_valid_target(self, tokenID : int, relation : TokenRelation, my_fraction : str) -> bool:
@@ -101,19 +98,19 @@ class BoosterSolver():
             CleverInitiative.end_booster_faze(token)
 
     def melee(self, tokenID):
-        self.board.tokens[tokenID].state.modifiers.meele_boosts += 1
+        self.board.tokens[tokenID].state.modifiers.melee_boosts += 1
 
     def initiative(self, tokenID):
-        self.board.tokens[tokenID].clever_initiative.initiative_boosts += 1
+        self.board.tokens[tokenID].state.modifiers.initiative_boosts += 1
 
     def minus_initiative(self, tokenID):
-        self.board.tokens[tokenID].clever_initiative.initiative_boosts -= 1
+        self.board.tokens[tokenID].state.modifiers.initiative_boosts -= 1
  
     def new_initiative(self, tokenID):
-        self.board.tokens[tokenID].clever_initiative.num_of_new += 1
+        self.board.tokens[tokenID].state.modifiers.num_of_new += 1
 
     def set_initiative_to_0(self, tokenID):
-        self.board.tokens[tokenID].clever_initiative.is_blocked_to_0 = True
+        self.board.tokens[tokenID].state.modifiers.is_blocked_to_0 = True
     
-    def meele_to_shoot(self, tokenID):
+    def melee_to_shoot(self, tokenID):
         return NotImplemented

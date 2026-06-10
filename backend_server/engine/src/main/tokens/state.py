@@ -77,3 +77,10 @@ class BoardTokenState:
         self.core.wired = False
         self.modifiers = TokenModifiers()
         self.relations = TokenRelations()
+
+    def reset_modifiers(self):
+        self.modifiers.melee_boosts = 0
+        self.modifiers.shoot_boosts = 0
+        self.modifiers.is_blocked_to_0 = False
+        self.modifiers.initiative_boosts = 0
+        self.modifiers.num_of_new = 0

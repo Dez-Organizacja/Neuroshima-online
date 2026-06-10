@@ -33,7 +33,7 @@ class BoardToken(Token):
     initiative: list[int] = field(default_factory=list)
     clever_initiative: CleverInitiative | None = None
 
-    meele_boosts: int = 0
+    melee_boosts: int = 0
 
     # chwilowo zadane np w trakcie bitwy
     wounds : list[int] = field(default_factory=list)
