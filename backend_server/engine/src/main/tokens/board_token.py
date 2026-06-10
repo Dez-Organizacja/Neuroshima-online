@@ -69,7 +69,7 @@ class BoardToken(Token):
         return len(self.wires) > 0
 
     def get_wire_directions(self) -> list:
-        return self.wires
+        return self.rotate_list(self.wires)
 
     # --------- rotation ----------
 

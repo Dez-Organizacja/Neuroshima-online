@@ -1,87 +1,89 @@
-# from collections import defaultdict
-# from main.board.board import Board
-# from main.systems import sieciarze
-# from main.tokens.board_token import BoardToken
+from main.board.board import Board
+from main.systems.sieciarze import Sieciarze
+from main.tokens.token_factory import TokenFactory
 
-# from main.utils.variable import *
-# from main.systems.sieciarze import Sieciarze
 
-# # from plansza import Board
+def place(board: Board, pos: tuple[int, int], name: str, faction: str, rotation: int):
+    token = TokenFactory.create(name, faction)
+    token.set_rotation(rotation)
+    board.import_token(pos, token)
 
-# class TestSieciarze:
-#     def test_sieciarze1(self):
-#         board = Board()
 
-#         # [0, 5]
-#         board.import_token((2, 4), {"name": "sieciarz", "faction": "moloch", "rotation": 1, "damage": 0})
+def compute(board: Board) -> Sieciarze:
+    sieciarze = Sieciarze(board)
+    sieciarze.kwestia_sieciarzy()
+    return sieciarze
 
-#         board.import_token((0, 4), {"name": "sieciarz", "faction": "moloch", "rotation": 3, "damage": 0})
 
-#         # [0]
-#         board.import_token((1, 3), {"name": "sieciarz", "faction": "testowa", "rotation": 2, "damage": 0})
+class TestSieciarze:
+    def test_wire_connections_use_rotated_directions(self):
+        board = Board()
 
-#         board.import_token((2, 6), {"name": "sieciarz", "faction": "testowa", "rotation": 0, "damage": 0})
+        place(board, (2, 4), "sieciarz", "moloch", rotation=1)
+        place(board, (2, 6), "sieciarz", "testowa", rotation=0)
+        place(board, (1, 5), "sieciarz", "testowa", rotation=0)
 
-#         board.import_token((1, 5), {"name": "sieciarz", "faction": "testowa", "rotation": 5, "damage": 0})
+        sieciarze = compute(board)
 
-#         # pop = defaultdict(int, {(2, 4): 1, (0, 4): 1, (1, 5): 1, (1, 3): 1, (2, 6): 2})
-#         pop = {(2, 4): 1, (0, 4): 1, (1, 5): 1, (1, 3): 1, (2, 6): 2}
-        
-#         sieciarze = Sieciarze(board)
-#         sieciarze.kwestia_sieciarzy()
+        assert sieciarze.status_sieciarzy == {
+            (2, 4): 1,
+            (2, 6): 2,
+            (1, 5): 2,
+        }
+        assert board.get_token((2, 4)).wired is False
+        assert board.get_token((2, 6)).wired is True
+        assert board.get_token((1, 5)).wired is True
 
-#         data = sieciarze.status_sieciarzy
+    def test_wire_can_reach_non_wire_targets(self):
+        board = Board()
 
-#         assert data == pop
+        place(board, (2, 4), "sieciarz", "testowa", rotation=1)
+        place(board, (2, 6), "sztab", "moloch", rotation=0)
 
-#         board.import_token((1, 1), {"name": "sieciarz", "faction": "moloch", "rotation": 1, "damage": 0})
+        sieciarze = compute(board)
 
-#         # pop = defaultdict(int, {(1, 1): 1, (2, 4): 1, (0, 4): 1, (1, 5): 2, (1, 3): 2, (2, 6): 2})
-#         pop = {(1, 1): 1, (2, 4): 1, (0, 4): 1, (1, 5): 2, (1, 3): 2, (2, 6): 2}
-        
-#         sieciarze = Sieciarze(board)
-#         sieciarze.kwestia_sieciarzy()
+        assert sieciarze.status_sieciarzy == {
+            (2, 4): 1,
+        }
+        assert board.get_token((2, 4)).wired is False
+        assert board.get_token((2, 6)).wired is True
 
-#         data = sieciarze.status_sieciarzy
+    def test_large_network_matches_expected_statuses(self):
+        board = Board()
 
-#         assert data == pop
+        place(board, (3, 3), "sieciarz", "testowa", rotation=5)
+        place(board, (2, 2), "sieciarz", "moloch", rotation=0)
+        place(board, (1, 3), "dwu-sieciarz", "testowa", rotation=1)
+        place(board, (2, 4), "sieciarz", "moloch", rotation=3)
+        place(board, (1, 5), "sztab", "moloch", rotation=0)
+        place(board, (1, 7), "sieciarz", "testowa", rotation=2)
+        place(board, (2, 8), "sieciarz", "moloch", rotation=1)
+        place(board, (3, 7), "sieciarz", "testowa", rotation=3)
+        place(board, (4, 6), "opancerzonywartownik", "moloch", rotation=2)
 
-#     # def test_sieciarze2(self):
-#     #     board = Board()
-        
-#     #     zeton = {"faction" : "testowa", "name" : "sieciarz", "ROTATION" : 5, "DAMAGE" : 0}
-#     #     board.import_token((3, 3), zeton)
+        sieciarze = compute(board)
 
-#     #     zeton = {"faction" : "moloch", "name" : "sieciarz", "ROTATION" : 0, "DAMAGE" : 0}
-#     #     board.import_token((2, 2), zeton)
+        assert sieciarze.status_sieciarzy == {
+            (1, 3): 1,
+            (1, 7): 1,
+            (2, 2): 1,
+            (2, 4): 1,
+            (2, 8): 2,
+            (3, 3): 1,
+            (3, 7): 1,
+        }
 
-#     #     zeton = {"faction" : "testowa", "name" : "dwu-sieciarz", "ROTATION" : 1, "DAMAGE" : 0}
-#     #     board.import_token((1, 3), zeton)
+        assert board.get_token((2, 8)).wired is True
+        assert board.get_token((1, 3)).wired is False
+        assert board.get_token((2, 4)).wired is False
+        assert board.get_token((3, 3)).wired is False
 
-#     #     zeton = {"faction" : "moloch", "name" : "sieciarz", "ROTATION" : 3, "DAMAGE" : 0}
-#     #     board.import_token((2, 4), zeton)
+    def test(self):
+        board = Board()
+        place(board, (2, 4), "sztab", "borgo", rotation=1)
+        place(board, (3, 3), "sieciarz", "testowa", rotation=0)
 
-#     #     zeton = {"faction" : "moloch", "name" : "sztab", "ROTATION" : 0, "DAMAGE" : 0}
-#     #     board.import_token((1, 5), zeton)
+        compute(board)
 
-#     #     zeton = {"faction" : "testowa", "name" : "sieciarz", "ROTATION" : 2, "DAMAGE" : 0}
-#     #     board.import_token((1, 7), zeton)
-
-#     #     zeton = {"faction" : "moloch", "name" : "sieciarz", "ROTATION" : 1, "DAMAGE" : 0}
-#     #     board.import_token((2, 8), zeton)
-
-#     #     zeton = {"faction" : "testowa", "name" : "sieciarz", "ROTATION" : 3, "DAMAGE" : 0}
-#     #     board.import_token((3, 7), zeton)
-
-#     #     zeton = {"faction" : "moloch", "name" : "opancerzonywartownik", "ROTATION" : 2, "DAMAGE" : 0}
-#     #     board.import_token((4, 6), zeton)
-
-#     #     sieciarze = Sieciarze(board)
-#     #     sieciarze.kwestia_sieciarzy()
-
-#     #     out = sieciarze.status_sieciarzy
-
-#     #     cout = {(1, 3): 1, (1, 5): 2, (1, 7): 1, (2, 2): 1, (2, 4): 1, (2, 8): 2, (3, 3): 1, (3, 7): 1, (4, 6): 2}
-
-#     #     # correct_output = [[1, 3, {Token.FACTION : 'testowa', Token.NAME: 'dwu-sieciarz', Token.rotation: 1, Token.damage: 0, Token.wired: False}], [1, 5, {Token.FACTION: 'moloch', Token.NAME: 'sztab', Token.rotation: 0, Token.damage: 0, Token.wired: True}], [1, 7, {Token.FACTION: 'testowa', Token.NAME: 'sieciarz', Token.rotation: 2, Token.damage: 0, Token.wired: False}], [2, 2, {Token.FACTION: 'moloch', Token.NAME: 'sieciarz', Token.rotation: 0, Token.damage: 0, Token.wired: False}], [2, 4, {Token.FACTION: 'moloch', Token.NAME: 'sieciarz', Token.rotation: 3, Token.damage: 0, Token.wired: False}], [2, 8, {Token.FACTION: 'moloch', Token.NAME: 'sieciarz', Token.rotation: 1, Token.damage: 0, Token.wired: True}], [3, 3, {Token.FACTION: 'testowa', Token.NAME: 'sieciarz', Token.rotation: 5, Token.damage: 0, Token.wired: False}], [3, 7, {Token.FACTION: 'testowa', Token.NAME: 'sieciarz', Token.rotation: 3, Token.damage: 0, Token.wired: False}], [4, 6, {Token.FACTION: 'moloch', Token.NAME: 'opancerzonywartownik', Token.rotation: 2, Token.damage: 0, Token.wired: True}]]       
-#     #     assert out == cout
+        assert board.get_token((2, 4)).wired is True
+        assert board.get_token((3, 3)).wired is False

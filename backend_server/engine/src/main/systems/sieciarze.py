@@ -38,8 +38,7 @@ class Sieciarze:
                 akt = self.board.get_token((x, y))
                 if akt is None:
                     continue
-                
-                wires = akt.wires
+
                 if not akt.can_wire():
                     continue
 
@@ -47,19 +46,17 @@ class Sieciarze:
                 self.graf_sieciarzy[(x, y)]
                 self.odwr_sieciarzy[(x, y)]
 
-                kierunki = wires
+                kierunki = akt.get_wire_directions()
 
                 for kier in kierunki:
                     nx, ny = self.board.go((x, y), kier)
-
-                    print(f"Sieciarz ({x},{y}) frakcja {akt.faction} kierunek {kier} -> ({nx},{ny}), frakcja {self.board.get_token((nx, ny)).faction if self.board.get_token((nx, ny)) is not None else 'None'} is valid: {self.board.is_valid_target((nx, ny), akt.faction)}")
 
                     if not self.board.is_valid_target((nx, ny), akt.faction):
                         continue
 
                     cel = self.board.get_token((nx, ny))
 
-                    if cel is None or not cel.can_wire():
+                    if cel is None:
                         continue
 
                     self.graf_sieciarzy[(x, y)].append((nx, ny))
@@ -237,8 +234,8 @@ class Sieciarze:
             if self.status_sieciarzy[i] != 1:
                 akt.set_wire(True)    
                 continue
-                
-            for kier in (akt.wired or []):
+
+            for kier in akt.get_wire_directions():
                 nx, ny = self.board.go(i, kier)
                 cel = self.board.get_token((nx, ny))
 
@@ -250,3 +247,5 @@ class Sieciarze:
         self.status_sieciarzy = dict(self.status_sieciarzy)
 
         # print("--------------------------------------------\n")
+
+        return self.status_sieciarzy
