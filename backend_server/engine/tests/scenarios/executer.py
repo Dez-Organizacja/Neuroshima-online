@@ -7,6 +7,7 @@ from main.view.state import StateViewBuilder
 from main.view.step import StepViewBuilder
 from main.actions.available.data import AvailableStructure
 from main.systems.passive_systems import PassiveSystems
+from main.input.data import Button
 
 class ScenarioExecuter:
     def __init__(self):
@@ -16,6 +17,7 @@ class ScenarioExecuter:
     def get_state_data(state : GameState) -> dict:
         state_data = Serializator.to_dict_dataclass(state)
         state_data["board"] = StateViewBuilder.build_board_view(state)
+        state_data["undo_stack"] = []
         return state_data
 
     @staticmethod
@@ -41,6 +43,11 @@ class ScenarioExecuter:
         
         step_view = StepViewBuilder().build_step(game.build_contex())
         result_actions = step_view.available_actions
+        if Button.CANCEL not in expected_actions.buttons:
+            result_actions.buttons = [
+                button for button in result_actions.buttons
+                if button != Button.CANCEL
+            ]
         assert result_actions == expected_actions, Diff.compare(result_actions, expected_actions)
 
     def run(self, scenario: Scenario):

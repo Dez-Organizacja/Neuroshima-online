@@ -93,3 +93,9 @@ class WorkflowInstance:
     name : WorkflowName
     current_step_index : int | None = None
     config : WorkflowConfig = field(default_factory=WorkflowConfig)
+
+@dataclass
+class UndoSnapshot:
+    workflow_name : WorkflowName
+    owner_faction : str
+    snapshot : dict

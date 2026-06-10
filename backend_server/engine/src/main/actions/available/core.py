@@ -1,7 +1,7 @@
 from main.actions.available.data import AvailableStructure
 from main.actions.available.config import AvailableActionProvider
 from main.state.contex import ActionContext
-from main.input.data import UserAction
+from main.input.data import Button, UserAction
 from typing import TypeVar
 A = TypeVar("A", bound=UserAction)
 
@@ -16,6 +16,7 @@ class AvailableActions:
             cls, 
             ctx : ActionContext,
             provider : AvailableActionProvider,
+            decision_faction : str | None = None,
         ) -> AvailableStructure:
         # print(f"provider {provider}")
         # print(f"board function {provider.get_positions}")
@@ -25,5 +26,7 @@ class AvailableActions:
         actions : AvailableStructure = AvailableStructure()
         actions.board = provider.get_positions(ctx)
         actions.buttons = provider.get_buttons(ctx)
+        if ctx.state.can_undo(decision_faction) and Button.CANCEL not in actions.buttons:
+            actions.buttons.append(Button.CANCEL)
         cls.apply_hand(actions.hand, provider.get_tokens(ctx))
         return actions

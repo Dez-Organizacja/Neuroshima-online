@@ -4,6 +4,8 @@ from main.state.contex import ActionContext
 from main.events.data import Event
 from main.events.flow import EndTurnEvent, DeleteAbove
 from main.events.effects import ClearWorkflowDataEffect, DiscardTokenEffect
+from main.events.history import RestoreUndoSnapshotEffect
+from main.events.workflow import GoToStep
 from main.workflows.data import WorkflowName, WorkflowData
 from main.input.data import(
     BoardAction, 
@@ -42,9 +44,20 @@ class ButtonHandler:
     @staticmethod
     @button_register(Button.CANCEL)
     def handle_cancel(ctx : ActionContext) -> list[Event]:
+        if not ctx.state.can_undo(ctx.decision_faction):
+            if ctx.workflow_instance.name in {
+                WorkflowName.TURN,
+                WorkflowName.HEADQUARTER_TURN,
+            }:
+                return [GoToStep(ctx.workflow_instance.current_step_index)]
+
+            return [
+                DeleteAbove(name=WorkflowName.TURN),
+                ClearWorkflowDataEffect()
+            ]
+
         return [
-            DeleteAbove(name=WorkflowName.TURN),
-            ClearWorkflowDataEffect()
+            RestoreUndoSnapshotEffect(ctx.decision_faction)
         ]
     
     @staticmethod

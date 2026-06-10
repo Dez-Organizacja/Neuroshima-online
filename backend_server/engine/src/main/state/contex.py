@@ -11,6 +11,7 @@ class ActionContext():
         self.state = state
         self.rules = rules or GameRules()
         self.consumed_input : bool = False
+        self.decision_faction : str | None = None
 
     #shortcuts
     @property

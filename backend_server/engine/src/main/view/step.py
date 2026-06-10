@@ -30,9 +30,14 @@ class StepViewBuilder:
         # print(f"action provider {wf.action_provider}")
         # print(f"positons {action_provider.get_available_positions(ctx)}")
         provider = self.build_av_actions_provider(action_provider)
+        ui_state = action_provider.get_ui_state(ctx)
         # print(f"provider {provider}")
         
         return StepViewData(
-            available_actions = AvailableActions.get_actions(ctx, provider),
-            ui_state= action_provider.get_ui_state(ctx)
+            available_actions = AvailableActions.get_actions(
+                ctx,
+                provider,
+                decision_faction=ui_state.faction,
+            ),
+            ui_state=ui_state
         )

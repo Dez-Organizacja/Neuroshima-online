@@ -7,7 +7,7 @@ from main.events.workflow import PushWorkflow
 from main.workflows.data import WorkflowConfig, WorkflowName
 from main.tokens.pile_factory import PileFactory
 from main.steps.step import Step
-from main.input.data import UserAction
+from main.input.data import Button, ButtonAction, UserAction
 
 class GameEngine:
 
@@ -59,11 +59,43 @@ class GameEngine:
             self.execute_step(ctx=ctx, step=step)
 
 
+    @staticmethod
+    def _is_cancel_action(action : UserAction) -> bool:
+        return (
+            isinstance(action, ButtonAction)
+            and action.name == Button.CANCEL
+        )
+
+    @staticmethod
+    def _get_current_decision_faction(ctx : ActionContext) -> str | None:
+        wf = WorkflowFactory.create(ctx.workflow_instance)
+        return wf.action_provider.get_ui_state(ctx).faction
+
+    @staticmethod
+    def _starts_player_action(ctx : ActionContext, step : Step) -> bool:
+        return (
+            step.requires_input
+            and ctx.workflow_instance.name in {
+                WorkflowName.TURN,
+                WorkflowName.HEADQUARTER_TURN,
+            }
+        )
+
     def execute_action(self, ctx : ActionContext, action : UserAction):
         # print("########################")
         # print(f"EXECUTING ACTION {action}")
         # print("########################")
-        self.execute_step(ctx, step=self._get_step(ctx), action=action)
+        step = self._get_step(ctx)
+        ctx.decision_faction = self._get_current_decision_faction(ctx)
+        if not self._is_cancel_action(action):
+            ctx.state.clear_undo_stack(ctx.decision_faction)
+            if self._starts_player_action(ctx, step):
+                ctx.state.create_undo_snapshot(
+                    workflow_name=ctx.workflow_instance.name,
+                    owner_faction=ctx.decision_faction,
+                )
+
+        self.execute_step(ctx, step=step, action=action)
         self.run_until_input_required(ctx)
 
     def _setup_players(self, ctx : ActionContext):
