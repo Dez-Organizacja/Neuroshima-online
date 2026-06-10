@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Rejestracja — Game Backend</title>
+  <style>
+    body { margin:0; font-family: system-ui, sans-serif; background:#0f1115; color:#e6e8ec;
+           display:flex; min-height:100vh; align-items:center; justify-content:center; padding:24px; }
+    form { background:#191c23; border:1px solid #262b35; border-radius:14px; padding:32px; width:100%; max-width:380px; }
+    h1 { font-size:1.3rem; margin:0 0 20px; }
+    label { display:block; font-size:.85rem; color:#9aa3b2; margin:14px 0 6px; }
+    input { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #2f3744; background:#11141a; color:#e6e8ec; font-size:.95rem; }
+    button { width:100%; margin-top:22px; padding:11px; border:0; border-radius:8px; background:#4f8cff; color:#fff; font-weight:600; font-size:.95rem; cursor:pointer; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    .captcha { margin-top:18px; }
+    .msg { margin-top:16px; font-size:.88rem; min-height:1.2em; }
+    .msg.err { color:#f87171; } .msg.ok { color:#34d399; }
+    a { color:#9aa3b2; font-size:.85rem; display:inline-block; margin-top:18px; }
+  </style>
+</head>
+<body>
+  <form id="f">
+    <h1>Rejestracja</h1>
+    <div id="disabled" style="display:none; color:#f87171;">Rejestracja jest obecnie wyłączona.</div>
+    <div id="fields">
+      <label for="u">Nazwa użytkownika</label>
+      <input id="u" autocomplete="username" required>
+      <label for="p">Hasło</label>
+      <input id="p" type="password" autocomplete="new-password" required minlength="6">
+      <div id="captchaBox" class="captcha" style="display:none;">
+        <label>Przepisz kod z obrazka</label>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <img id="captchaImg" alt="captcha" width="170" height="60" style="border-radius:8px; background:#fff;">
+          <button type="button" id="captchaReload" title="Odśwież obrazek"
+                  style="width:auto; margin:0; padding:8px 11px; background:#2f3744;">↻</button>
+        </div>
+        <input id="capa" autocomplete="off" placeholder="Kod z obrazka">
+      </div>
+      <button type="submit" id="submit">Załóż konto</button>
+    </div>
+    <div id="msg" class="msg"></div>
+    <a href="/">← strona główna</a>
+  </form>
+
+  <script>
+    const msg = document.getElementById('msg');
+    let captchaRequired = false, captchaId = '';
+
+    // Pobiera nowe wyzwanie CAPTCHA (obrazek + identyfikator) z serwera.
+    async function loadCaptcha() {
+      try {
+        const c = await (await fetch('/api/auth/captcha')).json();
+        captchaId = c.captchaId || '';
+        document.getElementById('captchaImg').src = c.image || '';
+        document.getElementById('capa').value = '';
+      } catch {
+        msg.className = 'msg err'; msg.textContent = 'Nie udało się pobrać CAPTCHA';
+      }
+    }
+
+    async function init() {
+      let cfg;
+      try { cfg = await (await fetch('/api/auth/registration-config')).json(); }
+      catch { msg.className = 'msg err'; msg.textContent = 'Nie udało się pobrać konfiguracji'; return; }
+
+      if (!cfg.registrationEnabled) {
+        document.getElementById('fields').style.display = 'none';
+        document.getElementById('disabled').style.display = 'block';
+        return;
+      }
+
+      captchaRequired = !!cfg.captchaRequired;
+      if (captchaRequired) {
+        document.getElementById('captchaBox').style.display = 'block';
+        document.getElementById('captchaReload').addEventListener('click', loadCaptcha);
+        await loadCaptcha();
+      }
+    }
+
+    document.getElementById('f').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const captchaAnswer = captchaRequired ? document.getElementById('capa').value.trim() : '';
+      if (captchaRequired && !captchaAnswer) {
+        msg.className = 'msg err'; msg.textContent = 'Przepisz kod z obrazka'; return;
+      }
+      msg.className = 'msg'; msg.textContent = 'Rejestracja…';
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u.value, password: p.value, captchaId, captchaAnswer })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          msg.className = 'msg ok'; msg.textContent = 'Konto utworzone. Możesz się zalogować.';
+        } else {
+          msg.className = 'msg err'; msg.textContent = data.error || 'Błąd rejestracji';
+          if (captchaRequired) await loadCaptcha(); // wyzwanie jest jednorazowe - pobierz nowe
+        }
+      } catch {
+        msg.className = 'msg err'; msg.textContent = 'Błąd połączenia';
+        if (captchaRequired) await loadCaptcha();
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

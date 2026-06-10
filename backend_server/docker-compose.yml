@@ -1,12 +1,12 @@
-version: '3.8'
-
 services:
   engine:
     build:
       context: ./engine
       dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
+    # Engine NIE jest wystawiany publicznie - nie ma własnej autoryzacji.
+    # Dostępny tylko wewnątrz sieci docker jako http://engine:5000 (woła go webapp).
+    expose:
+      - "5000"
     volumes:
       - ./log:/app/src/log
 
@@ -14,8 +14,9 @@ services:
     build:
       context: ./webapp
       dockerfile: Dockerfile
+    # Słucha tylko na loopback hosta - z internetu dostęp wyłącznie przez nginx (reverse proxy).
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     volumes:
       - ./log:/app/logs
       - ./webapp/db:/app/db

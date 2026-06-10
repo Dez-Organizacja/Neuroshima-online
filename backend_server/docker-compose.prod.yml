@@ -1,0 +1,14 @@
+# Nakladka produkcyjna na docker-compose.yml
+# Uruchamiane przez start-prod.sh:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# Captcha jest self-hosted (obrazkowa) - nie potrzeba zadnych sekretow ani pliku .env.
+
+services:
+  webapp:
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    restart: unless-stopped
+
+  engine:
+    restart: unless-stopped

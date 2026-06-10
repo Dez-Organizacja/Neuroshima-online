@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Logowanie — Game Backend</title>
+  <style>
+    body { margin:0; font-family: system-ui, sans-serif; background:#0f1115; color:#e6e8ec;
+           display:flex; min-height:100vh; align-items:center; justify-content:center; padding:24px; }
+    form { background:#191c23; border:1px solid #262b35; border-radius:14px; padding:32px; width:100%; max-width:380px; }
+    h1 { font-size:1.3rem; margin:0 0 20px; }
+    label { display:block; font-size:.85rem; color:#9aa3b2; margin:14px 0 6px; }
+    input { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #2f3744; background:#11141a; color:#e6e8ec; font-size:.95rem; }
+    button { width:100%; margin-top:22px; padding:11px; border:0; border-radius:8px; background:#4f8cff; color:#fff; font-weight:600; font-size:.95rem; cursor:pointer; }
+    .msg { margin-top:16px; font-size:.88rem; min-height:1.2em; }
+    .msg.err { color:#f87171; } .msg.ok { color:#34d399; word-break:break-all; }
+    a { color:#9aa3b2; font-size:.85rem; display:inline-block; margin-top:18px; }
+  </style>
+</head>
+<body>
+  <form id="f">
+    <h1>Logowanie</h1>
+    <label for="u">Nazwa użytkownika</label>
+    <input id="u" autocomplete="username" required>
+    <label for="p">Hasło</label>
+    <input id="p" type="password" autocomplete="current-password" required>
+    <button type="submit">Zaloguj</button>
+    <div id="msg" class="msg"></div>
+    <a href="/">← strona główna</a>
+  </form>
+  <script>
+    const f = document.getElementById('f'), msg = document.getElementById('msg');
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.className = 'msg'; msg.textContent = 'Logowanie…';
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u.value, password: p.value })
+        });
+        const data = await res.json();
+        if (res.ok) { msg.className = 'msg ok'; msg.textContent = 'Zalogowano. Token: ' + data.token; }
+        else { msg.className = 'msg err'; msg.textContent = data.error || 'Błąd logowania'; }
+      } catch { msg.className = 'msg err'; msg.textContent = 'Błąd połączenia'; }
+    });
+  </script>
+</body>
+</html>

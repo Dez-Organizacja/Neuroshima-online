@@ -1,9 +1,11 @@
 package pl.staszic.neu.websocket.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import pl.staszic.neu.security.config.SecurityConfig;
 import pl.staszic.neu.security.websocket.AuthHandshakeHandler;
 import pl.staszic.neu.security.websocket.AuthHandshakeInterceptor;
 import pl.staszic.neu.websocket.handler.WebSocketHandler;
@@ -21,6 +23,10 @@ public class WebSocketConfig implements WebSocketConfigurer {
     private final WebSocketHandler webSocketHandler;
     private final AuthHandshakeInterceptor authHandshakeInterceptor;
     private final AuthHandshakeHandler authHandshakeHandler;
+
+    // Te same originy co CORS REST; na produkcji ustaw https://twoja-domena.
+    @Value("${app.cors.allowed-origins:http://localhost:5173,http://localhost:3000,http://localhost:8080}")
+    private String allowedOrigins;
 
     public WebSocketConfig(
         WebSocketHandler webSocketHandler,
@@ -46,7 +52,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
             .addInterceptors(authHandshakeInterceptor)
             // Ustaw handler do obsługi handshake
             .setHandshakeHandler(authHandshakeHandler)
-            // Zezwól na połączenia z dowolnego origin (CORS)
-            .setAllowedOrigins("*");
+            // Zezwól na połączenia tylko z dozwolonych originów (nie wildcard)
+            .setAllowedOrigins(SecurityConfig.parseOrigins(allowedOrigins).toArray(String[]::new));
     }
 }

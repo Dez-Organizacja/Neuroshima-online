@@ -8,11 +8,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.staszic.neu.security.repo.UserRepository;
+import pl.staszic.neu.security.service.CaptchaService;
 import pl.staszic.neu.security.service.TokenAuthService;
 
 import java.util.Map;
@@ -25,23 +28,65 @@ public class AuthController {
     private final TokenAuthService tokenAuthService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CaptchaService captchaService;
+
+    // Czy rejestracja przez API jest dostępna. Domyślnie true (odblokowana).
+    // Na produkcji ustaw auth.registration.enabled=false aby zablokować.
+    @Value("${auth.registration.enabled:true}")
+    private boolean registrationEnabled;
 
     public AuthController(
         AuthenticationManager authenticationManager,
         TokenAuthService tokenAuthService,
         UserRepository userRepository,
-        PasswordEncoder passwordEncoder
+        PasswordEncoder passwordEncoder,
+        CaptchaService captchaService
     ) {
         this.authenticationManager = authenticationManager;
         this.tokenAuthService = tokenAuthService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.captchaService = captchaService;
+    }
+
+    /**
+     * Konfiguracja rejestracji dla frontu (czy włączona + czy wymagana captcha).
+     */
+    @GetMapping("/registration-config")
+    public Map<String, Object> registrationConfig() {
+        return Map.of(
+            "registrationEnabled", registrationEnabled,
+            "captchaRequired", captchaService.isRequired()
+        );
+    }
+
+    /**
+     * Wystawia nowe wyzwanie CAPTCHA (obrazek + identyfikator).
+     * Klient pokazuje obraz, użytkownik przepisuje kod, a klient odsyła captchaId + captchaAnswer
+     * w żądaniu rejestracji. Wyzwanie jest jednorazowe i wygasa po krótkim czasie (TTL).
+     */
+    @GetMapping("/captcha")
+    public ResponseEntity<?> captcha() {
+        if (!registrationEnabled) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "registration disabled"));
+        }
+        CaptchaService.IssuedCaptcha challenge = captchaService.issue();
+        return ResponseEntity.ok(Map.of(
+            "captchaId", challenge.captchaId(),
+            "image", challenge.image()
+        ));
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AuthRequest request) {
+        if (!registrationEnabled) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "registration disabled"));
+        }
         if (request == null || isBlank(request.username()) || isBlank(request.password())) {
             return ResponseEntity.badRequest().body(Map.of("error", "username i password są wymagane"));
+        }
+        if (!captchaService.verify(request.captchaId(), request.captchaAnswer())) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Weryfikacja CAPTCHA nieudana"));
         }
 
         try {
@@ -74,7 +119,7 @@ public class AuthController {
         return value == null || value.isBlank();
     }
 
-    public record AuthRequest(String username, String password) {
+    public record AuthRequest(String username, String password, String captchaId, String captchaAnswer) {
     }
 
     public record AuthResponse(String token, String expiresAt, String username) {

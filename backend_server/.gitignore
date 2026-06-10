@@ -1,0 +1,7 @@
+# Sekrety produkcyjne - nie commitowac
+.env
+
+# Logi i bazy
+/log/
+webapp/db/
+webapp/users.db

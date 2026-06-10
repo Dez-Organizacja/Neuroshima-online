@@ -225,3 +225,180 @@ java.io.EOFException: null
 2026-06-06 20:09:25.491 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-06-06 20:09:25.495 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2026-06-06 20:09:25.498 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-10 19:02:59.171 [main] INFO  pl.staszic.neu.Main - Starting Main using Java 17.0.19 with PID 1 (/app/app.jar started by root in /app)
+2026-06-10 19:02:59.172 [main] INFO  pl.staszic.neu.Main - No active profile set, falling back to 1 default profile: "default"
+2026-06-10 19:02:59.452 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-10 19:02:59.483 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 28 ms. Found 1 JPA repository interfaces.
+2026-06-10 19:02:59.742 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2026-06-10 19:02:59.748 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-10 19:02:59.748 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-10 19:02:59.748 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.1]
+2026-06-10 19:02:59.783 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-06-10 19:02:59.783 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 591 ms
+2026-06-10 19:02:59.871 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-10 19:02:59.894 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.1.5.Final
+2026-06-10 19:02:59.962 [main] WARN  org.hibernate.orm.deprecation - HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+2026-06-10 19:03:00.012 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-10 19:03:00.082 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@3fcdcf
+2026-06-10 19:03:00.084 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-10 19:03:00.093 [main] INFO  SQL dialect - HHH000400: Using dialect: org.hibernate.community.dialect.SQLiteDialect
+2026-06-10 19:03:00.375 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-06-10 19:03:00.379 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-10 19:03:00.593 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-10 19:03:00.633 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2026-06-10 19:03:00.673 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@c3edf4c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5af8bb51, org.springframework.security.web.context.SecurityContextHolderFilter@1422ac7f, org.springframework.security.web.header.HeaderWriterFilter@77bbadc, org.springframework.web.filter.CorsFilter@799ed4e8, org.springframework.security.web.authentication.logout.LogoutFilter@6e0c6a7a, pl.staszic.neu.security.TokenAuthFilter@654d8173, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7bc44ce8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@58472096, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2e66bc32, org.springframework.security.web.session.SessionManagementFilter@6f94a5a5, org.springframework.security.web.access.ExceptionTranslationFilter@4d41ba0f, org.springframework.security.web.access.intercept.AuthorizationFilter@2aff9dff]
+2026-06-10 19:03:00.778 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-10 19:03:00.798 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2026-06-10 19:03:00.810 [main] INFO  pl.staszic.neu.Main - Started Main in 1.787 seconds (process running for 2.145)
+2026-06-10 19:03:31.445 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-10 19:03:31.446 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-10 19:03:31.446 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2026-06-10 19:03:37.122 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Authenticated client uwu connected as session: 97d69330-d190-60b4-f62b-edb10a9871e0
+2026-06-10 19:03:37.122 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Authenticated client uwu connected as session: 8112aada-2823-4816-0ce2-90ee29c3937e
+2026-06-10 19:03:37.126 [http-nio-8080-exec-3] ERROR p.s.n.w.handler.WebSocketHandler - WebSocket error for client 8112aada-2823-4816-0ce2-90ee29c3937e: null
+java.io.EOFException: null
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.fillReadBuffer(NioEndpoint.java:1290)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.read(NioEndpoint.java:1177)
+	at org.apache.tomcat.websocket.server.WsFrameServer.onDataAvailable(WsFrameServer.java:75)
+	at org.apache.tomcat.websocket.server.WsFrameServer.doOnDataAvailable(WsFrameServer.java:183)
+	at org.apache.tomcat.websocket.server.WsFrameServer.notifyDataAvailable(WsFrameServer.java:162)
+	at org.apache.tomcat.websocket.server.WsHttpUpgradeHandler.upgradeDispatch(WsHttpUpgradeHandler.java:157)
+	at org.apache.coyote.http11.upgrade.UpgradeProcessorInternal.dispatch(UpgradeProcessorInternal.java:60)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:59)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:861)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1739)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2026-06-10 19:03:37.127 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Client disconnected: {"clientId":"8112aada-2823-4816-0ce2-90ee29c3937e","messageType":"DISCONNECTION","message":"Client disconnected with status: 1006","timestamp":"2026-06-10T19:03:37.127600631"}
+2026-06-10 19:03:37.128 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Message received from uwu: {"messageType":"GETROOMSLIST_REQUEST"}
+2026-06-10 19:03:37.131 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Rooms list sent to client 97d69330-d190-60b4-f62b-edb10a9871e0
+2026-06-10 19:31:31.829 [SpringApplicationShutdownHook] INFO  p.s.n.w.handler.WebSocketHandler - Client disconnected: {"clientId":"97d69330-d190-60b4-f62b-edb10a9871e0","messageType":"DISCONNECTION","message":"Client disconnected with status: 1001","timestamp":"2026-06-10T19:31:31.828759445"}
+2026-06-10 19:31:31.838 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-10 19:31:31.841 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-10 19:31:31.844 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-10 19:31:32.900 [main] INFO  pl.staszic.neu.Main - Starting Main using Java 17.0.19 with PID 1 (/app/app.jar started by root in /app)
+2026-06-10 19:31:32.901 [main] INFO  pl.staszic.neu.Main - No active profile set, falling back to 1 default profile: "default"
+2026-06-10 19:31:33.174 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-10 19:31:33.204 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 1 JPA repository interfaces.
+2026-06-10 19:31:33.444 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2026-06-10 19:31:33.448 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-10 19:31:33.449 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-10 19:31:33.449 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.1]
+2026-06-10 19:31:33.481 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-06-10 19:31:33.481 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 561 ms
+2026-06-10 19:31:33.568 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-10 19:31:33.591 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.1.5.Final
+2026-06-10 19:31:33.659 [main] WARN  org.hibernate.orm.deprecation - HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+2026-06-10 19:31:33.708 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-10 19:31:33.778 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@7ee55e70
+2026-06-10 19:31:33.780 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-10 19:31:33.791 [main] INFO  SQL dialect - HHH000400: Using dialect: org.hibernate.community.dialect.SQLiteDialect
+2026-06-10 19:31:34.078 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-06-10 19:31:34.081 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-10 19:31:34.286 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-10 19:31:34.333 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2026-06-10 19:31:34.370 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5f0f9947, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1aad0b1, org.springframework.security.web.context.SecurityContextHolderFilter@455c1d8c, org.springframework.security.web.header.HeaderWriterFilter@4d41ba0f, org.springframework.web.filter.CorsFilter@c3edf4c, org.springframework.security.web.authentication.logout.LogoutFilter@62dbe64e, pl.staszic.neu.security.TokenAuthFilter@654d8173, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1422ac7f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7bc44ce8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5af8bb51, org.springframework.security.web.session.SessionManagementFilter@25ad4f71, org.springframework.security.web.access.ExceptionTranslationFilter@3ee0b4f7, org.springframework.security.web.access.intercept.AuthorizationFilter@6c3659be]
+2026-06-10 19:31:34.463 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-10 19:31:34.473 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2026-06-10 19:31:34.481 [main] INFO  pl.staszic.neu.Main - Started Main in 1.725 seconds (process running for 2.002)
+2026-06-10 19:31:50.721 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-10 19:31:50.721 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-10 19:31:50.722 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-06-10 19:31:55.715 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Authenticated client gracz2 connected as session: b9765ce9-b5d6-59b2-a9db-9dca65ee5292
+2026-06-10 19:31:55.715 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Authenticated client gracz2 connected as session: c7cdc84e-a155-5411-2bca-c326475a873b
+2026-06-10 19:31:55.718 [http-nio-8080-exec-3] ERROR p.s.n.w.handler.WebSocketHandler - WebSocket error for client c7cdc84e-a155-5411-2bca-c326475a873b: null
+java.io.EOFException: null
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.fillReadBuffer(NioEndpoint.java:1290)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.read(NioEndpoint.java:1177)
+	at org.apache.tomcat.websocket.server.WsFrameServer.onDataAvailable(WsFrameServer.java:75)
+	at org.apache.tomcat.websocket.server.WsFrameServer.doOnDataAvailable(WsFrameServer.java:183)
+	at org.apache.tomcat.websocket.server.WsFrameServer.notifyDataAvailable(WsFrameServer.java:162)
+	at org.apache.tomcat.websocket.server.WsHttpUpgradeHandler.upgradeDispatch(WsHttpUpgradeHandler.java:157)
+	at org.apache.coyote.http11.upgrade.UpgradeProcessorInternal.dispatch(UpgradeProcessorInternal.java:60)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:59)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:861)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1739)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2026-06-10 19:31:55.720 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Client disconnected: {"clientId":"c7cdc84e-a155-5411-2bca-c326475a873b","messageType":"DISCONNECTION","message":"Client disconnected with status: 1006","timestamp":"2026-06-10T19:31:55.720482805"}
+2026-06-10 19:31:55.720 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Message received from gracz2: {"messageType":"GETROOMSLIST_REQUEST"}
+2026-06-10 19:31:55.724 [http-nio-8080-exec-8] INFO  p.s.n.w.handler.WebSocketHandler - Rooms list sent to client b9765ce9-b5d6-59b2-a9db-9dca65ee5292
+2026-06-10 19:32:28.082 [http-nio-8080-exec-6] INFO  p.s.n.w.handler.WebSocketHandler - Client disconnected: {"clientId":"b9765ce9-b5d6-59b2-a9db-9dca65ee5292","messageType":"DISCONNECTION","message":"Client disconnected with status: 1001","timestamp":"2026-06-10T19:32:28.082180771"}
+2026-06-10 19:32:32.207 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-10 19:32:32.210 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-10 19:32:32.210 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-10 19:37:16.054 [main] INFO  pl.staszic.neu.Main - Starting Main using Java 17.0.19 with PID 1 (/app/app.jar started by root in /app)
+2026-06-10 19:37:16.055 [main] INFO  pl.staszic.neu.Main - No active profile set, falling back to 1 default profile: "default"
+2026-06-10 19:37:16.330 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-10 19:37:16.360 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 26 ms. Found 1 JPA repository interfaces.
+2026-06-10 19:37:16.604 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2026-06-10 19:37:16.609 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-10 19:37:16.610 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-10 19:37:16.610 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.1]
+2026-06-10 19:37:16.640 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-06-10 19:37:16.641 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 567 ms
+2026-06-10 19:37:16.725 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-10 19:37:16.747 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.1.5.Final
+2026-06-10 19:37:16.816 [main] WARN  org.hibernate.orm.deprecation - HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+2026-06-10 19:37:16.865 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-10 19:37:16.929 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@7ee55e70
+2026-06-10 19:37:16.930 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-10 19:37:16.941 [main] INFO  SQL dialect - HHH000400: Using dialect: org.hibernate.community.dialect.SQLiteDialect
+2026-06-10 19:37:17.229 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-06-10 19:37:17.232 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-10 19:37:17.444 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-10 19:37:17.496 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2026-06-10 19:37:17.552 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2aff9dff, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5f0f9947, org.springframework.security.web.context.SecurityContextHolderFilter@6f94a5a5, org.springframework.security.web.header.HeaderWriterFilter@79b84841, org.springframework.web.filter.CorsFilter@1aad0b1, org.springframework.security.web.authentication.logout.LogoutFilter@5b5e7036, pl.staszic.neu.security.TokenAuthFilter@654d8173, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@a451491, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5e519ad3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@c3edf4c, org.springframework.security.web.session.SessionManagementFilter@7fdab70c, org.springframework.security.web.access.ExceptionTranslationFilter@56a4f272, org.springframework.security.web.access.intercept.AuthorizationFilter@65e21ce3]
+2026-06-10 19:37:17.651 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-10 19:37:17.662 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2026-06-10 19:37:17.672 [main] INFO  pl.staszic.neu.Main - Started Main in 1.765 seconds (process running for 2.049)
+2026-06-10 19:37:20.563 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-10 19:37:20.563 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-10 19:37:20.564 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-06-10 19:37:52.405 [http-nio-8080-exec-9] INFO  p.s.n.w.handler.WebSocketHandler - Authenticated client gracz3 connected as session: 7cab9623-2d57-a4eb-5e0b-50c8b5fd3f7d
+2026-06-10 19:37:52.405 [http-nio-8080-exec-10] INFO  p.s.n.w.handler.WebSocketHandler - Authenticated client gracz3 connected as session: f1d0fd5b-bcb3-6a99-1634-c66d80dc2443
+2026-06-10 19:37:52.408 [http-nio-8080-exec-9] ERROR p.s.n.w.handler.WebSocketHandler - WebSocket error for client 7cab9623-2d57-a4eb-5e0b-50c8b5fd3f7d: null
+java.io.EOFException: null
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.fillReadBuffer(NioEndpoint.java:1290)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.read(NioEndpoint.java:1177)
+	at org.apache.tomcat.websocket.server.WsFrameServer.onDataAvailable(WsFrameServer.java:75)
+	at org.apache.tomcat.websocket.server.WsFrameServer.doOnDataAvailable(WsFrameServer.java:183)
+	at org.apache.tomcat.websocket.server.WsFrameServer.notifyDataAvailable(WsFrameServer.java:162)
+	at org.apache.tomcat.websocket.server.WsHttpUpgradeHandler.upgradeDispatch(WsHttpUpgradeHandler.java:157)
+	at org.apache.coyote.http11.upgrade.UpgradeProcessorInternal.dispatch(UpgradeProcessorInternal.java:60)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:59)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:861)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1739)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2026-06-10 19:37:52.410 [http-nio-8080-exec-9] INFO  p.s.n.w.handler.WebSocketHandler - Client disconnected: {"clientId":"7cab9623-2d57-a4eb-5e0b-50c8b5fd3f7d","messageType":"DISCONNECTION","message":"Client disconnected with status: 1006","timestamp":"2026-06-10T19:37:52.410203196"}
+2026-06-10 19:37:52.411 [http-nio-8080-exec-10] INFO  p.s.n.w.handler.WebSocketHandler - Message received from gracz3: {"messageType":"GETROOMSLIST_REQUEST"}
+2026-06-10 19:37:52.414 [http-nio-8080-exec-10] INFO  p.s.n.w.handler.WebSocketHandler - Rooms list sent to client f1d0fd5b-bcb3-6a99-1634-c66d80dc2443
+2026-06-10 19:37:55.234 [http-nio-8080-exec-2] INFO  p.s.n.w.handler.WebSocketHandler - Message received from gracz3: {"messageType":"CREATENEWROOM_REQUEST","roomId":"a","playerName":"gracz3"}
+2026-06-10 19:37:55.243 [http-nio-8080-exec-2] INFO  p.s.n.w.handler.WebSocketHandler - Broadcasting room status to client f1d0fd5b-bcb3-6a99-1634-c66d80dc2443 in room a
+2026-06-10 19:37:55.252 [http-nio-8080-exec-2] INFO  p.s.n.w.handler.WebSocketHandler - Room created: {"messageType":"CREATENEWROOM_RESPONSE","timestamp":"2026-06-10T19:37:55.240368391","clientId":"f1d0fd5b-bcb3-6a99-1634-c66d80dc2443","createdRoomId":"a","serverStatus":"STARTED room=a player=gracz3"}
+2026-06-10 19:37:57.610 [http-nio-8080-exec-1] INFO  p.s.n.w.handler.WebSocketHandler - Message received from gracz3: {"messageType":"SETINROOMATTRIBUTES_REQUEST","status":"active","faction":"moloch"}
+2026-06-10 19:37:57.618 [http-nio-8080-exec-1] INFO  p.s.n.w.handler.WebSocketHandler - Broadcasting room status to client f1d0fd5b-bcb3-6a99-1634-c66d80dc2443 in room a
+2026-06-10 19:37:57.618 [http-nio-8080-exec-1] INFO  p.s.n.w.handler.WebSocketHandler - Attributes updated: {"messageType":"SETINROOMATTRIBUTES_RESPONSE","timestamp":"2026-06-10T19:37:57.616942617","clientId":"f1d0fd5b-bcb3-6a99-1634-c66d80dc2443","serverStatus":"Attributes successfully changed in room=a","faction":"moloch","status":"active"}
+2026-06-10 19:38:08.074 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Message received from gracz3: {"messageType":"SETINROOMATTRIBUTES_REQUEST","status":"active","faction":"moloch"}
+2026-06-10 19:38:08.075 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Broadcasting room status to client f1d0fd5b-bcb3-6a99-1634-c66d80dc2443 in room a
+2026-06-10 19:38:08.077 [http-nio-8080-exec-3] INFO  p.s.n.w.handler.WebSocketHandler - Attributes updated: {"messageType":"SETINROOMATTRIBUTES_RESPONSE","timestamp":"2026-06-10T19:38:08.074939427","clientId":"f1d0fd5b-bcb3-6a99-1634-c66d80dc2443","serverStatus":"Attributes successfully changed in room=a","faction":"moloch","status":"active"}
+2026-06-10 19:38:10.010 [http-nio-8080-exec-5] INFO  p.s.n.w.handler.WebSocketHandler - Message received from gracz3: {"messageType":"LEAVEROOM_REQUEST","roomId":"a","playerName":"gracz3"}
+2026-06-10 19:38:10.017 [http-nio-8080-exec-5] INFO  p.s.n.w.handler.WebSocketHandler - Room left: {"messageType":"LEAVEROOM_RESPONSE","timestamp":"2026-06-10T19:38:10.014168416","clientId":"f1d0fd5b-bcb3-6a99-1634-c66d80dc2443","serverStatus":"LEFT room=a player=gracz3"}
+2026-06-10 19:38:10.053 [http-nio-8080-exec-4] INFO  p.s.n.w.handler.WebSocketHandler - Message received from gracz3: {"messageType":"GETROOMSLIST_REQUEST"}
+2026-06-10 19:38:10.053 [http-nio-8080-exec-4] INFO  p.s.n.w.handler.WebSocketHandler - Rooms list sent to client f1d0fd5b-bcb3-6a99-1634-c66d80dc2443
+2026-06-10 19:38:10.054 [http-nio-8080-exec-4] INFO  p.s.n.w.handler.WebSocketHandler - Message received from gracz3: {"messageType":"GETROOMSLIST_REQUEST"}
+2026-06-10 19:38:10.054 [http-nio-8080-exec-4] INFO  p.s.n.w.handler.WebSocketHandler - Rooms list sent to client f1d0fd5b-bcb3-6a99-1634-c66d80dc2443
+2026-06-10 19:38:12.873 [http-nio-8080-exec-6] INFO  p.s.n.w.handler.WebSocketHandler - Client disconnected: {"clientId":"f1d0fd5b-bcb3-6a99-1634-c66d80dc2443","messageType":"DISCONNECTION","message":"Client disconnected with status: 1001","timestamp":"2026-06-10T19:38:12.872618273"}
+2026-06-10 19:38:19.973 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-10 19:38:19.975 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-10 19:38:19.976 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
