@@ -11,9 +11,11 @@ from .data import (
     StackSetIndex,
 )
 from main.workflows.data import WorkflowName, WorkflowInstance, WorkflowConfig
-from main.input.data import ActionType
+from main.input.data import ActionType, Button
 from typing import Callable
-    
+from main.actions.available.data import AvailableStructure
+
+# ----------- State Delta -----------
 def tile_place(pos : tuple[int, int], name : str, faction : str):
     def apply(delta : Delta):
         delta.board_delta.append(TilePlace(pos, name, faction))
@@ -112,7 +114,7 @@ def expected_step_index(index: int):
 
     return apply
 
-def composed_function(*funcs : list[Callable[[Delta], None]]):
+def composed_function(*funcs : Callable[[Delta], None]):
     def apply(delta : Delta):
         for func in funcs:
             func(delta)
@@ -120,7 +122,7 @@ def composed_function(*funcs : list[Callable[[Delta], None]]):
 
 def pushing_hand_wf_changes(slot : int):
     return composed_function(
-        wf_data_delta(slot=0, type=ActionType.HAND),
+        wf_data_delta(slot=slot, type=ActionType.HAND),
         stack_index_change(index=4),
         stack_add(name=WorkflowName.HAND, index=1),
     )
@@ -145,3 +147,23 @@ def wf_data_clear():
             decision=None,
         )
     )
+
+
+# ----------- Available Actions -----------
+def board(*positions : tuple[int, int]):
+    def apply(actions : AvailableStructure):
+        actions.board = list(positions)
+
+    return apply
+
+def tokens(*tokens : int):
+    def apply(actions : AvailableStructure):
+        for i in tokens:
+            actions.hand[i] = True
+
+    return apply
+
+def buttons(*buttons : Button):
+    def apply(actions : AvailableStructure):
+        actions.buttons = list(buttons)
+    return apply

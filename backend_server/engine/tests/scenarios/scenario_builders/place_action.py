@@ -5,7 +5,7 @@ from main.input.data import BoardAction, HandAction, ActionType, RotationAction
 from main.state.game_state import GameState
 from main.state.contex import ActionContext
 from main.workflows.data import WorkflowName, WorkflowConfig
-from ..delta_ops import *
+from ..build_helpers import *
 
 @ScenarioRegistry.register("place_action")
 def place_action_scenario() -> Scenario:

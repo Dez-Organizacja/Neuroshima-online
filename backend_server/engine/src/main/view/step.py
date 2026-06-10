@@ -33,6 +33,6 @@ class StepViewBuilder:
         # print(f"provider {provider}")
         
         return StepViewData(
-            available_actions= AvailableActions().get_actions(ctx, provider),
+            available_actions = AvailableActions.get_actions(ctx, provider),
             ui_state= action_provider.get_ui_state(ctx)
         )

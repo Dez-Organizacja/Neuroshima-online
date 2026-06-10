@@ -5,5 +5,6 @@ from main.systems.boosters import BoosterSolver
 class PassiveSystems:
     @staticmethod
     def compute(ctx : ActionContext):
+        # print("PASSIVE SYSTEMS RECOMPUTING")
         Sieciarze.compute(ctx.board)
-        # BoosterSolver.compute(ctx.board)
+        BoosterSolver.compute(ctx.board)

@@ -1,21 +1,19 @@
 from main.actions.available.data import AvailableStructure
 from main.actions.available.config import AvailableActionProvider
-from main.actions.available.builder import AvailableActionsBuilder
 from main.state.contex import ActionContext
 from main.input.data import UserAction
 from typing import TypeVar
 A = TypeVar("A", bound=UserAction)
 
 class AvailableActions:
-    def __init__(self):
-        self.builder = AvailableActionsBuilder()
-
-    def apply_hand(self, hand, hand_result):
+    @staticmethod
+    def apply_hand(hand, hand_result):
         for idx in hand_result:
             hand[idx] = True
 
+    @classmethod
     def get_actions(
-            self, 
+            cls, 
             ctx : ActionContext,
             provider : AvailableActionProvider,
         ) -> AvailableStructure:
@@ -27,5 +25,5 @@ class AvailableActions:
         actions : AvailableStructure = AvailableStructure()
         actions.board = provider.get_positions(ctx)
         actions.buttons = provider.get_buttons(ctx)
-        self.apply_hand(actions.hand, provider.get_tokens(ctx))
+        cls.apply_hand(actions.hand, provider.get_tokens(ctx))
         return actions

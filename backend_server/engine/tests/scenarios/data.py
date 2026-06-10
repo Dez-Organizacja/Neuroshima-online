@@ -3,6 +3,7 @@ from main.workflows.data import WorkflowInstance
 from typing import Callable
 from main.state.contex import GameState
 from main.input.data import UserAction
+from main.actions.available.data import AvailableStructure
 
 @dataclass
 class TileDamage:
@@ -124,6 +125,7 @@ class Delta:
 class StepCase:
     action : UserAction
     delta : Delta = field(default_factory=Delta)
+    available_actions : AvailableStructure | None = None
 
 @dataclass
 class Scenario:

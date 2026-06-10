@@ -1,20 +1,21 @@
-from main.state.contex import ActionContext
+from main.state.game_state import GameState
 from main.state.serialization import Serializator
 from main.board.board import TileView
 
 class StateViewBuilder:
     @staticmethod
-    def build_hands_view(ctx : ActionContext):
+    def build_hands_view(state : GameState):
         return {
             faction : Serializator.to_dict_dataclass(player_state.hand)
-            for faction, player_state in ctx.state.players.items()
+            for faction, player_state in state.players.items()
         }
 
-    def build_board_view(self, ctx : ActionContext):
+    @staticmethod
+    def build_board_view(state : GameState):
 
         tiles = [
             TileView(pos=tile.pos, unit=tile.unit.get_view())
-            for tile in ctx.board.get_tiles()
+            for tile in state.board.get_tiles()
         ]
         # print("TILES")
         # print(tiles)
@@ -25,9 +26,10 @@ class StateViewBuilder:
             for tile in tiles
         ]
 
-    def build(self, ctx : ActionContext):
+    @classmethod
+    def build(cls, state : GameState):
         return {
-            "factions" : ctx.state.factions,
-            "board" : self.build_board_view(ctx),
-            "hands" : self.build_hands_view(ctx)
+            "factions" : state.factions,
+            "board" : cls.build_board_view(state),
+            "hands" : cls.build_hands_view(state)
         }

@@ -10,7 +10,8 @@ class TokenCoreState:
 
 @dataclass
 class TokenModifiers:
-    meele_boosts: int = 0
+    melee_boosts: int = 0
+    shoot_boosts: int = 0
 
     initiatives: list[int] = field(default_factory=list)
     is_used: list[bool] = field(default_factory=list)

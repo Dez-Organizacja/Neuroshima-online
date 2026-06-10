@@ -1,7 +1,8 @@
 from .data import StepCase, Scenario, Delta
 from typing import Callable
 from main.state.game_state import GameState
-from main.input.data import UserAction
+from main.input.data import UserAction, Button
+from main.actions.available.data import AvailableStructure
 
 class ScenarioBuilder:
     def __init__(self, factions : list[str]):
@@ -25,6 +26,18 @@ class ScenarioBuilder:
         for func in funcs:
             func(self._current_step.delta)
         return self
+
+    def available_actions(
+            self,
+            *funcs : list[Callable[[AvailableStructure], None]]
+    ):
+        self._requires_step()
+        self._current_step.available_actions = AvailableStructure()
+
+        for func in funcs:
+            func(self._current_step.available_actions)
+        return self
+        
 
     def given(self, *funcs : list[Callable[[GameState], None]]):
         for func in funcs:

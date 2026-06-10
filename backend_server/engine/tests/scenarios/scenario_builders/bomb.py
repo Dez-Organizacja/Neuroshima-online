@@ -1,9 +1,9 @@
 from ..builder import ScenarioBuilder
-from ..delta_ops import *
+from ..build_helpers import *
 from ..data import Scenario
 from ..registry import ScenarioRegistry
 from main.workflows.data import WorkflowName
-from main.input.data import HandAction, BoardAction
+from main.input.data import HandAction, BoardAction, Button
 
 @ScenarioRegistry.register("bomb")
 def bomb_scenario() -> Scenario:
@@ -33,6 +33,10 @@ def bomb_scenario() -> Scenario:
             stack_pop(), # pop bomb wf
             wf_data_clear(),
             stack_index_change(index=2),
+        )
+        .available_actions(
+            tokens(0),
+            buttons(Button.END_TURN),
         )
         .build()
     )

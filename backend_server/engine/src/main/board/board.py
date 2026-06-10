@@ -235,3 +235,10 @@ class Board:
             Serializator.to_dict_dataclass(tile)
             for tile in self.get_tiles()
         ]
+
+    def print_board(self):
+        for tile in self.get_tiles():
+            print("pos:", tile.pos)
+            # print("unit:", tile.unit.get_view())
+            print(Serializator.to_dict_dataclass(tile.unit))
+            print("--------------------\n")

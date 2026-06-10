@@ -1,8 +1,10 @@
 from dataclasses import dataclass, field
+from typing import ClassVar
 
 @dataclass
 class Hand:
     tokens : list[str] = field(default_factory=list)
+    MAX_LIMIT : ClassVar[int] = 3
 
     @property
     def size(self):
