@@ -50,8 +50,12 @@ class ScenarioExecuter:
         scenario.setup.apply(before_state)
         PassiveSystems.compute(before_state.board)
 
-        print("AT (1, 3)", before_state.board.get_token((1, 3)))
-        print("is wired:", before_state.board.get_token((1, 3)).wired)
+        # print("AT (1, 3)", before_state.board.get_token((1, 3)))
+        # print("is wired:", before_state.board.get_token((1, 3)).wired)
+
+        unit1 = before_state.board.get_token((3, 5))
+        print("AT (3, 5)", unit1)
+        # print("wired directions:", unit1.get_wire_directions())
 
         # print("before game state")
         # before_state.print_game_state()

@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from main.tokens.data import TokenRelation
+from main.attacks.data import AttackType
 
 @dataclass
 class TokenCoreState:
@@ -10,8 +11,9 @@ class TokenCoreState:
 
 @dataclass
 class TokenModifiers:
-    melee_boosts: int = 0
-    shoot_boosts: int = 0
+    # melee_boosts: int = 0
+    # shoot_boosts: int = 0
+    attack_boosts : dict[AttackType, int] = field(default_factory=dict)
 
     initiatives: list[int] = field(default_factory=list)
     is_used: list[bool] = field(default_factory=list)
@@ -79,8 +81,14 @@ class BoardTokenState:
         self.relations = TokenRelations()
 
     def reset_modifiers(self):
-        self.modifiers.melee_boosts = 0
-        self.modifiers.shoot_boosts = 0
+        self.modifiers.attack_boosts.clear()
+        # self.modifiers.melee_boosts = 0
+        # self.modifiers.shoot_boosts = 0
         self.modifiers.is_blocked_to_0 = False
         self.modifiers.initiative_boosts = 0
         self.modifiers.num_of_new = 0
+    
+    def add_attack_boost(self, attack_type : AttackType, cnt : int):
+        boosts = self.modifiers.attack_boosts
+        boosts[attack_type] = boosts.get(attack_type, 0) + cnt
+        # self.state.modifiers.attack_boosts[attack_type] += cnt

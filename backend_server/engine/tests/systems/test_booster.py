@@ -1,5 +1,6 @@
 from main.board.board import Board
 from main.systems.boosters import BoosterSolver
+from main.attacks.data import AttackType
 
 def solve_boosters(board: Board) -> None:
     BoosterSolver(board)
@@ -26,7 +27,7 @@ def token_at(board: Board, pos: tuple[int, int]):
 
 
 def melee_boosts(board: Board, pos: tuple[int, int]) -> int:
-    return token_at(board, pos).state.modifiers.melee_boosts
+    return token_at(board, pos).get_attack_boost(AttackType.MELEE)
 
 
 def initiatives(board: Board, pos: tuple[int, int]) -> list[int]:

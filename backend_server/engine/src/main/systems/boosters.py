@@ -1,6 +1,7 @@
 from main.board.board import Board
 from main.tokens.data import TokenRelation, Boost
 from main.systems.clever_initiative import CleverInitiative
+from main.attacks.data import AttackType
 
 class BoosterSolver():
     board: Board
@@ -98,7 +99,7 @@ class BoosterSolver():
             CleverInitiative.end_booster_faze(token)
 
     def melee(self, tokenID):
-        self.board.tokens[tokenID].state.modifiers.melee_boosts += 1
+        self.board.tokens[tokenID].state.add_attack_boost(AttackType.MELEE, 1)
 
     def initiative(self, tokenID):
         self.board.tokens[tokenID].state.modifiers.initiative_boosts += 1

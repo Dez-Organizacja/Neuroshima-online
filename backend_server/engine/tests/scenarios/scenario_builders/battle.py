@@ -60,9 +60,9 @@ def melee_initiative_boosts_and_sieciarze() -> Scenario:
     setup_board = [
         faction_tiles_place(
             faction="borgo",
-            positions=[(0, 2), (1, 5), (3, 5), (4, 4)],
-            names=["zwiadowca", "sieciarz", "mutek", "oficer"],
-            rotations=[0, 1, 0, 0]
+            positions=[(0, 2), (1, 5), (3, 5), (4, 4), (4, 6)],
+            names=["zwiadowca", "sieciarz", "mutek", "oficer", "zwiadowca"],
+            rotations=[0, 2, 0, 0, 0]
         ),
         faction_tiles_place(
             faction="moloch",

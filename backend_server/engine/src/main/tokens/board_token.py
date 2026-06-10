@@ -9,6 +9,7 @@ from copy import deepcopy
 from main.state.serialization import Serializator
 from main.attacks.data import AttackConfig
 from main.tokens.data import TokenView
+from main.attacks.data import AttackType
 
 @dataclass
 class BoardToken(Token):
@@ -17,7 +18,6 @@ class BoardToken(Token):
     def reset(self):
         self.state.reset()
 
-    
 
     # --------- boosts ----------
     @property
@@ -35,7 +35,11 @@ class BoardToken(Token):
         if self.wired:
             return {}
         return self.boosts
-    # --------- healer ----------
+    
+    def get_attack_boost(self, attack_type : AttackType):
+        return self.state.modifiers.attack_boosts.get(attack_type, 0)
+
+    # --------- healer  ----------
 
     @property
     def is_healer(self) -> bool:
@@ -114,8 +118,8 @@ class BoardToken(Token):
     def clever_initiative(self):
         return self.state.clever_initiative
 
-    # def can_activate(self, initiative):
-    #     return not self.wired and CleverInitiative.can_activate(self, initiative)
+    def can_activate(self, initiative):
+        return not self.wired and CleverInitiative.can_activate(self, initiative)
 
     def mark_activated(self, initiative : int):
         return CleverInitiative.mark_activated(self, initiative)
