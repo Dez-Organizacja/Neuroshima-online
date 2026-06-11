@@ -19,6 +19,9 @@ def build_end_step(resolve_function : resolve_func_type | None = None):
 def build_resolve_step(resolve_function : resolve_func_type):
     return ResolveStepConfig(resolve_function)
 
+def build_waiting_step(setter):
+    return WaitingStepConfig(ActionHandler(setter=setter))
+
 class BoardSelectionMixin():
     def build_input_step(self, setter):
         return WaitingStepConfig(

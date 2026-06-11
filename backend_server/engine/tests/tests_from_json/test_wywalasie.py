@@ -1,6 +1,6 @@
 import json
 from main.communication.server_message import ServerMessage
-from main.communication.komunikacja import 
+# from main.communication.komunikacja import 
 from main.main import Game
 from pathlib import Path
 

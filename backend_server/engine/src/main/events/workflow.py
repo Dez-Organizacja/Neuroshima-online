@@ -15,7 +15,7 @@ class PushWorkflow(WorkflowEvent):
             name=self.name,
             config=self.config,
         )
-        # print("PUSH WORKFLOW")
+        print(f"PUSH {self.name}")
         # print(self.name)
         # print(self.config)
         if self.as_child:
@@ -27,7 +27,7 @@ class PushWorkflow(WorkflowEvent):
 @dataclass
 class PopWorkflow(WorkflowEvent):
     def apply(self, ctx: ActionContext):
-        # print("POPWORKFLOW")
+        print(f"POPWORKFLOW {ctx.workflow_instance.name}")
         ctx.state.workflow_stack.pop(-1)
 
 

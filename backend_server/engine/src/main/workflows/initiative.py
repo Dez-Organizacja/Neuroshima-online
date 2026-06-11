@@ -21,12 +21,12 @@ class InitiativeWorkflow(Workflow):
             wf_config=WorkflowConfig(factions=self.factions)
         )
 
-    def resolv_attack_declaration(self, ctx : ActionContext):
+    def resolve_attack_declaration(self, ctx : ActionContext):
         return CombatSystem.resolve_attack_declaration(ctx, self.initiative)
 
     def _build_steps(self):
         return [
-            build_resolve_step(self.resolv_attack_declaration),
+            build_resolve_step(self.resolve_attack_declaration),
             self.build_damage_resolve_step(),
             build_end_step(),
         ]

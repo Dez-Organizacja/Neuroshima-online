@@ -50,7 +50,6 @@ class WorkflowData:
     rotation    : int | None = None
     type        : ActionType | None = None
     button      : Button | None = None
-    decision    : bool | None = None
 
     # @classmethod
     # def from_dict(cls, data):
@@ -59,6 +58,10 @@ class WorkflowData:
     # def to_dict(self):
     #     return to_dict_dataclass(self)
     
+    @property
+    def decision(self) -> bool:
+        return self.button == Button.YES
+
     def set_unit_pos(self, value):
         self.unit_pos = value
     
@@ -77,8 +80,8 @@ class WorkflowData:
     def set_rotation(self, value):
         self.rotation = value
 
-    def set_decision(self, value):
-        self.decision = value
+    def set_button(self, value):
+        self.button = value
 
 
 @dataclass

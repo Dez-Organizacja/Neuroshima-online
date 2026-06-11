@@ -154,7 +154,6 @@ def wf_data_clear():
             rotation=None,
             type=None,
             button=None,
-            decision=None,
         )
     )
 

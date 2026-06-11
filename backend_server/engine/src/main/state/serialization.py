@@ -117,7 +117,7 @@ class Serializator:
         # ---------- dict ----------
         if isinstance(obj, dict):
             return {
-                k: Serializator.auto_to_dict(v)
+                Serializator.auto_to_dict(k) : Serializator.auto_to_dict(v)
                 for k, v in obj.items()
             }
 

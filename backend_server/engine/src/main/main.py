@@ -40,6 +40,7 @@ class Game:
         return self.engine.start_game(self.build_contex())
 
     def export(self):
+        # print("EXPORTING GAME STATE")
         return{
             **self.state.to_dict(),
         }

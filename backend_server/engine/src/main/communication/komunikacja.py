@@ -2,15 +2,15 @@ from main.main import Game
 import flask
 import json
 from main.communication.server_message import ServerMessage
-from main.state.serialization import Serializator
 
 app = flask.Flask(__name__)
 
+
 @app.route("/api/neuroshima", methods=["POST"])
-@app.route('/api/neuroshima/', methods=['POST'])
+# @app.route('/api/neuroshima/', methods=['POST'])
 def new_game():
     data = flask.request.get_json()
-    data = flask.request.get_json(silent=True)
+    # data = flask.request.get_json(silent=True)
     # if data is None:
     #     return flask.jsonify({
     #         "error": "Invalid JSON body"

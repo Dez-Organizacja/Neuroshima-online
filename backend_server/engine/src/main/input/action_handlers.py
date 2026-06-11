@@ -15,7 +15,7 @@ from main.input.data import(
     ButtonAction
 )
 
-button_handler = Callable[[ActionContext], list[Event]]
+button_handler = Callable[[ActionContext, ButtonAction], list[Event]]
 BUTTON_DISPATCH = {}
 def button_register(button : Button):
     def wrapper(func : button_handler):
@@ -24,10 +24,14 @@ def button_register(button : Button):
     return wrapper
 
 class ButtonHandler:
-    @staticmethod
-    def handle(ctx : ActionContext, action : ButtonAction) -> list[Event]:
-        return  BUTTON_DISPATCH[action.name](ctx)
-    
+    @classmethod
+    def handle(cls, ctx : ActionContext, action : ButtonAction) -> list[Event]:
+        handler = BUTTON_DISPATCH.get(action.name, None)
+        if handler:
+            return handler(ctx) or []
+        
+        return []
+
     @staticmethod
     def can_handle(ctx : ActionContext, action : UserAction) -> bool:
         return (
@@ -68,6 +72,7 @@ class ButtonHandler:
             DeleteAbove(WorkflowName.TURN)
         ]
 
+
 position_setter = Callable[[WorkflowData, BoardAction], None]
 class ActionHandler:
     def __init__(self, setter = None):
@@ -96,19 +101,15 @@ class ActionHandler:
         ctx.workflow_data.slot = action.slot
 
     @staticmethod
-    def handle_button(ctx : ActionContext, action : ButtonAction):
-        ctx.workflow_data.button = action.name
+    def handle_button(ctx : ActionContext, action : ButtonAction) -> None:
+        ctx.workflow_data.button = action.name 
 
-
-    def handle(self, ctx : ActionContext, action : UserAction) -> list[Event]:
+    def handle(self, ctx : ActionContext, action : UserAction) -> None:
         # if self.allowed_action_types is not None:
         #     is_allowed_button = action.type is ActionType.BUTTON and self.allow_buttons
         #     if not is_allowed_button and action.type not in self.allowed_action_types:
         #         raise ValueError(f"akcja {action.type} nie jest dozwolona w aktualnym kroku")
-
-        if action.type is ActionType.BUTTON and ButtonHandler.can_handle(ctx, action):
-            return ButtonHandler.handle(ctx, action)
-
         ctx.workflow_data.type = action.type
+        print(f"HANDLING ACTION {action}")
+
         self.dispatch[action.type](ctx, action)
-        return []

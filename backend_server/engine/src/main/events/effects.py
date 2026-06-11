@@ -68,7 +68,9 @@ class DamageEffect(Effect):
         # print("DAMAGE EFFECT")
         # print(f"pos {self.pos}, damage {self.damage}")
         unit = ctx.board.get_token(self.pos)
-        if unit is not None and self.damage > 0:
+        # if unit is not None and self.damage > 0:
+        #     unit.add_wounds(self.damage)
+        if self.damage > 0:
             unit.add_wounds(self.damage)
 
 @dataclass
@@ -106,8 +108,9 @@ class DestroyEffect(Effect):
     recompute_passive: ClassVar[bool] = True
 
     def apply(self, ctx: ActionContext):
-        if ctx.board.get_token(self.pos) is not None:
-            ctx.board.destroy_token(self.pos)
+        
+        # if ctx.board.get_token(self.pos) is not None:
+        ctx.board.destroy_token(self.pos)
 
 
 # ----------- unit abilitis -----------

@@ -43,11 +43,12 @@ class WaitingStep(Step[WaitingStepConfig]):
         super().__init__(config)
 
     def execute(self, ctx : ActionContext, action : UserAction) -> StepResult:
-        # print("WAITING STEP")
-        result = self.config.action_handler.handle(ctx, action)
+        print("WAITING STEP")
+        self.config.action_handler.handle(ctx, action)
         # print(f"wf instance {ctx.workflow_instance}")
-        result.extend(OnClickSystem.resolve(ctx.workflow_instance))
+        result = OnClickSystem.resolve(ctx.workflow_instance)
         # print(f"result: {result}")
+        print(f"workflow data {ctx.workflow_data}")
         return StepResult(execution_result=result)
     
     @property

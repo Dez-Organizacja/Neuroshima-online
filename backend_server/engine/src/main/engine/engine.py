@@ -8,6 +8,7 @@ from main.workflows.data import WorkflowConfig, WorkflowName
 from main.tokens.pile_factory import PileFactory
 from main.steps.step import Step
 from main.input.data import Button, ButtonAction, UserAction
+from main.input.action_handlers import ButtonHandler
 
 class GameEngine:
 
@@ -34,7 +35,8 @@ class GameEngine:
             step : Step, 
             action : UserAction | None = None
         ):
-        # print("START STEP EXECUTION", step)
+        print("START STEP EXECUTION", step.name)
+        print(f"config {step.config}")
         # print(ctx.print_wf_stack())
         # print(f"top {ctx.workflow_instance.name}")
         if action:
@@ -82,9 +84,9 @@ class GameEngine:
         )
 
     def execute_action(self, ctx : ActionContext, action : UserAction):
-        # print("########################")
-        # print(f"EXECUTING ACTION {action}")
-        # print("########################")
+        print("########################")
+        print(f"EXECUTING ACTION {action}")
+        print("########################")
         step = self._get_step(ctx)
         ctx.decision_faction = self._get_current_decision_faction(ctx)
         if not self._is_cancel_action(action):
@@ -95,7 +97,12 @@ class GameEngine:
                     owner_faction=ctx.decision_faction,
                 )
 
-        self.execute_step(ctx, step=step, action=action)
+        if ButtonHandler.can_handle(ctx, action):
+            self.resolver.execute(ctx, ButtonHandler.handle(ctx, action))
+
+        else:
+            self.execute_step(ctx, step=step, action=action)
+        
         self.run_until_input_required(ctx)
 
     def _setup_players(self, ctx : ActionContext):
