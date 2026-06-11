@@ -1,5 +1,5 @@
 from main.workflows.data import WorkflowName, WorkflowConfig
-from main.events.workflow import PopWorkflow, PushWorkflow
+from main.events.workflow import PopWorkflow, PushWorkflow, ConsumeOnClick
 from main.events.effects import DestroyEffect, EnqueueAttacksEffect
 from main.attacks.data import TargetedIntent
 from .builder import ScenarioBuilder
@@ -11,6 +11,7 @@ def build_prescenario(name : WorkflowName) -> ScenarioBuilder:
     return (
         ScenarioBuilder(name)
         .when(BoardAction(pos=(2, 4)))
+        .then_execution(events=[ConsumeOnClick()])
         .then_data_delta(target_pos=(2, 4), type=ActionType.BOARD)
     )
 
@@ -68,8 +69,11 @@ def bomb_scenario():
         ScenarioBuilder(name3)
         .when(BoardAction(pos=(2, 4)))
         .given(setup_function)
+        .then_execution(events=[ConsumeOnClick()])
         .then_data_delta(target_pos=(2, 4), type=ActionType.BOARD)
+        
         .tick()
+        .given_wf_onclick_consumed()
         .then_execution(
             events=[
                 EnqueueAttacksEffect(damage_effects()),

@@ -1,5 +1,6 @@
 from .builder import ScenarioBuilder
-from main.workflows.data import WorkflowName
+from main.workflows.data import WorkflowName, WorkflowConfig
+from main.events.data import OnClickData
 from main.events.workflow import PopWorkflow, PushWorkflow
 from main.events.effects import DiscardTokenEffect
 from main.input.data import ActionType
@@ -25,10 +26,7 @@ def hand_scenario():
 
         .tick()
         .then_execution(
-            events=[
-                DiscardTokenEffect(slot=1),
-                PopWorkflow()
-            ]
+            events=[PopWorkflow()]
         )
     ).build()
 
@@ -49,10 +47,7 @@ def hand_board_token_with_ability_scenario():
 
         .tick()
         .then_execution(
-            events=[
-                DiscardTokenEffect(slot=0),
-                PopWorkflow()
-            ]
+            events=[PopWorkflow()]
         )
     ).build()
 
@@ -68,14 +63,16 @@ def hand_instant_token_with_ability_scenario():
         .tick()
         .given(setup_function)
         .then_execution(
-            events=[PushWorkflow(WorkflowName.MOVE)]
+            events=[
+                PushWorkflow(
+                    name=WorkflowName.MOVE, 
+                    config=WorkflowConfig(on_click=OnClickData(discard_slot=0))
+                )
+            ]
         )
 
         .tick()
         .then_execution(
-            events=[
-                DiscardTokenEffect(slot=0),
-                PopWorkflow()
-            ]
+            events=[PopWorkflow()]
         )
     ).build()

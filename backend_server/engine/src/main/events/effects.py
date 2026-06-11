@@ -45,9 +45,9 @@ class EnqueueAttacksEffect(Effect):
     attack : list[AttackIntent]
 
     def apply(self, ctx : ActionContext):
-        if len(self.attack) > 0:
-            print("ENQUEUING ATTACKS")
-            print(self.attack)
+        # if len(self.attack) > 0:
+            # print("ENQUEUING ATTACKS")
+            # print(self.attack)
         # print("-----------------")
         ctx.state.pending_attacks.extend(self.attack)
 
@@ -65,8 +65,8 @@ class DamageEffect(Effect):
     damage : int = 1
 
     def apply(self, ctx: ActionContext):
-        print("DAMAGE EFFECT")
-        print(f"pos {self.pos}, damage {self.damage}")
+        # print("DAMAGE EFFECT")
+        # print(f"pos {self.pos}, damage {self.damage}")
         unit = ctx.board.get_token(self.pos)
         if unit is not None and self.damage > 0:
             unit.add_wounds(self.damage)
@@ -77,8 +77,8 @@ class ResolveUnitsDamageEffect(Effect):
     recompute_passive: ClassVar[bool] = True
 
     def apply(self, ctx: ActionContext):
-        print("RESOLVE UNITS DAMAGE")
-        print(f"positions {self.positions}")
+        # print("RESOLVE UNITS DAMAGE")
+        # print(f"positions {self.positions}")
         for pos in self.positions:
             token = ctx.board.get_token(pos)
             token.add_damage(sum(token.wounds))
@@ -117,6 +117,7 @@ class MarkAbilityUsedEffect(Effect):
     pos: tuple[int, int]
 
     def apply(self, ctx: ActionContext):
+        # print("MARK ABILITY USED")
         token = ctx.board.get_token(self.pos)
         token.ability_used = True
 
@@ -139,9 +140,9 @@ class MarkActivatedUnitsEffect(Effect):
     initiative : int
 
     def apply(self, ctx : ActionContext):
-        if len(self.positions) > 0:
-            print("MARK ACTIVATED UNITS")
-            print(f"positions {self.positions}")
+        # if len(self.positions) > 0:
+        #     print("MARK ACTIVATED UNITS")
+        #     print(f"positions {self.positions}")
         for pos in self.positions:
             token = ctx.board.get_token(pos)
             token.mark_activated(self.initiative)
@@ -192,5 +193,5 @@ class DiscardTokenEffect(Effect):
     slot: int
 
     def apply(self, ctx: ActionContext):
-        print(f"DISCARD TOKEN SLOT {self.slot}")
+        # print(f"DISCARD TOKEN SLOT {self.slot}")
         ctx.player.hand.remove(self.slot)

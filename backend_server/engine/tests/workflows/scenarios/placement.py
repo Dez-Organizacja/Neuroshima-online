@@ -1,7 +1,7 @@
 from main.workflows.data import WorkflowName
 from main.input.data import BoardAction
 from main.events.effects import ClearSelectedHandSlotEffect, DiscardTokenEffect, PlaceEffect
-from main.events.workflow import PopWorkflow, PushWorkflow
+from main.events.workflow import PopWorkflow, PushWorkflow, ConsumeOnClick
 from main.state.contex import ActionContext
 
 from .builder import ScenarioBuilder
@@ -22,6 +22,7 @@ def placement_scenario():
         
         .when(BoardAction(pos = (1, 1)))
         .given(setup_function)
+        .then_execution(events=[ConsumeOnClick()])
         .then_data_delta(type=BoardAction.type, unit_pos=(1, 1), slot=0)
 
         .tick()

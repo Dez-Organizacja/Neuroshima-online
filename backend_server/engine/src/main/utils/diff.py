@@ -20,6 +20,8 @@ class Diff:
             # print("a:", a)
             # print("b:", b)
             obj.print_stack()
+
+        assert status
         return status
 
     def diff(self, a, b):

@@ -1,7 +1,7 @@
 from main.input.data import BoardAction, ActionType
 from main.workflows.data import WorkflowName
 from main.events.effects import MoveEffect
-from main.events.workflow import PopWorkflow
+from main.events.workflow import PopWorkflow, ConsumeOnClick
 
 from .builder import ScenarioBuilder
 from .registry import register
@@ -13,9 +13,11 @@ def push_scenario():
         ScenarioBuilder(name)
         
         .when(BoardAction(pos = (1, 1)))
+        .then_execution(events=[ConsumeOnClick()])
         .then_data_delta(type=ActionType.BOARD, unit_pos=(1, 1))
 
         .when(BoardAction(pos=(1, 3)))
+        .given_wf_onclick_consumed()
         .then_data_delta(target_pos=(1, 3))
 
         .when(BoardAction(pos=(1, 5)))

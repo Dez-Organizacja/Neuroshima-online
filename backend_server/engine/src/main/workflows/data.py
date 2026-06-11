@@ -4,6 +4,7 @@ from main.input.data import ActionType
 from main.tokens.data import Ability, BattleAbility
 from main.input.data import Button
 from typing import TypeVar
+from main.events.data import Event, OnClickData
 
 Hex = tuple[int, int]
     
@@ -87,12 +88,14 @@ class WorkflowConfig:
     hand_limit : int = 3
     pos : tuple[int, int] | None = None
     initiative : int | None = None
+    on_click : OnClickData = field(default_factory=OnClickData)
 
 @dataclass
 class WorkflowInstance:
     name : WorkflowName
     current_step_index : int | None = None
     config : WorkflowConfig = field(default_factory=WorkflowConfig)
+    on_click_consumed : bool = False
 
 @dataclass
 class UndoSnapshot:

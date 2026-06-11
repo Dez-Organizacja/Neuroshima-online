@@ -4,7 +4,7 @@ from main.actions.available.config import AvailableActionProvider
 from main.state.contex import ActionContext
 from main.input.data import UserAction
 from main.steps.data import StepResult, StepName
-from main.events.data import Event
+from main.events.data import Event, OnClickData
 from main.workflows.data import WorkflowData, WorkflowConfig, WorkflowName
 from typing import Callable, TypeVar, Generic
 from main.input.action_handlers import ActionHandler
@@ -18,7 +18,7 @@ class StepConfig(ABC):
 class WaitingStepConfig(StepConfig):
     action_handler     : ActionHandler = field(default_factory=ActionHandler)
     name               : StepName = field(default=StepName.WAITING, init=False)
-    
+
 @dataclass
 class AutomaticStepConfig(StepConfig):
     pass

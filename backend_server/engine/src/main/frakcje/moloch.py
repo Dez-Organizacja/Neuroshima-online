@@ -54,7 +54,7 @@ units = [
     .build(),
 
     unit.board("opancerzonylowca", unit_count=2)
-    .hp(2)
+    .hp(1)
     .attacks(melee(directions=[0, 1, 2, 3, 4, 5]))
     .directions_of(armor=[0, 5])
     .initiatives([2])
@@ -88,7 +88,7 @@ units = [
     .attacks(shoot(directions=[1, 5]))
     .directions_of(armor=[0])
     .initiatives([2])
-    .build(),
+    .build(), 
 
     unit.board("oficer", unit_count=1)
     .hp(1)

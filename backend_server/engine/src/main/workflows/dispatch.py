@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from main.events.data import Event
+from main.events.data import Event, OnClickData
 from main.events.effects import DiscardTokenEffect, MarkAbilityUsedEffect
+from main.events.workflow import PushWorkflow
 
 from main.steps.config import InitStepConfig
 from main.state.contex import ActionContext
@@ -12,20 +13,16 @@ from main.tokens.token_factory import TokenFactory
 from main.workflows.providers.base import WorkflowActionProvider
 from main.workflows.base import Workflow
 from main.workflows.data import(
-    WorkflowName, 
+    WorkflowName,
+    WorkflowConfig, 
     ABILITY_WORKFLOW_REGISTRY, 
 )
-from main.workflows.step_builders import build_end_step
+from main.workflows.step_builders import build_end_step, build_resolve_step
 
 class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
     def __init__(self):
         super().__init__()
     
-    @staticmethod
-    @abstractmethod
-    def resolve_function(ctx : ActionContext) -> list[Event]:
-        pass
-
     @staticmethod
     @abstractmethod
     def get_active_token(ctx) -> Token:
@@ -34,22 +31,30 @@ class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
     @staticmethod
     def get_workflow_for_ability(ability : Ability):
         return ABILITY_WORKFLOW_REGISTRY[ability]
+    
+    @staticmethod
+    @abstractmethod
+    def on_click_effects(ctx : ActionContext) -> OnClickData:
+        pass
 
     def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
         token = self.get_active_token(ctx)
         ability = token.get_ability()
         return self.get_workflow_for_ability(ability)
     
-    def build_dispatch_step(self):
-        return InitStepConfig(
-            decision_func=self.dispatch_function,
-            as_child=True
+    def next_workflow_push_effect(self, ctx : ActionContext) -> PushWorkflow:
+        return PushWorkflow(
+            name=self.dispatch_function(ctx),
+            config=WorkflowConfig(on_click=self.on_click_effects(ctx))
         )
+
+    def resolve_function(self, ctx : ActionContext) -> list[Event]:
+        return [self.next_workflow_push_effect(ctx)]
     
     def _build_steps(self):
         return [
-            self.build_dispatch_step(),
-            build_end_step(self.resolve_function)   
+            build_resolve_step(self.resolve_function),
+            build_end_step(),   
         ]
 
 class HandWorkflow(DispatchActionWorkflow):
@@ -63,11 +68,15 @@ class HandWorkflow(DispatchActionWorkflow):
         # print(f"name {name}")
         return TokenFactory.create(name, ctx.faction)
 
+    @staticmethod
+    def is_board_token(token : Token) -> bool:
+        return token.type == TokenType.BOARD
+
     def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
         # print("dispatch function")
         # print(f"ability {self.get_active_token(ctx).get_ability()}")
         token = self.get_active_token(ctx)
-        if token.type == TokenType.BOARD:
+        if self.is_board_token(token):
             return WorkflowName.PLACE
 
         ability = token.get_ability()
@@ -78,11 +87,16 @@ class HandWorkflow(DispatchActionWorkflow):
         
         return self.get_workflow_for_ability(ability)
 
-    @staticmethod
-    def resolve_function(ctx : ActionContext) -> list[Event]:
-        if ctx.workflow_data.slot is None:
-            return []
-        return [DiscardTokenEffect(ctx.workflow_data.slot)]
+
+    def on_click_effects(self, ctx : ActionContext) -> OnClickData:
+        # print("RESOLVING ONCLICK\n SOURCE: FROM HAND")
+        # print(f"SLOT: {ctx.workflow_data.slot}")
+        result = OnClickData()
+        if not self.is_board_token(self.get_active_token(ctx)):
+            result.discard_slot = ctx.workflow_data.slot 
+        return result
+        # if ctx.workflow_data.slot is None:
+        #     return []
     
 class BoardWorkflow(DispatchActionWorkflow):
     def __init__(self):
@@ -93,14 +107,13 @@ class BoardWorkflow(DispatchActionWorkflow):
         return ctx.board.get_token(ctx.workflow_data.unit_pos)
 
     @staticmethod
-    def resolve_function(ctx : ActionContext) -> list[Event]:
-        pos = ctx.workflow_data.unit_pos
+    def on_click_effects(ctx : ActionContext) -> OnClickData:
+        return OnClickData(mark_activated_pos=ctx.workflow_data.unit_pos)
+        # pos = ctx.workflow_data.unit_pos
 
-        if ctx.board.get_token(pos) is None:
-            pos = ctx.workflow_data.destination
+        # if ctx.board.get_token(pos) is None:
+        #     pos = ctx.workflow_data.destination
 
-        token = ctx.board.get_token(pos)
-        if token is None:
-            raise ValueError("nie mozna oznaczyc uzycia abilki bez jednostki na planszy")
-
-        return [MarkAbilityUsedEffect(pos)]
+        # token = ctx.board.get_token(pos)
+        # if token is None:
+        #     raise ValueError("nie mozna oznaczyc uzycia abilki bez jednostki na planszy")

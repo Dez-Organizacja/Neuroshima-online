@@ -1,5 +1,5 @@
 from main.events.effects import ClearWorkflowDataEffect, DiscardTokenEffect, DrawNamedTokenEffect, PlaceEffect
-from main.events.workflow import PopWorkflow, PushWorkflow
+from main.events.workflow import PopWorkflow, PushWorkflow, ConsumeOnClick
 from main.input.data import ActionType, BoardAction, HandAction
 from main.state.contex import ActionContext
 from main.workflows.data import WorkflowConfig, WorkflowName
@@ -32,6 +32,7 @@ def headquarter_turn_scenario():
 
         .when(HandAction(slot=0))
         .given(setup_hand)
+        .then_execution(events=[ConsumeOnClick()])
         .then_data_delta(type=ActionType.HAND, slot=0)
 
         .tick()

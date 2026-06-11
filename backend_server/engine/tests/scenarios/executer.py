@@ -8,35 +8,43 @@ from main.view.step import StepViewBuilder
 from main.actions.available.data import AvailableStructure
 from main.systems.passive_systems import PassiveSystems
 from main.input.data import Button
+from main.utils.diff_state import DiffState
 
 class ScenarioExecuter:
     def __init__(self):
         pass
 
-    @staticmethod
-    def get_state_data(state : GameState) -> dict:
-        state_data = Serializator.to_dict_dataclass(state)
-        state_data["board"] = StateViewBuilder.build_board_view(state)
-        state_data["undo_stack"] = []
-        return state_data
+    # @staticmethod
+    # def get_state_data(state : GameState) -> dict:
+    #     state_data = Serializator.to_dict_dataclass(state)
+    #     state_data["board"] = StateViewBuilder.build_board_view(state)
+    #     state_data["undo_stack"] = []
+    #     return state_data
 
     @staticmethod
     def execute(before_state : GameState, step : StepCase) -> Game:
         print("----------------------------------")
         print("EXECUTER: executing step")
-        print(step)
+        print(f"action {step.action}")
         print("----------------------------------")
-        game = Game(Serializator.to_dict_dataclass(before_state))
+        # print("BEFORE STATE")
+        
+        data = Serializator.to_dict_dataclass(before_state)
+        # print(data)
+        game = Game(data)
+        # print("INITIALIZED GAME")
         game.handle_action(Serializator.to_dict_dataclass(step.action))
         return game
 
-    def validate_state(self, result_state : GameState, expected_state : GameState):
-        result_data = self.get_state_data(result_state)
-        # print("result board")
-        # result_state.board.print_board()
+    # def validate_state(self, result_state : GameState, expected_state : GameState):
+    #     result_data = self.get_state_data(result_state)
+    #     # print("result board")
+    #     # result_state.board.print_board()
 
-        expected_data = self.get_state_data(expected_state)
-        assert result_data == expected_data, Diff.compare(result_data, expected_data)
+    #     expected_data = self.get_state_data(expected_state)
+    #     print("expected workflow instance")
+    #     print(expected_state.workflow_stack[-1])
+    #     assert result_data == expected_data, Diff.compare(result_data, expected_data)
 
     @staticmethod
     def compare_av_actions(game : Game, expected_actions : AvailableStructure):
@@ -52,17 +60,8 @@ class ScenarioExecuter:
 
     def run(self, scenario: Scenario):
         before_state = GameState(factions=scenario.factions)
-        # print("SETUP")
-        # print(scenario.setup)
         scenario.setup.apply(before_state)
         PassiveSystems.compute(before_state.board)
-
-        # print("AT (1, 3)", before_state.board.get_token((1, 3)))
-        # print("is wired:", before_state.board.get_token((1, 3)).wired)
-
-        unit1 = before_state.board.get_token((3, 5))
-        print("AT (3, 5)", unit1)
-        # print("wired directions:", unit1.get_wire_directions())
 
         # print("before game state")
         # before_state.print_game_state()
@@ -72,7 +71,9 @@ class ScenarioExecuter:
             game = self.execute(before_state, step)
             step.delta.apply(before_state)
 
-            self.validate_state(game.state, before_state)
+            DiffState.compare(game.state, before_state)
+            # print("COMPARED SUCCESUFULLY")
+
             if step.available_actions is not None:
                 self.compare_av_actions(game, step.available_actions)
             

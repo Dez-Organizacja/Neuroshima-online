@@ -22,20 +22,24 @@ def bomb_scenario() -> Scenario:
         .when(HandAction(slot=0))
         .then(
             pushing_hand_wf_changes(slot=0),
-            stack_add(name=WorkflowName.BOMB, index=0),
+            stack_add(
+                name=WorkflowName.BOMB, 
+                index=0,
+                config=action_workflow_config(slot=0),
+            ),
         )
 
         .when(BoardAction(pos=(2, 2)))
         .then(
             tiles_remove(positions=[(1, 3), (2, 2)]),
             tile_damage(pos=(1, 1)),
+            hand_remove(faction="moloch", index=0),
             stack_pop(), #pop hand wf
             stack_pop(), # pop bomb wf
             wf_data_clear(),
             stack_index_change(index=2),
         )
         .available_actions(
-            tokens(0),
             buttons(Button.END_TURN),
         )
         .build()

@@ -1,11 +1,10 @@
 from main.workflows.data import WorkflowName, WorkflowConfig
 from main.input.data import HandAction, ActionType
-from main.events.workflow import PushWorkflow, GoToStep
+from main.events.workflow import PushWorkflow, GoToStep, ConsumeOnClick
 from main.events.effects import (
     ResetAbilityUsedEffect, 
     DrawTokensEffect,
     ClearWorkflowDataEffect
-    
 )
 from main.events.flow import EndTurnEvent
 from .builder import ScenarioBuilder
@@ -26,9 +25,12 @@ def turn_scenario():
         .tick()
         .given(setup_function)
         .then_execution(
-            events=[ResetAbilityUsedEffect(positions=[]), DrawTokensEffect()],
+            events=[
+                ResetAbilityUsedEffect(positions=[]), 
+                DrawTokensEffect(),
+            ],
         )
-        .then_faction("moloch")
+        # .then_faction("moloch")
         .then_faction("moloch", turn=True)
 
         .tick()
@@ -37,9 +39,11 @@ def turn_scenario():
         )
 
         .when(HandAction(slot=1))
+        .then_execution(events=[ConsumeOnClick()])
         .then_data_delta(type=ActionType.HAND, slot=1)
 
         .tick()
+        .given_wf_onclick_consumed()
         .then_execution(
             events=[PushWorkflow(name=WorkflowName.HAND)]
         )
@@ -54,7 +58,7 @@ def turn_scenario():
         .then_execution(
             events=[EndTurnEvent()]
         )
-        .then_faction("")
         .then_faction("", turn=True)
+        # .then_faction("")
 
     ).build()

@@ -15,9 +15,9 @@ class PushWorkflow(WorkflowEvent):
             name=self.name,
             config=self.config,
         )
-        print("PUSH WORKFLOW")
-        print(self.name)
-        print(self.config)
+        # print("PUSH WORKFLOW")
+        # print(self.name)
+        # print(self.config)
         if self.as_child:
             ctx.state.workflow_stack.append(wf_instance)
         else:
@@ -27,7 +27,7 @@ class PushWorkflow(WorkflowEvent):
 @dataclass
 class PopWorkflow(WorkflowEvent):
     def apply(self, ctx: ActionContext):
-        print("POPWORKFLOW")
+        # print("POPWORKFLOW")
         ctx.state.workflow_stack.pop(-1)
 
 
@@ -44,7 +44,11 @@ class DeleteAbove(WorkflowEvent):
     name: WorkflowName
 
     def apply(self, ctx: ActionContext):
-        print(f"DELETE ABOVE {self.name}")
+        # print(f"DELETE ABOVE {self.name}")
         while ctx.workflow_instance.name != self.name:
             ctx.state.workflow_stack.pop(-1)
         
+@dataclass
+class ConsumeOnClick(WorkflowEvent):
+    def apply(self, ctx : ActionContext):
+        ctx.workflow_instance.on_click_consumed = True

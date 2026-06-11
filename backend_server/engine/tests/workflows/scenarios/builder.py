@@ -3,6 +3,7 @@ from .data import StepCase, Scenario, SetupFn
 from main.input.data import UserAction
 from main.steps.data import StepResult
 from main.events.data import Event
+from main.state.contex import ActionContext
 
 
 class ScenarioBuilder:
@@ -13,7 +14,7 @@ class ScenarioBuilder:
         ):
         self.factions = factions or ["moloch", "borgo"]
         self.workflow_name = name
-        self.workflow_config = config
+        self.workflow_config = config or WorkflowConfig()
         self.steps : list[StepCase] = []
         self._current_step : StepCase | None = None
 
@@ -22,12 +23,18 @@ class ScenarioBuilder:
         self.steps.append(self._current_step)
         return self
 
-
     def given(self, fn : SetupFn):
         self._require_step()
         self._current_step.setup = fn
         return self
     
+    @staticmethod
+    def mark_onclick_consumed(ctx : ActionContext):
+        ctx.workflow_instance.on_click_consumed = True
+
+    def given_wf_onclick_consumed(self):
+        return self.given(self.mark_onclick_consumed)
+
     def then_data_delta(self, **kwargs):
         self._require_step()
         for key in kwargs:

@@ -21,3 +21,9 @@ class FlowEvent(Event, ABC):
 @dataclass
 class WorkflowEvent(Event, ABC):
     pass
+
+
+@dataclass
+class OnClickData:
+    discard_slot : int | None = None
+    mark_activated_pos : tuple[int, int] | None = None

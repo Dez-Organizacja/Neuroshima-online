@@ -101,6 +101,9 @@ class BoosterSolver():
     def melee(self, tokenID):
         self.board.tokens[tokenID].state.add_attack_boost(AttackType.MELEE, 1)
 
+    def shoot(self, tokenID):
+        self.board.tokens[tokenID].state.add_attack_boost(AttackType.SHOOT, 1)
+
     def initiative(self, tokenID):
         self.board.tokens[tokenID].state.modifiers.initiative_boosts += 1
 

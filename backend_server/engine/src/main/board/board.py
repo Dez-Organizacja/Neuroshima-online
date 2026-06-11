@@ -221,6 +221,13 @@ class Board:
             for id, token in self.tokens.items()
         ]
 
+    @staticmethod
+    def get_tile_view(tile : Tile):
+        return TileView(
+            pos=tile.pos,
+            unit=tile.unit.get_view()
+        )
+
     @classmethod
     def from_list(cls, data : list) -> Board:
         obj = cls()
@@ -237,8 +244,11 @@ class Board:
         ]
 
     def print_board(self):
-        for tile in self.get_tiles():
-            print("pos:", tile.pos)
+        print("PRINTING BOARD")
+        for tile in self.get_tiles():   
+            # print("pos:", tile.pos)
             # print("unit:", tile.unit.get_view())
-            print(Serializator.to_dict_dataclass(tile.unit))
+            print(Serializator.to_dict_dataclass(self.get_tile_view(tile)))
             print("--------------------\n")
+        print("PRINTING FINISHED BOARD")
+        

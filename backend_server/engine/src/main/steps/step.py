@@ -15,6 +15,7 @@ from main.steps.config import (
 from main.events.workflow import PopWorkflow, PushWorkflow, GoToStep
 from main.events.data import Event
 from main.steps.data import StepResult
+from main.systems.on_click import OnClickSystem
 
 from typing import TypeVar, Generic
 
@@ -42,7 +43,11 @@ class WaitingStep(Step[WaitingStepConfig]):
         super().__init__(config)
 
     def execute(self, ctx : ActionContext, action : UserAction) -> StepResult:
+        # print("WAITING STEP")
         result = self.config.action_handler.handle(ctx, action)
+        # print(f"wf instance {ctx.workflow_instance}")
+        result.extend(OnClickSystem.resolve(ctx.workflow_instance))
+        # print(f"result: {result}")
         return StepResult(execution_result=result)
     
     @property

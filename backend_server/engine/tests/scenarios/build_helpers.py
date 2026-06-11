@@ -14,6 +14,7 @@ from main.workflows.data import WorkflowName, WorkflowInstance, WorkflowConfig
 from main.input.data import ActionType, Button
 from typing import Callable
 from main.actions.available.data import AvailableStructure
+from main.events.data import Event, OnClickData
 
 # ----------- State Delta -----------
 def tile_place(pos : tuple[int, int], name : str, faction : str, rotation : int = 0):
@@ -102,6 +103,7 @@ def stack_add_turn_wf(faction : str):
         config=WorkflowConfig(faction=faction),
     )
 
+
 def faction_delta(faction: str, turn : bool = False):
     def apply(delta: Delta):
         if turn:
@@ -126,8 +128,14 @@ def pushing_hand_wf_changes(slot : int):
     return composed_function(
         wf_data_delta(slot=slot, type=ActionType.HAND),
         stack_index_change(index=4),
-        stack_add(name=WorkflowName.HAND, index=1),
+        stack_add(
+            name=WorkflowName.HAND, 
+            index=1, 
+        ),
     )
+
+def action_workflow_config(slot) -> WorkflowConfig:
+    return WorkflowConfig(on_click=OnClickData(discard_slot=slot))
 
 def setup_turn(factions : list[str]):
     return composed_function(

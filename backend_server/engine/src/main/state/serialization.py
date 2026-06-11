@@ -8,6 +8,7 @@ class Serializator:
     def convert_value(value, target_type, key=None):
 
         origin = get_origin(target_type)
+        # print(f"convert vaule {value} to {target_type} ")
 
         # ---------- enum ----------
         if isinstance(target_type, type) and issubclass(target_type, Enum):

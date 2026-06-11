@@ -1,5 +1,6 @@
 import json
 from main.communication.server_message import ServerMessage
+from main.communication.komunikacja import 
 from main.main import Game
 from pathlib import Path
 
@@ -19,9 +20,9 @@ def wczytaj(name):
     return ServerMessage(**data)
 
 
-# def test1():
-#     data = wczytaj("zle2.json")
-#     game = execute(data)
+def test1():
+    data = wczytaj("zle2.json")
+    game = execute(data)
 
-#     print(game.build_user_view())
-#     assert False
+    print(game.build_user_view())
+    assert False

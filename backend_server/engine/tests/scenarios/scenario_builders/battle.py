@@ -23,12 +23,17 @@ def build_battle_scenario(
         .when(HandAction(slot=0))
         .then(
             pushing_hand_wf_changes(slot=0),
-            stack_add(name=WorkflowName.START_BATTLE, index=0)
+            stack_add(
+                name=WorkflowName.START_BATTLE, 
+                index=0, 
+                config=action_workflow_config(slot=0)
+            )
         )
 
         .when(ButtonAction(Button.USE))
         .then(
             *expected_board,
+            hand_remove(faction=factions[0], index=0),
             # stan stacka przed start battle, hand, turn, game
             stack_pop(count=3), # pop start battle, hand, turn
             # oczekiwany stan stacku: game
