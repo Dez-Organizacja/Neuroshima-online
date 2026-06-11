@@ -77,6 +77,9 @@ const Tile: React.FC<TileProps> = ({
 
     }, [canRotate]);
 
+    if(color === "#666666") opacity = 0.5;
+    if(imageName === "undefined/undefined") opacity = 0.5;
+
 
     if(imageName !== "undefined/undefined") {
 
