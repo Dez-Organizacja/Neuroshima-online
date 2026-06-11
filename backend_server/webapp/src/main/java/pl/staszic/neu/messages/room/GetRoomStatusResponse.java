@@ -1,4 +1,4 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu.messages.room;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import pl.staszic.neu.game.model.RoomPolicyView;
@@ -6,15 +6,12 @@ import pl.staszic.neu.game.model.RoomPolicyView;
 import java.util.Map;
 import java.util.Set;
 
-public class GetRoomStatusResponse extends WebSocketMessage {
+public class GetRoomStatusResponse extends RoomScopedWebSocketMessage {
 
     public static final String TYPE = "GETROOMSTATUS_RESPONSE";
 
     @JsonProperty("serverStatus")
     private String serverStatus;
-
-    @JsonProperty("roomId")
-    private String roomId;
 
     @JsonProperty("playersInRoom")
     private Set<String> playersInRoom;
@@ -54,13 +51,6 @@ public class GetRoomStatusResponse extends WebSocketMessage {
 
     public void setPlayerFactions(Map<String, String> playerFactions) {
         this.playerFactions = playerFactions;
-    }
-
-    public String getRoomId() {
-        return roomId;
-    }
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
     }
 
     public void setGameId(String gameId) {

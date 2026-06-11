@@ -1,6 +1,7 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu.messages.game;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import pl.staszic.neu.messages.WebSocketMessage;
 
 /**
  * Bazowa klasa dla komunikatow odnoszacych sie do konkretnej gry.

@@ -11,8 +11,10 @@ import pl.staszic.neu.game.clientData.service.ClientDataException;
 import pl.staszic.neu.game.clientData.service.ClientDataService;
 import pl.staszic.neu.game.clientData.service.model.ClientData;
 import pl.staszic.neu.game.model.*;
-import pl.staszic.neu.messages.GameStatusChangeRequest;
+import pl.staszic.neu.messages.api.*;
 import pl.staszic.neu.messages.*;
+import pl.staszic.neu.messages.game.*;
+import pl.staszic.neu.messages.room.*;
 import pl.staszic.neu.rest.service.RestService;
 
 import java.util.HashSet;
@@ -103,6 +105,7 @@ public class InMemoryGameService implements GameService {
         }
 
         JoinRoomResponse response = new JoinRoomResponse();
+        response.setRoomId(room.getRoomId());
         response.setClientId(clientId);
         response.setServerStatus("JOINED room=" + request.getRoomId() + " player=" + clientDataService.getUsernameBySessionId(clientId));
         return response;
@@ -141,6 +144,59 @@ public class InMemoryGameService implements GameService {
         LeaveRoomResponse response = new LeaveRoomResponse();
         response.setClientId(clientId);
         response.setServerStatus("LEFT room=" + request.getRoomId() + " player=" + clientDataService.getUsernameBySessionId(clientId));
+        return response;
+    }
+
+    @Override
+    public KickFromRoomResponse kickFromRoom(String clientId, KickFromRoomRequest request) {
+        request.setClientId(clientId);
+
+        if (!affiliations.containsKey(clientId)) {
+            throw new GameValidationException("Client is not in a room");
+        }
+        if (isBlank(request.getRoomId())) {
+            throw new GameValidationException("Room id is null or empty");
+        }
+
+        Room room = activeRooms.get(request.getRoomId());
+        if (room == null) {
+            throw new GameValidationException("Room does not exist");
+        }
+
+        if(!room.getRoomPolicy().getHost().equals(clientId)){
+            throw new GameValidationException("Only host can kick players from the room");
+        }
+
+        if(room.hasActiveGame()){
+            throw new GameValidationException("Cannot kick players: game already started in room=" + request.getRoomId());
+        }
+
+        String kickedPlayer = null;
+        try {
+            kickedPlayer = clientDataService.findSessionIdByUsername(request.getKickedPlayerUsername());
+        }
+        catch (ClientDataException e){
+            throw new GameValidationException("No player with username=" + request.getKickedPlayerUsername() + " found");
+        }
+
+        if(!room.hasPlayer(kickedPlayer)){
+            throw new GameValidationException("Player with username=" + request.getKickedPlayerUsername() + " is not a member of room=" + request.getRoomId());
+        }
+
+        try {
+            room.removePlayer(kickedPlayer);
+            affiliations.remove(kickedPlayer);
+            if(room.isEmpty()){
+                activeRooms.remove(request.getRoomId());
+            }
+        } catch (Exception e) {
+            throw new GameValidationException(e.getMessage());
+        }
+
+        KickFromRoomResponse response = new KickFromRoomResponse();
+        response.setClientId(clientId);
+        response.setKickerUsername(clientDataService.getUsernameBySessionIdOrDefault(clientId, "Unknown"));
+        response.setServerStatus("KICKED from room=" + request.getRoomId() + " player=" + request.getKickedPlayerUsername());
         return response;
     }
 
@@ -239,6 +295,7 @@ public class InMemoryGameService implements GameService {
             room.mergePlayerAttributes(clientId, newRoomMember);
         }
 
+        response.setRoomId(room.getRoomId());
         response.setStatus(status);
         response.setFaction(faction);
         response.setServerStatus("Attributes successfully changed in room=" + roomId);

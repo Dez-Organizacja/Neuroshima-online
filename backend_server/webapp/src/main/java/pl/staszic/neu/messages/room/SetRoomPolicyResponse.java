@@ -1,9 +1,9 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu.messages.room;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import pl.staszic.neu.game.model.RoomPolicy;
 
-public class SetRoomPolicyResponse extends RoomScopedWebSocketMessage{
+public class SetRoomPolicyResponse extends RoomScopedWebSocketMessage {
 
     public static final String TYPE = "SETROOMPOLICY_RESPONSE";
 

@@ -1,4 +1,4 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu.messages.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;

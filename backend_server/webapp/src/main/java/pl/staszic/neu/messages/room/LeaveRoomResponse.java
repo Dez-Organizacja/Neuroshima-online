@@ -1,15 +1,16 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu.messages.room;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import pl.staszic.neu.messages.WebSocketMessage;
 
-public class JoinRoomResponse extends WebSocketMessage {
+public class LeaveRoomResponse extends WebSocketMessage {
 
-    public static final String TYPE = "JOINROOM_RESPONSE";
+    public static final String TYPE = "LEAVEROOM_RESPONSE";
 
     @JsonProperty("serverStatus")
     private String serverStatus;
 
-    public JoinRoomResponse() {
+    public LeaveRoomResponse() {
         super(TYPE);
     }
 

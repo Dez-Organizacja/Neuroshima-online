@@ -1,4 +1,4 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu.messages.room;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

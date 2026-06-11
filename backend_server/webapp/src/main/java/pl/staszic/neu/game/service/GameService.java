@@ -1,5 +1,8 @@
 package pl.staszic.neu.game.service;
 import pl.staszic.neu.messages.*;
+import pl.staszic.neu.messages.game.*;
+import pl.staszic.neu.messages.room.*;
+
 import java.util.Set;
 
 public interface GameService {
@@ -8,6 +11,8 @@ public interface GameService {
     JoinRoomResponse joinRoom(String clientId, JoinRoomRequest request);
 
     LeaveRoomResponse leaveRoom(String clientId, LeaveRoomRequest request);
+
+    KickFromRoomResponse kickFromRoom(String clientId, KickFromRoomRequest request);
 
     GetRoomStatusResponse getRoomStatus(String clientId, GetRoomStatusRequest request);
 

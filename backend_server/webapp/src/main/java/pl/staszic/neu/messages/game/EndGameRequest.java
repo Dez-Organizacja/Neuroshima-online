@@ -1,6 +1,4 @@
-package pl.staszic.neu.messages;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package pl.staszic.neu.messages.game;
 
 public class EndGameRequest extends GameScopedWebSocketMessage {
 

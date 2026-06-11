@@ -1,4 +1,4 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu.messages.game;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

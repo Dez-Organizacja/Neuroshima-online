@@ -1,8 +1,7 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu.messages.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import pl.staszic.neu.game.model.GameData;
 
 public class GameStatusChangeRequest extends ApiMessage {
 

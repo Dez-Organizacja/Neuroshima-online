@@ -1,7 +1,7 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu.messages.game;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
+import pl.staszic.neu.messages.WebSocketMessage;
 
 public class NewGameRequest extends WebSocketMessage {
 

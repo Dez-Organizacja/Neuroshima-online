@@ -13,6 +13,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import pl.staszic.neu.game.service.GameService;
 import pl.staszic.neu.game.service.GameValidationException;
 import pl.staszic.neu.messages.*;
+import pl.staszic.neu.messages.game.*;
+import pl.staszic.neu.messages.room.*;
 import pl.staszic.neu.websocket.session.WebSocketSessionRegistry;
 
 import java.io.IOException;
@@ -91,6 +93,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 case SetRoomPolicyRequest.TYPE -> handleSetRoomPolicy(session, clientId, rootNode);
                 case ActionRequest.TYPE -> handleActionRequest(clientId, rootNode);
                 case JoinRoomRequest.TYPE -> handleJoinRoom(session, clientId, rootNode);
+                case KickFromRoomRequest.TYPE -> handleKickFromRoom(session, clientId, rootNode);
                 case LeaveRoomRequest.TYPE -> handleLeaveRoom(session, clientId, rootNode);
                 case CreateNewRoomRequest.TYPE -> handleCreateNewRoom(session, clientId, rootNode);
                 case NewGameRequest.TYPE -> handleStartNewGame(session, clientId, rootNode);
@@ -151,6 +154,15 @@ public class WebSocketHandler extends TextWebSocketHandler {
         sendJson(session, response);
         broadcastRoomStatus(roomId);
         logger.info("Room left: {}", objectMapper.writeValueAsString(response));
+    }
+
+    private void handleKickFromRoom(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
+        KickFromRoomRequest request = objectMapper.treeToValue(rootNode, KickFromRoomRequest.class);
+        String roomId = request.getRoomId();
+        KickFromRoomResponse response = gameService.kickFromRoom(clientId, request);
+        sendJson(session, response);
+        broadcastRoomStatus(roomId);
+        logger.info("Kick from room: {}", objectMapper.writeValueAsString(response));
     }
 
     private void handleGetRoomStatus(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {

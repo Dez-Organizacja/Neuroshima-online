@@ -1,6 +1,7 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu.messages.room;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import pl.staszic.neu.messages.WebSocketMessage;
 
 public class CreateNewRoomResponse extends WebSocketMessage {
     public static final String TYPE = "CREATENEWROOM_RESPONSE";

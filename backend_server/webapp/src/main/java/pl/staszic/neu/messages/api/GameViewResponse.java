@@ -1,9 +1,9 @@
-package pl.staszic.neu.messages;
+package pl.staszic.neu.messages.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class GameViewResponse extends ApiMessage{
+public class GameViewResponse extends ApiMessage {
 
     public static final String TYPE = "GAMEVIEW_RESPONSE";
 
