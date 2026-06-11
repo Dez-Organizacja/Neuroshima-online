@@ -25,6 +25,14 @@ export default function Image({
     rotation,
     gameState,
 }: ImageProps) {
+    const field = gameState.view.state.board.find(field =>
+        field.pos[0] === poz1 &&
+        field.pos[1] === poz2
+    )
+    if(field) {
+        if(field.unit.damage !== 0 && field.unit.name !== "sztab") imageName = imageName + "_" + field.unit.damage;
+    }
+
     const imageSrc = imagesByName[imageName]
 
     const imageRef = useRef<HTMLImageElement>(null);
