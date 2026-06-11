@@ -85,7 +85,7 @@ export default function HexTest(){
                 // )
             }
 
-            let Color: string = "#d10606";
+            let Color: string = "#d3be00";
             const Clickable = gameState.view.availableActions.board.find(Clickable =>
                 Clickable[0] === y &&
                 Clickable[1] === x
@@ -93,7 +93,7 @@ export default function HexTest(){
             if(Clickable) Color = "#666666";
 
             Items.push(
-                <Tile imageName={Path} x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={Rotation + 30} color={Color} opacity={0.5} gameState={gameState} sendAction={sendAction} />
+                <Tile imageName={Path} x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={Rotation + 30} color={Color} opacity={0.1} gameState={gameState} sendAction={sendAction} />
             )
 
             // Items.push(
@@ -164,6 +164,7 @@ export default function HexTest(){
     let Ile: number = 0;
 
     for(const Name of gameState.view.availableActions.buttons) {
+        console.log("BUTTON: " + Name);
         Items.push(
             <GameButton x={RightX - Size * 2 - 100} y={ButtonPoz + Ile * (height / 20)} height={height / 20} width={height / 8} text={Name} sendAction={sendAction} gameState={gameState} />
         )
