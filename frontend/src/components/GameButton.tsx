@@ -25,7 +25,7 @@ export function ClickButton(text: string, sendAction : ((action : ActionData) =>
     if(!sendAction){
         return;
     }
-    if(gameState.view.uiState.mode === "rotation") return;
+    // if(gameState.view.uiState.mode === "rotation") return;
 
     console.log("ACTION: " + text);
     const action: ActionData = {
