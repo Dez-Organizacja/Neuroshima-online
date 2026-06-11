@@ -4,6 +4,10 @@ type DisplayPlayerFactionsProps = {
   playerFactions: Record<string, string | null>;
   playersInRoom?: string[];
   hostUsername?: string;
+  canManageRoom?: boolean;
+  isRoomPolicyBusy?: boolean;
+  pendingHostUsername?: string | null;
+  onMakeHost?: (player: string) => void;
 };
 
 function displayFactionName(faction: string) {
@@ -14,6 +18,10 @@ export default function DisplayPlayerFactions({
   playerFactions,
   playersInRoom = Object.keys(playerFactions),
   hostUsername,
+  canManageRoom = false,
+  isRoomPolicyBusy = false,
+  pendingHostUsername = null,
+  onMakeHost,
 }: DisplayPlayerFactionsProps) {
   const players = playersInRoom.length
     ? playersInRoom
@@ -39,6 +47,7 @@ export default function DisplayPlayerFactions({
           ? imagesByName[`${faction}/sztab`]
           : undefined;
         const isHost = Boolean(hostUsername && player === hostUsername);
+        const isPendingHost = pendingHostUsername === player;
 
         return (
           <div
@@ -60,12 +69,24 @@ export default function DisplayPlayerFactions({
             <span className="player-row__identity">
               <span className="player-row__name-line">
                 <strong>{player}</strong>
-                {isHost && (
+                {isHost ? (
                   <span className="player-row__host-badge">
                     <span aria-hidden="true">◆</span>
                     Host
                   </span>
-                )}
+                ) : canManageRoom && onMakeHost ? (
+                  <button
+                    className="player-row__host-action"
+                    type="button"
+                    onClick={() => onMakeHost(player)}
+                    disabled={isRoomPolicyBusy}
+                    aria-label={`Make ${player} the room host`}
+                    title={`Transfer room control to ${player}`}
+                  >
+                    <span aria-hidden="true">◆</span>
+                    {isPendingHost ? "Transferring…" : "Make host"}
+                  </button>
+                ) : null}
               </span>
               <small>
                 {faction ? displayFactionName(faction) : "Choosing faction…"}

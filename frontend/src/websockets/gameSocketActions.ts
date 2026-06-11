@@ -121,6 +121,17 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         5000,
         )
     }
+    function setRoomPolicyAWFR(visibility : string, hostUsername : string){
+        return sendAWFR({
+            messageType : "SETROOMPOLICY_REQUEST",
+            roomId : localStorage.getItem("room"),
+            visibility : visibility,
+            host : hostUsername,
+        },
+        ["SETROOMPOLICY_RESPONSE", "ERROR"],
+        5000,
+    )
+    }
 
     return{
         createRoomAWFR,
@@ -131,5 +142,6 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         sendAction,
         setFactionAWFR,
         getRoomListAWFR,
+        setRoomPolicyAWFR,
     }
 }

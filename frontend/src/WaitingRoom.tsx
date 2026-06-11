@@ -13,6 +13,7 @@ type RoomScreenProps = {
 type PlayerFactions = Record<string, string | null>;
 
 type FactionName = "borgo" | "moloch" | "posterunek" | "hegemonia";
+type RoomVisibility = "public" | "private";
 
 type FactionDetails = {
   label: string;
@@ -38,6 +39,10 @@ const factions: Record<FactionName, FactionDetails> = {
   },
 };
 
+function isRoomVisibility(value: unknown): value is RoomVisibility {
+  return value === "public" || value === "private";
+}
+
 function isPlayerFactions(value: unknown): value is PlayerFactions {
   return (
     typeof value === "object" &&
@@ -53,8 +58,15 @@ export function RoomScreen({
   onSwitchToGame,
   onSwitchToMenu,
 }: RoomScreenProps) {
-  const { latestMessage, setFactionAWFR, leaveRoomAWFR, startNewGameAWFR } =
-    useGameSocketContext();
+  const {
+    latestMessage,
+    isConnected,
+    setFactionAWFR,
+    leaveRoomAWFR,
+    startNewGameAWFR,
+    setRoomPolicyAWFR,
+    getRoomStatusAWFR,
+  } = useGameSocketContext();
 
   const [playersInRoom, setPlayersInRoom] = useState<string[]>([]);
   const [playerFactions, setPlayerFactions] = useState<PlayerFactions>();
@@ -62,10 +74,15 @@ export function RoomScreen({
   const [faction, setFaction] = useState<FactionName | "">("");
   const [isSubmittingFaction, setIsSubmittingFaction] = useState(false);
   const [hostUsername, setHostUsername] = useState("");
-
+  const [visibility, setVisibility] = useState<RoomVisibility | "">("");
+  const [isUpdatingRoomPolicy, setIsUpdatingRoomPolicy] = useState(false);
+  const [pendingHostUsername, setPendingHostUsername] = useState<string | null>(
+    null,
+  );
   const roomName = localStorage.getItem("room") ?? "Current room";
   const username = localStorage.getItem("username") ?? "Commander";
   const isHost = Boolean(hostUsername && hostUsername === username);
+
 
   const selectedFactions = playersInRoom
     .map((player) => playerFactions?.[player])
@@ -98,16 +115,30 @@ export function RoomScreen({
       setPlayersInRoom(latestMessage.playersInRoom);
       setPlayerFactions(latestMessage.playerFactions);
 
-      const roomPolicy = latestMessage.roomPolicy;
-      if (typeof roomPolicy === "object" && roomPolicy !== null) {
-        const policy = roomPolicy as Record<string, unknown>;
-        const host =
-          typeof policy.host === "string"
-            ? policy.host
-            : typeof policy.hostUsername === "string"
-              ? policy.hostUsername
-              : "";
-        setHostUsername(host);
+      const roomPolicy =
+        typeof latestMessage.roomPolicy === "object" &&
+        latestMessage.roomPolicy !== null
+          ? (latestMessage.roomPolicy as Record<string, unknown>)
+          : {};
+      const reportedHost =
+        typeof roomPolicy.host === "string"
+          ? roomPolicy.host
+          : typeof roomPolicy.hostUsername === "string"
+            ? roomPolicy.hostUsername
+            : typeof latestMessage.host === "string"
+              ? latestMessage.host
+              : typeof latestMessage.hostUsername === "string"
+                ? latestMessage.hostUsername
+                : "";
+      const reportedVisibility = isRoomVisibility(roomPolicy.visibility)
+        ? roomPolicy.visibility
+        : latestMessage.visibility;
+
+      if (reportedHost) {
+        setHostUsername(reportedHost);
+      }
+      if (isRoomVisibility(reportedVisibility)) {
+        setVisibility(reportedVisibility);
       }
 
       if (typeof latestMessage.gameId === "string") {
@@ -115,6 +146,22 @@ export function RoomScreen({
       }
     }
   }, [latestMessage, onSwitchToGame]);
+
+  useEffect(() => {
+    if (!isConnected) {
+      return;
+    }
+
+    void getRoomStatusAWFR().catch((error) => {
+      setCurrentReply(
+        error instanceof Error
+          ? error.message
+          : "Could not load the room policy.",
+      );
+    });
+    // This request should run once when the waiting room gains a connection.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected]);
 
   async function handleFaction() {
     if (!faction || isSubmittingFaction) {
@@ -152,19 +199,20 @@ export function RoomScreen({
       setIsSubmittingFaction(false);
     }
   }
-
+  
+  
   async function handleLeave() {
     try {
       const response = await leaveRoomAWFR();
-
+      
       if (response.messageType === "LEAVEROOM_RESPONSE") {
         localStorage.removeItem("room");
         onSwitchToMenu();
       } else if (response.messageType === "ERROR") {
         setCurrentReply(
           typeof response.error === "string"
-            ? response.error
-            : "Could not leave room.",
+          ? response.error
+          : "Could not leave room.",
         );
       }
     } catch (error) {
@@ -173,7 +221,7 @@ export function RoomScreen({
       );
     }
   }
-
+  
   async function handleStartGame() {
     if (!playerFactions || !canStartGame) {
       setCurrentReply(
@@ -181,10 +229,10 @@ export function RoomScreen({
       );
       return;
     }
-
+    
     try {
       const response = await startNewGameAWFR(playersInRoom, selectedFactions);
-
+      
       if (
         response.messageType === "NEWGAME_RESPONSE" &&
         typeof response.createdGameId === "string"
@@ -194,8 +242,8 @@ export function RoomScreen({
       } else if (response.messageType === "ERROR") {
         setCurrentReply(
           typeof response.error === "string"
-            ? response.error
-            : "Could not start game.",
+          ? response.error
+          : "Could not start game.",
         );
       }
     } catch (error) {
@@ -204,7 +252,101 @@ export function RoomScreen({
       );
     }
   }
+  async function updateRoomPolicy(
+    nextVisibility: RoomVisibility,
+    nextHostUsername: string,
+    successMessage: string,
+  ) {
+    if (!isHost) {
+      setCurrentReply("Only the current host can change the room policy.");
+      return;
+    }
 
+    if (!nextHostUsername) {
+      setCurrentReply("The room host is not available yet.");
+      return;
+    }
+
+    setIsUpdatingRoomPolicy(true);
+    setCurrentReply("");
+
+    try {
+      const response = await setRoomPolicyAWFR(
+        nextVisibility,
+        nextHostUsername,
+      );
+
+      if (response.messageType === "SETROOMPOLICY_RESPONSE") {
+        if (typeof response.error === "string") {
+          setCurrentReply(response.error);
+          return;
+        }
+
+        const reportedHost =
+          typeof response.host === "string"
+            ? response.host
+            : typeof response.hostUsername === "string"
+              ? response.hostUsername
+              : nextHostUsername;
+        const reportedVisibility = isRoomVisibility(response.visibility)
+          ? response.visibility
+          : nextVisibility;
+
+        setHostUsername(reportedHost);
+        setVisibility(reportedVisibility);
+        setCurrentReply(successMessage);
+      } else if (response.messageType === "ERROR") {
+        setCurrentReply(
+          typeof response.error === "string"
+            ? response.error
+            : "Could not change the room policy.",
+        );
+      }
+    } catch (error) {
+      setCurrentReply(
+        error instanceof Error
+          ? error.message
+          : "Could not change the room policy.",
+      );
+    } finally {
+      setIsUpdatingRoomPolicy(false);
+      setPendingHostUsername(null);
+    }
+  }
+
+  function handleVisibilityChange(nextVisibility: RoomVisibility) {
+    if (
+      nextVisibility === visibility ||
+      isUpdatingRoomPolicy ||
+      !hostUsername
+    ) {
+      return;
+    }
+
+    void updateRoomPolicy(
+      nextVisibility,
+      hostUsername,
+      `Room visibility changed to ${nextVisibility}.`,
+    );
+  }
+
+  function handleHostTransfer(nextHostUsername: string) {
+    if (
+      !visibility ||
+      nextHostUsername === hostUsername ||
+      isUpdatingRoomPolicy
+    ) {
+      return;
+    }
+
+    setPendingHostUsername(nextHostUsername);
+    void updateRoomPolicy(
+      visibility,
+      nextHostUsername,
+      `${nextHostUsername} is now the room host.`,
+    );
+  }
+  
   return (
     <main className="waiting-room">
       <div className="waiting-room__noise" aria-hidden="true" />
@@ -336,10 +478,72 @@ export function RoomScreen({
               </span>
             </div>
 
+            <section
+              className={`room-policy${isHost ? " is-editable" : ""}`}
+              aria-labelledby="room-policy-title"
+            >
+              <div className="room-policy__heading">
+                <div>
+                  <span className="room-policy__eyebrow">Room access</span>
+                  <strong id="room-policy-title">
+                    {visibility
+                      ? `${visibility} room`
+                      : "Loading room policy…"}
+                  </strong>
+                </div>
+                <span
+                  className={`room-policy__lock${isHost ? " is-unlocked" : ""}`}
+                  aria-hidden="true"
+                >
+                  {isHost ? "◆" : "▣"}
+                </span>
+              </div>
+
+              <div
+                className="visibility-switch"
+                role="group"
+                aria-label="Room visibility"
+              >
+                {(["public", "private"] as RoomVisibility[]).map(
+                  (option) => (
+                    <button
+                      className={`visibility-switch__option${
+                        visibility === option ? " is-active" : ""
+                      }`}
+                      type="button"
+                      key={option}
+                      onClick={() => handleVisibilityChange(option)}
+                      disabled={
+                        !isHost ||
+                        !visibility ||
+                        isUpdatingRoomPolicy
+                      }
+                      aria-pressed={visibility === option}
+                    >
+                      <span aria-hidden="true">
+                        {option === "public" ? "◉" : "▣"}
+                      </span>
+                      {option}
+                    </button>
+                  ),
+                )}
+              </div>
+
+              <p className="room-policy__note">
+                {isHost
+                  ? "You can change access or transfer command from the player list."
+                  : `Only ${hostUsername || "the host"} can change room access.`}
+              </p>
+            </section>
+
             <DisplayPlayerFactions
               playerFactions={playerFactions ?? {}}
               playersInRoom={playersInRoom}
               hostUsername={hostUsername}
+              canManageRoom={isHost && Boolean(visibility)}
+              isRoomPolicyBusy={isUpdatingRoomPolicy}
+              pendingHostUsername={pendingHostUsername}
+              onMakeHost={handleHostTransfer}
             />
 
             <div className={`readiness ${canStartGame ? "is-ready" : ""}`}>

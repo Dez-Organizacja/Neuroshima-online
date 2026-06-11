@@ -35,7 +35,11 @@ export default function HexTest(){
         return <div>Loading game...</div>;
     }
 
-    const currentfaction = gameState.view.uiState.faction;
+    // const currentfaction = gameState.view.uiState.faction;
+    const currentfaction = localStorage.getItem("faction");
+    if(!currentfaction){
+        return <div>No faction found</div>;
+    }
     const Items = [];
     // =============== //
 
