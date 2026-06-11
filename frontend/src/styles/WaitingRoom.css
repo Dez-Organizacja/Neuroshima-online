@@ -383,19 +383,19 @@
 }
 
 .faction-card--borgo {
-  --faction-glow: 169, 53, 44;
+  --faction-glow: 58, 105, 159;
 }
 
 .faction-card--moloch {
-  --faction-glow: 109, 128, 86;
+  --faction-glow: 184, 55, 38;
 }
 
 .faction-card--posterunek {
-  --faction-glow: 78, 126, 153;
+  --faction-glow: 103, 164, 52;
 }
 
 .faction-card--hegemonia {
-  --faction-glow: 184, 129, 55;
+  --faction-glow: 222, 165, 45;
 }
 
 .faction-card::after {
