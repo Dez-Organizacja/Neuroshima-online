@@ -13,11 +13,5 @@ export type ActionData =
     }
     | {
         type: "button";
-        name:
-            | "end_turn"
-            | "discard"
-            | "use"
-            | "cancel"
-            | "yes"
-            | "no";
+        name: string;
     };

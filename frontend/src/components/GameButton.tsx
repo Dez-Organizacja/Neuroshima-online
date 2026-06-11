@@ -17,9 +17,7 @@ interface GameButtonProps {
 }
 
 export function ClickButton(text: string, sendAction : ((action : ActionData) => void) | undefined, gameState: GameState | undefined): void {
-    if(text === "End Turn") {text="end_turn";}
-    if(text === "Cancel") {text="cancel";}
-    if(text === "Discard") {text="discard";}
+
     // const {sendAction} = useGameSocketContext();
     if(!gameState) return;
     const field = gameState.view.availableActions.buttons.find(field => field === text);
@@ -28,29 +26,13 @@ export function ClickButton(text: string, sendAction : ((action : ActionData) =>
         return;
     }
     if(gameState.view.uiState.mode === "rotation") return;
-    if(text === "end_turn") {
-        console.log("Your turn has ended.")
-        const action: ActionData = {
-            type: "button",
-            name: "end_turn"
-        }
-        sendAction(action);
-    } else if(text === "cancel") {
-        console.log("Cancel.");
 
-        const action: ActionData = {
-            type: "button",
-            name: "cancel"
-        }
-        sendAction(action);
-    } else if(text === "discard") {
-        console.log("Discard.");
-        const action: ActionData = {
-            type: "button",
-            name: "discard"
-        }
-        sendAction(action);
+    console.log("ACTION: " + text);
+    const action: ActionData = {
+        type: "button",
+        name: text
     }
+    sendAction(action);
 }
 
 export default function GameButton({
@@ -64,6 +46,14 @@ export default function GameButton({
     onClick,
     gameState
 }: GameButtonProps) {
+
+    let DisplayText: string = "";
+    if(text === "end_turn") {DisplayText="End Turn";}
+    if(text === "cancel") {DisplayText="Cancel";}
+    if(text === "discard") {DisplayText="Discard";}
+    if(text === "use") {DisplayText="Use";}
+    if(text === "yes") {DisplayText="Yes";}
+    if(text === "no") {DisplayText="No";}
 
     return (
         <div
@@ -79,7 +69,7 @@ export default function GameButton({
                 height: height
             }}
         >
-            {text}
+            {DisplayText}
             {children}
         </div>
     );

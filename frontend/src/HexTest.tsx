@@ -156,15 +156,16 @@ export default function HexTest(){
 
 
     // ===== End Button ===== //
-    Items.push(
-        <GameButton x={RightX - Size * 2 - 100} y={height / 16} height={height / 20} width={height / 8} text={"End Turn"} sendAction={sendAction} gameState={gameState} />
-    )
-    Items.push(
-        <GameButton x={RightX - Size * 2 - 100} y={(height / 16) + (height / 20)} height={height / 20} width={height / 8} text={"Cancel"} sendAction={sendAction} gameState={gameState} />
-    )
-    Items.push(
-        <GameButton x={RightX - Size * 2 - 100} y={(height / 16) + 2 * (height / 20)} height={height / 20} width={height / 8} text={"Discard"} sendAction={sendAction} gameState={gameState} />
-    )
+    let ButtonPoz: number = (height / 16);
+    let Ile: number = 0;
+
+    for(const Name of gameState.view.availableActions.buttons) {
+        Items.push(
+            <GameButton x={RightX - Size * 2 - 100} y={ButtonPoz + Ile * (height / 20)} height={height / 20} width={height / 8} text={Name} sendAction={sendAction} gameState={gameState} />
+        )
+        Ile += 1;
+    }
+
     // ===== ========== ===== //
 
     // console.log("======");
