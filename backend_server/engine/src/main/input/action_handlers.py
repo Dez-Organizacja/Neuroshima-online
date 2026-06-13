@@ -5,8 +5,8 @@ from main.events.data import Event
 from main.events.flow import EndTurnEvent, DeleteAbove
 from main.events.effects import ClearWorkflowDataEffect, DiscardTokenEffect
 from main.events.history import RestoreUndoSnapshotEffect
-from main.events.workflow import GoToStep
-from main.workflows.data import WorkflowName, WorkflowData
+from main.events.workflow import GoToStep, PushWorkflow
+from main.workflows.data import WorkflowName, WorkflowData, WorkflowConfig
 from main.input.data import(
     BoardAction, 
     UserAction, 
@@ -42,6 +42,13 @@ class ButtonHandler:
     @staticmethod
     @button_register(Button.END_TURN)
     def handle_end_turn(ctx : ActionContext) -> list[Event]:
+        if ctx.player.hand.size > 0:
+            return [
+                PushWorkflow(
+                    name=WorkflowName.END_TURN_CONFIRM,
+                    config=WorkflowConfig(faction=ctx.faction),
+                )
+            ]
         return [EndTurnEvent()]
 
 

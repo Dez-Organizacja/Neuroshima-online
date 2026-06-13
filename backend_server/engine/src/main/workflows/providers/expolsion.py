@@ -14,5 +14,5 @@ class ExplasionProvider(WorkflowActionProvider):
         return StepUIState(
             faction=ctx.board.get_token(self.pos).faction,
             mode=UIMode.DECISION,
-            message="użyć cechy eksplozji?"
+            message="Do you want to use explosion ability?"
         )

@@ -18,6 +18,8 @@ from main.workflows.battle import BattleWorkflow
 from main.workflows.explosion import ExpolsionWorkflow
 from main.workflows.initiative import InitiativeWorkflow
 from main.workflows.damage_resolve import ResolveDamageWorkflow
+from main.workflows.unhappy_draw import UnhappyDrawWorkflow
+from main.workflows.end_turn_confirm import EndTurnConfirmWorkflow
 from main.workflows.base import Workflow
 from dataclasses import dataclass
 
@@ -52,6 +54,8 @@ class WorkflowFactory:
         WorkflowName.EXPLOSION : WorkflowMeta(ExpolsionWorkflow, True),
         WorkflowName.INITIATIVE : WorkflowMeta(InitiativeWorkflow, True),
         WorkflowName.DAMAGE_RESOLVE : WorkflowMeta(ResolveDamageWorkflow, True),
+        WorkflowName.UNHAPPY_DRAW : WorkflowMeta(UnhappyDrawWorkflow, True),
+        WorkflowName.END_TURN_CONFIRM : WorkflowMeta(EndTurnConfirmWorkflow, True),
     }
     @classmethod
     def create(cls, instance : WorkflowInstance) -> Workflow:

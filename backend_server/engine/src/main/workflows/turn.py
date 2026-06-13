@@ -13,6 +13,7 @@ from main.events.effects import (
     ResetAbilityUsedEffect, 
     DrawTokensEffect,
     ClearWorkflowDataEffect,
+    MaybePushUnhappyDrawEffect,
 )
 from main.events.flow import EndTurnEvent
 from main.board.query import BoardQuery
@@ -39,6 +40,7 @@ class TurnWorkflow(Workflow[TurnProvider]):
         return [
                 ResetAbilityUsedEffect(positions),
                 DrawTokensEffect(hand_limit=self.config.hand_limit),
+                MaybePushUnhappyDrawEffect(faction=self.config.faction),
             ]
     
     @staticmethod

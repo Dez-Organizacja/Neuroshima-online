@@ -4,6 +4,10 @@ from main.state.contex import ActionContext
 from main.events.data import Effect
 from main.attacks.data import AttackIntent
 from main.workflows.data import WorkflowData
+from main.events.workflow import PushWorkflow
+from main.tokens.data import TokenType
+from main.tokens.token_factory import TokenFactory
+from main.workflows.data import WorkflowConfig, WorkflowName
 
 # ----------- moving and placing -----------
 
@@ -198,3 +202,35 @@ class DiscardTokenEffect(Effect):
     def apply(self, ctx: ActionContext):
         # print(f"DISCARD TOKEN SLOT {self.slot}")
         ctx.player.hand.remove(self.slot)
+
+@dataclass
+class DiscardHandEffect(Effect):
+    def apply(self, ctx: ActionContext):
+        ctx.player.hand.tokens.clear()
+
+
+@dataclass
+class MaybePushUnhappyDrawEffect(Effect):
+    faction: str
+
+    def apply(self, ctx: ActionContext):
+        hand = ctx.player.hand
+        if hand.size != hand.MAX_LIMIT:
+            return []
+
+        if not hand.tokens:
+            return []
+
+        if all(
+            TokenFactory.create(token_name, self.faction).type == TokenType.INSTANT
+            for token_name in hand.tokens
+        ):
+            return [
+                ClearWorkflowDataEffect(),
+                PushWorkflow(
+                    name=WorkflowName.UNHAPPY_DRAW,
+                    config=WorkflowConfig(faction=self.faction),
+                ),
+            ]
+
+        return []

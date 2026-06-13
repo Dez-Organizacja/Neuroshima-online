@@ -28,6 +28,8 @@ class WorkflowName(Enum):
     INITIATIVE = "initiative"
     EXPLOSION = "explosion"
     DAMAGE_RESOLVE = "damage_resolve"
+    UNHAPPY_DRAW = "unhappy_draw"
+    END_TURN_CONFIRM = "end_turn_confirm"
 
 ABILITY_WORKFLOW_REGISTRY = {
     Ability.MOVE : WorkflowName.MOVE,
