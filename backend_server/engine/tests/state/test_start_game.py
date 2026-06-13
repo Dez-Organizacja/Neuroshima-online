@@ -85,12 +85,14 @@ class Tests:
         assert ctx.player.hand.size == 1
 
         engine.execute_action(ctx, ButtonAction(name = Button.END_TURN))
+        engine.execute_action(ctx, ButtonAction(name = Button.YES))
         second_turn_faction = ctx.faction
         assert second_turn_faction != first_turn_faction
         assert ctx.workflow_instance.name == WorkflowName.TURN
         assert ctx.player.hand.size == 2
 
         engine.execute_action(ctx, ButtonAction(name = Button.END_TURN))
+        engine.execute_action(ctx, ButtonAction(name = Button.YES))
         assert ctx.faction == first_turn_faction
         assert ctx.workflow_instance.name == WorkflowName.TURN
         assert ctx.player.hand.size == 3

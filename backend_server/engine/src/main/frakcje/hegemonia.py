@@ -69,9 +69,15 @@ units = [
     .boosts(types=[Boost.INITIATIVE], directions=[0, 5])
     .build(),
 
+    # unit.board("kwatermistrz", unit_count=1)
+    # .hp(1)
+    # .boosts(types=[Boost.MELEE_TO_SHOOT], directions=[0])
+    # .build(),
+    
     unit.board("kwatermistrz", unit_count=1)
     .hp(1)
-    .boosts(types=[Boost.MELEE_TO_SHOOT], directions=[0])
+    .boosts(types=[Boost.MELEE], directions=[0])
+    .boosts(types=[Boost.SHOOT], directions=[0])
     .build(),
 
     unit.board("oficer1", unit_count=2)

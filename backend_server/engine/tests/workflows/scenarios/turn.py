@@ -4,7 +4,8 @@ from main.events.workflow import PushWorkflow, GoToStep, ConsumeOnClick
 from main.events.effects import (
     ResetAbilityUsedEffect, 
     DrawTokensEffect,
-    ClearWorkflowDataEffect
+    ClearWorkflowDataEffect,
+    MaybePushUnhappyDrawEffect
 )
 from main.events.flow import EndTurnEvent
 from .builder import ScenarioBuilder
@@ -28,6 +29,7 @@ def turn_scenario():
             events=[
                 ResetAbilityUsedEffect(positions=[]), 
                 DrawTokensEffect(),
+                MaybePushUnhappyDrawEffect(faction='moloch'),
             ],
         )
         # .then_faction("moloch")
