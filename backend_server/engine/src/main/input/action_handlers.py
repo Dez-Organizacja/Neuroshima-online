@@ -98,6 +98,7 @@ class ActionHandler:
         
     def handle_board(self, ctx : ActionContext, action : BoardAction):
         self.setter(ctx.workflow_data, action.pos)
+        ctx.state.last_clicked_hex.set_board(action.pos)
 
     @staticmethod
     def handle_rotation(ctx : ActionContext, action : RotationAction) -> None:
@@ -106,6 +107,7 @@ class ActionHandler:
     @staticmethod
     def handle_hand(ctx : ActionContext, action : HandAction) -> None:
         ctx.workflow_data.slot = action.slot
+        ctx.state.last_clicked_hex.set_hand(action.slot)
 
     @staticmethod
     def handle_button(ctx : ActionContext, action : ButtonAction) -> None:

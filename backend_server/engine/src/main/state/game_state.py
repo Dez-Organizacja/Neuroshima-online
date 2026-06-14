@@ -7,6 +7,7 @@ from main.attacks.data import AttackIntent
 from main.workflows.data import WorkflowData, WorkflowInstance, WorkflowName, UndoSnapshot
 from main.state.serialization import Serializator
 from main.utils.variable import Phase
+from main.state.last_clicked_hex import LastClickedHex
 
 def print_obj(obj, deepth):
     base_s = "\n" + "   " * deepth
@@ -63,6 +64,7 @@ class GameState:
     # --------- others ----------
     undo_stack          : list[UndoSnapshot] = field(default_factory=list)
     phase               : Phase = Phase.GAME
+    last_clicked_hex    : LastClickedHex = field(default_factory=LastClickedHex)
     
     def __post_init__(self):
         for faction in self.factions:
@@ -87,6 +89,8 @@ class GameState:
             return
 
         snapshot = self.to_dict()
+        if snapshot.get("last_clicked_hex") is None:
+            snapshot.pop("last_clicked_hex", None)
         self.undo_stack.append(
             UndoSnapshot(
                 workflow_name=workflow_name,

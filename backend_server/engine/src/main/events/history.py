@@ -14,3 +14,4 @@ class RestoreUndoSnapshotEffect(Effect):
         restored_state = GameState.from_dict(snapshot)
         ctx.state.__dict__.clear()
         ctx.state.__dict__.update(restored_state.__dict__)
+        ctx.state.last_clicked_hex.reset()

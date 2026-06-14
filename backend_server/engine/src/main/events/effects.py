@@ -158,6 +158,7 @@ class MarkActivatedUnitsEffect(Effect):
 class ClearWorkflowDataEffect(Effect):
     def apply(self, ctx):
         ctx.workflow_data = WorkflowData()
+        ctx.state.last_clicked_hex.reset()
 
 @dataclass
 class ClearSelectedHandSlotEffect(Effect):
