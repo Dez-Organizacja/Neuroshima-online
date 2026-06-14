@@ -16,11 +16,11 @@ import pl.staszic.neu.messages.*;
 import pl.staszic.neu.messages.game.*;
 import pl.staszic.neu.messages.room.*;
 import pl.staszic.neu.rest.service.RestService;
+import pl.staszic.neu.security.repo.StoredUser;
+import pl.staszic.neu.security.repo.UserRepository;
+import pl.staszic.neu.security.repo.repository.UserEntity;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -37,16 +37,19 @@ public class InMemoryGameService implements GameService {
     private final RestService restService;
     private final String gameStateServiceUrl;
     private final ObjectMapper objectMapper;
+    private final UserRepository userRepository;
 
     @Autowired
     public InMemoryGameService(
             ClientDataService clientDataService, RestService restService,
-            @Value("${game.state-service.url:http://127.0.0.1:5000/api/neuroshima}") String gameStateServiceUrl, ObjectMapper objectMapper
+            @Value("${game.state-service.url:http://127.0.0.1:5000/api/neuroshima}") String gameStateServiceUrl, ObjectMapper objectMapper,
+            UserRepository userRepository
     ) {
         this.clientDataService = clientDataService;
         this.restService = restService;
         this.gameStateServiceUrl = gameStateServiceUrl;
         this.objectMapper = objectMapper;
+        this.userRepository = userRepository;
     }
     //koniec slabego kodu
 
@@ -384,6 +387,34 @@ public class InMemoryGameService implements GameService {
     }
 
     @Override
+    public GetUserDataResponse getUserData(String clientId, GetUserDataRequest request){
+        request.setClientId(clientId);
+
+        GetUserDataResponse response = new GetUserDataResponse();
+
+        String username;
+        try {
+            username = clientDataService.findSessionIdByUsername(clientId);
+        }        catch (ClientDataException e){
+            response.setError("No user data found for clientId=" + clientId);
+            return response;
+        }
+
+        StoredUser entity = userRepository.findByUsername(username).orElse(null);
+        if(entity == null){
+            response.setError("No user data found for username=" + username);
+            return response;
+        }
+
+        response.setUsername(username);
+        response.setMatches(entity.matches());
+        response.setWins(entity.wins());
+        response.setServerStatus("User data retrieved for username=" + username);
+
+        return response;
+    }
+
+    @Override
     public NewGameResponse startNewGame(String clientId, NewGameRequest request) {
         request.setClientId(clientId);
 
@@ -467,18 +498,18 @@ public class InMemoryGameService implements GameService {
         Game game = activeGames.get(request.getGameId());
 
         //odkomentowac to na produkcji, ale na razie niech bedzie latwiej testowac
-//        if(game.getCurrentFaction() != null) {
-//            String playerFaction = game.getPlayerFaction(clientId);
-//            if (playerFaction == null) {
-//                throw new GameValidationException("Client is not a player in the game");
-//            }
-//            if (!playerFaction.equals(game.getCurrentFaction())) {
-//                throw new GameValidationException("It's not the player's turn");
-//            }
-//        }
-//        else{
-//            logger.warn("Current faction in game is not defined, clientId={}, gameId={}, gameState={}", clientId, request.getGameId(), game.getGameState());
-//        }
+        if(game.getCurrentFaction() != null) {
+            String playerFaction = game.getPlayerFaction(clientId);
+            if (playerFaction == null) {
+                throw new GameValidationException("Client is not a player in the game");
+            }
+            if (!playerFaction.equals(game.getCurrentFaction())) {
+                throw new GameValidationException("It's not the player's turn");
+            }
+        }
+        else{
+            logger.warn("Current faction in game is not defined, clientId={}, gameId={}, gameState={}", clientId, request.getGameId(), game.getGameState());
+        }
 
         GameStatusChangeRequest gameStatusChangeRequest = new GameStatusChangeRequest();
         gameStatusChangeRequest.setGameState(game.getGameState());
@@ -488,6 +519,19 @@ public class InMemoryGameService implements GameService {
 
         GameStatusChangeResponse responseGameData = objectMapper.convertValue(responseGameDataJsonMessage, GameStatusChangeResponse.class);
         game.setGameState(responseGameData.getGameState());
+
+        try{
+            if(game.getGameState().get("state").get("phase") != null && game.getGameState().get("state").get("phase").isTextual()
+            && game.getGameState().get("state").get("phase").toString().equals("gameover")) {
+                logger.info("Game game={} is over", game.getGameId());
+                EndGameRequest endGameRequest = new EndGameRequest();
+                endGameRequest.setGameId(game.getGameId());
+                endGame(endGameRequest.getClientId(), endGameRequest);
+            }
+        }
+        catch (IllegalStateException e) {
+            throw new GameValidationException("Game has no state" + e.getMessage());
+        }
 
         ActionResponse response = new ActionResponse();
         response.setGameView(buildGameView(game.getGameState()));
@@ -514,6 +558,44 @@ public class InMemoryGameService implements GameService {
 
         if(room.getGameId() != null && !request.getGameId().equals(room.getGameId())){
             throw new GameValidationException("Client is not affiliated with gameId=" + request.getGameId());
+        }
+
+        Game game = activeGames.get(room.getGameId());
+
+        try{
+            JsonNode winnerNode = game.getGameState().get("winner");
+            String winner = (winnerNode == null || winnerNode.isNull()) ? null : winnerNode.asText();
+
+            if (winner == null) {
+                logger.warn("Game game={} ended with no winner", request.getGameId());
+            } else {
+                logger.info("Game game={} ended with winner={}", request.getGameId(), winner);
+            }
+
+            for(Map.Entry<String, String> entry : room.getActivePlayerFactions().entrySet()){
+                String playerId = entry.getKey();
+                String playerFaction = entry.getValue();
+
+                String username = clientDataService.getUsernameBySessionIdOrDefault(playerId, null);
+                if (username == null) {
+                    logger.warn("Cannot resolve username for playerId={}, skipping stats update", playerId);
+                    continue;
+                }
+
+                boolean won = playerFaction.equals(winner);
+                if (won) {
+                    logger.info("Player playerId={} username={} wins the game", playerId, username);
+                }
+
+                try {
+                    userRepository.recordMatch(username, won);
+                } catch (Exception e) {
+                    logger.warn("Failed to update stats for username={}: {}", username, e.getMessage());
+                }
+            }
+        }
+        catch (Exception e) {
+            throw new GameValidationException("Game data has no winner" + e.getMessage());
         }
 
         room.clearGame();

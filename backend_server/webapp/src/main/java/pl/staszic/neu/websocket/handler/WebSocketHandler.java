@@ -89,6 +89,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
             switch (messageType) {
                 case GetRoomStatusRequest.TYPE -> handleGetRoomStatus(session, clientId, rootNode);
+                case GetUserDataRequest.TYPE -> handleGetUserData(session, clientId, rootNode);
                 case SetInRoomAttributesRequest.TYPE -> handleSetInRoomAttributes(session, clientId, rootNode);
                 case SetRoomPolicyRequest.TYPE -> handleSetRoomPolicy(session, clientId, rootNode);
                 case ActionRequest.TYPE -> handleActionRequest(clientId, rootNode);
@@ -170,6 +171,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
         GetRoomStatusResponse response = gameService.getRoomStatus(clientId, request);
         sendJson(session, response);
         logger.info("Room status: {}", objectMapper.writeValueAsString(response));
+    }
+
+    private void handleGetUserData(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
+        GetUserDataRequest request = objectMapper.treeToValue(rootNode, GetUserDataRequest.class);
+        GetUserDataResponse response = gameService.getUserData(clientId, request);
+        sendJson(session, response);
+        logger.info("User data sent to client {}: {}", clientId, objectMapper.writeValueAsString(response));
     }
 
     private void handleSetInRoomAttributes(WebSocketSession session, String clientId, JsonNode rootNode) throws IOException {
