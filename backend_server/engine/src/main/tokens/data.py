@@ -71,3 +71,4 @@ class TokenView:
     wired : bool
     ability_used : bool
     damage : int
+    wounds : int

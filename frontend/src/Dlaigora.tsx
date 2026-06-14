@@ -8,6 +8,7 @@ type BoardCell = {
         faction : string,
         rotation : number,
         damage : number,
+        wounds: number,
         wired : number,
         ability_used : boolean,
     }

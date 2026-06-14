@@ -9,6 +9,7 @@ import { useGameSocketContext } from "./websockets/gameSocketContext";
 // import { gameState } from "./components/gameState";
 import { useProcesedGameState, GameState } from "./Dlaigora";
 import Tile from "./components/Tile"
+import TextBox from "./components/TextBox";
 
 async function cos(name : string) {
   console.log(name);
@@ -57,9 +58,9 @@ export default function HexTest(){
     // =================== Nowe Wyswietlanie =================== //
 
     for(let y = 0; y <= 4; y++){
-        let xs = Math.abs(2 - y);
-        let xf = 4 + Math.abs(2 - y) + 2 * Math.abs(2 - Math.abs(2 - y));
-        console.log(y + " " + xs + "-" + xf);
+        // let xs = Math.abs(2 - y);
+        // let xf = 4 + Math.abs(2 - y) + 2 * Math.abs(2 - Math.abs(2 - y));
+        // console.log(y + " " + xs + "-" + xf);
         for(let x = Math.abs(2 - y); x <= 4 + Math.abs(2 - y) + 2 * Math.abs(2 - Math.abs(2 - y)); x+=2){
             const Y = y * 1.732 * Size;
             const X = x * Size;
@@ -159,7 +160,7 @@ export default function HexTest(){
     // ==== //
 
 
-    // ===== End Button ===== //
+    // ===== Buttons ===== //
     let ButtonPoz: number = (height / 16);
     let Ile: number = 0;
 
@@ -171,7 +172,39 @@ export default function HexTest(){
         Ile += 1;
     }
 
-    // ===== ========== ===== //
+    // ===== ======= ===== //
+
+    // ===== Message ===== //
+    let Text: string = gameState.view.uiState.message;
+    if(Text) {
+        Items.push(
+            <TextBox x={width / 2} y={ButtonPoz} text={Text} />
+        );
+    }
+    // ===== ======= ===== //
+
+    // ===== Sztaby ===== //
+    let CurrentHeadquarterHP: number = 20;
+    const CurrentFind = gameState.view.state.board.find(CurrentFind =>
+        CurrentFind.unit.faction === currentfaction &&
+        CurrentFind.unit.name === "sztab"
+    );
+    if(CurrentFind) CurrentHeadquarterHP = 20 - CurrentFind.unit.damage;
+
+    let EnemyHeadquarterHP: number = 20;
+    const EnemyFind = gameState.view.state.board.find(EnemyFind =>
+        EnemyFind.unit.faction === enemyfaction &&
+        EnemyFind.unit.name === "sztab"
+    );
+    if(EnemyFind) EnemyHeadquarterHP = 20 - EnemyFind.unit.damage;
+
+    Items.push(
+        <TextBox x={LeftX} y={height / 32} text={"HP: " + CurrentHeadquarterHP} />
+    )
+    Items.push(
+        <TextBox x={RightX} y={height / 32} text={"HP: " + EnemyHeadquarterHP} />
+    )
+    // ===== ====== ===== //
 
     // console.log("======");
     // console.log(window.api);

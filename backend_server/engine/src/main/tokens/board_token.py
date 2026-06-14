@@ -160,6 +160,7 @@ class BoardToken(Token):
             name= self.name,
             rotation= self.rotation,
             ability_used= self.ability_used,
-            damage= self.state.damage + sum(self.wounds),
+            damage= self.state.damage,
             wired= self.wired,
+            wounds= sum(self.wounds),
         )
