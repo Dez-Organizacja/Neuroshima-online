@@ -183,20 +183,9 @@ export default function HexTest(){
     }
     // ===== ======= ===== //
 
-    // ===== Sztaby ===== //
-    let CurrentHeadquarterHP: number = 20;
-    const CurrentFind = gameState.view.state.board.find(CurrentFind =>
-        CurrentFind.unit.faction === currentfaction &&
-        CurrentFind.unit.name === "sztab"
-    );
-    if(CurrentFind) CurrentHeadquarterHP = 20 - CurrentFind.unit.damage;
-
-    let EnemyHeadquarterHP: number = 20;
-    const EnemyFind = gameState.view.state.board.find(EnemyFind =>
-        EnemyFind.unit.faction === enemyfaction &&
-        EnemyFind.unit.name === "sztab"
-    );
-    if(EnemyFind) EnemyHeadquarterHP = 20 - EnemyFind.unit.damage;
+    // ===== Sztaby i stosy ===== //
+    const CurrentHeadquarterHP = gameState.view.scores[currentfaction];
+    const EnemyHeadquarterHP = gameState.view.scores[enemyfaction];
 
     const CurrentPile = gameState.view.state.piles[currentfaction];
     const EnemyPile = gameState.view.state.piles[enemyfaction];
@@ -213,7 +202,7 @@ export default function HexTest(){
             <TextBox x={RightX} y={height - (height / 32)} text={"Pile size: " + EnemyPile} />
         </div>
     )
-    // ===== ====== ===== //
+    // ===== ============== ===== //
 
     // console.log("======");
     // console.log(window.api);
