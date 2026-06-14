@@ -4,49 +4,8 @@ from typing import Callable
 from main.state.contex import GameState
 from main.input.data import UserAction
 from main.actions.available.data import AvailableStructure
+from main.workflows.data import WorkflowInstance
 
-@dataclass
-class TileDamage:
-    pos : tuple[int, int]
-    damage : int = 1
-    
-    def apply(self, state : GameState):
-        state.board.get_token(self.pos).add_damage(self.damage)
-
-@dataclass
-class TileWounds:
-    pos : tuple[int, int]
-    wounds : list[int]
-
-    def apply(self, state : GameState):
-        for amount in self.wounds:
-            state.board.get_token(self.pos).add_wounds(amount)
-            
-@dataclass
-class TilePlace:
-    pos : tuple[int, int]
-    name : str
-    faction : str
-    rotation : int = 0
-
-    def apply(self, state : GameState):
-        state.board.put_token(pos=self.pos, name=self.name, faction=self.faction)
-        state.board.get_token(self.pos).set_rotation(self.rotation)
-
-@dataclass
-class TileRemove:
-    pos : tuple[int, int]
-
-    def apply(self, state : GameState):
-        state.board.remove_token(self.pos)
-
-@dataclass
-class TileRotate:
-    pos : tuple[int, int]
-    rotation : int
-
-    def apply(self, state : GameState):
-        state.board.get_token(self.pos).set_rotation(self.rotation)
 
 @dataclass
 class StackPush:
@@ -69,58 +28,17 @@ class StackSetIndex:
         # print(f"set index to {self.index}")
         state.workflow_stack[-1].current_step_index = self.index
 
-@dataclass
-class HandAdd:
-    card: str
-    faction : str
-
-    def apply(self, state: GameState):
-        state.players[self.faction].hand.add(self.card)
-
-@dataclass
-class HandRemove:
-    faction : str
-    index: int
-
-    def apply(self, state: GameState):
-        state.players[self.faction].hand.remove(self.index)
-
-StackChange = StackPush | StackPop | StackSetIndex
-BoardDelta = TileRemove | TileRotate
-HandDelta = HandAdd | HandRemove
 
 @dataclass
 class Delta:
-    board_delta : list[BoardDelta] = field(default_factory=list)
+    changes : list[Callable[[GameState], None]] = field(default_factory=list)
 
-    hand_delta : list[HandDelta] = field(default_factory=list)
-
-    wf_data_delta : dict = field(default_factory=dict)
-    stack_delta : list[StackChange] = field(default_factory=list)
-    faction_delta : str | None = None
-    turn_faction_delta : str | None = None
+    def add(self, *funcs : Callable[[GameState], None]):
+        self.changes.extend(funcs)
 
     def apply(self, state : GameState):
-        if self.faction_delta is not None:
-            state.active_faction = self.faction_delta
-        
-        if self.turn_faction_delta is not None:
-            state.turn_faction = self.turn_faction_delta
-
-        for tile in self.board_delta:
-            tile.apply(state)
-
-        # print("appling workflow stack changes")
-        for stack_change in self.stack_delta:
-            stack_change.apply(state)
-        # print("workflow changes appiled")
-        # print("-------------")
-        
-        for hand_change in self.hand_delta:
-            hand_change.apply(state)
-
-        for k, v in self.wf_data_delta.items():
-            setattr(state.workflow_data, k, v)
+        for func in self.changes:
+            func(state)
         
 
 @dataclass
@@ -128,6 +46,7 @@ class StepCase:
     action : UserAction
     delta : Delta = field(default_factory=Delta)
     available_actions : AvailableStructure | None = None
+    finish : bool = False
 
 @dataclass
 class Scenario:

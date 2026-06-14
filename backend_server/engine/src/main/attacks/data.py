@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from main.attacks.properties.data import AttackProperties
 
 class AttackType(Enum):
     MELEE = "melee"
@@ -18,7 +19,7 @@ class TargetedIntent:
 class DirectedIntent:
     attaker_pos : tuple[int, int]
     direction : int
-    attack_type : AttackType
+    properties : AttackProperties
     power : int = 1
 
 AttackIntent = TargetedIntent | DirectedIntent

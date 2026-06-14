@@ -56,6 +56,8 @@ class Tests:
         resolver.execute(ctx=ctx, result=result)
         resolver.execute(ctx=ctx, result=[Wf.PushWorkflow(name=WorkflowName.BATTLE)])
 
+        assert(ctx.faction == "")
+        ctx.faction = "moloch"
         assert(ctx.player.hand.tokens == ["sieciarz", "lowca"])
         assert(ctx.player.pile.tokens == [])
         

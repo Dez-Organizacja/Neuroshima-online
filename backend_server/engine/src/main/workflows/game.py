@@ -1,7 +1,6 @@
 from main.workflows.base import Workflow
 from main.workflows.data import WorkflowName, WorkflowConfig
 from main.workflows.providers.base import WorkflowActionProvider
-from main.steps.config import InitStepConfig, RepeatStepConfig
 
 class GameWorkflow(Workflow[WorkflowActionProvider]):
     def __init__(self, config : WorkflowConfig):
@@ -9,21 +8,16 @@ class GameWorkflow(Workflow[WorkflowActionProvider]):
         super().__init__()
 
     def build_player_turn_step(self, faction : str, hand_limit : int = 3):
-        return InitStepConfig(
-            wf_name=WorkflowName.TURN,
-            wf_config=WorkflowConfig(faction=faction, hand_limit=hand_limit)
+        return self.build_push_workflow_step(
+            name=WorkflowName.TURN,
+            config=WorkflowConfig(faction=faction, hand_limit=hand_limit)
         )
 
     def build_headquarter_turn_step(self, faction : str):
-        return InitStepConfig(
-            wf_name=WorkflowName.HEADQUARTER_TURN,
-            wf_config=WorkflowConfig(faction=faction)
+        return self.build_push_workflow_step(
+            name=WorkflowName.HEADQUARTER_TURN,
+            config=WorkflowConfig(faction=faction)
         )
-    
-    def build_repeat_step(self):
-        return RepeatStepConfig(repeat_from_index=2 * len(self.config.factions)) 
-        # *2 poniewaz sa 2 frakcje -> 2 kroki na frakcje -> 4 tura to dopiero normalna tura
-        # sztab1, sztab2, tura 1 zeton, tura 2 zetony, tura 3 zetony, ...,
     
     def _build_steps(self):
         headquarter_steps = [
@@ -39,5 +33,7 @@ class GameWorkflow(Workflow[WorkflowActionProvider]):
             for faction in self.config.factions
         ]
         steps = headquarter_steps + opening_turn_steps + turn_steps
-        steps.append(self.build_repeat_step())
+        steps.append(self.build_repeat_step(index=2 * len(self.config.factions)))
+        # *2 poniewaz sa 2 frakcje -> 2 kroki na frakcje -> 4 tura to dopiero normalna tura
+        # sztab1, sztab2, tura 1 zeton, tura 2 zetony, tura 3 zetony, ...,
         return steps

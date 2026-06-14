@@ -10,6 +10,10 @@ class Hand:
     def size(self):
         return len(self.tokens)
 
+    @property
+    def is_full(self):
+        return self.MAX_LIMIT == self.size
+
     def remove(self, slot : int):
         self.tokens.pop(slot)
 

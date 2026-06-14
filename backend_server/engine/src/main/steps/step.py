@@ -38,17 +38,23 @@ class Step(ABC, Generic[C]):
     def requires_input(self) -> bool:
         pass
 
+    def can_skip(self, ctx : ActionContext) -> bool:
+        return False
+
 class WaitingStep(Step[WaitingStepConfig]):
     def __init__(self, config : WaitingStepConfig):
         super().__init__(config)
 
+    def can_skip(self, ctx : ActionContext) -> bool:
+        return self.config.can_skip(ctx)
+
     def execute(self, ctx : ActionContext, action : UserAction) -> StepResult:
-        print("WAITING STEP")
+        # print("WAITING STEP")
         self.config.action_handler.handle(ctx, action)
         # print(f"wf instance {ctx.workflow_instance}")
         result = OnClickSystem.resolve(ctx.workflow_instance)
         # print(f"result: {result}")
-        print(f"workflow data {ctx.workflow_data}")
+        # print(f"workflow data {ctx.workflow_data}")
         return StepResult(execution_result=result)
     
     @property
@@ -74,6 +80,7 @@ class ResolveStep(AutomaticStep[ResolveStepConfig]):
     def execute(self, ctx : ActionContext) -> StepResult:
         # print(f"EXECUTING RESOLVE STEP")
         res : list[Event] = self.config.resolve_func(ctx) or []
+        # print("FINISHED CONFIG FUNCTION RESOLVING")
         if self.config.wf_finished:
             res.append(PopWorkflow())
         #     print("finished workflow effect pushed")

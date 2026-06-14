@@ -63,6 +63,7 @@ def test_game_can_reimport_exported_state_after_placing_token():
                 "wired": False,
                 "ability_used": False,
                 "damage": 0,
+                "wounds" : 0,
             },
         }
     ]

@@ -1,179 +1,190 @@
-from .data import (
-    Delta,
-    TileRemove,
-    TilePlace,
-    TileRotate,
-    TileDamage,
-    HandAdd,
-    HandRemove,
-    StackPush,
-    StackPop,
-    StackSetIndex,
-)
-from main.workflows.data import WorkflowName, WorkflowInstance, WorkflowConfig
-from main.input.data import ActionType, Button
+from main.board.board import Board, Hex
+from main.state.game_state import GameState
+from main.tokens.board_token import BoardToken
+from main.tokens.hand import Hand
+from main.workflows.data import WorkflowName, WorkflowInstance
+from main.input.data import Button
 from typing import Callable
 from main.actions.available.data import AvailableStructure
-from main.events.data import Event, OnClickData
+from main.utils.variable import Phase
 
-# ----------- State Delta -----------
-def tile_place(pos : tuple[int, int], name : str, faction : str, rotation : int = 0):
-    def apply(delta : Delta):
-        delta.board_delta.append(TilePlace(pos, name, faction, rotation))
+# ----------- Helpers -----------
+def _composed_function(*funcs : Callable[[GameState], None]):
+    def apply(*args):
+        for func in funcs:
+            func(*args)
     return apply
 
+def _set_attributes(obj, **data):
+    for key, value in data.items():
+        setattr(obj, key, value)
+
+# ----------- Board changes -----------
+
+def place(pos : tuple[int, int], name : str, faction : str, rotation : int = 0):
+    def apply(board : Board):
+        board.put_token(pos, name, faction)
+        board.get_token(pos).set_rotation(rotation)
+    return apply
+
+def tile(pos : Hex, name : str, rotation : int = 0):
+    def build(faction : str):
+        return place(pos, name, faction, rotation)
+    return build
 
 def tiles_remove(positions : list[tuple[int, int]]):
-    def apply(delta: Delta):
+    def apply(board : Board):
         for pos in positions:
-            delta.board_delta.append(TileRemove(pos=pos))
+            board.remove_token(pos)
     return apply
 
-def tile_rotate(pos: tuple[int, int], rotation: int):
-    def apply(delta: Delta):
-        delta.board_delta.append(TileRotate(pos=pos, rotation=rotation))
+def rotate(rotation: int):
+    def apply(unit : BoardToken):
+        unit.set_rotation(rotation)
     return apply
 
-def tile_damage(pos : tuple[int, int], damage : int = 1):
-    def apply(delta : Delta):
-        delta.board_delta.append(TileDamage(pos, damage))
+def damage(damage : int = 1):
+    def apply(unit : BoardToken):
+        unit.add_damage(damage)
     return apply
 
-def hand_add(faction: str, cards: list[str]):
-    def apply(delta: Delta):
-        for card in cards:
-            delta.hand_delta.append(HandAdd(faction=faction, card=card))
-    return apply
+def wounds(*wounds : int):
+    def apply(unit : BoardToken):
+        unit.wounds.extend(wounds)
+    return apply    
 
-def hand_remove(faction: str, index: int):
-    def apply(delta: Delta):
-        delta.hand_delta.append(HandRemove(faction=faction, index=index))
-    return apply
-
-def wf_data_delta(**data):
-    def apply(delta: Delta):
-        delta.wf_data_delta = data
-    return apply
-
-def stack_add(
-    name: WorkflowName,
-    config: WorkflowConfig | None = None,
-    index : int | None = None,
-):
-    def apply(delta: Delta):
-        workflow_config = config or WorkflowConfig()
-
-        delta.stack_delta.append(
-            StackPush(
-                instance=WorkflowInstance(
-                    name=name,
-                    config=workflow_config,
-                )
-            )
-        )
-        if index is not None:
-            delta.stack_delta.append(StackSetIndex(index=index))
-
-    return apply
-
-def stack_index_change(index: int):
-    def apply(delta: Delta):
-        delta.stack_delta.append(StackSetIndex(index=index))
-
-    return apply
-
-def stack_pop(count : int = 1):
-    def apply(delta: Delta):
-        for i in range(count):
-            delta.stack_delta.append(StackPop())
-
-    return apply
-
-def stack_add_game_wf(factions : list[str]):
-    return stack_add(
-        name=WorkflowName.GAME,
-        index=5, # znaznik ustawinoy na ture drugiej frakcji (tury frakcji indexy 4-5)
-        config=WorkflowConfig(factions=factions),
-    )
-
-def stack_add_turn_wf(faction : str):
-    return stack_add(
-        name=WorkflowName.TURN,
-        index=2,
-        config=WorkflowConfig(faction=faction),
-    )
-
-
-def faction_delta(faction: str, turn : bool = False):
-    def apply(delta: Delta):
-        if turn:
-            delta.turn_faction_delta = faction
-        delta.faction_delta = faction
-
-    return apply
-
-def expected_step_index(index: int):
-    def apply(delta: Delta):
-        delta.expected_step_index = index
-
-    return apply
-
-def composed_function(*funcs : Callable[[Delta], None]):
-    def apply(delta : Delta):
-        for func in funcs:
-            func(delta)
-    return apply
-
-def pushing_hand_wf_changes(slot : int):
-    return composed_function(
-        wf_data_delta(slot=slot, type=ActionType.HAND),
-        stack_index_change(index=4),
-        stack_add(
-            name=WorkflowName.HAND, 
-            index=1, 
-        ),
-    )
-
-def action_workflow_config(slot) -> WorkflowConfig:
-    return WorkflowConfig(on_click=OnClickData(discard_slot=slot))
-
-def setup_turn(factions : list[str]):
-    return composed_function(
-        stack_add_game_wf(factions),
-        stack_add_turn_wf(factions[0]),
-        faction_delta(faction=factions[0], turn=True),
-    )
-
-def wf_data_clear():
-    return composed_function(
-        wf_data_delta(
-            slot=None,
-            unit_pos=None,
-            target_pos=None,
-            destination=None,
-            rotation=None,
-            type=None,
-            button=None,
-        )
-    )
-
-def faction_tiles_place(
-        faction : str,
-        positions : list[tuple[int, int]],
-        names : list[str],
-        rotations : list[int],
-):
-    if len(positions) != len(names) or len(names) != len(rotations):
-        raise ValueError("Faction tile placment wrong arrays sizes")
+def remove_wounds(index : int = 0):
+    def apply(unit : BoardToken):
+        unit.wounds.pop(index)
+    return apply    
     
-    return composed_function(
-        *[tile_place(pos, name, faction, rotation)
-        for pos, name,rotation in zip(positions, names, rotations)]
+def unit(pos : Hex, *funcs : Callable[[BoardToken], None]):
+    def apply(board : Board):
+        for func in funcs:
+            func(board.get_token(pos))
+    return apply
+
+def faction_place(faction : str, *funcs : Callable[[str], Callable[[Board], None]]):
+    return _composed_function(
+        *[
+            func(faction)
+            for func in funcs
+        ]
     )
-            
+
+def board(*funcs : Callable[[Board], None]):
+    def apply(state : GameState):
+        for func in funcs:
+            func(state.board)
+    return apply
+
+# ----------- Hand changes -----------
+def hand(faction : str, *funcs : Callable[[Hand], None]):
+    def apply(state : GameState):
+        for func in funcs:
+            func(state.players[faction].hand)
+    return apply
+
+def draw(cards: list[str]):
+    def apply(hand : Hand):
+        for card in cards:
+            hand.add(card)
+    return apply
+
+def discard(index: int):
+    def apply(hand : Hand):
+        hand.remove(index)
+    return apply
+
+# ----------- Faction changes -----------
+def set_faction(faction: str, turn = True):
+    def apply(state : GameState):
+        state.active_faction = faction
+        if turn:
+            state.turn_faction = faction
+    return apply
+
+# ----------- Top workflow changes -----------
+def index(index : int):
+    def apply(workflow : WorkflowInstance):
+        workflow.current_step_index = index
+    return apply
+
+def config(**data):
+    def apply(workflow : WorkflowInstance):
+        _set_attributes(workflow.config, **data)
+    return apply
+
+def name(name : WorkflowName):
+    def apply(workflow : WorkflowInstance):
+        workflow.name = name
+    return apply
+
+def workflow(*funcs : Callable[[WorkflowInstance], None]):
+    def apply(state : GameState):
+        for func in funcs:
+            func(state.workflow_stack[-1])
+    return apply
+
+def turn_workflow(faction : str): #index = 2 to waiting step
+    return [
+        name(WorkflowName.TURN),
+        index(2),
+        config(faction=faction),
+    ]
+
+def phase(phase : Phase):
+    def apply(state : GameState):
+        state.phase = phase
+    return apply
+
+# ----------- setup -----------
+def push_workflow(
+        *funcs : Callable[[WorkflowInstance], None]
+    ):
+    def apply(state : GameState):
+        print("PUSH WORKFLOW APPLYING")
+        # print(type(state))
+        state.workflow_stack.append(WorkflowInstance(name=""))
+        workflow(*funcs)(state)
+    return apply
+
+def push_game_wf(factions : list[str]) -> Callable[[GameState], None]:
+    return push_workflow(
+        name(WorkflowName.GAME), 
+        index(5), #index na ture drugie frakcj
+        config(factions=factions)
+    )
+
+def setup_turn_wf(faction : str) -> Callable[[GameState], None]:
+    return _composed_function(
+        push_workflow(*turn_workflow(faction)),
+        set_faction(faction, turn=True),
+    )
+
+def wf_data_setup(**data):
+    def apply(state : GameState):
+        for key, value in data.items():
+            if not hasattr(state.workflow_data, key):
+                raise ValueError(f"Workflow data doesn't have argument {key}")
+            setattr(state.workflow_data, key, value)
+    return apply
+
+def build_from_hand_action_wfs(
+        factions : list[str], 
+        wf_data_setup_func : Callable[[GameState], None] | None = None,
+    ):
+    wf_data_setup_func = wf_data_setup_func or wf_data_setup(slot=0)
+
+    return _composed_function(
+        wf_data_setup_func,
+        push_game_wf(factions),
+        setup_turn_wf(faction=factions[0]),
+        push_workflow(name(WorkflowName.HAND))
+    )
 
 # ----------- Available Actions -----------
-def board(*positions : tuple[int, int]):
+def positions(*positions : tuple[int, int]):
     def apply(actions : AvailableStructure):
         actions.board = list(positions)
 
@@ -190,4 +201,3 @@ def buttons(*buttons : Button):
     def apply(actions : AvailableStructure):
         actions.buttons = list(buttons)
     return apply
-

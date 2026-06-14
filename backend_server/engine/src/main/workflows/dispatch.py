@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 from main.events.data import Event, OnClickData
-from main.events.effects import DiscardTokenEffect, MarkAbilityUsedEffect
+from main.events.effects import DiscardTokenEffect
 from main.events.workflow import PushWorkflow, PopWorkflow
 
-from main.steps.config import WaitingStepConfig
 from main.state.contex import ActionContext
 
 from main.tokens.base import Token
@@ -17,7 +16,6 @@ from main.workflows.data import(
     WorkflowConfig, 
     ABILITY_WORKFLOW_REGISTRY, 
 )
-from main.workflows.step_builders import build_end_step, build_resolve_step
 from main.input.data import Button
 
 class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
@@ -47,6 +45,7 @@ class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
         pass
 
     def next_workflow_push_effect(self, ctx : ActionContext) -> PushWorkflow:
+        # print("NEXT WORKFLOW PUSH EFFECT")
         return PushWorkflow(
             name=self.dispatch_function(ctx),
             config=WorkflowConfig(on_click=self.on_click_effects(ctx))
@@ -54,8 +53,8 @@ class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
 
     def _build_steps(self):
         return [
-            build_resolve_step(self.resolve_function),
-            build_end_step(),   
+            self.build_resolve_step(self.resolve_function),
+            self.build_end_step(),   
         ]
 
 class HandWorkflow(DispatchActionWorkflow):
@@ -74,8 +73,9 @@ class HandWorkflow(DispatchActionWorkflow):
         return token.type == TokenType.BOARD
 
     def resolve_function(self, ctx : ActionContext) -> list[Event]:
-        print("HAND RESOLVE FUNCTION")
+        # print("HAND RESOLVE FUNCTION")
         if ctx.workflow_data.button == Button.DISCARD:
+            # print("REOSLVE DISCARD")
             return [
                 DiscardTokenEffect(slot=ctx.workflow_data.slot),
                 PopWorkflow(),
@@ -85,6 +85,7 @@ class HandWorkflow(DispatchActionWorkflow):
             return [self.next_workflow_push_effect(ctx)]
 
     def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
+        # print("DISPATCH FUNCTION")
         token = self.get_active_token(ctx)
         if self.is_board_token(token):
             return WorkflowName.PLACE
@@ -109,6 +110,8 @@ class BoardWorkflow(DispatchActionWorkflow):
 
     @staticmethod
     def get_active_token(ctx : ActionContext):
+        print("get active token")
+        print(f"workflow data {ctx.workflow_data}")
         return ctx.board.get_token(ctx.workflow_data.unit_pos)
 
     @staticmethod

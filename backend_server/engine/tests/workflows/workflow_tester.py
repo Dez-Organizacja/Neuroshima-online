@@ -29,9 +29,9 @@ class WorkflowTester:
         # return Serializator.to_dict_dataclass(expected_ctx.state)
 
     def run(self, scenario: Scenario):
-        print("RUNING SECNARIO")
-        print(scenario)
-        print("---------------")
+        # print("RUNING SECNARIO")
+        # print(scenario)
+        # print("---------------")
         ctx = ActionContext(
             state=GameState(factions=scenario.factions)
         )

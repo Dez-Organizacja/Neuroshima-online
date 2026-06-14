@@ -7,6 +7,5 @@ from main.utils.diff import Diff
 #     name = "battle1"
 #     scenario = ScenarioRegistry._SCENARIOS[name]()
 #     ScenarioExecuter().run(scenario)
-
     
 #     assert False

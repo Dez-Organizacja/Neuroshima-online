@@ -45,6 +45,7 @@ class CombatSystem:
             wf_name = BATTLE_ABILITY_WORKFLOW_REGISTRY[ability]
             return PushWorkflow(name=wf_name, config=WorkflowConfig(pos=pos))
 
+        # print(f"attacks {AttackProvider.get_attack_intents(unit, pos)}")
         return EnqueueAttacksEffect(AttackProvider.get_attack_intents(unit, pos))
 
     @classmethod
@@ -59,6 +60,7 @@ class CombatSystem:
         for pos in positions:
             unit = ctx.board.get_token(pos)
             if CombatRules.can_activate(unit, initiative):
+                # print(f"ACTIVATING UNIT {unit.get_view()} AT {pos}")
                 effects.append(cls.resolve_unit_attack_declarations(unit, pos))
 
         return effects

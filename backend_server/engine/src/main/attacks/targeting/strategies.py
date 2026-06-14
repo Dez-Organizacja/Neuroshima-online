@@ -1,12 +1,14 @@
 from main.attacks.targeting.base import TargetingStrategy
 from main.attacks.targeting.factory import TargetingFactory
-from main.attacks.data import AttackType
-from main.board.query import BoardQuery
+from main.attacks.targeting.data import TargetingType
+
 from main.board.board import Hex, Board
+from main.board.query import BoardQuery
 from main.rules.predicates import adjacent_to, in_line_to, is_enemy_of
+
 from typing import ClassVar
 
-@TargetingFactory.register(AttackType.MELEE)
+@TargetingFactory.register(TargetingType.ADJACENT)
 class AdjacentDirection(TargetingStrategy):
     @staticmethod
     def get_targets(
@@ -20,7 +22,7 @@ class AdjacentDirection(TargetingStrategy):
             is_enemy_of(board.get_token(attacker_pos))
         ]).apply(board)
 
-@TargetingFactory.register(AttackType.SHOOT)
+@TargetingFactory.register(TargetingType.FIRST_IN_LINE)
 class FirstInLine(TargetingStrategy):
     IS_BLOCKALBE : ClassVar[bool] = True
     @staticmethod
@@ -39,7 +41,7 @@ class FirstInLine(TargetingStrategy):
 
         return []
     
-@TargetingFactory.register(AttackType.GAUSS)
+@TargetingFactory.register(TargetingType.ALL_IN_LINE)
 class AllEnemiesInLine(TargetingStrategy):
     @staticmethod
     def get_targets(

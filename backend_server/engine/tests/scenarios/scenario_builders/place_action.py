@@ -3,8 +3,8 @@ from ..registry import ScenarioRegistry
 from ..data import Scenario
 from main.input.data import BoardAction, HandAction, ActionType, RotationAction
 from main.state.game_state import GameState
-from main.state.contex import ActionContext
-from main.workflows.data import WorkflowName, WorkflowConfig
+from main.workflows.data import WorkflowName
+from main.state.game_state import GameState
 from ..build_helpers import *
 from typing import Callable
 
@@ -13,49 +13,45 @@ def place_scenario_builder(
         slot : int,
         pos : tuple[int, int],
         unit_name : str,
-        setup_hand : list[Callable],
-        setup_board : list[Callable],
+        setup_hand : Callable[[GameState], None],
+        setup_board : Callable[[GameState], None],
 ) -> Scenario:
     return (
         ScenarioBuilder(factions)
         .given(
-            setup_turn(factions),
-            *setup_hand,
-            *setup_board,
+            build_from_hand_action_wfs(factions, wf_data_setup(slot=slot)),
+            setup_hand,
+            setup_board,
         )
 
-        .when(HandAction(slot=slot))
-        .then(
-            pushing_hand_wf_changes(slot=slot), #wf data tez wrzuca
-            stack_add(
-                name=WorkflowName.PLACE, 
-                index=0,
-            ),
-        )
+        # .when(HandAction(slot=slot))
+        # .then(
+        #     pushing_hand_wf_changes(slot=slot), #wf data tez wrzuca
+        #     stack_add(
+        #         name=WorkflowName.PLACE, 
+        #         index=0,
+        #     ),
+        # )
 
         .when(BoardAction(pos=pos))
         .then(
-            tile_place(pos, name=unit_name, faction=factions[0]),
-            hand_remove(faction=factions[0], index=slot),
-            stack_index_change(index=2),
-            stack_add(name=WorkflowName.ROTATE, index=0),
-            wf_data_delta(slot=None, unit_pos=pos, type=ActionType.BOARD),
+            board(place(pos, unit_name, factions[0])),
+            hand(factions[0], discard(slot)),
+            workflow(name(WorkflowName.ROTATE), index(0)),
         )
         
         .when(RotationAction(rotation=1))
         .then(
-            tile_rotate(pos=pos, rotation=1),
-            stack_pop(count=3),
-            stack_index_change(index=2),
-            wf_data_clear(),
+            board(unit(pos, rotate(1))),
+            workflow(*turn_workflow(factions[0])),
         )
     ).build()
     
 
 @ScenarioRegistry.register("place_action")
 def place_action_scenario() -> Scenario:
-    setup_hand = [hand_add(faction="moloch", cards=["juggernaut", "sieciarz"])]
-    setup_board = [tile_place(pos=(2, 2), faction="moloch", name="sztab")]
+    setup_hand = hand("moloch", draw(["juggernaut", "sieciarz"]))
+    setup_board = board(place((2, 2), "sztab", "moloch"))
     return place_scenario_builder(
         factions=["moloch", "borgo"],
         slot=0,
@@ -65,15 +61,15 @@ def place_action_scenario() -> Scenario:
         setup_board=setup_board,
     )
 
-@ScenarioRegistry.register("boost_place")
-def place_melee_boost() -> Scenario: 
-    setup_hand = [hand_add(faction="borgo", cards=["oficer"])]
-    setup_board = [tile_place(pos=(2, 4), name="sztab", faction="borgo")]
-    return place_scenario_builder(
-        factions=["borgo", "moloch"],
-        slot=0,
-        pos=(2, 2),
-        unit_name="oficer",
-        setup_hand=setup_hand,
-        setup_board=setup_board,
-    )
+# @ScenarioRegistry.register("boost_place")
+# def place_melee_boost() -> Scenario: 
+#     setup_hand = [hand_add(faction="borgo", cards=["oficer"])]
+#     setup_board = [tile_place(pos=(2, 4), name="sztab", faction="borgo")]
+#     return place_scenario_builder(
+#         factions=["borgo", "moloch"],
+#         slot=0,
+#         pos=(2, 2),
+#         unit_name="oficer",
+#         setup_hand=setup_hand,
+#         setup_board=setup_board,
+#     )

@@ -1,149 +1,14 @@
 {
-  "messageType" : "GAMEVIEW_REQUEST",
-  "timestamp" : "2026-06-09T22:21:05.258364449",
+  "messageType" : "GAMESTATUSCHANGE_REQUEST",
+  "timestamp" : "2026-06-14T02:16:06.38904827",
   "gameState" : {
     "active_faction" : "moloch",
     "board" : [ {
       "pos" : [ 2, 4 ],
       "unit" : {
         "config_id" : {
-          "faction" : "moloch",
+          "faction" : "borgo",
           "name" : "sztab"
-        },
-        "state" : {
-          "core" : {
-            "damage" : 0,
-            "rotation" : 3,
-            "wired" : false,
-            "wounds" : [ ]
-          },
-          "exection" : {
-            "used_ability" : false,
-            "used_battle_ability" : false
-          },
-          "modifiers" : {
-            "melee_boosts" : 0,
-            "shoot_boosts" : 0
-          },
-          "relations" : {
-            "real_boost_target" : null
-          }
-        }
-      }
-    }, {
-      "pos" : [ 2, 2 ],
-      "unit" : {
-        "config_id" : {
-          "faction" : "posterunek",
-          "name" : "sztab"
-        },
-        "state" : {
-          "core" : {
-            "damage" : 0,
-            "rotation" : 4,
-            "wired" : false,
-            "wounds" : [ 1 ]
-          },
-          "exection" : {
-            "used_ability" : false,
-            "used_battle_ability" : false
-          },
-          "modifiers" : {
-            "melee_boosts" : 0,
-            "shoot_boosts" : 0
-          },
-          "relations" : {
-            "real_boost_target" : null
-          }
-        }
-      }
-    }, {
-      "pos" : [ 1, 3 ],
-      "unit" : {
-        "config_id" : {
-          "faction" : "moloch",
-          "name" : "lowca"
-        },
-        "state" : {
-          "core" : {
-            "damage" : 0,
-            "rotation" : 4,
-            "wired" : false,
-            "wounds" : [ 1 ]
-          },
-          "exection" : {
-            "used_ability" : false,
-            "used_battle_ability" : false
-          },
-          "modifiers" : {
-            "melee_boosts" : 0,
-            "shoot_boosts" : 0
-          },
-          "relations" : {
-            "real_boost_target" : null
-          }
-        }
-      }
-    }, {
-      "pos" : [ 2, 0 ],
-      "unit" : {
-        "config_id" : {
-          "faction" : "posterunek",
-          "name" : "likwidator"
-        },
-        "state" : {
-          "core" : {
-            "damage" : 0,
-            "rotation" : 3,
-            "wired" : false,
-            "wounds" : [ 1 ]
-          },
-          "exection" : {
-            "used_ability" : false,
-            "used_battle_ability" : false
-          },
-          "modifiers" : {
-            "melee_boosts" : 0,
-            "shoot_boosts" : 0
-          },
-          "relations" : {
-            "real_boost_target" : null
-          }
-        }
-      }
-    }, {
-      "pos" : [ 3, 1 ],
-      "unit" : {
-        "config_id" : {
-          "faction" : "posterunek",
-          "name" : "komandos"
-        },
-        "state" : {
-          "core" : {
-            "damage" : 0,
-            "rotation" : 4,
-            "wired" : false,
-            "wounds" : [ 1 ]
-          },
-          "exection" : {
-            "used_ability" : false,
-            "used_battle_ability" : false
-          },
-          "modifiers" : {
-            "melee_boosts" : 0,
-            "shoot_boosts" : 0
-          },
-          "relations" : {
-            "real_boost_target" : null
-          }
-        }
-      }
-    }, {
-      "pos" : [ 1, 5 ],
-      "unit" : {
-        "config_id" : {
-          "faction" : "moloch",
-          "name" : "medyk"
         },
         "state" : {
           "core" : {
@@ -157,36 +22,1306 @@
             "used_battle_ability" : false
           },
           "modifiers" : {
-            "melee_boosts" : 0,
-            "shoot_boosts" : 0
+            "attack_boosts" : { },
+            "initiative_boosts" : 0,
+            "initiatives" : [ 0 ],
+            "is_basic" : [ true ],
+            "is_blocked_to_0" : false,
+            "is_used" : [ false ],
+            "num_of_new" : 0,
+            "num_of_old" : 0
           },
           "relations" : {
-            "real_boost_target" : null
+            "real_boost_target" : "own"
+          }
+        }
+      }
+    }, {
+      "pos" : [ 0, 2 ],
+      "unit" : {
+        "config_id" : {
+          "faction" : "moloch",
+          "name" : "sztab"
+        },
+        "state" : {
+          "core" : {
+            "damage" : 0,
+            "rotation" : 0,
+            "wired" : false,
+            "wounds" : [ ]
+          },
+          "exection" : {
+            "used_ability" : false,
+            "used_battle_ability" : false
+          },
+          "modifiers" : {
+            "attack_boosts" : { },
+            "initiative_boosts" : 0,
+            "initiatives" : [ 0 ],
+            "is_basic" : [ true ],
+            "is_blocked_to_0" : false,
+            "is_used" : [ false ],
+            "num_of_new" : 0,
+            "num_of_old" : 0
+          },
+          "relations" : {
+            "real_boost_target" : "own"
+          }
+        }
+      }
+    }, {
+      "pos" : [ 1, 3 ],
+      "unit" : {
+        "config_id" : {
+          "faction" : "borgo",
+          "name" : "mutek"
+        },
+        "state" : {
+          "core" : {
+            "damage" : 0,
+            "rotation" : 5,
+            "wired" : false,
+            "wounds" : [ ]
+          },
+          "exection" : {
+            "used_ability" : false,
+            "used_battle_ability" : false
+          },
+          "modifiers" : {
+            "attack_boosts" : { },
+            "initiative_boosts" : 1,
+            "initiatives" : [ 2 ],
+            "is_basic" : [ true ],
+            "is_blocked_to_0" : false,
+            "is_used" : [ false ],
+            "num_of_new" : 0,
+            "num_of_old" : 0
+          },
+          "relations" : {
+            "real_boost_target" : "own"
+          }
+        }
+      }
+    }, {
+      "pos" : [ 2, 2 ],
+      "unit" : {
+        "config_id" : {
+          "faction" : "moloch",
+          "name" : "klaun"
+        },
+        "state" : {
+          "core" : {
+            "damage" : 0,
+            "rotation" : 1,
+            "wired" : false,
+            "wounds" : [ ]
+          },
+          "exection" : {
+            "used_ability" : false,
+            "used_battle_ability" : false
+          },
+          "modifiers" : {
+            "attack_boosts" : { },
+            "initiative_boosts" : 0,
+            "initiatives" : [ 2 ],
+            "is_basic" : [ true ],
+            "is_blocked_to_0" : false,
+            "is_used" : [ false ],
+            "num_of_new" : 0,
+            "num_of_old" : 0
+          },
+          "relations" : {
+            "real_boost_target" : "own"
+          }
+        }
+      }
+    }, {
+      "pos" : [ 0, 4 ],
+      "unit" : {
+        "config_id" : {
+          "faction" : "moloch",
+          "name" : "bloker"
+        },
+        "state" : {
+          "core" : {
+            "damage" : 0,
+            "rotation" : 2,
+            "wired" : false,
+            "wounds" : [ ]
+          },
+          "exection" : {
+            "used_ability" : false,
+            "used_battle_ability" : false
+          },
+          "modifiers" : {
+            "attack_boosts" : {
+              "shoot" : 1
+            },
+            "initiative_boosts" : 0,
+            "initiatives" : [ ],
+            "is_basic" : [ ],
+            "is_blocked_to_0" : false,
+            "is_used" : [ ],
+            "num_of_new" : 0,
+            "num_of_old" : 0
+          },
+          "relations" : {
+            "real_boost_target" : "own"
+          }
+        }
+      }
+    }, {
+      "pos" : [ 1, 5 ],
+      "unit" : {
+        "config_id" : {
+          "faction" : "borgo",
+          "name" : "mutek"
+        },
+        "state" : {
+          "core" : {
+            "damage" : 0,
+            "rotation" : 0,
+            "wired" : false,
+            "wounds" : [ ]
+          },
+          "exection" : {
+            "used_ability" : false,
+            "used_battle_ability" : false
+          },
+          "modifiers" : {
+            "attack_boosts" : { },
+            "initiative_boosts" : 1,
+            "initiatives" : [ 2 ],
+            "is_basic" : [ true ],
+            "is_blocked_to_0" : false,
+            "is_used" : [ false ],
+            "num_of_new" : 0,
+            "num_of_old" : 0
+          },
+          "relations" : {
+            "real_boost_target" : "own"
+          }
+        }
+      }
+    }, {
+      "pos" : [ 1, 1 ],
+      "unit" : {
+        "config_id" : {
+          "faction" : "borgo",
+          "name" : "mutek"
+        },
+        "state" : {
+          "core" : {
+            "damage" : 0,
+            "rotation" : 0,
+            "wired" : false,
+            "wounds" : [ ]
+          },
+          "exection" : {
+            "used_ability" : false,
+            "used_battle_ability" : false
+          },
+          "modifiers" : {
+            "attack_boosts" : { },
+            "initiative_boosts" : 0,
+            "initiatives" : [ 2 ],
+            "is_basic" : [ true ],
+            "is_blocked_to_0" : false,
+            "is_used" : [ false ],
+            "num_of_new" : 0,
+            "num_of_old" : 0
+          },
+          "relations" : {
+            "real_boost_target" : "own"
+          }
+        }
+      }
+    }, {
+      "pos" : [ 4, 6 ],
+      "unit" : {
+        "config_id" : {
+          "faction" : "moloch",
+          "name" : "cyborg"
+        },
+        "state" : {
+          "core" : {
+            "damage" : 0,
+            "rotation" : 5,
+            "wired" : false,
+            "wounds" : [ ]
+          },
+          "exection" : {
+            "used_ability" : false,
+            "used_battle_ability" : false
+          },
+          "modifiers" : {
+            "attack_boosts" : { },
+            "initiative_boosts" : 0,
+            "initiatives" : [ 3 ],
+            "is_basic" : [ true ],
+            "is_blocked_to_0" : false,
+            "is_used" : [ false ],
+            "num_of_new" : 0,
+            "num_of_old" : 0
+          },
+          "relations" : {
+            "real_boost_target" : "own"
+          }
+        }
+      }
+    }, {
+      "pos" : [ 2, 0 ],
+      "unit" : {
+        "config_id" : {
+          "faction" : "moloch",
+          "name" : "cyborg"
+        },
+        "state" : {
+          "core" : {
+            "damage" : 0,
+            "rotation" : 0,
+            "wired" : false,
+            "wounds" : [ ]
+          },
+          "exection" : {
+            "used_ability" : false,
+            "used_battle_ability" : false
+          },
+          "modifiers" : {
+            "attack_boosts" : { },
+            "initiative_boosts" : 0,
+            "initiatives" : [ 3 ],
+            "is_basic" : [ true ],
+            "is_blocked_to_0" : false,
+            "is_used" : [ false ],
+            "num_of_new" : 0,
+            "num_of_old" : 0
+          },
+          "relations" : {
+            "real_boost_target" : "own"
           }
         }
       }
     } ],
     "events_queue" : [ ],
-    "factions" : [ "moloch", "posterunek" ],
+    "factions" : [ "borgo", "moloch" ],
     "pending_attacks" : [ ],
-    "players" : {
-      "moloch" : {
-        "hand" : {
-          "tokens" : [ "bomba", "bloker" ]
+    "pending_workflow" : {
+      "config" : {
+        "faction" : "",
+        "factions" : [ "moloch", "borgo" ],
+        "hand_limit" : 3,
+        "initiative" : null,
+        "on_click" : {
+          "discard_slot" : null,
+          "mark_activated_pos" : null
         },
-        "pile" : [ "cyborg", "dzialkogaussa", "bloker", "sieciarz", "lowca", "klaun", "medyk", "cyborg", "juggernaut" ]
+        "pos" : null
       },
-      "posterunek" : {
+      "current_step_index" : null,
+      "name" : "end_game_sequence",
+      "on_click_consumed" : false
+    },
+    "phase" : "endgame",
+    "players" : {
+      "borgo" : {
         "hand" : {
           "tokens" : [ ]
         },
-        "pile" : [ "bitwa", "bitwa", "bitwa", "biegacz", "pancerzwspomagany", "medyk", "ruch", "oficer", "dywersant", "silacz", "zwiadowca", "ckm", "zwiadowca", "ruch", "medyk", "skoper", "ruch", "komandos", "komandos", "bitwa", "biegacz", "likwidator", "ruch", "bitwa", "komandos", "ruch", "ruch", "ruch", "snajper", "komandos", "bitwa", "centrumrozpoznania" ]
+        "pile" : [ "granat", "mutek", "mutek" ]
+      },
+      "moloch" : {
+        "hand" : {
+          "tokens" : [ ]
+        },
+        "pile" : [ ]
       }
     },
     "turn_faction" : "moloch",
+    "undo_stack" : [ {
+      "owner_faction" : "moloch",
+      "snapshot" : {
+        "active_faction" : "moloch",
+        "board" : [ {
+          "pos" : [ 2, 4 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "borgo",
+              "name" : "sztab"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 0,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 0,
+                "initiatives" : [ 0 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 0, 2 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "moloch",
+              "name" : "sztab"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 0,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 0,
+                "initiatives" : [ 0 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 1, 3 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "borgo",
+              "name" : "mutek"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 5,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 1,
+                "initiatives" : [ 2 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 2, 2 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "moloch",
+              "name" : "klaun"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 1,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 0,
+                "initiatives" : [ 2 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 0, 4 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "moloch",
+              "name" : "bloker"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 2,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : {
+                  "shoot" : 1
+                },
+                "initiative_boosts" : 0,
+                "initiatives" : [ ],
+                "is_basic" : [ ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 1, 5 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "borgo",
+              "name" : "mutek"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 0,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 1,
+                "initiatives" : [ 2 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 1, 1 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "borgo",
+              "name" : "mutek"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 0,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 0,
+                "initiatives" : [ 2 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        } ],
+        "events_queue" : [ ],
+        "factions" : [ "borgo", "moloch" ],
+        "pending_attacks" : [ ],
+        "pending_workflow" : {
+          "config" : {
+            "faction" : "",
+            "factions" : [ "moloch", "borgo" ],
+            "hand_limit" : 3,
+            "initiative" : null,
+            "on_click" : {
+              "discard_slot" : null,
+              "mark_activated_pos" : null
+            },
+            "pos" : null
+          },
+          "current_step_index" : null,
+          "name" : "end_game_sequence",
+          "on_click_consumed" : false
+        },
+        "phase" : "endgame",
+        "players" : {
+          "borgo" : {
+            "hand" : {
+              "tokens" : [ ]
+            },
+            "pile" : [ "granat", "mutek", "mutek" ]
+          },
+          "moloch" : {
+            "hand" : {
+              "tokens" : [ "cyborg", "cyborg" ]
+            },
+            "pile" : [ ]
+          }
+        },
+        "turn_faction" : "moloch",
+        "undo_stack" : [ ],
+        "workflow_data" : {
+          "button" : null,
+          "destination" : null,
+          "rotation" : null,
+          "slot" : null,
+          "target_pos" : null,
+          "type" : null,
+          "unit_pos" : null
+        },
+        "workflow_stack" : [ {
+          "config" : {
+            "faction" : "",
+            "factions" : [ "borgo", "moloch" ],
+            "hand_limit" : 3,
+            "initiative" : null,
+            "on_click" : {
+              "discard_slot" : null,
+              "mark_activated_pos" : null
+            },
+            "pos" : null
+          },
+          "current_step_index" : 6,
+          "name" : "game",
+          "on_click_consumed" : false
+        }, {
+          "config" : {
+            "faction" : "moloch",
+            "factions" : [ ],
+            "hand_limit" : 3,
+            "initiative" : null,
+            "on_click" : {
+              "discard_slot" : null,
+              "mark_activated_pos" : null
+            },
+            "pos" : null
+          },
+          "current_step_index" : 2,
+          "name" : "turn",
+          "on_click_consumed" : false
+        } ]
+      },
+      "workflow_name" : "turn"
+    }, {
+      "owner_faction" : "moloch",
+      "snapshot" : {
+        "active_faction" : "moloch",
+        "board" : [ {
+          "pos" : [ 2, 4 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "borgo",
+              "name" : "sztab"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 0,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 0,
+                "initiatives" : [ 0 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 0, 2 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "moloch",
+              "name" : "sztab"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 0,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 0,
+                "initiatives" : [ 0 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 1, 3 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "borgo",
+              "name" : "mutek"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 5,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 1,
+                "initiatives" : [ 2 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 2, 2 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "moloch",
+              "name" : "klaun"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 1,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 0,
+                "initiatives" : [ 2 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 0, 4 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "moloch",
+              "name" : "bloker"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 2,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : {
+                  "shoot" : 1
+                },
+                "initiative_boosts" : 0,
+                "initiatives" : [ ],
+                "is_basic" : [ ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 1, 5 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "borgo",
+              "name" : "mutek"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 0,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 1,
+                "initiatives" : [ 2 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 1, 1 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "borgo",
+              "name" : "mutek"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 0,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 0,
+                "initiatives" : [ 2 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        }, {
+          "pos" : [ 4, 6 ],
+          "unit" : {
+            "config_id" : {
+              "faction" : "moloch",
+              "name" : "cyborg"
+            },
+            "state" : {
+              "core" : {
+                "damage" : 0,
+                "rotation" : 5,
+                "wired" : false,
+                "wounds" : [ ]
+              },
+              "exection" : {
+                "used_ability" : false,
+                "used_battle_ability" : false
+              },
+              "modifiers" : {
+                "attack_boosts" : { },
+                "initiative_boosts" : 0,
+                "initiatives" : [ 3 ],
+                "is_basic" : [ true ],
+                "is_blocked_to_0" : false,
+                "is_used" : [ false ],
+                "num_of_new" : 0,
+                "num_of_old" : 0
+              },
+              "relations" : {
+                "real_boost_target" : "own"
+              }
+            }
+          }
+        } ],
+        "events_queue" : [ ],
+        "factions" : [ "borgo", "moloch" ],
+        "pending_attacks" : [ ],
+        "pending_workflow" : {
+          "config" : {
+            "faction" : "",
+            "factions" : [ "moloch", "borgo" ],
+            "hand_limit" : 3,
+            "initiative" : null,
+            "on_click" : {
+              "discard_slot" : null,
+              "mark_activated_pos" : null
+            },
+            "pos" : null
+          },
+          "current_step_index" : null,
+          "name" : "end_game_sequence",
+          "on_click_consumed" : false
+        },
+        "phase" : "endgame",
+        "players" : {
+          "borgo" : {
+            "hand" : {
+              "tokens" : [ ]
+            },
+            "pile" : [ "granat", "mutek", "mutek" ]
+          },
+          "moloch" : {
+            "hand" : {
+              "tokens" : [ "cyborg" ]
+            },
+            "pile" : [ ]
+          }
+        },
+        "turn_faction" : "moloch",
+        "undo_stack" : [ {
+          "owner_faction" : "moloch",
+          "snapshot" : {
+            "active_faction" : "moloch",
+            "board" : [ {
+              "pos" : [ 2, 4 ],
+              "unit" : {
+                "config_id" : {
+                  "faction" : "borgo",
+                  "name" : "sztab"
+                },
+                "state" : {
+                  "core" : {
+                    "damage" : 0,
+                    "rotation" : 0,
+                    "wired" : false,
+                    "wounds" : [ ]
+                  },
+                  "exection" : {
+                    "used_ability" : false,
+                    "used_battle_ability" : false
+                  },
+                  "modifiers" : {
+                    "attack_boosts" : { },
+                    "initiative_boosts" : 0,
+                    "initiatives" : [ 0 ],
+                    "is_basic" : [ true ],
+                    "is_blocked_to_0" : false,
+                    "is_used" : [ false ],
+                    "num_of_new" : 0,
+                    "num_of_old" : 0
+                  },
+                  "relations" : {
+                    "real_boost_target" : "own"
+                  }
+                }
+              }
+            }, {
+              "pos" : [ 0, 2 ],
+              "unit" : {
+                "config_id" : {
+                  "faction" : "moloch",
+                  "name" : "sztab"
+                },
+                "state" : {
+                  "core" : {
+                    "damage" : 0,
+                    "rotation" : 0,
+                    "wired" : false,
+                    "wounds" : [ ]
+                  },
+                  "exection" : {
+                    "used_ability" : false,
+                    "used_battle_ability" : false
+                  },
+                  "modifiers" : {
+                    "attack_boosts" : { },
+                    "initiative_boosts" : 0,
+                    "initiatives" : [ 0 ],
+                    "is_basic" : [ true ],
+                    "is_blocked_to_0" : false,
+                    "is_used" : [ false ],
+                    "num_of_new" : 0,
+                    "num_of_old" : 0
+                  },
+                  "relations" : {
+                    "real_boost_target" : "own"
+                  }
+                }
+              }
+            }, {
+              "pos" : [ 1, 3 ],
+              "unit" : {
+                "config_id" : {
+                  "faction" : "borgo",
+                  "name" : "mutek"
+                },
+                "state" : {
+                  "core" : {
+                    "damage" : 0,
+                    "rotation" : 5,
+                    "wired" : false,
+                    "wounds" : [ ]
+                  },
+                  "exection" : {
+                    "used_ability" : false,
+                    "used_battle_ability" : false
+                  },
+                  "modifiers" : {
+                    "attack_boosts" : { },
+                    "initiative_boosts" : 1,
+                    "initiatives" : [ 2 ],
+                    "is_basic" : [ true ],
+                    "is_blocked_to_0" : false,
+                    "is_used" : [ false ],
+                    "num_of_new" : 0,
+                    "num_of_old" : 0
+                  },
+                  "relations" : {
+                    "real_boost_target" : "own"
+                  }
+                }
+              }
+            }, {
+              "pos" : [ 2, 2 ],
+              "unit" : {
+                "config_id" : {
+                  "faction" : "moloch",
+                  "name" : "klaun"
+                },
+                "state" : {
+                  "core" : {
+                    "damage" : 0,
+                    "rotation" : 1,
+                    "wired" : false,
+                    "wounds" : [ ]
+                  },
+                  "exection" : {
+                    "used_ability" : false,
+                    "used_battle_ability" : false
+                  },
+                  "modifiers" : {
+                    "attack_boosts" : { },
+                    "initiative_boosts" : 0,
+                    "initiatives" : [ 2 ],
+                    "is_basic" : [ true ],
+                    "is_blocked_to_0" : false,
+                    "is_used" : [ false ],
+                    "num_of_new" : 0,
+                    "num_of_old" : 0
+                  },
+                  "relations" : {
+                    "real_boost_target" : "own"
+                  }
+                }
+              }
+            }, {
+              "pos" : [ 0, 4 ],
+              "unit" : {
+                "config_id" : {
+                  "faction" : "moloch",
+                  "name" : "bloker"
+                },
+                "state" : {
+                  "core" : {
+                    "damage" : 0,
+                    "rotation" : 2,
+                    "wired" : false,
+                    "wounds" : [ ]
+                  },
+                  "exection" : {
+                    "used_ability" : false,
+                    "used_battle_ability" : false
+                  },
+                  "modifiers" : {
+                    "attack_boosts" : {
+                      "shoot" : 1
+                    },
+                    "initiative_boosts" : 0,
+                    "initiatives" : [ ],
+                    "is_basic" : [ ],
+                    "is_blocked_to_0" : false,
+                    "is_used" : [ ],
+                    "num_of_new" : 0,
+                    "num_of_old" : 0
+                  },
+                  "relations" : {
+                    "real_boost_target" : "own"
+                  }
+                }
+              }
+            }, {
+              "pos" : [ 1, 5 ],
+              "unit" : {
+                "config_id" : {
+                  "faction" : "borgo",
+                  "name" : "mutek"
+                },
+                "state" : {
+                  "core" : {
+                    "damage" : 0,
+                    "rotation" : 0,
+                    "wired" : false,
+                    "wounds" : [ ]
+                  },
+                  "exection" : {
+                    "used_ability" : false,
+                    "used_battle_ability" : false
+                  },
+                  "modifiers" : {
+                    "attack_boosts" : { },
+                    "initiative_boosts" : 1,
+                    "initiatives" : [ 2 ],
+                    "is_basic" : [ true ],
+                    "is_blocked_to_0" : false,
+                    "is_used" : [ false ],
+                    "num_of_new" : 0,
+                    "num_of_old" : 0
+                  },
+                  "relations" : {
+                    "real_boost_target" : "own"
+                  }
+                }
+              }
+            }, {
+              "pos" : [ 1, 1 ],
+              "unit" : {
+                "config_id" : {
+                  "faction" : "borgo",
+                  "name" : "mutek"
+                },
+                "state" : {
+                  "core" : {
+                    "damage" : 0,
+                    "rotation" : 0,
+                    "wired" : false,
+                    "wounds" : [ ]
+                  },
+                  "exection" : {
+                    "used_ability" : false,
+                    "used_battle_ability" : false
+                  },
+                  "modifiers" : {
+                    "attack_boosts" : { },
+                    "initiative_boosts" : 0,
+                    "initiatives" : [ 2 ],
+                    "is_basic" : [ true ],
+                    "is_blocked_to_0" : false,
+                    "is_used" : [ false ],
+                    "num_of_new" : 0,
+                    "num_of_old" : 0
+                  },
+                  "relations" : {
+                    "real_boost_target" : "own"
+                  }
+                }
+              }
+            } ],
+            "events_queue" : [ ],
+            "factions" : [ "borgo", "moloch" ],
+            "pending_attacks" : [ ],
+            "pending_workflow" : {
+              "config" : {
+                "faction" : "",
+                "factions" : [ "moloch", "borgo" ],
+                "hand_limit" : 3,
+                "initiative" : null,
+                "on_click" : {
+                  "discard_slot" : null,
+                  "mark_activated_pos" : null
+                },
+                "pos" : null
+              },
+              "current_step_index" : null,
+              "name" : "end_game_sequence",
+              "on_click_consumed" : false
+            },
+            "phase" : "endgame",
+            "players" : {
+              "borgo" : {
+                "hand" : {
+                  "tokens" : [ ]
+                },
+                "pile" : [ "granat", "mutek", "mutek" ]
+              },
+              "moloch" : {
+                "hand" : {
+                  "tokens" : [ "cyborg", "cyborg" ]
+                },
+                "pile" : [ ]
+              }
+            },
+            "turn_faction" : "moloch",
+            "undo_stack" : [ ],
+            "workflow_data" : {
+              "button" : null,
+              "destination" : null,
+              "rotation" : null,
+              "slot" : null,
+              "target_pos" : null,
+              "type" : null,
+              "unit_pos" : null
+            },
+            "workflow_stack" : [ {
+              "config" : {
+                "faction" : "",
+                "factions" : [ "borgo", "moloch" ],
+                "hand_limit" : 3,
+                "initiative" : null,
+                "on_click" : {
+                  "discard_slot" : null,
+                  "mark_activated_pos" : null
+                },
+                "pos" : null
+              },
+              "current_step_index" : 6,
+              "name" : "game",
+              "on_click_consumed" : false
+            }, {
+              "config" : {
+                "faction" : "moloch",
+                "factions" : [ ],
+                "hand_limit" : 3,
+                "initiative" : null,
+                "on_click" : {
+                  "discard_slot" : null,
+                  "mark_activated_pos" : null
+                },
+                "pos" : null
+              },
+              "current_step_index" : 2,
+              "name" : "turn",
+              "on_click_consumed" : false
+            } ]
+          },
+          "workflow_name" : "turn"
+        } ],
+        "workflow_data" : {
+          "button" : null,
+          "destination" : null,
+          "rotation" : null,
+          "slot" : null,
+          "target_pos" : null,
+          "type" : null,
+          "unit_pos" : null
+        },
+        "workflow_stack" : [ {
+          "config" : {
+            "faction" : "",
+            "factions" : [ "borgo", "moloch" ],
+            "hand_limit" : 3,
+            "initiative" : null,
+            "on_click" : {
+              "discard_slot" : null,
+              "mark_activated_pos" : null
+            },
+            "pos" : null
+          },
+          "current_step_index" : 6,
+          "name" : "game",
+          "on_click_consumed" : false
+        }, {
+          "config" : {
+            "faction" : "moloch",
+            "factions" : [ ],
+            "hand_limit" : 3,
+            "initiative" : null,
+            "on_click" : {
+              "discard_slot" : null,
+              "mark_activated_pos" : null
+            },
+            "pos" : null
+          },
+          "current_step_index" : 2,
+          "name" : "turn",
+          "on_click_consumed" : true
+        } ]
+      },
+      "workflow_name" : "turn"
+    } ],
     "workflow_data" : {
       "button" : null,
-      "decision" : null,
       "destination" : null,
       "rotation" : null,
       "slot" : null,
@@ -197,63 +1332,37 @@
     "workflow_stack" : [ {
       "config" : {
         "faction" : "",
-        "factions" : [ "moloch", "posterunek" ],
+        "factions" : [ "borgo", "moloch" ],
         "hand_limit" : 3,
         "initiative" : null,
+        "on_click" : {
+          "discard_slot" : null,
+          "mark_activated_pos" : null
+        },
         "pos" : null
       },
-      "current_step_index" : 5,
-      "name" : "game"
+      "current_step_index" : 6,
+      "name" : "game",
+      "on_click_consumed" : false
     }, {
       "config" : {
         "faction" : "moloch",
         "factions" : [ ],
         "hand_limit" : 3,
         "initiative" : null,
-        "pos" : null
-      },
-      "current_step_index" : 4,
-      "name" : "turn"
-    }, {
-      "config" : {
-        "faction" : "",
-        "factions" : [ ],
-        "hand_limit" : 3,
-        "initiative" : null,
-        "pos" : null
-      },
-      "current_step_index" : 1,
-      "name" : "hand"
-    }, {
-      "config" : {
-        "faction" : "",
-        "factions" : [ ],
-        "hand_limit" : 3,
-        "initiative" : null,
+        "on_click" : {
+          "discard_slot" : null,
+          "mark_activated_pos" : null
+        },
         "pos" : null
       },
       "current_step_index" : 2,
-      "name" : "bomb"
-    }, {
-      "config" : {
-        "faction" : "",
-        "factions" : [ "moloch", "posterunek" ],
-        "hand_limit" : 3,
-        "initiative" : null,
-        "pos" : null
-      },
-      "current_step_index" : 2,
-      "name" : "damage_resolve"
-    }, {
-      "config" : {
-        "faction" : "moloch",
-        "factions" : [ ],
-        "hand_limit" : 3,
-        "initiative" : null,
-        "pos" : null
-      },
-      "current_step_index" : 2,
-      "name" : "heal"
+      "name" : "turn",
+      "on_click_consumed" : true
     } ]
+  },
+  "userAction" : {
+    "type" : "button",
+    "name" : "end_turn"
   }
 }

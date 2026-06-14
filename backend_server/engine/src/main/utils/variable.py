@@ -1,9 +1,10 @@
 from enum import Enum
 
 class Phase(Enum):
-    HQ_PLACEMENT = "sztaby"
-    GAME = "game"
     START_GAME = "newgame"
+    GAME = "game"
+    ENDGAME="endgame"
+    GAMEOVER="gameover"
 
 class Relation(Enum):
     EMPTY = "empty"

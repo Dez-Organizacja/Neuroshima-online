@@ -23,8 +23,7 @@ class ScenarioBuilder:
     
     def then(self, *funcs : list[Callable[[Delta], None]]):
         self._requires_step()
-        for func in funcs:
-            func(self._current_step.delta)
+        self._current_step.delta.add(*funcs)
         return self
 
     def available_actions(
@@ -40,8 +39,7 @@ class ScenarioBuilder:
         
 
     def given(self, *funcs : list[Callable[[GameState], None]]):
-        for func in funcs:
-            func(self.setup)
+        self.setup.add(*funcs)
         return self
 
     def build(self) -> Scenario:

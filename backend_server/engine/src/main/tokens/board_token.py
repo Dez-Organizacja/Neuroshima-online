@@ -162,5 +162,5 @@ class BoardToken(Token):
             ability_used= self.ability_used,
             damage= self.state.damage,
             wired= self.wired,
-            wounds= sum(self.wounds),
+            wounds=sum(self.wounds),
         )

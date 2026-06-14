@@ -25,11 +25,19 @@ class StateViewBuilder:
             Serializator.to_dict_dataclass(tile)
             for tile in tiles
         ]
+    
+    @staticmethod
+    def build_piles_view(state : GameState):
+        return {
+            faction : state.players[faction].pile.size
+            for faction in state.factions
+        }
 
     @classmethod
     def build(cls, state : GameState):
         return {
             "factions" : state.factions,
             "board" : cls.build_board_view(state),
-            "hands" : cls.build_hands_view(state)
+            "hands" : cls.build_hands_view(state),
+            "piles" : cls.build_piles_view(state),
         }

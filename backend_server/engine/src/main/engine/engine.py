@@ -35,8 +35,8 @@ class GameEngine:
             step : Step, 
             action : UserAction | None = None
         ):
-        print("START STEP EXECUTION", step.name)
-        print(f"config {step.config}")
+        # print("START STEP EXECUTION", step.name)
+        # print(f"config {step.config}")
         # print(ctx.print_wf_stack())
         # print(f"top {ctx.workflow_instance.name}")
         if action:
@@ -52,11 +52,16 @@ class GameEngine:
     def run_until_input_required(self, ctx : ActionContext):
         while True:
             step = self._get_step(ctx)
+            if step.can_skip(ctx):
+                self.resolver.advance(ctx)
+                continue
             # print(f"current_step {step}")
+            
             if step.requires_input:
+                break
+
                 # print(f"INPUT NEEDED EXECUTING STEP FINISED")
                 # print(f"workflow instance {ctx.workflow_instance}")
-                break
 
             self.execute_step(ctx=ctx, step=step)
 
@@ -87,6 +92,7 @@ class GameEngine:
         print("########################")
         print(f"EXECUTING ACTION {action}")
         print("########################")
+        print(ctx.workflow_instance)
         step = self._get_step(ctx)
         ctx.decision_faction = self._get_current_decision_faction(ctx)
         if not self._is_cancel_action(action):

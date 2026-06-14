@@ -28,8 +28,14 @@ class WorkflowName(Enum):
     INITIATIVE = "initiative"
     EXPLOSION = "explosion"
     DAMAGE_RESOLVE = "damage_resolve"
+<<<<<<< HEAD
     UNHAPPY_DRAW = "unhappy_draw"
     END_TURN_CONFIRM = "end_turn_confirm"
+=======
+    DRAW="draw"
+    GAMEOVER="gameover"
+    ENDGAMESEQUENCE="end_game_sequence"
+>>>>>>> 03822f3 (działa ekspozja, medycy, sekwencja końcowa, nieszcześliwy dociąg i discard pierwszego żetou w turze)
 
 ABILITY_WORKFLOW_REGISTRY = {
     Ability.MOVE : WorkflowName.MOVE,
@@ -90,10 +96,13 @@ class WorkflowData:
 class WorkflowConfig:
     faction : str = ""
     factions : list[str] = field(default_factory=list)
-    hand_limit : int = 3
-    pos : tuple[int, int] | None = None
-    initiative : int | None = None
     on_click : OnClickData = field(default_factory=OnClickData)
+    
+    initiative : int | None = None
+    
+    pos : tuple[int, int] | None = None
+    
+    hand_limit : int = 3
 
 @dataclass
 class WorkflowInstance:

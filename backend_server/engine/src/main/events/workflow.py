@@ -44,7 +44,7 @@ class DeleteAbove(WorkflowEvent):
     name: WorkflowName
 
     def apply(self, ctx: ActionContext):
-        # print(f"DELETE ABOVE {self.name}")
+        print(f"DELETE ABOVE {self.name}")
         while ctx.workflow_instance.name != self.name:
             ctx.state.workflow_stack.pop(-1)
         
@@ -52,3 +52,21 @@ class DeleteAbove(WorkflowEvent):
 class ConsumeOnClick(WorkflowEvent):
     def apply(self, ctx : ActionContext):
         ctx.workflow_instance.on_click_consumed = True
+
+@dataclass
+class EnqueueWorkflow(WorkflowEvent):
+    name : WorkflowName
+    config : WorkflowConfig
+
+    def apply(self, ctx : ActionContext):
+        ctx.state.pending_workflows.append(
+            WorkflowInstance(
+                name=self.name,
+                config=self.config 
+            )
+        )
+
+@dataclass
+class PopAllWorkflows(WorkflowEvent):
+    def apply(self, ctx : ActionContext):
+        ctx.state.workflow_stack.clear()

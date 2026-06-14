@@ -4,10 +4,7 @@ from main.state.contex import ActionContext
 from main.events.data import Effect
 from main.attacks.data import AttackIntent
 from main.workflows.data import WorkflowData
-from main.events.workflow import PushWorkflow
-from main.tokens.data import TokenType
-from main.tokens.token_factory import TokenFactory
-from main.workflows.data import WorkflowConfig, WorkflowName
+from main.tokens.data import BoardType
 
 # ----------- moving and placing -----------
 
@@ -194,6 +191,12 @@ class DrawNamedTokenEffect(Effect):
         pile.tokens.remove(self.name)
         hand.add(self.name)
 
+@dataclass
+class DrawHQ(Effect):
+    def apply(self, ctx : ActionContext):
+        name = BoardType.HQ.value
+        ctx.player.pile.remove(name)
+        ctx.player.hand.add(name)
 
 @dataclass
 class DiscardTokenEffect(Effect):
@@ -203,34 +206,38 @@ class DiscardTokenEffect(Effect):
         # print(f"DISCARD TOKEN SLOT {self.slot}")
         ctx.player.hand.remove(self.slot)
 
-@dataclass
-class DiscardHandEffect(Effect):
-    def apply(self, ctx: ActionContext):
-        ctx.player.hand.tokens.clear()
+# @dataclass
+# class DiscardHandEffect(Effect):
+#     def apply(self, ctx: ActionContext):
+#         ctx.player.hand.tokens.clear()
 
 
-@dataclass
-class MaybePushUnhappyDrawEffect(Effect):
-    faction: str
+# @dataclass
+# class MaybePushUnhappyDrawEffect(Effect):
+#     faction: str
 
-    def apply(self, ctx: ActionContext):
-        hand = ctx.player.hand
-        if hand.size != hand.MAX_LIMIT:
-            return []
+#     def apply(self, ctx: ActionContext):
+#         hand = ctx.player.hand
+#         if hand.size != hand.MAX_LIMIT:
+#             return []
 
-        if not hand.tokens:
-            return []
+#         if not hand.tokens:
+#             return []
 
-        if all(
-            TokenFactory.create(token_name, self.faction).type == TokenType.INSTANT
-            for token_name in hand.tokens
-        ):
-            return [
-                ClearWorkflowDataEffect(),
-                PushWorkflow(
-                    name=WorkflowName.UNHAPPY_DRAW,
-                    config=WorkflowConfig(faction=self.faction),
-                ),
-            ]
+#         if all(
+#             TokenFactory.create(token_name, self.faction).type == TokenType.INSTANT
+#             for token_name in hand.tokens
+#         ):
+#             return [
+#                 ClearWorkflowDataEffect(),
+#                 PushWorkflow(
+#                     name=WorkflowName.UNHAPPY_DRAW,
+#                     config=WorkflowConfig(faction=self.faction),
+#                 ),
+#             ]
 
-        return []
+#         return []
+class DiscardAllEffect(Effect):
+    def apply(self, ctx : ActionContext):
+        while ctx.player.hand.size:
+            ctx.player.hand.remove(0)

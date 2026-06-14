@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar
 
-from main.workflows.step_builders import BoardSelectionMixin, build_end_step, build_resolve_step
+from main.workflows.step_builders import BoardSelectionMixin
 from main.workflows.base import Workflow
 from main.workflows.providers.target import (
     TargetProvider,
@@ -48,9 +48,11 @@ class TargetWorkflow(BoardSelectionMixin, Workflow[P], ABC):
     def _build_steps(self):
         return [
             self.build_target_step(),
-            build_resolve_step(self.resolve_func),
-            build_end_step()
+            self.build_resolve_step(self.resolve_func),
+            self.build_end_step(),
         ]
+            # build_resolve_step(self.resolve_func),
+            # build_end_step()
     
 class SniperWorkflow(TargetWorkflow[SniperProvider]):
     def __init__(self):

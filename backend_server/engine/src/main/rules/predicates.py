@@ -58,3 +58,8 @@ def has_ability(board : Board, pos : Hex):
 def has_used_ability(board : Board, pos : Hex):
     token = board.get_token(pos)
     return token is not None and has_ability(board, pos) and token.ability_used
+
+def predicate_maker(func : Callable[[BoardToken], bool]):
+    def predicate(board : Board, pos : Hex):
+        return func(board.get_token(pos))
+    return predicate

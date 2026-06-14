@@ -6,6 +6,7 @@ from main.events.data import Event
 from main.attacks.data import AttackIntent
 from main.workflows.data import WorkflowData, WorkflowInstance, WorkflowName, UndoSnapshot
 from main.state.serialization import Serializator
+from main.utils.variable import Phase
 
 def print_obj(obj, deepth):
     base_s = "\n" + "   " * deepth
@@ -51,14 +52,18 @@ class GameState:
     board               : Board = field(default_factory=Board)
     
     # --------- events ----------
-    events_queue          : deque[Event] = field(default_factory=deque)
-    pending_attacks       : list[AttackIntent] = field(default_factory=list)
+    events_queue        : deque[Event] = field(default_factory=deque)
+    pending_attacks     : list[AttackIntent] = field(default_factory=list)
+    pending_workflows   : list[WorkflowInstance] = field(default_factory=list)
 
     # --------- workflows ----------
     workflow_data       : WorkflowData = field(default_factory=WorkflowData)
     workflow_stack      : list[WorkflowInstance] = field(default_factory=list)
+    
+    # --------- others ----------
     undo_stack          : list[UndoSnapshot] = field(default_factory=list)
-
+    phase               : Phase = Phase.GAME
+    
     def __post_init__(self):
         for faction in self.factions:
             if not faction in self.players:

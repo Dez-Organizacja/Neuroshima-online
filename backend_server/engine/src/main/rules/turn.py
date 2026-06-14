@@ -1,8 +1,13 @@
 from main.state.contex import ActionContext
 from main.board.query import BoardQuery
-from main.rules.predicates import is_empty_at
+from main.board.board import Hex
+from main.rules.predicates import is_empty_at, is_ally, has_ability
 from main.rules.ability.movement import MoveRules, PushRules
 from main.tokens.data import Ability
+from main.workflows.data import WorkflowName
+from main.tokens.hand import Hand
+from main.tokens.data import TokenType
+from main.tokens.token_factory import TokenFactory
 
 ABILITY_RULES = {
     Ability.MOVE: MoveRules,
@@ -26,3 +31,25 @@ class TurnRules:
     @staticmethod
     def end_turn_check(ctx : ActionContext) -> bool:
         return any(BoardQuery([is_empty_at]).apply(ctx.board))
+    
+    @staticmethod
+    def get_units_to_reset(ctx : ActionContext, faction : str) -> list[Hex]:
+        return BoardQuery([
+            is_ally(faction),
+            has_ability
+        ]).apply(ctx.board)
+
+
+    @staticmethod
+    def can_skip_discarding_phase(ctx : ActionContext):
+        return not ctx.player.hand.is_full
+    
+    @staticmethod
+    def is_unhappy_draw(hand : Hand, faction : str):
+        return all(
+            TokenFactory.create(hand.get(i), faction).type == TokenType.INSTANT
+            for i in range(hand.size)
+        ) and hand.size
+    # @staticmethod
+    # def is_hq_placing_turn(ctx : ActionContext):
+    #     return ctx.workflow_instance.config.hq_placing

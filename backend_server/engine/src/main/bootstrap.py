@@ -21,6 +21,9 @@ def register_factions():
 def register_targeting():
     import main.attacks.targeting.strategies
 
+def register_attack_properties():
+    import main.attacks.properties.properties
+
 def bootstrap():
     global _BOOTSTRAPED
 
@@ -31,3 +34,4 @@ def bootstrap():
 
     register_targeting()
     register_factions()
+    register_attack_properties()

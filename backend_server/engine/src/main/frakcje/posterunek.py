@@ -6,6 +6,7 @@ unit = Faction("posterunek")
 
 units = [
     unit.HQ(boost=Boost.NEW_INITIATIVE).build(),
+    
     unit.board("biegacz", unit_count=2)
     .hp(1)
     .attacks(shoot(directions=[5]))

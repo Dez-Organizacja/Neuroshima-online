@@ -10,15 +10,15 @@
 #             "abilities" : Serializator.to_dict_dataclass(self.abilities),
 #         }
 #         return data
-from dataclasses import dataclass
-from main.tokens.config import Abilities
+# from dataclasses import dataclass
+# from main.tokens.config import Abilities
 
-@dataclass
-class TokenView:
-    name : str
-    faction : str
-    damage : int
-    wounds : list[int]
-    rotation : list[int]
-    wired : bool
-    abilities : Abilities
+# @dataclass
+# class TokenView:
+#     name : str
+#     faction : str
+#     damage : int
+#     wounds : int
+#     rotation : list[int]
+#     wired : bool
+#     abilities : Abilities

@@ -3,8 +3,6 @@ from main.workflows.data import (
     WorkflowConfig,
     WorkflowName, 
 )
-from main.steps.config import InitStepConfig
-from main.workflows.step_builders import build_end_step, build_resolve_step
 from main.systems.combat import CombatSystem
 from main.state.contex import ActionContext
 
@@ -15,18 +13,24 @@ class InitiativeWorkflow(Workflow):
         self.factions = config.factions
 
     
-    def build_damage_resolve_step(self):
-        return InitStepConfig(
-            wf_name=WorkflowName.DAMAGE_RESOLVE,
-            wf_config=WorkflowConfig(factions=self.factions)
-        )
+    # def build_damage_resolve_step(self):
+    #     return InitStepConfig(
+    #         wf_name=WorkflowName.DAMAGE_RESOLVE,
+    #         wf_config=WorkflowConfig(factions=self.factions)
+    #     )
 
     def resolve_attack_declaration(self, ctx : ActionContext):
         return CombatSystem.resolve_attack_declaration(ctx, self.initiative)
 
     def _build_steps(self):
         return [
-            build_resolve_step(self.resolve_attack_declaration),
-            self.build_damage_resolve_step(),
-            build_end_step(),
+            self.build_resolve_step(self.resolve_attack_declaration),
+            self.build_push_workflow_step(
+                name=WorkflowName.DAMAGE_RESOLVE,
+                config=WorkflowConfig(factions=self.factions),
+            ),
+            self.build_end_step(),
         ]
+            # build_resolve_step(self.resolve_attack_declaration),
+            # self.build_damage_resolve_step(),
+            # build_end_step(),

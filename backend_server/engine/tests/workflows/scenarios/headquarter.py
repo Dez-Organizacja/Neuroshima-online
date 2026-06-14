@@ -1,5 +1,6 @@
 from main.events.effects import ClearWorkflowDataEffect, DiscardTokenEffect, DrawNamedTokenEffect, PlaceEffect
 from main.events.workflow import PopWorkflow, PushWorkflow, ConsumeOnClick
+from main.events.flow import StartTurnEvent, EndTurnEvent
 from main.input.data import ActionType, BoardAction, HandAction
 from main.state.contex import ActionContext
 from main.workflows.data import WorkflowConfig, WorkflowName
@@ -17,6 +18,10 @@ def headquarter_turn_scenario():
     def setup_hand(ctx: ActionContext):
         ctx.player.hand.add("sztab")
 
+    def setup_factions(ctx : ActionContext):
+        ctx.turn_faction = "moloch"
+        ctx.faction = "moloch"
+
     return (
         ScenarioBuilder(
             WorkflowName.HEADQUARTER_TURN,
@@ -24,11 +29,15 @@ def headquarter_turn_scenario():
         )
         .tick()
         .given(setup_function)
-        .then_execution(events=[DrawNamedTokenEffect("sztab")])
-        .then_faction("moloch", turn=True)                              
-
+        .then_execution(
+            events=[
+                StartTurnEvent(faction="moloch"), 
+                ClearWorkflowDataEffect()]
+        )
+        
         .tick()
-        .then_execution(events=[ClearWorkflowDataEffect()])
+        .given(setup_factions)
+        .then_execution(events=[DrawNamedTokenEffect("sztab")])
 
         .when(HandAction(slot=0))
         .given(setup_hand)
@@ -39,8 +48,9 @@ def headquarter_turn_scenario():
         .then_execution(events=[PushWorkflow(name=WorkflowName.HAND)])
 
         .tick()
-        .then_execution(events=[PopWorkflow()])
-        .then_faction("", turn=True)
+        .then_execution(
+            events=[EndTurnEvent(turn_name=WorkflowName.HEADQUARTER_TURN)]
+        )
     ).build()
 
 

@@ -7,7 +7,7 @@ class DiffState:
     KEYS = [
         "active_faction",
         "players",
-        "workflow_data",
+        "phase",
     ]
     def __init__(self, a : GameState, b : GameState):
         # print("COMPERING STATES")
@@ -53,6 +53,7 @@ class DiffState:
 
     def compare_keys(self, a, b, keys : list[str]):
         for key in keys:
+            # print(f"KEY {key} compared")
             self.diff(getattr(a, key), getattr(b, key))
 
     @classmethod

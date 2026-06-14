@@ -1,12 +1,12 @@
 from main.workflows.base import Workflow
 from main.workflows.data import WorkflowConfig
-from main.workflows.step_builders import build_end_step
 from main.workflows.providers.expolsion import ExplasionProvider
 
 from main.events.effects import ClearWorkflowDataEffect
-from main.steps.config import WaitingStepConfig, ResolveStepConfig
 from main.state.contex import ActionContext
 from main.attacks.data import TargetedIntent
+from main.attacks.provider import AttackProvider
+
 from main.events.effects import EnqueueAttacksEffect
 from main.board.query import BoardQuery
 from main.rules.predicates import NOT, is_empty_at, adjacent_to
@@ -17,13 +17,14 @@ class ExpolsionWorkflow(Workflow):
         super().__init__(action_provider=ExplasionProvider(config.pos))
         self.pos = config.pos
 
-    def build_clean_step(self):
-        def resolve_func(ctx : ActionContext):
-            return [ClearWorkflowDataEffect()]
-        return ResolveStepConfig(resolve_func=resolve_func)
+    @staticmethod
+    def clear_wf_data(ctx : ActionContext):
+        return [ClearWorkflowDataEffect()]
+        # def resolve_func(ctx : ActionContext):
+        # return ResolveStepConfig(resolve_func=resolve_func)
 
-    def build_decision_step(self):
-        return WaitingStepConfig()
+    # def build_decision_step(self):
+    #     return WaitingStepConfig()
 
     def resolve_explosion(self, ctx : ActionContext):
         targets = BoardQuery([
@@ -41,12 +42,17 @@ class ExpolsionWorkflow(Workflow):
         if ctx.workflow_data.decision:
             return self.resolve_explosion(ctx)
         else:
-            token = ctx.board.get_token(self.pos)
-            return [EnqueueAttacksEffect(token.get_attacks())]
+            return EnqueueAttacksEffect(
+                *AttackProvider.get_attack_intents(
+                    unit=ctx.board.get_token(self.pos),
+                    pos=self.pos
+                )
+            )
 
     def _build_steps(self):
         return [
-            self.build_clean_step(),
-            self.build_decision_step(),
-            build_end_step(self.resolve_func)
+            self.build_resolve_step(self.clear_wf_data),
+            self.build_input_step(),
+            self.build_resolve_step(self.resolve_func),
+            self.build_end_step()
         ]

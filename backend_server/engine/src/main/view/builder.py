@@ -7,9 +7,17 @@ class GameViewBuilder:
         self.state_view = StateViewBuilder()
         self.step_view = StepViewBuilder()
 
+    @staticmethod
+    def get_scores(ctx : ActionContext):
+        return {
+            faction : ctx.rules.get_score(ctx.board, faction)
+            for faction in ctx.state.factions
+        }
+
     def build(self, ctx : ActionContext) -> dict:
-        # print("cos", cos)
         return {
             "state" : self.state_view.build(ctx.state),
-            **self.step_view.build_step(ctx).to_dict()
+            "scores" : self.get_scores(ctx),
+            "winner" : ctx.rules.get_winner(ctx.board, ctx.state.factions),
+            **self.step_view.build_step(ctx).to_dict(),
         }

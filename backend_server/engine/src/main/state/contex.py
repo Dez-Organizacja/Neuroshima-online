@@ -13,6 +13,10 @@ class ActionContext():
         self.consumed_input : bool = False
         self.decision_faction : str | None = None
 
+    @property
+    def phase(self):
+        return self.state.phase
+
     #shortcuts
     @property
     def faction(self):

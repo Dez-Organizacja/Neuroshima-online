@@ -19,9 +19,9 @@ def rotate_scenario():
         .tick()
         .given_wf_onclick_consumed()
         .then_execution(
-            events=[
-                RotateEffect(pos=(1, 1), rotation=1),
-                PopWorkflow()
-            ]
+            events=[RotateEffect(pos=(1, 1), rotation=1)]
         )
+
+        .tick()
+        .then_execution(events=[PopWorkflow()])
     ).build()

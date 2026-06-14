@@ -14,9 +14,13 @@ class StepConfig(ABC):
     name : StepName = field(init=False)
 
 
+def cannot_skip(ctx : ActionContext) -> bool:
+    return False
+
 @dataclass
 class WaitingStepConfig(StepConfig):
     action_handler     : ActionHandler = field(default_factory=ActionHandler)
+    can_skip           : Callable[[ActionContext], bool] = cannot_skip
     name               : StepName = field(default=StepName.WAITING, init=False)
 
 @dataclass

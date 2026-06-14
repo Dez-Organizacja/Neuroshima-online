@@ -14,8 +14,13 @@ class Pile:
         return self.tokens.pop()
     
     @property
+    def size(self):
+        return len(self.tokens)
+    
+    @property
     def empty(self):
-        return len(self.tokens) == 0
+        return self.size == 0
+
 
     @classmethod
     def from_list(self, data):

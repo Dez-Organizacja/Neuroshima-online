@@ -1,5 +1,6 @@
 from dataclasses import fields, MISSING, is_dataclass
-from typing import get_origin, get_args
+from typing import get_origin, get_args, Union
+from types import UnionType
 from collections import deque
 from enum import Enum
 
@@ -72,8 +73,47 @@ class Serializator:
                 Serializator.convert_value(v, t)
                 for v, t in zip(value, item_types)
             )
+        
+        if origin is Union or isinstance(target_type, UnionType):
+            return Serializator._deserialize_union(value, target_type)
 
         return value
+
+    @staticmethod
+    def _is_optional(target_type):
+        return (
+            isinstance(target_type, UnionType)
+            and type(None) in get_args(target_type)
+            and len(get_args(target_type)) == 2
+        )
+
+    @staticmethod
+    def _deserialize_union(value : dict, target_type):
+        args = get_args(target_type)
+
+        # ---------- Optional ----------
+        if Serializator._is_optional(target_type):
+            if value is None:
+                return None
+            
+            subtype = next(
+                t for t in args
+                if t is not type(None)
+            )
+            return Serializator.convert_value(value, subtype)
+
+        # ---------- normal Union ----------
+        for subtype in args:
+            required = {
+                f.name
+                for f in fields(subtype)
+                if f.default is MISSING
+                and f.default_factory is MISSING
+            }
+            if required.issubset(value.keys()):
+                return Serializator.from_dict_dataclass(cls=subtype, data=value)
+
+        raise ValueError(f"Cannot deserialize {value} to any of {args}")
 
     @staticmethod
     def from_dict_dataclass(cls, data: dict):

@@ -1,14 +1,9 @@
 from main.state.contex import ActionContext
-from main.steps.config import (
-    InitStepConfig, 
-    WaitingStepConfig, 
-    ResolveStepConfig,
-    RepeatStepConfig
-)
 from main.workflows.base import Workflow
 from main.workflows.providers.turn import TurnProvider
-from main.workflows.data import WorkflowData, WorkflowName, WorkflowConfig
+from main.workflows.data import WorkflowName, WorkflowConfig
 from main.events.data import Event
+<<<<<<< HEAD
 from main.events.effects import (
     ResetAbilityUsedEffect, 
     DrawTokensEffect,
@@ -21,8 +16,10 @@ from main.rules.predicates import (
     is_ally,
     has_ability
 )
+=======
+from main.events.flow import EndTurnEvent, StartTurnEvent
+>>>>>>> 03822f3 (działa ekspozja, medycy, sekwencja końcowa, nieszcześliwy dociąg i discard pierwszego żetou w turze)
 from main.rules.turn import TurnRules
-from main.input.action_handlers import ActionHandler
 
 class TurnWorkflow(Workflow[TurnProvider]):
     def __init__(self, config : WorkflowConfig):
@@ -31,66 +28,47 @@ class TurnWorkflow(Workflow[TurnProvider]):
         super().__init__(action_provider=TurnProvider())
 
     def start_turn_resolve(self, ctx : ActionContext) -> list[Event]:
-        ctx.faction = self.config.faction
-        ctx.state.turn_faction = self.config.faction
-        positions = BoardQuery([
-            is_ally(ctx.faction),
-            has_ability
-        ]).apply(ctx.board)
         return [
+<<<<<<< HEAD
                 ResetAbilityUsedEffect(positions),
                 DrawTokensEffect(hand_limit=self.config.hand_limit),
                 MaybePushUnhappyDrawEffect(faction=self.config.faction),
             ]
     
+=======
+            StartTurnEvent(
+                faction=self.config.faction,
+                positions=self.rules.get_units_to_reset(ctx, self.config.faction),
+            ),
+        ]
+
+
+>>>>>>> 03822f3 (działa ekspozja, medycy, sekwencja końcowa, nieszcześliwy dociąg i discard pierwszego żetou w turze)
     @staticmethod
     def end_turn_resolve(ctx : ActionContext) -> list[Event]:
-        ctx.faction = ""
-        ctx.state.turn_faction = ""
         return [EndTurnEvent()]
-
-    def build_init_step(self):
-        return ResolveStepConfig(resolve_func=self.start_turn_resolve)
-
-    def build_waiting_step(self):
-        return WaitingStepConfig(
-            action_handler=ActionHandler(WorkflowData.set_unit_pos),
-        )
     
-    def build_dispatch_step(self):
-        def decision_function(ctx : ActionContext) -> WorkflowName:
-            # print("turn dispatch function")
-            # print(f"workflow data {ctx.workflow_data}")
-            if ctx.workflow_data.slot is not None:
-                return WorkflowName.HAND
-            else:
-                return WorkflowName.BOARD
-        return InitStepConfig(decision_func=decision_function)
+    @staticmethod
+    def dispatch(ctx : ActionContext) -> WorkflowName:
+        if ctx.workflow_data.slot is not None:
+            return WorkflowName.HAND
+        else:
+            return WorkflowName.BOARD
 
-    def build_clear_step(self):
-        def resolve_func(ctx : ActionContext) -> list[Event]:
-            return [ClearWorkflowDataEffect()]
-        return ResolveStepConfig(resolve_func=resolve_func)
-
-    def build_repeat_step(self):
-        return RepeatStepConfig(
-            repeat_from_index=1,
-            check_func=self.rules.end_turn_check,
-        )
-
-    def build_end_step(self):
-        return ResolveStepConfig(
-            resolve_func=self.end_turn_resolve,
-            wf_finished=False
-            #bo endturnevent popuje workflow 
+    def draw_tokens(self, ctx : ActionContext):
+        return self.push_workflow(
+            name=WorkflowName.DRAW,
+            config=WorkflowConfig(hand_limit=self.config.hand_limit)
         )
 
     def _build_steps(self):
         return [
-            self.build_init_step(),
-            self.build_clear_step(),
-            self.build_waiting_step(),
-            self.build_dispatch_step(),
-            self.build_repeat_step(),
-            self.build_end_step(),
+            self.build_resolve_step(
+                self.start_turn_resolve,
+                self.draw_tokens,
+            ),
+            self.build_resolve_step(self.clear_wf_data),
+            self.build_input_step(),
+            self.build_dispatch_step(self.dispatch),
+            self.build_repeat_step(index=1),
         ]
