@@ -59,7 +59,7 @@ class HeadquarterTurnWorkflow(Workflow[HeadquarterTurnProvider]):
                 self.clear_wf_data,
             ),
             self.build_resolve_step(self.draw_token),
-            self.build_input_step(),
+            self.build_input_step(message="Select your headquarters token."),
             self.build_push_workflow_step(name=WorkflowName.HAND),
             self.build_resolve_step(self.end_turn_resolve),
             # self.build_end_step()

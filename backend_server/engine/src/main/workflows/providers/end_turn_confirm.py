@@ -12,5 +12,4 @@ class EndTurnConfirmProvider(WorkflowActionProvider):
         return StepUIState(
             faction=ctx.faction,
             mode=UIMode.DECISION,
-            message="Do you want to end turn? You have unused tokens on your hand.",
         )

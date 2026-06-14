@@ -47,7 +47,7 @@ class TargetWorkflow(BoardSelectionMixin, Workflow[P], ABC):
 
     def _build_steps(self):
         return [
-            self.build_target_step(),
+            self.build_target_step(message="Select a target."),
             self.build_resolve_step(self.resolve_func),
             self.build_end_step(),
         ]

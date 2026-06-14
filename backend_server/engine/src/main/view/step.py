@@ -19,9 +19,13 @@ class StepViewBuilder:
     
     def build_step(self, ctx : ActionContext) -> StepViewData:
         wf = WorkflowFactory.create(ctx.workflow_instance)
+        wf.build_steps()
         action_provider : P = wf.action_provider
         provider = self.build_av_actions_provider(action_provider)
         ui_state = action_provider.get_ui_state(ctx)
+        current_step = wf.get_current_step(ctx)
+        if not ui_state.message:
+            ui_state.message = current_step.config.message
         
         return StepViewData(
             available_actions = AvailableActions.get_actions(

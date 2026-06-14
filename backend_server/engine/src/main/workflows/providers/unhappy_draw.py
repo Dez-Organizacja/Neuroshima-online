@@ -12,5 +12,4 @@ class UnhappyDrawProvider(WorkflowActionProvider):
         return StepUIState(
             faction=ctx.faction,
             mode=UIMode.DECISION,
-            message="Do you want to use the unhappy draw rule (discard your whole hand and draw new one)?",
         )

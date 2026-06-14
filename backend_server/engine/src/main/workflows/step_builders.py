@@ -42,10 +42,15 @@ class StepBuilderMixin:
     @staticmethod
     def build_input_step(
         setter = None, 
-        can_skip : Callable[[ActionContext], bool] | None = None
+        can_skip : Callable[[ActionContext], bool] | None = None,
+        message : str = "",
     ):
         can_skip = can_skip or (lambda ctx : False)
-        return WaitingStepConfig(ActionHandler(setter=setter), can_skip=can_skip)
+        return WaitingStepConfig(
+            ActionHandler(setter=setter),
+            can_skip=can_skip,
+            message=message,
+        )
     
     @staticmethod
     def build_push_workflow_step(name : WorkflowName, config : WorkflowConfig | None = None):
@@ -92,11 +97,11 @@ class StepBuilderMixin:
         return [ClearWorkflowDataEffect()]
 
 class BoardSelectionMixin(StepBuilderMixin):
-    def build_source_step(self):
-        return self.build_input_step(WorkflowData.set_unit_pos)
+    def build_source_step(self, message : str = ""):
+        return self.build_input_step(WorkflowData.set_unit_pos, message=message)
 
-    def build_destination_step(self):
-        return self.build_input_step(WorkflowData.set_destination)
+    def build_destination_step(self, message : str = ""):
+        return self.build_input_step(WorkflowData.set_destination, message=message)
     
-    def build_target_step(self):
-        return self.build_input_step(WorkflowData.set_target_pos)
+    def build_target_step(self, message : str = ""):
+        return self.build_input_step(WorkflowData.set_target_pos, message=message)

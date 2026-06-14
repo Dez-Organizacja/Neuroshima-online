@@ -12,6 +12,7 @@ from main.input.action_handlers import ActionHandler
 @dataclass
 class StepConfig(ABC):
     name : StepName = field(init=False)
+    message : str = field(default="", kw_only=True)
 
 
 def cannot_skip(ctx : ActionContext) -> bool:

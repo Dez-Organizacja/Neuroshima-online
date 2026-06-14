@@ -52,7 +52,7 @@ class ExpolsionWorkflow(Workflow):
     def _build_steps(self):
         return [
             self.build_resolve_step(self.clear_wf_data),
-            self.build_input_step(),
+            self.build_input_step(message="Do you want to use explosion ability?"),
             self.build_resolve_step(self.resolve_func),
             self.build_end_step()
         ]

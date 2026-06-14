@@ -80,7 +80,7 @@ class PushProvider(WorkflowActionProvider):
     def get_ui_state(self, ctx):
         if ctx.workflow_data.target_pos and ctx.workflow_data.destination is None:
             return StepUIState(
-                faction=GameRules.get_enemy(ctx.state.factions, ctx.faction)
+                faction=GameRules.get_enemy(ctx.state.factions, ctx.faction),
             )
         
         return super().get_ui_state(ctx)

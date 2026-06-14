@@ -80,12 +80,18 @@ class GameEngine:
 
     @staticmethod
     def _starts_player_action(ctx : ActionContext, step : Step) -> bool:
+        if not step.requires_input:
+            return False
+
+        if ctx.workflow_instance.name in {
+            WorkflowName.TURN,
+            WorkflowName.HEADQUARTER_TURN,
+        }:
+            return True
+
         return (
-            step.requires_input
-            and ctx.workflow_instance.name in {
-                WorkflowName.TURN,
-                WorkflowName.HEADQUARTER_TURN,
-            }
+            ctx.workflow_instance.name == WorkflowName.DRAW
+            and ctx.workflow_instance.current_step_index == 3
         )
 
     def execute_action(self, ctx : ActionContext, action : UserAction):

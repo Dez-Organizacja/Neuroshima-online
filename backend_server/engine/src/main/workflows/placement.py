@@ -28,7 +28,7 @@ class PlaceWorkflow(Workflow[PlacementProvider], BoardSelectionMixin):
 
     def _build_steps(self):
         return [
-            self.build_source_step(),
+            self.build_source_step(message="Select a field for the token."),
             self.build_resolve_step(self.resolve_function),
             self.build_end_step()
         ]

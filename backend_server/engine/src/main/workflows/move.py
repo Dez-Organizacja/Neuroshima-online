@@ -17,8 +17,8 @@ class MoveWorkflow(BoardSelectionMixin, Workflow[MoveProvider]):
 
     def _build_steps(self):
         return [
-            self.build_source_step(),
-            self.build_destination_step(),
+            self.build_source_step(message="Select the unit to move."),
+            self.build_destination_step(message="Select the movement destination."),
             self.build_resolve_step(self.resolve_move),
             self.build_push_workflow_step(WorkflowName.ROTATE),
             self.build_end_step()

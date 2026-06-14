@@ -6,6 +6,6 @@ class GameOverWorkflow(Workflow):
 
     def _build_steps(self):
         return [
-            self.build_input_step(),
+            self.build_input_step(message="Game over."),
             self.build_repeat_step(index=0),
         ]

@@ -29,6 +29,8 @@ class EndTurnConfirmWorkflow(Workflow[EndTurnConfirmProvider]):
 
     def _build_steps(self):
         return [
-            WaitingStepConfig(),
+            WaitingStepConfig(
+                message="Do you want to end turn? You have unused tokens on your hand.",
+            ),
             ResolveStepConfig(resolve_func=self.resolve_function),
         ]

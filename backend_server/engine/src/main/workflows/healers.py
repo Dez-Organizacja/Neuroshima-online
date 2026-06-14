@@ -50,13 +50,16 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
                 finish_func=self.resolve_end_wf,
             ),
 
-            self.build_input_step(can_skip=self.can_skip_continue_decision_step),
+            self.build_input_step(
+                can_skip=self.can_skip_continue_decision_step,
+                message="Do you want to finish healing?",
+            ),
             self.build_check_workflow_break_step(
                 predicate_func=self.break_workflow_check,
                 finish_func=self.resolve_end_wf,
             ),
-            self.build_source_step(),
-            self.build_target_step(),
+            self.build_source_step(message="Select a healer."),
+            self.build_target_step(message="Select a unit to heal."),
             self.build_resolve_step(self.resolve),
             self.build_repeat_step(index=0),
         ]

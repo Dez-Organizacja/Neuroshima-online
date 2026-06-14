@@ -37,9 +37,15 @@ class DrawWorkflow(Workflow[DrawProvider]):
                 self.draw_tokens,
                 self.clear_wf_data,
             ),
-            self.build_input_step(can_skip=self.can_skip_discard_all),
+            self.build_input_step(
+                can_skip=self.can_skip_discard_all,
+                message="Choose whether to redraw your hand.",
+            ),
             self.build_resolve_step(self.resolve_discard_all),
-            self.build_input_step(can_skip=TurnRules.can_skip_discarding_phase),
+            self.build_input_step(
+                can_skip=TurnRules.can_skip_discarding_phase,
+                message="Select a token to discard.",
+            ),
             self.build_resolve_step(self.resolve_discard_phase),
             self.build_end_step(),
         ]

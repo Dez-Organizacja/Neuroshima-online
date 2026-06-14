@@ -45,7 +45,7 @@ class TurnWorkflow(Workflow[TurnProvider]):
                 self.draw_tokens,
             ),
             self.build_resolve_step(self.clear_wf_data),
-            self.build_input_step(),
+            self.build_input_step(message="Select a token or unit action."),
             self.build_dispatch_step(self.dispatch),
             self.build_repeat_step(index=1),
         ]

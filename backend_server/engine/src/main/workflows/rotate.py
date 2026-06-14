@@ -1,7 +1,4 @@
 from main.workflows.base import Workflow
-from main.steps.config import (
-    WaitingStepConfig,
-)
 from main.state.contex import ActionContext
 from main.events.data import Event
 from main.events.effects import RotateEffect
@@ -24,7 +21,7 @@ class RotateWorkflow(Workflow[RotateProvider]):
 
     def _build_steps(self):
         return [
-            self.build_input_step(),
+            self.build_input_step(message="Select the unit rotation."),
             self.build_resolve_step(self.resolve_function),
             self.build_end_step(),
         ]

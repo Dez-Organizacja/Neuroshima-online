@@ -20,7 +20,7 @@ class StartBattleWorkflow(Workflow[StartBattleProvider]):
  
     def _build_steps(self):
         return [
-            self.build_input_step(),
+            self.build_input_step(message="Do you want to start battle?"),
             self.build_resolve_step(self.resolve_func),
             #nie ma end workflow step bo start battle -> end turn wywala ze stacka
         ]

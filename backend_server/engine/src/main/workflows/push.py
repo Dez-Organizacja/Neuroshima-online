@@ -17,9 +17,9 @@ class PushWorkflow(BoardSelectionMixin, Workflow[PushProvider]):
 
     def _build_steps(self):
         return [
-            self.build_source_step(),
-            self.build_target_step(),
-            self.build_destination_step(),
+            self.build_source_step(message="Select the repelling unit."),
+            self.build_target_step(message="Select the unit being repelled."),
+            self.build_destination_step(message="Select the repulsion field."),
             self.build_resolve_step(self.resolve_push),
             self.build_end_step(),
         ]

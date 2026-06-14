@@ -73,6 +73,30 @@ def test_other_faction_decision_clears_undo_stack():
     assert game.state.workflow_stack[-1].name == WorkflowName.TURN
 
 
+def test_cancel_restores_draw_discard_from_full_hand():
+    game = build_draw_discard_game()
+
+    game.handle_action({
+        "type": "hand",
+        "slot": 1,
+    })
+
+    assert game.state.players["moloch"].hand.tokens == ["bitwa", "bomba"]
+    assert game.state.workflow_stack[-1].name == WorkflowName.TURN
+    assert len(game.state.undo_stack) == 1
+
+    game.handle_action({
+        "type": "button",
+        "name": "cancel",
+    })
+
+    assert game.state.players["moloch"].hand.tokens == ["bitwa", "bitwa", "bomba"]
+    assert game.state.workflow_stack[-1].name == WorkflowName.DRAW
+    assert game.state.workflow_stack[-1].current_step_index == 3
+    assert game.state.workflow_data.slot is None
+    assert game.state.undo_stack == []
+
+
 def test_cancel_can_restore_new_snapshot_after_previous_restore():
     game = build_place_game()
 

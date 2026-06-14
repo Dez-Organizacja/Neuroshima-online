@@ -30,6 +30,8 @@ class UnhappyDrawWorkflow(Workflow[UnhappyDrawProvider]):
 
     def _build_steps(self):
         return [
-            WaitingStepConfig(),
+            WaitingStepConfig(
+                message="Do you want to use the unhappy draw rule?",
+            ),
             build_end_step(self.resolve_function),
         ]
