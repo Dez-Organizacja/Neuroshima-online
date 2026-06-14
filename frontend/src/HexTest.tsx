@@ -145,15 +145,6 @@ export default function HexTest(){
         let Path: string = "undefined/undefined";
         if(TokenName !== undefined) Path = enemyfaction + "/" + TokenName;
 
-        // if(TokenName !== undefined) {
-        //     Items.push(
-        //         <Image imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={999} height={((Size * 2 + 15) * 0.866)} rotation={30} gameState={gameState} />
-        //     )
-        // }
-        // Items.push(
-        //     <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={999} size={Size * 2 + 15} rotation={30} color="#00aaff" gameState={gameState} sendAction={sendAction} />
-        // )
-
         Items.push(
             <Tile imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={999} size={Size * 2 + 15} rotation={30} gameState={gameState} sendAction={sendAction} color="#00aaff" opacity={0.1} />
         )
