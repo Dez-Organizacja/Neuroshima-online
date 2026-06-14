@@ -12,7 +12,6 @@ from main.tokens.data import BoardType
 class MoveEffect(Effect):
     from_pos: tuple[int, int]
     to_pos: tuple[int, int]
-    recompute_passive: ClassVar[bool] = True
 
     def apply(self, ctx: ActionContext):
         ctx.board.move_token(self.from_pos, self.to_pos)
@@ -32,7 +31,7 @@ class PlaceEffect(Effect):
     pos: tuple[int, int]
     name: str
     faction: str
-    recompute_passive: ClassVar[bool] = True
+    # recompute_passive: ClassVar[bool] = True
 
     def apply(self, ctx: ActionContext):
         ctx.board.put_token(
@@ -64,6 +63,7 @@ class ClearPendingAttacksEffect(Effect):
 class DamageEffect(Effect):
     pos : tuple[int, int]
     damage : int = 1
+    recompute_passive : ClassVar[bool] = True
 
     def apply(self, ctx: ActionContext):
         # print("DAMAGE EFFECT")
@@ -95,6 +95,7 @@ class ResolveUnitsDamageEffect(Effect):
 class HealEffect(Effect):
     source_pos : tuple[int, int]
     target_pos : tuple[int, int]
+    recompute_passive : ClassVar[bool] = True
 
     def apply(self, ctx : ActionContext):
         healer = ctx.board.get_token(self.source_pos)
@@ -206,38 +207,14 @@ class DiscardTokenEffect(Effect):
         # print(f"DISCARD TOKEN SLOT {self.slot}")
         ctx.player.hand.remove(self.slot)
 
-# @dataclass
-# class DiscardHandEffect(Effect):
-#     def apply(self, ctx: ActionContext):
-#         ctx.player.hand.tokens.clear()
-
-
-# @dataclass
-# class MaybePushUnhappyDrawEffect(Effect):
-#     faction: str
-
-#     def apply(self, ctx: ActionContext):
-#         hand = ctx.player.hand
-#         if hand.size != hand.MAX_LIMIT:
-#             return []
-
-#         if not hand.tokens:
-#             return []
-
-#         if all(
-#             TokenFactory.create(token_name, self.faction).type == TokenType.INSTANT
-#             for token_name in hand.tokens
-#         ):
-#             return [
-#                 ClearWorkflowDataEffect(),
-#                 PushWorkflow(
-#                     name=WorkflowName.UNHAPPY_DRAW,
-#                     config=WorkflowConfig(faction=self.faction),
-#                 ),
-#             ]
-
-#         return []
 class DiscardAllEffect(Effect):
     def apply(self, ctx : ActionContext):
         while ctx.player.hand.size:
             ctx.player.hand.remove(0)
+
+# ----------- passives -----------
+class RecomputePassivesEffect(Effect):
+    recompute_passive : ClassVar[bool] = True
+
+    def apply(self, ctx : ActionContext):
+        pass

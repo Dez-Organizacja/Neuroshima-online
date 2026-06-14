@@ -1,7 +1,7 @@
 from main.state.contex import ActionContext
 from main.workflows.base import Workflow
 from main.workflows.providers.movement import PushProvider
-from main.events.effects import MoveEffect
+from main.events.effects import MoveEffect, RecomputePassivesEffect
 from main.events.data import Event
 from main.workflows.step_builders import BoardSelectionMixin
 
@@ -34,7 +34,7 @@ class PushWorkflow(BoardSelectionMixin, Workflow[PushProvider]):
             from_pos=ctx.workflow_data.target_pos,
             to_pos=ctx.workflow_data.destination
         )
-        return [move]
+        return [move, RecomputePassivesEffect()]
     
     def get_first_step_index(self, ctx : ActionContext):
         return 1 if ctx.workflow_data.unit_pos else 0

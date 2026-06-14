@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from main.events.data import FlowEvent, Event
 from main.events.workflow import PushWorkflow, PopWorkflow, DeleteAbove, EnqueueWorkflow, PopAllWorkflows
-from main.events.effects import ResetAbilityUsedEffect
+from main.events.effects import ResetAbilityUsedEffect, MoveEffect
 from main.state.contex import ActionContext
 from main.workflows.data import WorkflowName, WorkflowConfig
 from main.utils.variable import Phase
@@ -108,4 +108,3 @@ class CheckGameOverEvent(FlowEvent):
         if ctx.rules.is_game_over(ctx.board, ctx.state.factions, ctx.phase):
             return [GameOverEvent()]
         return []
-        

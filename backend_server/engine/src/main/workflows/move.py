@@ -9,12 +9,6 @@ class MoveWorkflow(BoardSelectionMixin, Workflow[MoveProvider]):
     def __init__(self):
         super().__init__(action_provider=MoveProvider())
 
-    # def build_move_step(self):
-    #     return ResolveStepConfig(resolve_func=self.resolve_move)
-
-    # def build_rotate_step(self):
-    #     return InitStepConfig(wf_name=WorkflowName.ROTATE)
-
     def _build_steps(self):
         return [
             self.build_source_step(message="Select the unit to move."),
@@ -23,11 +17,6 @@ class MoveWorkflow(BoardSelectionMixin, Workflow[MoveProvider]):
             self.build_push_workflow_step(WorkflowName.ROTATE),
             self.build_end_step()
         ]
-            # self.build_source_step(),
-            # self.build_destination_step(),
-            # self.build_move_step(),
-            # self.build_rotate_step(),
-            # build_end_step(),
 
     @staticmethod
     def resolve_move(ctx : ActionContext):

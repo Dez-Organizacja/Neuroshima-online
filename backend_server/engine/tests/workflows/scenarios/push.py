@@ -1,6 +1,6 @@
 from main.input.data import BoardAction, ActionType
 from main.workflows.data import WorkflowName
-from main.events.effects import MoveEffect
+from main.events.effects import MoveEffect, RecomputePassivesEffect
 from main.events.workflow import PopWorkflow, ConsumeOnClick
 
 from .builder import ScenarioBuilder
@@ -25,7 +25,7 @@ def push_scenario():
 
         .tick()
         .then_execution(
-            events=[MoveEffect(from_pos=(1, 3), to_pos=(1, 5))]
+            events=[MoveEffect(from_pos=(1, 3), to_pos=(1, 5)), RecomputePassivesEffect()]
         )
 
         .tick()

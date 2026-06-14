@@ -55,6 +55,7 @@ class WorkflowData:
     type        : ActionType | None = None
     button      : Button | None = None
 
+
     # @classmethod
     # def from_dict(cls, data):
     #     return from_dict_dataclass(cls, data) 

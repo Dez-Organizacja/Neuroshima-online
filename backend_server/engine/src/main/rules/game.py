@@ -8,7 +8,7 @@ class GameRules():
         for faction in factions:
             if(faction != my_fraction):
                 return faction
-    
+
     @staticmethod
     def get_score(board : Board, faction : str) -> int:
         pos = board.get_hq_pos(faction)

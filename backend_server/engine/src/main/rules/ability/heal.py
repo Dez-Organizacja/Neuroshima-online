@@ -7,7 +7,8 @@ from main.rules.predicates import (
     is_ally_of,
     is_ally,
     NOT,
-    predicate_maker
+    predicate_maker,
+    of_relation_to,
 )
 from main.tokens.board_token import BoardToken
 
@@ -23,6 +24,7 @@ class HealRules(AbilityRules):
     def get_targets(self, board : Board, healer_pos : Hex):
         # print(f"possible getting targets for {healer_pos}")
         healer = board.get_token(healer_pos)
+        to_target_relation = healer.state.relations.real_boost_target
         heal_directions = healer.get_heal_directions()
         candidates = [
             board.go(healer_pos, direction)
@@ -32,7 +34,7 @@ class HealRules(AbilityRules):
         possible_targets = set(
             BoardQuery([
                 NOT(is_empty_at),
-                is_ally_of(healer),
+                of_relation_to(to_target_relation, healer),
                 predicate_maker(self.needs_heal),
             ]).apply(board)
         )

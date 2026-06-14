@@ -1,10 +1,13 @@
 from main.board.board import Board
 from main.tokens.board_token import BoardToken
-from main.tokens.data import Ability
+from main.tokens.data import TokenRelation
 from typing import Callable
 from main.board.board import Hex
 
 predicate_func = Callable[[Board, Hex], bool]
+
+def _get_relation(faction1 : str, faction2 : str):
+    return (TokenRelation.OWN if faction1 == faction2 else TokenRelation.ENEMY)
 
 def NOT(predicate):
     def not_predicate(board : Board, pos : Hex):
@@ -28,6 +31,12 @@ def is_enemy(faction : str):
 
 def is_enemy_of(unit : BoardToken):
     return is_enemy(unit.faction)
+
+def of_relation_to(expected_relation : TokenRelation, unit : BoardToken):
+    def predicate(board : Board, pos : Hex) -> bool:
+        relation = _get_relation(board.get_token(pos).faction, unit.faction)
+        return relation == expected_relation
+    return predicate
 
 def is_empty_at(board : Board, pos : Hex):
     return board.get_token(pos) is None
