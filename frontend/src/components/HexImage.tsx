@@ -13,6 +13,7 @@ type ImageProps = {
     height: number
     rotation: number
     gameState: GameState
+    opacity?: number
 }
 
 export default function Image({ 
@@ -24,6 +25,7 @@ export default function Image({
     height,
     rotation,
     gameState,
+    opacity = 1,
 }: ImageProps) {
     const field = gameState.view.state.board.find(field =>
         field.pos[0] === poz1 &&
@@ -76,6 +78,7 @@ export default function Image({
             left: x - (width / 2),
             top: y - (height / 2),
             transform: `rotate(${rotation}deg) scale(1)`,
+            opacity: opacity,
         }}
         />
     )

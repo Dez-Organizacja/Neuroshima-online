@@ -82,37 +82,35 @@ const Tile: React.FC<TileProps> = ({
 
 
     if(imageName !== "undefined/undefined") {
+        const Items = [];
+
+        Items.push(
+            <Image imageName={imageName} x={x} y={y} poz1={poz1} poz2={poz2} height={height} rotation={Rotation} gameState={gameState} />
+        )
+
+        const Field = gameState.view.state.board.find(Field =>
+            Field.pos[0] === poz1 &&
+            Field.pos[1] === poz2
+        );
+        let Wired: number = 0;
+        if(Field) Wired = Field.unit.wired;
+        if(Wired === 1) {
+            Items.push(
+                <Image imageName="inne/siec2" x={x} y={y} poz1={poz1} poz2={poz2} height={size} rotation={0} gameState={gameState} opacity={0.6} />
+            )
+        }
+
+        Items.push(
+            <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size} color={color} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
+        )
 
         // console.log("POZ: " + poz1 + ", " + poz2 + "    ROT: " + Rotation);
 
-        // const Field = gameState.view.state.board.find(Field =>
-        //     Field.pos[0] === poz1 &&
-        //     Field.pos[1] === poz2
-        // );
-        // let PathSztab: string = "";
-        // if(Field) PathSztab = Field.unit.faction + "/" + "sztab";
-        // if(imageName === PathSztab) {
-        //     const field = gameState.view.state.board.find(field =>
-        //         field.pos[0] === poz1 &&
-        //         field.pos[1] === poz2
-        //     );
-        //     if(field) {
-        //         const HP = 20 - field.unit.damage;
-        //         return (
-        //             <div>
-        //                 <Image imageName={imageName} x={x} y={y} poz1={poz1} poz2={poz2} height={height} rotation={Rotation} gameState={gameState} />
-        //                 <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size} color={color} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} > {HP} </Hexagon>
-        //             </div>
-        //         )
-        //     }
-        // } else {
-            return (
-                <div>
-                    <Image imageName={imageName} x={x} y={y} poz1={poz1} poz2={poz2} height={height} rotation={Rotation} gameState={gameState} />
-                    <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size} color={color} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
-                </div>
-            )
-        // }
+        return (
+            <div>
+                {Items}
+            </div>
+        )
     } else {
         return (
             <div>
