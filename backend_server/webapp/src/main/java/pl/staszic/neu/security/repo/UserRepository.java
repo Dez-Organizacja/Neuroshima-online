@@ -6,7 +6,7 @@ public interface UserRepository {
 
     Optional<StoredUser> findByUsername(String username);
 
-    void save(String username, String encodedPassword, Integer wins, Integer matches);
+    void save(String username, String encodedPassword, Integer matches, Integer wins);
 
     void save(StoredUser storedUser);
 

@@ -1,6 +1,7 @@
 package pl.staszic.neu.security.repo.repository;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "users")
@@ -17,9 +18,11 @@ public class UserEntity {
     private String password;
 
     @Column(nullable = false)
+    @ColumnDefault("0")
     private Integer matches;
 
     @Column(nullable = false)
+    @ColumnDefault("0")
     private Integer wins;
 
     public UserEntity() {}

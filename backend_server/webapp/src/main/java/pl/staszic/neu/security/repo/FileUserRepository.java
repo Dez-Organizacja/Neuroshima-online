@@ -38,10 +38,10 @@ public class FileUserRepository implements UserRepository {
     }
 
     public synchronized void save(StoredUser storedUser) {
-        save(storedUser.username(), storedUser.encodedPassword(), storedUser.wins(), storedUser.matches());
+        save(storedUser.username(), storedUser.encodedPassword(), storedUser.matches(), storedUser.wins());
     }
 
-    public synchronized void save(String username, String encodedPassword, Integer wins, Integer matches) {
+    public synchronized void save(String username, String encodedPassword, Integer matches, Integer wins) {
         if (findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("Użytkownik już istnieje: " + username);
         }

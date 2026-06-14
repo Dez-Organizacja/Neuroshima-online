@@ -23,11 +23,11 @@ public class DBUserRepository implements UserRepository {
     }
 
     @Override
-    public void save(String username, String encodedPassword, Integer wins, Integer matches) {
+    public void save(String username, String encodedPassword, Integer matches, Integer wins) {
         if(jpaRepository.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("Username already exists");
         }
-        jpaRepository.save(new UserEntity(username, encodedPassword, wins, matches));
+        jpaRepository.save(new UserEntity(username, encodedPassword, matches, wins));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class DBUserRepository implements UserRepository {
         if(jpaRepository.findByUsername(storedUser.username()).isPresent()) {
             throw new IllegalArgumentException("Username already exists");
         }
-        jpaRepository.save(new UserEntity(storedUser.username(), storedUser.encodedPassword(), storedUser.wins(), storedUser.matches()));
+        jpaRepository.save(new UserEntity(storedUser.username(), storedUser.encodedPassword(), storedUser.matches(), storedUser.wins()));
     }
 
     @Override
