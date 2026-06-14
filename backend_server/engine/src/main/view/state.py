@@ -33,15 +33,6 @@ class StateViewBuilder:
             for faction in state.factions
         }
 
-    @staticmethod
-    def build_last_view(state : GameState):
-        last_clicked_hex = state.last_clicked_hex
-        return {
-            "source": last_clicked_hex.source,
-            "pos": list(last_clicked_hex.pos) if last_clicked_hex.pos is not None else None,
-            "slot": last_clicked_hex.slot,
-        }
-
     @classmethod
     def build(cls, state : GameState):
         return {
@@ -49,5 +40,4 @@ class StateViewBuilder:
             "board" : cls.build_board_view(state),
             "hands" : cls.build_hands_view(state),
             "piles" : cls.build_piles_view(state),
-            "LastClickedHex" : cls.build_last_view(state),
         }
