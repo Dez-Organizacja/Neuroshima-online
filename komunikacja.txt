@@ -33,6 +33,11 @@ dla frontendu:
         "mode": "default"/"rotation"/"decision", 
         "message": ""
     }
+    "last_clicked_hex" {
+        "source" : "board"/"hand"
+        "pos" : [1, 1]/None
+        "slot" : int/None
+    }
 }
 
 dla engine:{
