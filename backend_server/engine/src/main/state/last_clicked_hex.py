@@ -2,12 +2,12 @@ from dataclasses import dataclass
 
 @dataclass
 class LastClickedHex:
-    source: str = ""
+    source: str | None = None
     pos: tuple[int, int] | None = None
     slot: int | None = None
 
     def reset(self) -> None:
-        self.source = ""
+        self.source = None
         self.pos = None
         self.slot = None
 

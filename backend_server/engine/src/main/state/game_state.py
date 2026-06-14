@@ -79,10 +79,7 @@ class GameState:
         return Serializator.from_dict_dataclass(cls, data)
     
     def to_dict(self):
-        data = Serializator.to_dict_dataclass(self)
-        if not self.last_clicked_hex.source:
-            data.pop("last_clicked_hex", None)
-        return data
+        return Serializator.to_dict_dataclass(self)
     
     def print_game_state(self):
         print_obj(self.to_dict(), 0)

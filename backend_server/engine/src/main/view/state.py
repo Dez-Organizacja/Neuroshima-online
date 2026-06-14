@@ -36,9 +36,6 @@ class StateViewBuilder:
     @staticmethod
     def build_last_view(state : GameState):
         last_clicked_hex = state.last_clicked_hex
-        if not last_clicked_hex.source:
-            return None
-
         return {
             "source": last_clicked_hex.source,
             "pos": list(last_clicked_hex.pos) if last_clicked_hex.pos is not None else None,
