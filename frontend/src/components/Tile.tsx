@@ -35,6 +35,8 @@ const Tile: React.FC<TileProps> = ({
     gameState,
 }) => {
 
+    const Items = [];
+
     // console.log("START1 = POZ: " + poz1 + ", " + poz2 + "    ROT: " + rotation);
 
 
@@ -82,8 +84,19 @@ const Tile: React.FC<TileProps> = ({
     if(imageName === "undefined/undefined") opacity = 0.5;
 
 
+    if(gameState.view.LastClickedHex.source === "board" && gameState.view.LastClickedHex.pos[0] === poz1 && gameState.view.LastClickedHex.pos[1] === poz2) {
+        Items.push(
+            <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 6} color={"#b0ff97"} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
+        )
+    }
+    if(gameState.view.LastClickedHex.source === "hand" && gameState.view.LastClickedHex.slot === poz1) {
+        Items.push(
+            <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 6} color={"#b0ff97"} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
+        )
+    }
+
+
     if(imageName !== "undefined/undefined") {
-        const Items = [];
 
         Items.push(
             <Image imageName={imageName} x={x} y={y} poz1={poz1} poz2={poz2} height={height} rotation={Rotation} gameState={gameState} />
@@ -127,9 +140,12 @@ const Tile: React.FC<TileProps> = ({
             </div>
         )
     } else {
-        return (
+        Items.push(
+            <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size} color={color} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
+        )
+        return(
             <div>
-                <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size} color={color} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
+                {Items}
             </div>
         )
     }

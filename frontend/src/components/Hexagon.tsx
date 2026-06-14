@@ -15,12 +15,14 @@ type HexagonProps = {
     opacity?: number;
     rotation?: number;
     onClick?: () => void;
+    clickable?: boolean;
     children?: React.ReactNode;
     sendAction? : (action : ActionData) => void;
     gameState : GameState;
 };
 
-export function ClickCheck(x: number, y: number, gameState : GameState | undefined, sendAction : ((action : ActionData) => void) | undefined, rotation: number) : void {
+export function ClickCheck(x: number, y: number, gameState : GameState | undefined, sendAction : ((action : ActionData) => void) | undefined, rotation: number, clickable: boolean) : void {
+    if(clickable !== true) return;
     if(y === 999) return;
     if(!gameState){
         return;
@@ -83,6 +85,7 @@ const Hexagon: React.FC<HexagonProps> = ({
     opacity = 0.3,
     rotation = 0,
     onClick,
+    clickable = true,
     children,
     sendAction,
     gameState,
@@ -95,7 +98,7 @@ const Hexagon: React.FC<HexagonProps> = ({
             className="hexagon"
             // onClick={onClick}
             // onClick={() => console.log("Clicked hex:", { poz1, poz2 })}
-            onClick={() => ClickCheck(poz1, poz2, gameState, sendAction, rotation)}
+            onClick={() => ClickCheck(poz1, poz2, gameState, sendAction, rotation, clickable)}
         style={{
             width: size,
             height: height,
