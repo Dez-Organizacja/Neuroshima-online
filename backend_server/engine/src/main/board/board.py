@@ -39,6 +39,8 @@ class Board:
         self.board = [[None] * self.length for i in range(self.width)]
         self.where_am_i : dict[int, tuple[int, int]] = {}
         self.tokens : dict[int, BoardToken] = {}
+        self.my_healers : dict[Hex, list[Hex]] = {}
+        self.my_targets : dict[Hex, list[Hex]] = {}
         
         self.ALL_HEXES = []
 
@@ -57,6 +59,7 @@ class Board:
         self.board = [[None] * self.length for _ in range(self.width)]
         self.where_am_i = {}
         self.tokens = {}
+        self.clear_healing_tokens()
         self.last_id = 0
 
         for x in range(self.width):
@@ -77,6 +80,10 @@ class Board:
                 if self.board[i][j] is not None:
                     data[i][j] = self.tokens[self.board[i][j]].to_dict()
         return data
+
+    def clear_healing_tokens(self) -> None:
+        self.my_healers.clear()
+        self.my_targets.clear()
     
     # ----------- board state and actions -----------
 
@@ -251,4 +258,3 @@ class Board:
             print(Serializator.to_dict_dataclass(self.get_tile_view(tile)))
             print("--------------------\n")
         print("PRINTING FINISHED BOARD")
-        
