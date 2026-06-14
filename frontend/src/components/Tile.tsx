@@ -84,15 +84,21 @@ const Tile: React.FC<TileProps> = ({
     if(imageName === "undefined/undefined") opacity = 0.5;
 
 
-    if(gameState.view.LastClickedHex.source === "board" && gameState.view.LastClickedHex.pos[0] === poz1 && gameState.view.LastClickedHex.pos[1] === poz2) {
-        Items.push(
-            <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 6} color={"#b0ff97"} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
-        )
-    }
-    if(gameState.view.LastClickedHex.source === "hand" && gameState.view.LastClickedHex.slot === poz1) {
-        Items.push(
-            <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 6} color={"#b0ff97"} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
-        )
+    console.log("LAST CLICK (" + poz1 + ", " + poz2 + "):");
+    console.log(gameState.view.LastClickedHex);
+    if(gameState.view.LastClickedHex !== undefined) {
+        console.log("LAST CLICK (CLICKED):");
+        console.log(gameState.view.LastClickedHex);
+        if(gameState.view.LastClickedHex.source === "board" && gameState.view.LastClickedHex.pos[0] === poz1 && gameState.view.LastClickedHex.pos[1] === poz2) {
+            Items.push(
+                <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 6} color={"#b0ff97"} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
+            )
+        }
+        if(gameState.view.LastClickedHex.source === "hand" && gameState.view.LastClickedHex.slot === poz1 && poz2 === -1) {
+            Items.push(
+                <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 6} color={"#b0ff97"} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
+            )
+        }
     }
 
 

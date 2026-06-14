@@ -120,15 +120,12 @@ export default function HexTest(){
         // === Dict check === //
         const Index = (i + 1) / 2;
         const TokenName = gameState.view.state.hands[currentfaction].tokens[Index];
-        const Path = currentfaction + "/" + TokenName;
+        let Path: string = "undefined/undefined";
+        if(TokenName !== undefined) Path = currentfaction + "/" + TokenName;
 
-        if(TokenName !== undefined) {
-            Items.push(
-                <Image imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={-1} height={((Size * 2 + 15) * 0.866)} rotation={30} gameState={gameState} />
-            )
-        }
+
         Items.push(
-            <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={-1} size={Size * 2 + 15} rotation={30} color="#00aaff" gameState={gameState} sendAction={sendAction} />
+            <Tile imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={-1} size={Size * 2 + 15} rotation={30} gameState={gameState} sendAction={sendAction} color="#00aaff" opacity={0.1} />
         )
     }
     // const [enemyfaction, setEnemyfaction] = useState(gameState.view.state.factions[0]);
@@ -145,15 +142,20 @@ export default function HexTest(){
         // === Dict check === //
         const Index = (i + 1) / 2;
         const TokenName = gameState.view.state.hands[enemyfaction].tokens[Index];
-        const Path = enemyfaction + "/" + TokenName;
+        let Path: string = "undefined/undefined";
+        if(TokenName !== undefined) Path = enemyfaction + "/" + TokenName;
 
-        if(TokenName !== undefined) {
-            Items.push(
-                <Image imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={999} height={((Size * 2 + 15) * 0.866)} rotation={30} gameState={gameState} />
-            )
-        }
+        // if(TokenName !== undefined) {
+        //     Items.push(
+        //         <Image imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={999} height={((Size * 2 + 15) * 0.866)} rotation={30} gameState={gameState} />
+        //     )
+        // }
+        // Items.push(
+        //     <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={999} size={Size * 2 + 15} rotation={30} color="#00aaff" gameState={gameState} sendAction={sendAction} />
+        // )
+
         Items.push(
-            <Hexagon x={FinalX} y={FinalY} poz1={Index} poz2={999} size={Size * 2 + 15} rotation={30} color="#00aaff" gameState={gameState} sendAction={sendAction} />
+            <Tile imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={999} size={Size * 2 + 15} rotation={30} gameState={gameState} sendAction={sendAction} color="#00aaff" opacity={0.1} />
         )
     }
     // ======= ========== ======= //
