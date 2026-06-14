@@ -5,7 +5,6 @@ from main.events.effects import (
     ResetAbilityUsedEffect, 
     DrawTokensEffect,
     ClearWorkflowDataEffect,
-    MaybePushUnhappyDrawEffect
 )
 from main.events.flow import EndTurnEvent, StartTurnEvent
 from .builder import ScenarioBuilder
@@ -27,17 +26,11 @@ def turn_scenario():
         .given(setup_function)
         .then_execution(
             events=[
-<<<<<<< HEAD
-                ResetAbilityUsedEffect(positions=[]), 
-                DrawTokensEffect(),
-                MaybePushUnhappyDrawEffect(faction='moloch'),
-=======
                 StartTurnEvent(faction="moloch"), 
                 PushWorkflow(
                     name=WorkflowName.DRAW, 
                     config=WorkflowConfig(hand_limit=3)
                 )
->>>>>>> 03822f3 (działa ekspozja, medycy, sekwencja końcowa, nieszcześliwy dociąg i discard pierwszego żetou w turze)
             ],
         )
 

@@ -28,14 +28,10 @@ class WorkflowName(Enum):
     INITIATIVE = "initiative"
     EXPLOSION = "explosion"
     DAMAGE_RESOLVE = "damage_resolve"
-<<<<<<< HEAD
-    UNHAPPY_DRAW = "unhappy_draw"
     END_TURN_CONFIRM = "end_turn_confirm"
-=======
     DRAW="draw"
     GAMEOVER="gameover"
     ENDGAMESEQUENCE="end_game_sequence"
->>>>>>> 03822f3 (działa ekspozja, medycy, sekwencja końcowa, nieszcześliwy dociąg i discard pierwszego żetou w turze)
 
 ABILITY_WORKFLOW_REGISTRY = {
     Ability.MOVE : WorkflowName.MOVE,

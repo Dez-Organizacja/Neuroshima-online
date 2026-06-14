@@ -18,14 +18,10 @@ from main.workflows.battle import BattleWorkflow
 from main.workflows.explosion import ExpolsionWorkflow
 from main.workflows.initiative import InitiativeWorkflow
 from main.workflows.damage_resolve import ResolveDamageWorkflow
-<<<<<<< HEAD
-from main.workflows.unhappy_draw import UnhappyDrawWorkflow
 from main.workflows.end_turn_confirm import EndTurnConfirmWorkflow
-=======
 from main.workflows.draw import DrawWorkflow
 from main.workflows.endgame import EndGameSequenceWorkflow
 from main.workflows.game_over import GameOverWorkflow
->>>>>>> 03822f3 (działa ekspozja, medycy, sekwencja końcowa, nieszcześliwy dociąg i discard pierwszego żetou w turze)
 from main.workflows.base import Workflow
 from dataclasses import dataclass
 
@@ -60,13 +56,9 @@ class WorkflowFactory:
         WorkflowName.EXPLOSION : WorkflowMeta(ExpolsionWorkflow, True),
         WorkflowName.INITIATIVE : WorkflowMeta(InitiativeWorkflow, True),
         WorkflowName.DAMAGE_RESOLVE : WorkflowMeta(ResolveDamageWorkflow, True),
-<<<<<<< HEAD
-        WorkflowName.UNHAPPY_DRAW : WorkflowMeta(UnhappyDrawWorkflow, True),
         WorkflowName.END_TURN_CONFIRM : WorkflowMeta(EndTurnConfirmWorkflow, True),
-=======
         WorkflowName.DRAW : WorkflowMeta(DrawWorkflow, True),
         WorkflowName.ENDGAMESEQUENCE : WorkflowMeta(EndGameSequenceWorkflow, True),
->>>>>>> 03822f3 (działa ekspozja, medycy, sekwencja końcowa, nieszcześliwy dociąg i discard pierwszego żetou w turze)
     }
     @classmethod
     def create(cls, instance : WorkflowInstance) -> Workflow:

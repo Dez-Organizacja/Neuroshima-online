@@ -29,19 +29,19 @@ class AvailableActions:
         actions.board = provider.get_positions(ctx)
         actions.buttons = provider.get_buttons(ctx)
 
-        if ctx.player.hand.size == 3:
-            actions.buttons = [
-                button for button in actions.buttons
-                if button != Button.END_TURN
-            ]
-        if ctx.player.hand.size == 3 and ctx.workflow_data.slot is not None:
-            token_name = ctx.player.hand.get(ctx.workflow_data.slot)
-            if token_name is not None:
-                token = TokenFactory.create(token_name, faction=ctx.faction)
-                actions.board = []
-                actions.buttons = []
-                if PlacementRules.can_discard(token):
-                    actions.buttons = [Button.DISCARD]
+        # if ctx.player.hand.size == 3:
+        #     actions.buttons = [
+        #         button for button in actions.buttons
+        #         if button != Button.END_TURN
+        #     ]
+        # if ctx.player.hand.size == 3 and ctx.workflow_data.slot is not None:
+        #     token_name = ctx.player.hand.get(ctx.workflow_data.slot)
+        #     if token_name is not None:
+        #         token = TokenFactory.create(token_name, faction=ctx.faction)
+        #         actions.board = []
+        #         actions.buttons = []
+        #         if PlacementRules.can_discard(token):
+        #             actions.buttons = [Button.DISCARD]
 
         if ctx.state.can_undo(decision_faction) and Button.CANCEL not in actions.buttons:
             actions.buttons.append(Button.CANCEL)

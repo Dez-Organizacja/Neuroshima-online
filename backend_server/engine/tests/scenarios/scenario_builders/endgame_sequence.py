@@ -16,7 +16,7 @@ def endgame_scenario() -> Scenario:
                 index(0),
                 config(factions=factions),
             ),
-            hand("borgo", draw(["zabojca", "sieciarz"])),
+            # hand("borgo", draw(["zabojca", "sieciarz"])),
             board(
                 faction_place(
                     "moloch",
