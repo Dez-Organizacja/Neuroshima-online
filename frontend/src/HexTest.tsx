@@ -198,11 +198,20 @@ export default function HexTest(){
     );
     if(EnemyFind) EnemyHeadquarterHP = 20 - EnemyFind.unit.damage;
 
+    const CurrentPile = gameState.view.state.piles[currentfaction];
+    const EnemyPile = gameState.view.state.piles[enemyfaction];
+
     Items.push(
-        <TextBox x={LeftX} y={height / 32} text={"HP: " + CurrentHeadquarterHP} />
+        <div>
+            <TextBox x={LeftX} y={height / 32} text={"HP: " + CurrentHeadquarterHP} />
+            <TextBox x={RightX} y={height / 32} text={"HP: " + EnemyHeadquarterHP} />
+        </div>
     )
     Items.push(
-        <TextBox x={RightX} y={height / 32} text={"HP: " + EnemyHeadquarterHP} />
+        <div>
+            <TextBox x={LeftX} y={height - (height / 32)} text={"Pile size: " + CurrentPile} />
+            <TextBox x={RightX} y={height - (height / 32)} text={"Pile size: " + EnemyPile} />
+        </div>
     )
     // ===== ====== ===== //
 
