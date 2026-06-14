@@ -28,6 +28,6 @@ class GameViewBuilder:
             "state" : self.state_view.build(ctx.state),
             "scores" : self.get_scores(ctx),
             "winner" : ctx.rules.get_winner(ctx.board, ctx.state.factions),
-            "lastClickedHex" : self.build_last_clicked_hex_view(ctx.state),
+            "LastClickedHex" : self.build_last_clicked_hex_view(ctx.state),
             **self.step_view.build_step(ctx).to_dict(),
         }
