@@ -73,10 +73,16 @@ class GameState:
 
     @classmethod
     def from_dict(cls, data) -> GameState:
+        data = dict(data)
+        if data.get("last_clicked_hex") is None:
+            data.pop("last_clicked_hex", None)
         return Serializator.from_dict_dataclass(cls, data)
     
     def to_dict(self):
-        return Serializator.to_dict_dataclass(self)
+        data = Serializator.to_dict_dataclass(self)
+        if not self.last_clicked_hex.source:
+            data.pop("last_clicked_hex", None)
+        return data
     
     def print_game_state(self):
         print_obj(self.to_dict(), 0)
@@ -89,8 +95,6 @@ class GameState:
             return
 
         snapshot = self.to_dict()
-        if snapshot.get("last_clicked_hex") is None:
-            snapshot.pop("last_clicked_hex", None)
         self.undo_stack.append(
             UndoSnapshot(
                 workflow_name=workflow_name,

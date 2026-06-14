@@ -20,13 +20,3 @@ class LastClickedHex:
         self.source = "hand"
         self.slot = slot
         self.pos = None
-
-    def to_dict(self):
-        if not self.source:
-            return None
-
-        return {
-            "source": self.source,
-            "pos": list(self.pos) if self.pos is not None else None,
-            "slot": self.slot,
-        }
