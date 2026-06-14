@@ -91,12 +91,12 @@ const Tile: React.FC<TileProps> = ({
         console.log(gameState.view.LastClickedHex);
         if(gameState.view.LastClickedHex.source === "board" && gameState.view.LastClickedHex.pos[0] === poz1 && gameState.view.LastClickedHex.pos[1] === poz2) {
             Items.push(
-                <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 6} color={"#b0ff97"} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
+                <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 10} color={"#b0ff97"} opacity={0.7} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
             )
         }
         if(gameState.view.LastClickedHex.source === "hand" && gameState.view.LastClickedHex.slot === poz1 && poz2 === -1) {
             Items.push(
-                <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 6} color={"#b0ff97"} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
+                <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 10} color={"#b0ff97"} opacity={0.7} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
             )
         }
     }
