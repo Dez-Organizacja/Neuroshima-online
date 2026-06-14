@@ -92,9 +92,9 @@ const Tile: React.FC<TileProps> = ({
             Field.pos[0] === poz1 &&
             Field.pos[1] === poz2
         );
-        let Wired: number = 0;
+        let Wired: boolean = false;
         if(Field) Wired = Field.unit.wired;
-        if(Wired === 1) {
+        if(Wired === true) {
             Items.push(
                 <Image imageName="inne/siec2" x={x} y={y} poz1={poz1} poz2={poz2} height={size} rotation={0} gameState={gameState} opacity={0.6} />
             )

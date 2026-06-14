@@ -9,7 +9,7 @@ type BoardCell = {
         rotation : number,
         damage : number,
         wounds: number,
-        wired : number,
+        wired : boolean,
         ability_used : boolean,
     }
 }
@@ -21,7 +21,14 @@ export type GameState = {
             hands : {
                 [key : string] : {tokens : string[]}
             }
+            piles : {
+                [key: string] : number
+            }
         }
+        scores : {
+            [key : string] : number
+        }
+        winner : string
         availableActions : {
             hand : boolean[]
             board : [number, number][]
