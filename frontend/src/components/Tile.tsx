@@ -4,6 +4,7 @@ import { useGameSocketContext } from "../websockets/gameSocketContext";
 import { useProcesedGameState, GameState } from "../Dlaigora";
 import Hexagon from "./Hexagon";
 import Image from "./HexImage";
+import NumberOverlay from "./NumberOverlay";
 import { ActionData } from "./ActionTypes";
 
 type TileProps = {
@@ -88,6 +89,7 @@ const Tile: React.FC<TileProps> = ({
             <Image imageName={imageName} x={x} y={y} poz1={poz1} poz2={poz2} height={height} rotation={Rotation} gameState={gameState} />
         )
 
+        // ===== Wired and Wounds ===== //
         const Field = gameState.view.state.board.find(Field =>
             Field.pos[0] === poz1 &&
             Field.pos[1] === poz2
@@ -99,6 +101,19 @@ const Tile: React.FC<TileProps> = ({
                 <Image imageName="inne/siec2" x={x} y={y} poz1={poz1} poz2={poz2} height={size} rotation={0} gameState={gameState} opacity={0.6} />
             )
         }
+
+        let Wounds: number = 0;
+        if(Field) Wounds = Field.unit.wounds;
+
+        if(Wounds !== 0) {
+            Items.push(
+                <Image imageName="inne/rana2" x={x} y={y} poz1={poz1} poz2={poz2} height={size / 3} rotation={0} gameState={gameState} />
+            )
+            Items.push(
+                <NumberOverlay x={x} y={y} value={Wounds} opacity={0.9} height={size / 6} />
+            )
+        }
+        // ===== ================ ===== //
 
         Items.push(
             <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size} color={color} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
