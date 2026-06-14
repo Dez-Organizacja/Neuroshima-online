@@ -39,6 +39,11 @@ export type GameState = {
             mode : string,
             message : string
         }
+        LastClickedHex : {
+            source : string,
+            pos : [number, number],
+            slot : number
+        }
     }
 }
 
