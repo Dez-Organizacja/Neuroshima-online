@@ -90,7 +90,7 @@ public class AuthController {
         }
 
         try {
-            userRepository.save(request.username(), passwordEncoder.encode(request.password()));
+            userRepository.save(request.username(), passwordEncoder.encode(request.password()), 0, 0);
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status", "registered"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));

@@ -1,6 +1,5 @@
 package pl.staszic.neu.security.repo;
 
-import org.apache.catalina.Store;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,7 +37,11 @@ public class FileUserRepository implements UserRepository {
         }
     }
 
-    public synchronized void save(String username, String encodedPassword) {
+    public synchronized void save(StoredUser storedUser) {
+        save(storedUser.username(), storedUser.encodedPassword(), storedUser.wins(), storedUser.matches());
+    }
+
+    public synchronized void save(String username, String encodedPassword, Integer wins, Integer matches) {
         if (findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("Użytkownik już istnieje: " + username);
         }
@@ -51,6 +54,13 @@ public class FileUserRepository implements UserRepository {
         }
     }
 
+    @Override
+    public void recordMatch(String username, boolean won) {
+        // Format pliku przechowuje tylko login i hasło, więc statystyki
+        // (mecze/wygrane) nie są tu utrwalane - obsługuje je repozytorium bazodanowe.
+        logger.warn("recordMatch nie jest wspierane przez FileUserRepository, pomijam aktualizację dla username={}, won={}", username, won);
+    }
+
     private StoredUser parseLine(String rawLine) {
         String line = rawLine == null ? "" : rawLine.trim();
         if (line.isEmpty() || line.startsWith("#")) {
@@ -61,7 +71,7 @@ public class FileUserRepository implements UserRepository {
             String withoutPrefix = line.substring("Username:".length()).trim();
             String[] parts = withoutPrefix.split(", Password:", 2);
             if (parts.length == 2) {
-                return new StoredUser(parts[0].trim(), "{noop}" + parts[1].trim());
+                return new StoredUser(parts[0].trim(), "{noop}" + parts[1].trim(), 0, 0);
             }
             return null;
         }
@@ -74,12 +84,12 @@ public class FileUserRepository implements UserRepository {
         String username = line.substring(0, separatorIdx).trim();
         String password = line.substring(separatorIdx + 1).trim();
         if (password.startsWith("{")) {
-            return new StoredUser(username, password);
+            return new StoredUser(username, password, 0, 0);
         }
         if (password.startsWith("$2a$") || password.startsWith("$2b$") || password.startsWith("$2y$")) {
-            return new StoredUser(username, "{bcrypt}" + password);
+            return new StoredUser(username, "{bcrypt}" + password, 0, 0);
         }
-        return new StoredUser(username, "{noop}" + password);
+        return new StoredUser(username, "{noop}" + password, 0, 0);
     }
 
     private void ensureFileExists() {

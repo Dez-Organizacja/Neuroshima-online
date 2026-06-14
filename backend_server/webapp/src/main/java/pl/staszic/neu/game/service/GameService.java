@@ -16,6 +16,8 @@ public interface GameService {
 
     GetRoomStatusResponse getRoomStatus(String clientId, GetRoomStatusRequest request);
 
+    GetUserDataResponse getUserData(String clientId, GetUserDataRequest request);
+
     SetInRoomAttributesResponse setInRoomAttributes(String clientId, SetInRoomAttributesRequest request);
 
     SetRoomPolicyResponse setRoomPolicy(String clientId, SetRoomPolicyRequest request);
