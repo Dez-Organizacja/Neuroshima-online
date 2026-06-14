@@ -44,5 +44,5 @@ class StateViewBuilder:
             "board" : cls.build_board_view(state),
             "hands" : cls.build_hands_view(state),
             "piles" : cls.build_piles_view(state),
-            "lastClickedHex" : cls.build_last_view(state),
+            "LastClickedHex" : cls.build_last_view(state),
         }
