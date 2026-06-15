@@ -5,7 +5,7 @@ type NumberOverlayProps = {
     y: number;
     value: number;
     opacity?: number;
-    height: number,
+    height: number;
 };
 
 export default function NumberOverlay({

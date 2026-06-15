@@ -47,6 +47,36 @@ export type GameState = {
     }
 }
 
+// export function useProcesedGameState(){
+//     const {latestMessage} = useGameSocketContext();
+//     const [gameState, setGameState] = useState<GameState | null>(null)
+//     useEffect(() => {
+//         if(!latestMessage){
+//             return;
+//         }
+//         if(latestMessage.messageType === "ACTION_RESPONSE" && latestMessage.gameView){   
+//             setGameState({
+//                 view : latestMessage.gameView as GameState["view"]
+//             });
+//         }
+//         if(latestMessage.messageType === "NEWGAME_RESPONSE" && latestMessage.gameView){
+//             setGameState({
+//                 view : latestMessage.gameView as GameState["view"]
+//             })
+//             if(typeof latestMessage.createdGameId === "string"){
+//                 localStorage.setItem("gameId", latestMessage.createdGameId);
+//             }
+//             return;
+//         }
+//         if (latestMessage.messageType === "ERROR") {
+//             console.error(latestMessage.error);
+//             return;
+//         }
+//     }, [latestMessage]);
+
+//     return { gameState};
+// }
+
 export function useProcesedGameState(){
     const {latestMessage} = useGameSocketContext();
     const [prevGameState, setPrevGameState] = useState<GameState | null>(null);
@@ -56,7 +86,7 @@ export function useProcesedGameState(){
             return;
         }
         if(latestMessage.messageType === "ACTION_RESPONSE" && latestMessage.gameView){
-            setPrevGameState(gameState);
+            setPrevGameState(gameState);   
             setGameState({
                 view : latestMessage.gameView as GameState["view"]
             });

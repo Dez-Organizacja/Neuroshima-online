@@ -12,7 +12,13 @@ import Tile from "./components/Tile"
 import TextBox from "./components/TextBox";
 import { getCurrentFaction } from "./factionStore";
 
-export default function HexTest(){
+type HexTestProps = {
+    gameState: GameState;
+};
+
+export default function HexTest({
+    gameState,
+}: HexTestProps){
     const { width, height } = GetWindowSize();
     const ScreenWidth = width;
     const ScreenHeight = height;
@@ -28,10 +34,11 @@ export default function HexTest(){
     console.log("CenterX: " + CenterX + "     CenterY: " + CenterY);
     console.log("MidX: " + MidX + "     MidY: " + MidY);
     const { sendAction } = useGameSocketContext();
-    const { gameState } = useProcesedGameState();
+    // const { gameState, prevGameState} = useProcesedGameState(); // =========== WAZNA LINIA
     if (!gameState) {
         return <div>Loading game...</div>;
     }
+    // if (!prevGameState) {}
 
     // const currentfaction = gameState.view.uiState.faction;
     const currentfaction = getCurrentFaction();
