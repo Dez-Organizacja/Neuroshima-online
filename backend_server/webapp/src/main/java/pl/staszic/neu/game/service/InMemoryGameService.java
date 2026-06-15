@@ -520,21 +520,23 @@ public class InMemoryGameService implements GameService {
         GameStatusChangeResponse responseGameData = objectMapper.convertValue(responseGameDataJsonMessage, GameStatusChangeResponse.class);
         game.setGameState(responseGameData.getGameState());
 
-//        try{
-//            if(game.getGameState().get("state").get("phase") != null && game.getGameState().get("state").get("phase").isTextual()
-//            && game.getGameState().get("state").get("phase").toString().equals("gameover")) {
-//                logger.info("Game game={} is over", game.getGameId());
-//                EndGameRequest endGameRequest = new EndGameRequest();
-//                endGameRequest.setGameId(game.getGameId());
-//                endGame(endGameRequest.getClientId(), endGameRequest);
-//            }
-//        }
-//        catch (IllegalStateException e) {
-//            throw new GameValidationException("Game has no state" + e.getMessage());
-//        }
-
         ActionResponse response = new ActionResponse();
-        response.setGameView(buildGameView(game.getGameState()));
+        JsonNode gameView = buildGameView(game.getGameState());
+        response.setGameView(gameView);
+
+        try{
+            if(gameView.get("phase") != null && gameView.get("phase").isTextual()
+                    && gameView.get("phase").toString().equals("gameover")) {
+                logger.info("Game game={} is over", game.getGameId());
+                EndGameRequest endGameRequest = new EndGameRequest();
+                endGameRequest.setGameId(game.getGameId());
+                endGame(endGameRequest.getClientId(), endGameRequest);
+            }
+        }
+        catch (IllegalStateException e) {
+            logger.error("Error checking game state for gameId={}: {}", game.getGameId(), e.getMessage());
+            throw new GameValidationException("Game has no state" + e.getMessage());
+        }
 
         logger.info("Action processed: {}", request);
 
