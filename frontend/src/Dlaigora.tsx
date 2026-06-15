@@ -74,5 +74,5 @@ export function useProcesedGameState(){
         }
     }, [latestMessage]);
 
-    return { gameState};
+    return {gameState};
 }

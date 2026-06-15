@@ -3,12 +3,15 @@ import Button from "./components/Button";
 import { useGameSocketContext } from "./websockets/gameSocketContext";
 import DisplayPlayerFactions from "./components/DisplayPlayerFactions";
 import { imagesByName } from "./Images";
+import { setCurrentFaction } from "./factionStore";
 import "./styles/WaitingRoom.css";
 
 type RoomScreenProps = {
   onSwitchToGame: () => void;
   onSwitchToMenu: () => void;
 };
+
+
 
 type PlayerFactions = Record<string, string | null>;
 
@@ -67,11 +70,10 @@ export function RoomScreen({
     setRoomPolicyAWFR,
     getRoomStatusAWFR,
   } = useGameSocketContext();
-
+  const [faction, setFaction] = useState<FactionName | "">("");
   const [playersInRoom, setPlayersInRoom] = useState<string[]>([]);
   const [playerFactions, setPlayerFactions] = useState<PlayerFactions>();
   const [currentReply, setCurrentReply] = useState<string>("");
-  const [faction, setFaction] = useState<FactionName | "">("");
   const [isSubmittingFaction, setIsSubmittingFaction] = useState(false);
   const [hostUsername, setHostUsername] = useState("");
   const [visibility, setVisibility] = useState<RoomVisibility | "">("");
@@ -82,8 +84,6 @@ export function RoomScreen({
   const roomName = localStorage.getItem("room") ?? "Current room";
   const username = localStorage.getItem("username") ?? "Commander";
   const isHost = Boolean(hostUsername && hostUsername === username);
-
-
   const selectedFactions = playersInRoom
     .map((player) => playerFactions?.[player])
     .filter((selected): selected is string => typeof selected === "string");
@@ -179,8 +179,8 @@ export function RoomScreen({
           typeof response.faction === "string" &&
           typeof response.serverStatus === "string"
         ) {
-          localStorage.setItem("faction", response.faction);
           setCurrentReply(response.serverStatus);
+          setCurrentFaction(response.faction)
         } else if (typeof response.error === "string") {
           setCurrentReply(response.error);
         }

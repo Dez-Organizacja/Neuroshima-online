@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Button from "./components/Button";
 import TextInput from "./components/TekstInput";
 import { Register } from "./features/auth/Register";
 import { imagesByName } from "./Images";
+import { apiUrl } from "./config";
 import "./styles/Auth.css";
 
 type RegisterScreenProps = {
@@ -11,29 +12,154 @@ type RegisterScreenProps = {
 
 const factionInsignia = ["borgo", "moloch", "posterunek", "hegemonia"];
 
+type RegistrationConfig = {
+  registrationEnabled: boolean;
+  captchaRequired: boolean;
+};
+
+type CaptchaResponse = {
+  captchaId: string;
+  image: string;
+};
+
+type ApiError = {
+  error?: string;
+};
+
 export default function RegisterScreen({
   onSwitchToLogin,
 }: RegisterScreenProps) {
-  const url = "http://localhost:8080/api/auth/register";
   const [username, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  const [isConfigLoading, setIsConfigLoading] = useState(true);
+  const [registrationEnabled, setRegistrationEnabled] = useState(false);
+
+  const [captchaRequired, setCaptchaRequired] = useState(false);
+  const [captchaId, setCaptchaId] = useState("");
+  const [captchaImage, setCaptchaImage] = useState("");
+  const [captchaAnswer, setCaptchaAnswer] = useState("");
+  const [isCaptchaLoading, setIsCaptchaLoading] = useState(false);
+
+  const loadCaptcha = useCallback(async () => {
+    
+    setIsCaptchaLoading(true);
+    setCaptchaId("");
+    setCaptchaImage("");
+    setCaptchaAnswer("");
+
+    try {
+      const response = await fetch(apiUrl("/api/auth/captcha"), {
+        cache: "no-store",
+      });
+
+      const data = (await response.json()) as CaptchaResponse & ApiError;
+
+      if (!response.ok) {
+        throw new Error(data.error || "Could not load CAPTCHA.");
+      }
+
+      if (!data.captchaId || !data.image) {
+        throw new Error("The server returned an invalid CAPTCHA response.");
+      }
+
+      setCaptchaId(data.captchaId);
+      setCaptchaImage(data.image);
+    } finally {
+      setIsCaptchaLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function initialiseRegistration() {
+      setIsConfigLoading(true);
+
+      try {
+        const response = await fetch(apiUrl("/api/auth/registration-config"),{cache: "no-store"});
+
+        const data = (await response.json()) as RegistrationConfig & ApiError;
+
+        if (!response.ok) {
+          throw new Error(data.error || "Could not read registration settings.");
+        }
+
+        if (cancelled) {
+          return;
+        }
+
+        setRegistrationEnabled(data.registrationEnabled);
+        setCaptchaRequired(data.captchaRequired);
+
+        if (data.registrationEnabled && data.captchaRequired) {
+          await loadCaptcha();
+        }
+      } catch (initialisationError) {
+        if (!cancelled) {
+          setError(
+            initialisationError instanceof Error
+              ? initialisationError.message
+              : "Could not initialise registration.",
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setIsConfigLoading(false);
+        }
+      }
+    }
+
+    void initialiseRegistration();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [loadCaptcha]);
+
   const passwordsMatch = password === confirmPassword;
+  const captchaComplete =
+    !captchaRequired ||
+    (Boolean(captchaId) &&
+      Boolean(captchaImage) &&
+      Boolean(captchaAnswer.trim()));
+
   const canSubmit =
     Boolean(username.trim()) &&
     Boolean(password) &&
     Boolean(confirmPassword) &&
     passwordsMatch &&
+    captchaComplete &&
+    registrationEnabled &&
+    !isConfigLoading &&
+    !isCaptchaLoading &&
     !isSubmitting;
+
+  async function handleRefreshCaptcha() {
+    setError("");
+
+    try {
+      await loadCaptcha();
+    } catch (captchaError) {
+      setError(
+        captchaError instanceof Error
+          ? captchaError.message
+          : "Could not load a new CAPTCHA.",
+      );
+    }
+  }
 
   async function handleRegister() {
     if (!canSubmit) {
       if (password && confirmPassword && !passwordsMatch) {
         setError("The access keys do not match.");
+      } else if (captchaRequired && !captchaAnswer.trim()) {
+        setError("Enter the code shown in the CAPTCHA image.");
       }
+
       return;
     }
 
@@ -41,7 +167,20 @@ export default function RegisterScreen({
     setError("");
 
     try {
-      await Register(username.trim(), password, url);
+      await Register(
+        {
+          username: username.trim(),
+          password,
+          ...(captchaRequired
+            ? {
+                captchaId,
+                captchaAnswer: captchaAnswer.trim(),
+              }
+            : {}),
+        },
+        apiUrl("/api/auth/register"),
+      );
+
       onSwitchToLogin();
     } catch (registerError) {
       setError(
@@ -49,6 +188,12 @@ export default function RegisterScreen({
           ? registerError.message
           : "Profile creation failed. Try another commander name.",
       );
+      if (captchaRequired) {
+        try {
+          await loadCaptcha();
+        } catch {
+        }
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -191,6 +336,79 @@ export default function RegisterScreen({
                   <span className="auth-field__corner" aria-hidden="true" />
                 </span>
               </label>
+
+              {captchaRequired && (
+                <div className="auth-captcha">
+                  <div className="auth-captcha__heading">
+                    <span className="auth-field__label">
+                      Security check
+                    </span>
+
+                    <Button
+                      className="auth-captcha__refresh"
+                      onClick={() => void handleRefreshCaptcha()}
+                      disabled={isSubmitting || isCaptchaLoading}
+                      text={isCaptchaLoading ? "Loading…" : "New code"}
+                    />
+                  </div>
+
+                  <div className="auth-captcha__image-frame">
+                    {captchaImage ? (
+                      <img
+                        className="auth-captcha__image"
+                        src={captchaImage}
+                        alt="CAPTCHA verification code"
+                      />
+                    ) : (
+                      <span>
+                        {isCaptchaLoading
+                          ? "Generating security code…"
+                          : "CAPTCHA unavailable"}
+                      </span>
+                    )}
+                  </div>
+
+                  <label
+                    className="auth-field"
+                    htmlFor="register-captcha"
+                  >
+                    <span className="auth-field__label">
+                      Enter the code from the image
+                    </span>
+
+                    <span className="auth-field__control">
+                      <TextInput
+                        id="register-captcha"
+                        name="captchaAnswer"
+                        className="auth-input"
+                        value={captchaAnswer}
+                        onChange={(value) => {
+                          setCaptchaAnswer(value);
+                          clearError();
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter") {
+                            void handleRegister();
+                          }
+                        }}
+                        placeholder="Security code"
+                        autoComplete="off"
+                        disabled={
+                          isSubmitting ||
+                          isCaptchaLoading ||
+                          !captchaImage
+                        }
+                      />
+
+                      <span
+                        className="auth-field__corner"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </label>
+                </div>
+              )}
+
             </div>
 
             <div
@@ -206,7 +424,13 @@ export default function RegisterScreen({
                 {error ||
                   (confirmPassword && !passwordsMatch
                     ? "The access keys do not match."
-                    : "Use a unique commander name and a secure access key.")}
+                    : isConfigLoading
+                      ? "Checking registration settings…"
+                      : !registrationEnabled
+                        ? "Registration is currently disabled."
+                        : captchaRequired
+                          ? "Complete the security check before creating the profile."
+                          : "Use a unique commander name and a secure access key.")}
               </span>
             </div>
 

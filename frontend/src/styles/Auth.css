@@ -724,3 +724,58 @@
     transition-duration: 0.01ms !important;
   }
 }
+.auth-captcha {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--auth-line);
+  background: rgba(7, 10, 9, 0.42);
+}
+
+.auth-captcha__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.auth-captcha__refresh {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--auth-line-strong);
+  color: var(--auth-text);
+  background: rgba(215, 180, 91, 0.06);
+  cursor: pointer;
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.auth-captcha__refresh:hover:not(:disabled) {
+  border-color: var(--auth-accent);
+  background: rgba(215, 180, 91, 0.12);
+}
+
+.auth-captcha__refresh:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.auth-captcha__image-frame {
+  min-height: 64px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(218, 200, 145, 0.28);
+  background: #ece6d5;
+  color: #34352f;
+  font-size: 0.76rem;
+}
+
+.auth-captcha__image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

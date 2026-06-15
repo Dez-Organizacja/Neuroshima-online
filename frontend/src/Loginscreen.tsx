@@ -4,6 +4,7 @@ import TextInput from "./components/TekstInput";
 import { Login } from "./features/auth/Login";
 import { imagesByName } from "./Images";
 import "./styles/Auth.css";
+import { apiUrl } from "./config";
 
 type LoginScreenProps = {
   onSwitchToRegister: () => void;
@@ -16,7 +17,6 @@ export default function LoginScreen({
   onSwitchToRegister,
   onAcceptedLogin,
 }: LoginScreenProps) {
-  const url = "http://localhost:8080/api/auth/login";
   const [username, setName] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,7 +32,7 @@ export default function LoginScreen({
     setError("");
 
     try {
-      const data = await Login(username.trim(), password, url);
+      const data = await Login(username.trim(), password, apiUrl("/api/auth/login"));
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("username", username.trim());

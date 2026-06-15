@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Hexagon from "./components/Hexagon";
 import Image from "./components/HexImage";
 import GameButton from "./components/GameButton";
@@ -10,10 +10,7 @@ import { useGameSocketContext } from "./websockets/gameSocketContext";
 import { useProcesedGameState, GameState } from "./Dlaigora";
 import Tile from "./components/Tile"
 import TextBox from "./components/TextBox";
-
-async function cos(name : string) {
-  console.log(name);
-}
+import { getCurrentFaction } from "./factionStore";
 
 export default function HexTest(){
     const { width, height } = GetWindowSize();
@@ -37,7 +34,7 @@ export default function HexTest(){
     }
 
     // const currentfaction = gameState.view.uiState.faction;
-    const currentfaction = localStorage.getItem("faction");
+    const currentfaction = getCurrentFaction();
     if(!currentfaction){
         return <div>No faction found</div>;
     }

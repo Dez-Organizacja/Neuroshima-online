@@ -12,8 +12,10 @@ services:
 
   webapp:
     build:
-      context: ./webapp
-      dockerfile: Dockerfile
+      # The build context is the project root so the Dockerfile can build both
+      # frontend/ and backend_server/webapp/ into one Spring Boot image.
+      context: ..
+      dockerfile: backend_server/webapp/Dockerfile
     # Słucha tylko na loopback hosta - z internetu dostęp wyłącznie przez nginx (reverse proxy).
     ports:
       - "127.0.0.1:8080:8080"

@@ -1,3 +1,10 @@
+# Important: frontend deployment
+
+The production Docker build now compiles `frontend/` and embeds the resulting
+Vite files into the Spring Boot JAR. If nginx already proxies the domain to
+`127.0.0.1:8080`, no separate frontend or nginx change is required. Run
+`./start-prod.sh` from the project root. See `ONE_COMMAND_DEPLOYMENT.md`.
+
 # Wdrożenie produkcyjne — heuroshimanex.pl
 
 Instrukcja krok po kroku: jak uruchomić backend na serwerze produkcyjnym i wygenerować

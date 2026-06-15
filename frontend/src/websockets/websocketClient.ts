@@ -1,3 +1,4 @@
+import { gameWebSocketUrl } from "../config";
 export type WebSocketMessage = {
     messageType : string;
     [key: string] : unknown;
@@ -9,7 +10,7 @@ export function createGameSocket(
     onClose?: () => void,
     onError?: () => void
 ){
-    let url = `ws://localhost:8080/ws/chat?token=${encodeURIComponent(token)}`
+    let url = gameWebSocketUrl(token);
     const socket = new WebSocket(url)
     socket.onopen = () => {
     console.log("WebSocket connected");
