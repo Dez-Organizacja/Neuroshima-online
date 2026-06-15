@@ -58,6 +58,11 @@ def remove_wounds(index : int = 0):
         unit.wounds.pop(index)
     return apply    
     
+def set_wire(state : bool):
+    def apply(unit : BoardToken):
+        unit.set_wire(state)
+    return apply
+
 def unit(pos : Hex, *funcs : Callable[[BoardToken], None]):
     def apply(board : Board):
         for func in funcs:
@@ -75,6 +80,7 @@ def faction_place(faction : str, *funcs : Callable[[str], Callable[[Board], None
 def board(*funcs : Callable[[Board], None]):
     def apply(state : GameState):
         for func in funcs:
+            # print(func)
             func(state.board)
     return apply
 

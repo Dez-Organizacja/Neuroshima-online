@@ -20,10 +20,11 @@ class HealersProvider(WorkflowActionProvider):
         if ctx.workflow_instance.current_step_index == 2:
             return []
 
-        if not ctx.workflow_data.unit_pos:
-            return self.rules.get_sources(ctx.board, ctx.faction)
-        
         if not ctx.workflow_data.target_pos:
-            return self.rules.get_targets(ctx.board, ctx.workflow_data.unit_pos)
+            return self.rules.get_targets(ctx.board, ctx.faction)
+        
+        if not ctx.workflow_data.unit_pos:
+            return self.rules.get_healers(ctx.board, ctx.workflow_data.target_pos)
+        
         
         return []

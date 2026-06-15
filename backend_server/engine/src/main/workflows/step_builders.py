@@ -112,5 +112,9 @@ class BoardSelectionMixin(StepBuilderMixin):
     def build_destination_step(self, message : str = ""):
         return self.build_input_step(WorkflowData.set_destination, message=message)
     
-    def build_target_step(self, message : str = ""):
-        return self.build_input_step(WorkflowData.set_target_pos, message=message)
+    def build_target_step(self, message : str = "", snapshot : bool = False):
+        return self.build_input_step(
+            WorkflowData.set_target_pos, 
+            message=message,
+            snapshot=snapshot,
+        )

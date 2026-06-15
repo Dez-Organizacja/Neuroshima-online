@@ -2,10 +2,11 @@ from dataclasses import dataclass, field
 from main.events.data import FlowEvent, Event
 from main.events.workflow import PushWorkflow, PopWorkflow, DeleteAbove, EnqueueWorkflow, PopAllWorkflows
 from main.events.effects import ResetAbilityUsedEffect
-from main.events.history import ClearUndoStackEffect, CreateSnapshotEffect 
+from main.events.history import ClearUndoStackEffect
 from main.state.context import ActionContext
 from main.workflows.data import WorkflowName, WorkflowConfig
 from main.utils.variable import Phase
+from main.rules.game import GameRules
 
 # ----------- setters -----------
 @dataclass
@@ -81,7 +82,7 @@ class BuildEndGameWorkflowEvent(FlowEvent):
     faction: str
 
     def apply(self, ctx: ActionContext) -> list[Event]:
-        enemy = ctx.rules.get_enemy(ctx.state.factions, self.faction)
+        enemy = ctx.factions.get_enemy(self.faction)
 
         return [
             EnqueueWorkflow(
@@ -123,6 +124,6 @@ class GameOverEvent(FlowEvent):
 class CheckGameOverEvent(FlowEvent):
     def apply(self, ctx : ActionContext) -> list[Event]:
         # print("END GAME CHECK")
-        if ctx.rules.is_game_over(ctx.board, ctx.state.factions, ctx.phase):
+        if GameRules.is_game_over(ctx.board, ctx.state.factions, ctx.phase):
             return [GameOverEvent()]
         return []

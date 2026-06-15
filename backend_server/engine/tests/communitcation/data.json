@@ -17,7 +17,7 @@
             "wired" : false,
             "wounds" : [ ]
           },
-          "exection" : {
+          "execution" : {
             "used_ability" : false,
             "used_battle_ability" : false
           },
@@ -50,7 +50,7 @@
             "wired" : false,
             "wounds" : [ ]
           },
-          "exection" : {
+          "execution" : {
             "used_ability" : false,
             "used_battle_ability" : false
           },
@@ -106,7 +106,7 @@
                 "wired" : false,
                 "wounds" : [ ]
               },
-              "exection" : {
+              "execution" : {
                 "used_ability" : false,
                 "used_battle_ability" : false
               },
@@ -139,7 +139,7 @@
                 "wired" : false,
                 "wounds" : [ ]
               },
-              "exection" : {
+              "execution" : {
                 "used_ability" : false,
                 "used_battle_ability" : false
               },

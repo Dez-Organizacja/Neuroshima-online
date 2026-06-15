@@ -39,7 +39,7 @@ class BoardTokenState:
     core: TokenCoreState = field(default_factory=TokenCoreState)
     modifiers: TokenModifiers = field(default_factory=TokenModifiers)
     relations: TokenRelations = field(default_factory=TokenRelations)
-    exection : TokenExecutionState = field(default_factory=TokenExecutionState)
+    execution : TokenExecutionState = field(default_factory=TokenExecutionState)
 
     # --------- wire ----------
     @property

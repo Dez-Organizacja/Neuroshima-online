@@ -1,5 +1,5 @@
 from main.state.game_state import GameState
-from main.rules.game import GameRules
+from main.rules.faction_manager import FactionManager
 from main.state.player_state import PlayerState
 from main.systems.undo import UndoSystem
 
@@ -7,12 +7,12 @@ class ActionContext():
     def __init__(
             self, 
             state : GameState, 
+            faction_manager : FactionManager,
             undo_system : UndoSystem | None = None,
-            rules : GameRules | None = None,
         ):
         self.state = state
+        self.factions = faction_manager 
         self.undo_system = undo_system or UndoSystem()
-        self.rules = rules or GameRules()
         self.consumed_input : bool = False
         # self.decision_faction : str | None = None
 

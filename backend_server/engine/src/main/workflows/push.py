@@ -5,6 +5,7 @@ from main.events.effects import MoveEffect, RecomputePassivesEffect
 from main.events.data import Event
 from main.events.flow import ChangeActiveFactionEvent
 from main.workflows.step_builders import BoardSelectionMixin
+from main.rules.game import GameRules
 
 class PushWorkflow(BoardSelectionMixin, Workflow[PushProvider]):
     def __init__(self):
@@ -19,7 +20,7 @@ class PushWorkflow(BoardSelectionMixin, Workflow[PushProvider]):
     def change_faction(ctx : ActionContext):
         return [
             ChangeActiveFactionEvent(
-                ctx.rules.get_enemy(ctx.state.factions, ctx.faction)
+                ctx.factions.get_enemy(ctx.faction)
             )
         ]
 

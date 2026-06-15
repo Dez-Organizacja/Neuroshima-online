@@ -134,7 +134,7 @@ class ResetAbilityUsedEffect(Effect):
     def apply(self, ctx: ActionContext):
         for pos in self.positions:
             token = ctx.board.get_token(pos)
-            token.state.exection.used_ability = False
+            token.state.execution.used_ability = False
 
 
 # ----------- activation -----------

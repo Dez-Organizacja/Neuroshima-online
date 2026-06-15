@@ -72,79 +72,104 @@ def melee_initiative_boosts_and_sieciarze() -> Scenario:
     return build_battle_scenario(factions, setup_board, expected_board)
     
 
-# @ScenarioRegistry.register("battle3")
-# def sieciarz_blocks_attack() -> Scenario:
-#     factions = ["borgo", "moloch"]
-#     setup_board = [
-#         tile_place(pos=(4, 6), name="sztab", faction="borgo"),
-#         tile_place(pos=(4, 2), name="sztab", faction="moloch"),
-#         tile_place(pos=(2, 4), name="sieciarz", faction="moloch", rotation=2),
-#         tile_place(pos=(3, 5), name="zabojca", faction="borgo", rotation=3),
-#     ]
-#     expected_board = []
-#     return build_battle_scenario(factions, setup_board, expected_board)
+@ScenarioRegistry.register("battle3")
+def sieciarz_blocks_attack() -> Scenario:
+    factions = ["borgo", "moloch"]
+    setup_board = [
+        place(pos=(4, 6), name="sztab", faction="borgo"),
+        place(pos=(4, 2), name="sztab", faction="moloch"),
+        place(pos=(2, 4), name="sieciarz", faction="moloch", rotation=2),
+        place(pos=(3, 5), name="zabojca", faction="borgo", rotation=3),
+    ]
+    expected_board = []
+    return build_battle_scenario(factions, setup_board, expected_board)
 
 
-# @ScenarioRegistry.register("battle4")
-# def shoot_boost_does_not_remove_bloker() -> Scenario:
-#     factions = ["borgo", "moloch"]
-#     setup_board = [
-#         tile_place(pos=(4, 6), name="sztab", faction="moloch"),
-#         tile_place(pos=(1, 3), name="bloker", faction="moloch"),
-#         tile_place(pos=(4, 2), name="sztab", faction="borgo"),
-#         tile_place(pos=(3, 3), name="oficer", faction="borgo", rotation=1),
-#         tile_place(pos=(3, 5), name="zabojca", faction="borgo"),
-#     ]
-#     expected_board = [
-#         tiles_remove([(3, 5)]),
-#         tile_damage((1, 3), damage=1),
-#     ]
-#     return build_battle_scenario(factions, setup_board, expected_board)
+@ScenarioRegistry.register("battle4")
+def shoot_boost_does_not_remove_bloker() -> Scenario:
+    factions = ["borgo", "moloch"]
+    setup_board = [
+        place(pos=(4, 6), name="sztab", faction="moloch"),
+        place(pos=(1, 3), name="bloker", faction="moloch"),
+        place(pos=(4, 2), name="sztab", faction="borgo"),
+        place(pos=(3, 3), name="oficer", faction="borgo", rotation=1),
+        place(pos=(3, 5), name="zabojca", faction="borgo"),
+    ]
+    expected_board = [
+        tiles_remove([(3, 5)]),
+        unit((1, 3), damage()),
+    ]
+    return build_battle_scenario(factions, setup_board, expected_board)
 
 
-# @ScenarioRegistry.register("battle5")
-# def melee_boost_removes_supermutant() -> Scenario:
-#     factions = ["moloch", "borgo"]
-#     setup_board = [
-#         tile_place(pos=(4, 6), name="sztab", faction="moloch"),
-#         tile_place(pos=(4, 2), name="sztab", faction="borgo"),
-#         tile_place(pos=(2, 4), name="mozg", faction="moloch"),
-#         tile_place(pos=(1, 5), name="lowca", faction="moloch"),
-#         tile_place(pos=(0, 4), name="supermutant", faction="borgo"),
-#     ]
-#     expected_board = [
-#         tiles_remove([(0, 4)]),
-#     ]
-#     return build_battle_scenario(factions, setup_board, expected_board)
+@ScenarioRegistry.register("battle5")
+def melee_boost_removes_supermutant() -> Scenario:
+    factions = ["moloch", "borgo"]
+    setup_board = [
+        place(pos=(4, 6), name="sztab", faction="moloch"),
+        place(pos=(4, 2), name="sztab", faction="borgo"),
+        place(pos=(2, 4), name="mozg", faction="moloch"),
+        place(pos=(1, 5), name="lowca", faction="moloch"),
+        place(pos=(0, 4), name="supermutant", faction="borgo"),
+    ]
+    expected_board = [
+        tiles_remove([(0, 4)]),
+    ]
+    return build_battle_scenario(factions, setup_board, expected_board)
 
 
-# @ScenarioRegistry.register("battle6")
-# def shoot_boost_removes_klaun() -> Scenario:
-#     factions = ["borgo", "moloch"]
-#     setup_board = [
-#         tile_place(pos=(4, 2), name="sztab", faction="borgo"),
-#         tile_place(pos=(4, 6), name="sztab", faction="moloch"),
-#         tile_place(pos=(2, 4), name="mozg", faction="moloch", rotation=1),
-#         tile_place(pos=(2, 6), name="szturmowiec", faction="moloch", rotation=5),
-#         tile_place(pos=(0, 4), name="supermutant", faction="borgo", rotation=3),
-#     ]
-#     expected_board = [
-#         tiles_remove([(0, 4)]),
-#     ]
-#     return build_battle_scenario(factions, setup_board, expected_board)
+@ScenarioRegistry.register("battle6")
+def shoot_boost_removes_klaun() -> Scenario:
+    factions = ["borgo", "moloch"]
+    setup_board = [
+        place(pos=(4, 2), name="sztab", faction="borgo"),
+        place(pos=(4, 6), name="sztab", faction="moloch"),
+        place(pos=(2, 4), name="mozg", faction="moloch", rotation=1),
+        place(pos=(2, 6), name="szturmowiec", faction="moloch", rotation=5),
+        place(pos=(0, 4), name="supermutant", faction="borgo", rotation=3),
+    ]
+    expected_board = [
+        tiles_remove([(0, 4)]),
+    ]
+    return build_battle_scenario(factions, setup_board, expected_board)
 
 
-# @ScenarioRegistry.register("battle7")
-# def melee_boost_removes_supermutant() -> Scenario:
-#     factions = ["moloch", "borgo"]
-#     setup_board = [
-#         tile_place(pos=(4, 6), name="sztab", faction="moloch"),
-#         tile_place(pos=(4, 2), name="sztab", faction="borgo"),
-#         tile_place(pos=(2, 2), name="mozg", faction="moloch"),
-#         tile_place(pos=(1, 3), name="lowca", faction="moloch"),
-#         tile_place(pos=(0, 2), name="supermutant", faction="borgo"),
-#     ]
-#     expected_board = [
-#         tiles_remove([(0, 2)]),
-#     ]
-#     return build_battle_scenario(factions, setup_board, expected_board)
+@ScenarioRegistry.register("battle7")
+def melee_boost_removes_supermutant() -> Scenario:
+    factions = ["moloch", "borgo"]
+    setup_board = [
+        place(pos=(4, 6), name="sztab", faction="moloch"),
+        place(pos=(4, 2), name="sztab", faction="borgo"),
+        place(pos=(2, 2), name="mozg", faction="moloch"),
+        place(pos=(1, 3), name="lowca", faction="moloch"),
+        place(pos=(0, 2), name="supermutant", faction="borgo"),
+    ]
+    expected_board = [
+        tiles_remove([(0, 2)]),
+    ]
+    return build_battle_scenario(factions, setup_board, expected_board)
+
+@ScenarioRegistry.register("battle8")
+def shoot_to_armor_unwire_during_battle() -> Scenario:
+    factions = ["moloch", "posterunek"]
+    setup_board = [
+        faction_place(
+            "moloch",
+            tile((0, 2), "sztab"),
+            tile((1, 1), "szturmowiec", rotation=2),
+            tile((1, 3), "opancerzonylowca", rotation=3),
+            tile((2, 2), "sieciarz", rotation=1)
+        ),
+        faction_place(
+            "posterunek",
+            tile((2, 0), "dywersant"),
+            tile((2, 4), "sztab"),
+            tile((2, 6), "komandos", rotation=2),
+            tile((3, 5), "komandos", rotation=3),
+        )
+    ]
+    expected_board = [
+        tiles_remove([(2, 2), (1, 3)]),
+        unit((2, 4), set_wire(False), damage())
+    ]
+    return build_battle_scenario(factions, setup_board, expected_board)

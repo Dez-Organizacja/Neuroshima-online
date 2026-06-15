@@ -173,69 +173,69 @@ class TestBoosters:
         assert melee_boosts(board, (2, 6)) == 0
         assert melee_boosts(board, (1, 3)) == 1
 
-    def test_board_healing_maps_are_refreshed_after_boosters(self):
-        board = Board()
-        place(board, (2, 4), "medyk", "moloch")
-        target = place(board, (1, 5), "sztab", "moloch")
-        target.add_wounds(1)
+    # def test_board_healing_maps_are_refreshed_after_boosters(self):
+    #     board = Board()
+    #     place(board, (2, 4), "medyk", "moloch")
+    #     target = place(board, (1, 5), "sztab", "moloch")
+    #     target.add_wounds(1)
 
-        solve_boosters(board)
+    #     solve_boosters(board)
 
-        assert board.my_targets == {(2, 4): [(1, 5)]}
-        assert board.my_healers == {(1, 5): [(2, 4)]}
+    #     assert board.my_targets == {(2, 4): [(1, 5)]}
+    #     assert board.my_healers == {(1, 5): [(2, 4)]}
 
-    def test_board_healing_maps_use_stolen_heal_target_relation(self):
-        board = Board()
-        place(board, (2, 2), "skoper", "posterunek")
-        place(board, (2, 4), "medyk", "moloch")
-        ally = place(board, (1, 5), "sztab", "moloch")
-        enemy = place(board, (3, 5), "silacz", "posterunek")
-        ally.add_wounds(1)
-        enemy.add_wounds(1)
+    # def test_board_healing_maps_use_stolen_heal_target_relation(self):
+    #     board = Board()
+    #     place(board, (2, 2), "skoper", "posterunek")
+    #     place(board, (2, 4), "medyk", "moloch")
+    #     ally = place(board, (1, 5), "sztab", "moloch")
+    #     enemy = place(board, (3, 5), "silacz", "posterunek")
+    #     ally.add_wounds(1)
+    #     enemy.add_wounds(1)
 
-        solve_boosters(board)
+    #     solve_boosters(board)
 
-        assert board.my_targets == {(2, 4): [(3, 5)]}
-        assert board.my_healers == {(3, 5): [(2, 4)]}
+        # assert board.my_targets == {(2, 4): [(3, 5)]}
+        # assert board.my_healers == {(3, 5): [(2, 4)]}
 
-    def test_board_healing_maps_are_cleared_when_target_is_removed(self):
-        board = Board()
-        place(board, (2, 4), "medyk", "moloch")
-        target = place(board, (1, 5), "sztab", "moloch")
-        target.add_wounds(1)
+    # def test_board_healing_maps_are_cleared_when_target_is_removed(self):
+    #     board = Board()
+    #     place(board, (2, 4), "medyk", "moloch")
+    #     target = place(board, (1, 5), "sztab", "moloch")
+    #     target.add_wounds(1)
 
-        solve_boosters(board)
-        board.destroy_token((1, 5))
-        solve_boosters(board)
+    #     solve_boosters(board)
+    #     board.destroy_token((1, 5))
+    #     solve_boosters(board)
 
-        assert board.my_targets == {}
-        assert board.my_healers == {}
+    #     assert board.my_targets == {}
+    #     assert board.my_healers == {}
 
-    def test_board_healing_maps_collect_multiple_healers_for_same_target(self):
-        board = Board()
-        target = place(board, (2, 4), "sztab", "moloch")
-        target.add_wounds(1)
-        place(board, (1, 3), "medyk", "moloch")
-        place(board, (2, 6), "medyk", "moloch")
-        place(board, (3, 3), "medyk", "moloch")
+    # def test_board_healing_maps_collect_multiple_healers_for_same_target(self):
+    #     board = Board()
+    #     target = place(board, (2, 4), "sztab", "moloch")
+    #     target.add_wounds(1)
+    #     place(board, (1, 3), "medyk", "moloch")
+    #     place(board, (2, 6), "medyk", "moloch")
+    #     place(board, (3, 3), "medyk", "moloch")
 
-        solve_boosters(board)
+    #     solve_boosters(board)
 
-        assert board.my_targets == {
-            (1, 3): [(2, 4)],
-            (2, 6): [(2, 4)],
-            (3, 3): [(2, 4)],
-        }
-        assert set(board.my_healers[(2, 4)]) == {(1, 3), (2, 6), (3, 3)}
-        assert len(board.my_healers) == 1
+    #     assert board.my_targets == {
+    #         (1, 3): [(2, 4)],
+    #         (2, 6): [(2, 4)],
+    #         (3, 3): [(2, 4)],
+    #     }
+    #     assert set(board.my_healers[(2, 4)]) == {(1, 3), (2, 6), (3, 3)}
+    #     assert len(board.my_healers) == 1
 
-    def test_board_healing_maps_skip_wired_healers(self):
-        board = Board()
-        place(board, (2, 4), "medyk", "moloch", wired=True)
-        target = place(board, (1, 5), "sztab", "moloch")
-        target.add_wounds(1)
+    # def test_board_healing_maps_skip_wired_healers(self):
+    #     board = Board()
+    #     place(board, (2, 4), "medyk", "moloch", wired=True)
+    #     target = place(board, (1, 5), "sztab", "moloch")
+    #     target.add_wounds(1)
 
-        solve_boosters(board)
+    #     solve_boosters(board)
 
-        assert board.my_targets == {}
-        assert board.my_healers == {}
+    #     assert board.my_targets == {}
+    #     assert board.my_healers == {}

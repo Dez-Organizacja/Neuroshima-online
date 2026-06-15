@@ -18,7 +18,9 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
         self.rules = HealRules()
 
     def set_faction(self, ctx : ActionContext):
-        return [ChangeActiveFactionEvent(self.faction)]
+        return [
+            ChangeActiveFactionEvent(self.faction)
+        ]
 
     def check_end_workflow(self, ctx : ActionContext) -> bool:
         return self.rules.is_finished(ctx.board, ctx.faction)
@@ -58,8 +60,8 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
                 predicate_func=self.break_workflow_check,
                 finish_func=self.resolve_end_wf,
             ),
-            self.build_source_step(message="Select a healer.", snapshot=True),
-            self.build_target_step(message="Select a unit to heal."),
+            self.build_target_step(message="Select a unit to heal.", snapshot=True),
+            self.build_source_step(message="Select a healer."),
             self.build_resolve_step(self.resolve),
             self.build_repeat_step(index=0),
         ]

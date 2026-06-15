@@ -20,6 +20,7 @@ class InitiativeWorkflow(Workflow):
     #     )
 
     def resolve_attack_declaration(self, ctx : ActionContext):
+        # print(f"START INITIATIVE {self.initiative}")
         return CombatSystem.resolve_attack_declaration(ctx, self.initiative)
 
     def _build_steps(self):

@@ -14,7 +14,7 @@ class Resolver():
             return
 
         # print("commiting pending workflow")
-        # print(f"pending workflow {ctx.state.pending_workflow}")
+        # print(f"pending workflow {ctx.state.pending_workflows}")
         ctx.state.workflow_stack[-1] = ctx.state.pending_workflows[-1]
         ctx.state.pending_workflows.pop()
 

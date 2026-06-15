@@ -19,7 +19,10 @@ class TargetedResolver:
         return (direction + 3) % 6
 
     def reduce_damage(self, attack : TargetedIntent):
+        # print("damage reducing")
+        # print(f"blockable {attack.blockable}")
         if attack.blockable and attack.from_direction is not None:
+            # print("blacable and directed")
             unit = self.board.get_token(attack.target_pos)
             if self.reverse_direction(attack.from_direction) in unit.get_armor():
                 return max(attack.power - 1, 0)
@@ -31,6 +34,7 @@ class TargetedResolver:
             return [DestroyEffect(attack.target_pos)]
 
         power = self.reduce_damage(attack)
+        # print(f"new power {power}")
         if power <= 0:
             return []
         return [DamageEffect(pos=attack.target_pos, damage=power)]
@@ -48,6 +52,10 @@ class DirectedResolver:
 
     @classmethod
     def resolve(cls, attack : DirectedIntent, board : Board) -> list[TargetedIntent]:
+        # print(f"RESOLVE DIRECTED")
+        # print(f"from {attack.attaker_pos}")
+        # print(f"properties: {attack.properties}")
+        # print(f"")
         return [
             TargetedIntent(
                 target_pos=t,
@@ -62,7 +70,8 @@ class DirectedResolver:
 class AttackResolver:
     @classmethod
     def resolve(cls, attack, board):
-        # print(f"RESOLVING ATTACK {attack}")
+        # print(f"RESOLVING ATTACK")
+        # print(f"from {attack.}")
         match attack:
             case DirectedIntent():
                 expanded = DirectedResolver.resolve(attack, board)
@@ -75,6 +84,7 @@ class AttackResolver:
         resolver = TargetedResolver(board)
 
         for t in expanded:
+            # print(f"targeted to {t.target_pos} of power {t.power}")
             result.extend(resolver.resolve(t))
 
         return result

@@ -21,7 +21,7 @@ class BoosterSolver():
 
         self.collect_steal_boosts()
         self.solve_steal_boosts()
-        self.refresh_healing_tokens()
+        # self.refresh_healing_tokens()
 
         self.collect_boosts(self.boosts)
         self.solve_all()
@@ -37,26 +37,26 @@ class BoosterSolver():
             token.state.relations.real_boost_target = token.config.boost_target
             CleverInitiative.begin_initiative(token)
 
-    def refresh_healing_tokens(self):
-        from main.rules.ability.heal import HealRules
+    # def refresh_healing_tokens(self):
+    #     from main.rules.ability.heal import HealRules
 
-        self.board.clear_healing_tokens()
-        rules = HealRules()
-        factions = sorted({
-            token.faction
-            for token in self.board.tokens.values()
-            if token.faction is not None
-        })
+    #     self.board.clear_healing_tokens()
+    #     rules = HealRules()
+    #     factions = sorted({
+    #         token.faction
+    #         for token in self.board.tokens.values()
+    #         if token.faction is not None
+    #     })
 
-        for faction in factions:
-            for source in rules.get_sources(self.board, faction):
-                targets = rules.get_targets(self.board, source)
-                if not targets:
-                    continue
+    #     for faction in factions:
+    #         for source in rules.get_sources(self.board, faction):
+    #             targets = rules.get_targets(self.board, source)
+    #             if not targets:
+    #                 continue
 
-                self.board.my_targets[source] = targets
-                for target in targets:
-                    self.board.my_healers.setdefault(target, []).append(source)
+    #             self.board.my_targets[source] = targets
+    #             for target in targets:
+    #                 self.board.my_healers.setdefault(target, []).append(source)
 
     def is_valid_target(self, tokenID : int, relation : TokenRelation, my_fraction : str) -> bool:
         if (tokenID is None):

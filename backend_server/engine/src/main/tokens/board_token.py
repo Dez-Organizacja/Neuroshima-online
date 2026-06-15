@@ -139,11 +139,11 @@ class BoardToken(Token):
     # --------- attacks ----------
     @property
     def ability_used(self):
-        return self.state.exection.used_ability
+        return self.state.execution.used_ability
     
     @ability_used.setter
     def ability_used(self, value):
-        self.state.exection.used_ability = value
+        self.state.execution.used_ability = value
 
     # --------- save and load ----------
 

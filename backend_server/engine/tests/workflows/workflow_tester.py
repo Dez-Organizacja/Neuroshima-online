@@ -5,6 +5,7 @@ from .scenarios.data import Scenario, StepCase
 from main.state.context import ActionContext
 from main.state.game_state import GameState
 from main.utils.diff_state import DiffState
+from main.rules.faction_manager import FactionManager
 
 class WorkflowTester:
     def apply_changes(self, before : ActionContext, step_case : StepCase):
@@ -31,7 +32,8 @@ class WorkflowTester:
         # print(scenario)
         # print("---------------")
         ctx = ActionContext(
-            state = GameState(factions=scenario.factions)
+            state = GameState(factions=scenario.factions),
+            faction_manager=FactionManager(scenario.factions)
         )
         ctx.state.workflow_stack.append(
             WorkflowInstance(

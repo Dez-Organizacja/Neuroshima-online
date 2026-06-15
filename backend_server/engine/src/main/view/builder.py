@@ -1,6 +1,7 @@
 from main.state.context import ActionContext
 from main.view.state import StateViewBuilder
 from main.view.step import StepViewBuilder
+from main.rules.game import GameRules
 
 class GameViewBuilder:
     def __init__(self):
@@ -19,15 +20,15 @@ class GameViewBuilder:
     @staticmethod
     def get_scores(ctx : ActionContext):
         return {
-            faction : ctx.rules.get_score(ctx.board, faction)
+            faction : GameRules.get_score(ctx.board, faction)
             for faction in ctx.state.factions
         }
 
     def build(self, ctx : ActionContext) -> dict:
         return {
-            "state" : self.state_view.build(ctx.state),
+            "state"  : self.state_view.build(ctx.state),
             "scores" : self.get_scores(ctx),
-            "winner" : ctx.rules.get_winner(ctx.board, ctx.state.factions),
+            "winner" : GameRules.get_winner(ctx.board, ctx.state.factions),
             "LastClickedHex" : self.build_last_clicked_hex_view(ctx.state),
             "phase"  : ctx.state.phase.value,
             **self.step_view.build_step(ctx).to_dict(),

@@ -38,6 +38,7 @@ dla frontendu:
         "pos" : [1, 1]/None
         "slot" : int/None
     }
+    "animations" : [animacja]
 }
 
 dla engine:{
@@ -45,6 +46,15 @@ dla engine:{
     "gameState" : cały poprzedni stan gry
     "userAction" : format akcji
 }
+
+Hex = (int, int)
+
+format animacji:
+{"type" : (attack/wound/destroy/weaken), ...}
+{"type" : "attack", "attacker" : Hex, "target" : Hex}
+{"type" : "wound", "target" : Hex, "wounds" : int}
+{"type" : "destroy", "target" : Hex}
+{"type" : "weaken", "target" : Hex, "damage" : int}
 
 format akcji:
 {"type" : (hand/baord/bottom/rotate), ...}

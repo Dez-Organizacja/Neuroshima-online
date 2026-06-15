@@ -75,10 +75,10 @@ class ScenarioExecuter:
             step.delta.apply(before_state)
 
 
-            print("result")
+            # print("result")
             # game.state.board.print_board()
-            print(game.state.workflow_stack[-1])
-            print(game.state.players["moloch"].hand)
+            # print(game.state.workflow_stack[-1])
+            # print(game.state.players["moloch"].hand)
             # print(f"active faction: {game.state.active_faction}")
             # print(f"turn faction: {game.state.turn_faction}")
             DiffState.compare(game.state, before_state)

@@ -44,14 +44,14 @@ def heal_scenario():
         .given_wf_onclick_consumed()
 
         .when(BoardAction((1, 1)))
-        .then_data_delta(unit_pos=(1, 1), type=ActionType.BOARD)
+        .then_data_delta(target_pos=(1, 1), type=ActionType.BOARD)
 
         .when(BoardAction((1, 3)))
-        .then_data_delta(target_pos=(1, 3))
+        .then_data_delta(unit_pos=(1, 3))
 
         .tick()
         .then_execution(
-            events=[HealEffect(source_pos=(1, 1), target_pos=(1, 3))]
+            events=[HealEffect(source_pos=(1, 3), target_pos=(1, 1))]
         )
 
         .tick()

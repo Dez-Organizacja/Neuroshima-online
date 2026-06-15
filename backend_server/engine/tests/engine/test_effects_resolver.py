@@ -11,6 +11,7 @@ from main.workflows.data import (
     WorkflowData, 
     WorkflowConfig
 )
+from main.rules.faction_manager import FactionManager
 
 class Tests:
     @staticmethod
@@ -20,7 +21,10 @@ class Tests:
             turn_faction="moloch",
             active_faction="moloch",
         )
-        return ActionContext(state=state, rules=GameRules())
+        return ActionContext(
+            state=state, 
+            faction_manager=FactionManager(state.factions)
+        )
 
     def test1(self):
         ctx = self.contex_maker()

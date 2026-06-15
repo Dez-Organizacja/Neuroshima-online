@@ -8,7 +8,7 @@ from main.view.builder import GameViewBuilder
 from main.workflows.data import WorkflowConfig, WorkflowInstance, WorkflowName
 # from main.workflows.providers.turn import TurnProvider
 from main.workflows.providers.action import ActionProvider
-
+from main.rules.faction_manager import FactionManager
 
 def make_ctx() -> ActionContext:
     state = GameState(
@@ -16,7 +16,10 @@ def make_ctx() -> ActionContext:
         turn_faction="posterunek",
         active_faction="posterunek"
     )
-    return ActionContext(state=state, rules=GameRules())
+    return ActionContext(
+        state=state, 
+        faction_manager=FactionManager(state.factions)
+    )
 
 
 def test_board_move_ability_moves_selected_unit_and_marks_it_used():
@@ -61,7 +64,10 @@ def test_borgo_move_ability_is_visible_in_available_actions_board():
         turn_faction="borgo",
         active_faction="borgo",
     )
-    ctx = ActionContext(state=state, rules=GameRules())
+    ctx = ActionContext(
+        state=state, 
+        faction_manager=FactionManager(state.factions)
+    )
     ctx.board.put_token((1, 5), "zabojca", "borgo")
     ctx.state.workflow_stack.append(
         WorkflowInstance(

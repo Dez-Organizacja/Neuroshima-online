@@ -8,7 +8,7 @@ def execute(data : ServerMessage):
     game = Game()
     game.load(data.gameState)
     # print(f"pending attacks")
-    print(game.state.pending_attacks)
+    # print(game.state.pending_attacks)
     game.handle_action(data.userAction)
     return game
 
@@ -23,9 +23,17 @@ def wczytaj(name):
     return ServerMessage(**data)
 
 
-# def test1():
-#     data = wczytaj("zle2.json")
-#     game = execute(data)
-
-#     # print(game.build_user_view())
-#     assert False
+def test1():
+    data = wczytaj("zle2.json")
+    game = execute(data)
+    game.handle_action({
+        "type" : "button",
+        "name" : "end_turn",
+    })
+    game.handle_action({
+        "type" : "button",
+        "name" : "yes",
+    })
+    # print(game.export())
+    # print(game.build_user_view())
+    assert False

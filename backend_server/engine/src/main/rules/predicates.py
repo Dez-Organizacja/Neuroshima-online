@@ -3,11 +3,9 @@ from main.tokens.board_token import BoardToken
 from main.tokens.data import TokenRelation
 from typing import Callable
 from main.board.board import Hex
+from main.rules.faction_manager import FactionManager
 
 predicate_func = Callable[[Board, Hex], bool]
-
-def _get_relation(faction1 : str, faction2 : str):
-    return (TokenRelation.OWN if faction1 == faction2 else TokenRelation.ENEMY)
 
 def NOT(predicate):
     def not_predicate(board : Board, pos : Hex):
@@ -17,7 +15,10 @@ def NOT(predicate):
 def is_ally(faction : str):
     def predicate(board : Board, pos : Hex):
         token = board.get_token(pos)
-        return token is not None and token.faction == faction
+        return (
+            token is not None
+            and FactionManager.are_allies(token.faction, faction)
+        )
     return predicate
 
 def is_ally_of(unit : BoardToken):
@@ -26,7 +27,10 @@ def is_ally_of(unit : BoardToken):
 def is_enemy(faction : str):
     def predicate(board : Board, pos : Hex):
         token = board.get_token(pos)
-        return token is not None and token.faction != faction
+        return (
+            token is not None
+            and FactionManager.are_enemies(token.faction, faction)
+        )
     return predicate
 
 def is_enemy_of(unit : BoardToken):
@@ -34,7 +38,8 @@ def is_enemy_of(unit : BoardToken):
 
 def of_relation_to(expected_relation : TokenRelation, unit : BoardToken):
     def predicate(board : Board, pos : Hex) -> bool:
-        relation = _get_relation(board.get_token(pos).faction, unit.faction)
+        unit2 = board.get_token(pos)
+        relation = FactionManager.get_relation(unit2.faction, unit.faction)
         return relation == expected_relation
     return predicate
 

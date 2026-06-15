@@ -5,7 +5,7 @@ from main.rules.validator import FormatValidator
 
 from main.engine.engine import GameEngine
 from main.engine.resolver import Resolver
-from main.rules.game import GameRules
+from main.rules.faction_manager import FactionManager
 from main.systems.undo import UndoSystem
 
 from main.view.builder import GameViewBuilder
@@ -18,7 +18,6 @@ from main.bootstrap import bootstrap
 class Game:
     def __init__(self):
         bootstrap()
-        self.rules = GameRules()
         self.undo_system = UndoSystem()
         self.build_game_engine()
 
@@ -38,8 +37,8 @@ class Game:
 
     def build_context(self) -> ActionContext:
         return ActionContext(
-            state=self.state, 
-            rules=self.rules,
+            state=self.state,
+            faction_manager=FactionManager(self.state.factions),
             undo_system=self.undo_system,
         )
 

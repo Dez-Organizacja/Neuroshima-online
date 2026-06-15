@@ -6,6 +6,7 @@ from main.engine.resolver import Resolver
 from main.workflows.data import WorkflowName, WorkflowConfig
 from main.state.player_state import PlayerState
 from main.input.data import BoardAction, Button, ButtonAction, HandAction, RotationAction
+from main.rules.faction_manager import FactionManager
 
 class Tests:
     def place_current_headquarter(
@@ -39,9 +40,10 @@ class Tests:
             assert player.hand.size == 0
 
     def test_start_game(self):
+        factions = ["moloch", "borgo"]
         ctx = ActionContext(
-            state=GameState(factions=["moloch", "borgo"]),
-            rules=GameRules()
+            state=GameState(factions=factions),
+            faction_manager=FactionManager(factions=factions)
         )
         engine = GameEngine(Resolver())
         engine.start_game(ctx)

@@ -1,15 +1,12 @@
 from main.utils.variable import Phase
 from main.tokens.board_token import BoardToken
 from main.board.board import Board
+from main.tokens.data import TokenRelation
 
 class GameRules():
-    @staticmethod
-    def get_enemy(factions : list[str], my_faction):
-        # print(f"getting enemy of {my_faction}")
-        for faction in factions:
-            if(faction != my_faction):
-                # print(f"found enemy {faction}")
-                return faction
+    
+
+    # def get_faction(faction : str, relation : TokenRelation)
 
     @staticmethod
     def get_score(board : Board, faction : str) -> int:
@@ -19,15 +16,16 @@ class GameRules():
         hq = board.get_token(pos)
         return max(0, hq.config.hp - hq.state.damage)
 
-    def get_scores(self, board : Board, factions : list[str]):
+    @classmethod
+    def get_scores(cls, board : Board, factions : list[str]):
         return [
-            self.get_score(board, faction)
+            cls.get_score(board, faction)
             for faction in factions
         ]
 
-
-    def get_winner(self, board : Board, factions : str) -> str | None:
-        scores = self.get_scores(board, factions)
+    @classmethod
+    def get_winner(cls, board : Board, factions : str) -> str | None:
+        scores = cls.get_scores(board, factions)
 
         if len(set(scores)) == 1:
             return None
@@ -37,10 +35,11 @@ class GameRules():
         
         return factions[1]
 
-    def is_game_over(self, board : Board, factions : str, phase : Phase) -> bool:
-        print("game over checking")
+    @classmethod
+    def is_game_over(cls, board : Board, factions : str, phase : Phase) -> bool:
+        # print("game over checking")
         print(f"factions {factions}")
-        scores = self.get_scores(board, factions)
+        scores = cls.get_scores(board, factions)
         print(f"scores: {scores}")
 
         if any(score <= 0 for score in scores):
