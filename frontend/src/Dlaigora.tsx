@@ -49,12 +49,14 @@ export type GameState = {
 
 export function useProcesedGameState(){
     const {latestMessage} = useGameSocketContext();
-    const [gameState, setGameState] = useState<GameState | null>(null)
+    const [prevGameState, setPrevGameState] = useState<GameState | null>(null);
+    const [gameState, setGameState] = useState<GameState | null>(null);
     useEffect(() => {
         if(!latestMessage){
             return;
         }
-        if(latestMessage.messageType === "ACTION_RESPONSE" && latestMessage.gameView){   
+        if(latestMessage.messageType === "ACTION_RESPONSE" && latestMessage.gameView){
+            setPrevGameState(gameState);
             setGameState({
                 view : latestMessage.gameView as GameState["view"]
             });
@@ -74,5 +76,5 @@ export function useProcesedGameState(){
         }
     }, [latestMessage]);
 
-    return {gameState};
+    return {gameState, prevGameState};
 }

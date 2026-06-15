@@ -6,7 +6,7 @@ export function apiUrl(path : string) : string {
 
     const configuredBase = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim();
     if(configuredBase){
-        return `${trimTrailingSlash(configuredBase)}${path}`;
+        return `${trimTrailingSlash(configuredBase)}${normalizedPath}`;
     }
     if(import.meta.env.DEV){
         return `http://localhost:8080${normalizedPath}`;
@@ -27,7 +27,7 @@ export function gameWebSocketUrl(token: string): string {
         base = "ws://localhost:8080";
     }
     else{
-        const protocol = window.location.protocol === "http:" ? "wss:" : "ws:";
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
         base = `${protocol}//${window.location.host}`;
     }
     return `${base}/ws/chat?token=${encodeURIComponent(token)}`;

@@ -28,7 +28,7 @@ export default function HexTest(){
     console.log("CenterX: " + CenterX + "     CenterY: " + CenterY);
     console.log("MidX: " + MidX + "     MidY: " + MidY);
     const { sendAction } = useGameSocketContext();
-    const { gameState} = useProcesedGameState();
+    const { gameState } = useProcesedGameState();
     if (!gameState) {
         return <div>Loading game...</div>;
     }
