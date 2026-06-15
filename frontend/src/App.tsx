@@ -4,6 +4,7 @@ import LoginScreen from "./Loginscreen";
 import RegisterScreen from "./Registerscreen";
 import MenuScreen from "./Menu";
 import HexTest from "./HexTest";
+import Display from "./BoardBoss";
 import { RoomScreen } from "./WaitingRoom";
 import { GameSocketProvider } from "./websockets/gameSocketContext";
 
@@ -43,7 +44,8 @@ export default function App() {
       <RoomScreen onSwitchToGame={SwitchToGame} onSwitchToMenu={SwitchToMenu}></RoomScreen>
     ) : 
      screen === "game" ?(
-      <HexTest></HexTest>
+      // <HexTest></HexTest>
+      <Display></Display>
     ) : (
       <p>AAAAAA</p>
     )}

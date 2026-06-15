@@ -5,5 +5,7 @@ import HexTest from "./HexTest";
 
 export default function Display() {
     const { gameState, prevGameState} = useProcesedGameState();
-    if(gameState !== null) return HexTest({gameState: gameState});
+    if(gameState !== null) return (
+        <HexTest gameState={gameState} />
+    )
 }
