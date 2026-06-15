@@ -498,18 +498,18 @@ public class InMemoryGameService implements GameService {
         Game game = activeGames.get(request.getGameId());
 
         //odkomentowac to na produkcji, ale na razie niech bedzie latwiej testowac
-//        if(game.getCurrentFaction() != null) {
-//            String playerFaction = game.getPlayerFaction(clientId);
-//            if (playerFaction == null) {
-//                throw new GameValidationException("Client is not a player in the game");
-//            }
-//            if (!playerFaction.equals(game.getCurrentFaction())) {
-//                throw new GameValidationException("It's not the player's turn");
-//            }
-//        }
-//        else{
-//            logger.warn("Current faction in game is not defined, clientId={}, gameId={}, gameState={}", clientId, request.getGameId(), game.getGameState());
-//        }
+        if(game.getCurrentFaction() != null) {
+            String playerFaction = game.getPlayerFaction(clientId);
+            if (playerFaction == null) {
+                throw new GameValidationException("Client is not a player in the game");
+            }
+            if (!playerFaction.equals(game.getCurrentFaction())) {
+                throw new GameValidationException("It's not the player's turn");
+            }
+        }
+        else{
+            logger.warn("Current faction in game is not defined, clientId={}, gameId={}, gameState={}", clientId, request.getGameId(), game.getGameState());
+        }
 
         GameStatusChangeRequest gameStatusChangeRequest = new GameStatusChangeRequest();
         gameStatusChangeRequest.setGameState(game.getGameState());
@@ -520,18 +520,18 @@ public class InMemoryGameService implements GameService {
         GameStatusChangeResponse responseGameData = objectMapper.convertValue(responseGameDataJsonMessage, GameStatusChangeResponse.class);
         game.setGameState(responseGameData.getGameState());
 
-        try{
-            if(game.getGameState().get("state").get("phase") != null && game.getGameState().get("state").get("phase").isTextual()
-            && game.getGameState().get("state").get("phase").toString().equals("gameover")) {
-                logger.info("Game game={} is over", game.getGameId());
-                EndGameRequest endGameRequest = new EndGameRequest();
-                endGameRequest.setGameId(game.getGameId());
-                endGame(endGameRequest.getClientId(), endGameRequest);
-            }
-        }
-        catch (IllegalStateException e) {
-            throw new GameValidationException("Game has no state" + e.getMessage());
-        }
+//        try{
+//            if(game.getGameState().get("state").get("phase") != null && game.getGameState().get("state").get("phase").isTextual()
+//            && game.getGameState().get("state").get("phase").toString().equals("gameover")) {
+//                logger.info("Game game={} is over", game.getGameId());
+//                EndGameRequest endGameRequest = new EndGameRequest();
+//                endGameRequest.setGameId(game.getGameId());
+//                endGame(endGameRequest.getClientId(), endGameRequest);
+//            }
+//        }
+//        catch (IllegalStateException e) {
+//            throw new GameValidationException("Game has no state" + e.getMessage());
+//        }
 
         ActionResponse response = new ActionResponse();
         response.setGameView(buildGameView(game.getGameState()));
