@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from main.input.data import Button
 from main.board.query import BoardQuery
 import main.rules.predicates as pr
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 
 def is_full_bomb_center(board, pos):
     return board.on_board(pos) and len(board.adjacent_hexes(pos)) == 6

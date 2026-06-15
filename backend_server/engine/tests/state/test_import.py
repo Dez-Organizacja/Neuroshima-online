@@ -4,6 +4,7 @@ from main.main import Game
 from main.state.game_state import GameState
 from main.workflows.data import WorkflowInstance, WorkflowConfig, WorkflowName
 from main.attacks.data import AttackType
+from main.state.game_dump import GameDump
 
 def test_game_state_serialization_roundtrip():
 
@@ -39,18 +40,26 @@ def test_game_state_serialization_roundtrip():
 
     assert restored_data == data
 
+def game_init(game):
+    dump = GameDump(**game.export())
+    game = Game()
+    game.load(dump.to_dict())
+    return game
 
 def test_game_can_reimport_exported_state_after_placing_token():
-    game = Game({"factions": ["moloch", "hegemonia"]})
-    game.start_game()
+    # dump = GameDump(
+    #     state=GameState.from_dict()
+    # )
+    game = Game()
+    game.start_game({"factions": ["moloch", "hegemonia"]})
 
-    game = Game(game.export())
+    game = game_init(game)
     game.handle_action({"type": "hand", "slot": 0})
 
-    game = Game(game.export())
+    game = game_init(game)
     game.handle_action({"type": "board", "pos": [2, 4]})
 
-    game = Game(game.export())
+    game = game_init(game)
     view = game.build_user_view()
 
     assert view["state"]["board"] == [

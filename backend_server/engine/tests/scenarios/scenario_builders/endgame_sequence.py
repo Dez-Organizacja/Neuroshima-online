@@ -40,13 +40,13 @@ def endgame_scenario() -> Scenario:
                 # Draw
             ),
             set_faction("moloch", turn=True), # goes to moloch's turn
-            workflow(*turn_workflow("moloch"))
+            workflow(name(WorkflowName.ACTION), index(1))
         )
 
         .when(ButtonAction(Button.END_TURN)) # end moloch's turn
         .then(
             set_faction("borgo"),
-            workflow(*turn_workflow("borgo")), # goes to borgo's turn
+            workflow(name(WorkflowName.ACTION), index(1)), # goes to borgo's turn
         )
 
         .when(ButtonAction(Button.END_TURN)) #end borgo's turn

@@ -5,7 +5,7 @@ from main.attacks.data import TargetedIntent
 from .builder import ScenarioBuilder
 from .registry import register
 from main.input.data import BoardAction, ActionType
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 
 def build_prescenario(name : WorkflowName) -> ScenarioBuilder:
     return (

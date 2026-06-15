@@ -2,6 +2,7 @@ from main.input.data import BoardAction, ActionType
 from main.workflows.data import WorkflowName
 from main.events.effects import MoveEffect, RecomputePassivesEffect
 from main.events.workflow import PopWorkflow, ConsumeOnClick
+from main.events.flow import ChangeActiveFactionEvent
 
 from .builder import ScenarioBuilder
 from .registry import register
@@ -20,12 +21,19 @@ def push_scenario():
         .given_wf_onclick_consumed()
         .then_data_delta(target_pos=(1, 3))
 
+        .tick()
+        .then_execution(events=[ChangeActiveFactionEvent(faction="borgo")])
+
         .when(BoardAction(pos=(1, 5)))
         .then_data_delta(destination=(1, 5))
 
         .tick()
         .then_execution(
-            events=[MoveEffect(from_pos=(1, 3), to_pos=(1, 5)), RecomputePassivesEffect()]
+            events=[
+                ChangeActiveFactionEvent(faction="moloch", turn=False),
+                MoveEffect(from_pos=(1, 3), to_pos=(1, 5)), 
+                RecomputePassivesEffect()
+            ]
         )
 
         .tick()

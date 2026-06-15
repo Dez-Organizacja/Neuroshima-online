@@ -33,7 +33,7 @@ def bomb_scenario() -> Scenario:
                 unit((1, 1), damage()),
             ),
             hand("moloch", discard(0)),
-            workflow(*turn_workflow("moloch")),
+            workflow(name(WorkflowName.ACTION), index(1)),
         )
         .available_actions(
             buttons(Button.END_TURN),

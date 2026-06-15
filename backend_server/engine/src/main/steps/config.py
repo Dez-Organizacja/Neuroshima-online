@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from abc import ABC
 from main.actions.available.config import AvailableActionProvider
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.input.data import UserAction
 from main.steps.data import StepResult, StepName
 from main.events.data import Event, OnClickData
@@ -13,6 +13,7 @@ from main.input.action_handlers import ActionHandler
 class StepConfig(ABC):
     name : StepName = field(init=False)
     message : str = field(default="", kw_only=True)
+    snapshot : bool = False
 
 
 def cannot_skip(ctx : ActionContext) -> bool:
@@ -47,13 +48,13 @@ class InitStepConfig(AutomaticStepConfig):
     wf_config     : WorkflowConfig = field(default_factory=WorkflowConfig)
     as_child      : bool = True
 
-A = TypeVar("A", bound=UserAction)
-T = TypeVar("T")
-@dataclass 
-class SetStepConfig(AutomaticStepConfig, Generic[A]):
-    getter          : Callable[[A], T]
-    setter          : Callable[[WorkflowData, T], None]
-    name            : StepName = field(default=StepName.SET, init=False)
+# A = TypeVar("A", bound=UserAction)
+# T = TypeVar("T")
+# @dataclass 
+# class SetStepConfig(AutomaticStepConfig, Generic[A]):
+#     getter          : Callable[[A], T]
+#     setter          : Callable[[WorkflowData, T], None]
+#     name            : StepName = field(default=StepName.SET, init=False)
 
 @dataclass
 class RepeatStepConfig(AutomaticStepConfig):

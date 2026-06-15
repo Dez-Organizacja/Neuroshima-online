@@ -4,9 +4,10 @@ from main.communication.server_message import ServerMessage
 from main.main import Game
 from pathlib import Path
 
-def execute(data):
-    game = Game(data.gameState)
-    print(f"pending attacks")
+def execute(data : ServerMessage):
+    game = Game()
+    game.load(data.gameState)
+    # print(f"pending attacks")
     print(game.state.pending_attacks)
     game.handle_action(data.userAction)
     return game
@@ -26,5 +27,5 @@ def wczytaj(name):
 #     data = wczytaj("zle2.json")
 #     game = execute(data)
 
-#     print(game.build_user_view())
+#     # print(game.build_user_view())
 #     assert False

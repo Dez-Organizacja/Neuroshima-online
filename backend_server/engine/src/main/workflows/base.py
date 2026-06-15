@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.steps.factory import StepFactory
 from main.workflows.providers.base import WorkflowActionProvider
 from main.steps.step import Step

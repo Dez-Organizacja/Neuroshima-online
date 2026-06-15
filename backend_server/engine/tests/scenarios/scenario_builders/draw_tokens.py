@@ -23,6 +23,6 @@ def draw_3_instant_tokens_scenario():
         .then(
             hand("moloch", discard(1)),
             phase(Phase.ENDGAME),
-            workflow(*turn_workflow("moloch"))
+            workflow(name(WorkflowName.ACTION), index(1))
         )
     )

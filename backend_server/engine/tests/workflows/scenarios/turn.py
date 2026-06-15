@@ -9,7 +9,7 @@ from main.events.effects import (
 from main.events.flow import EndTurnEvent, StartTurnEvent
 from .builder import ScenarioBuilder
 from .registry import register
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 
 name = WorkflowName.TURN
 @register(name)
@@ -36,17 +36,7 @@ def turn_scenario():
 
         .tick()
         .then_execution(
-            events=[ClearWorkflowDataEffect()]
-        )
-
-        .when(HandAction(slot=1))
-        .then_execution(events=[ConsumeOnClick()])
-        .then_data_delta(type=ActionType.HAND, slot=1)
-
-        .tick()
-        .given_wf_onclick_consumed()
-        .then_execution(
-            events=[PushWorkflow(name=WorkflowName.HAND)]
+            events=[PushWorkflow(name=WorkflowName.ACTION)]
         )
 
         .tick()
@@ -54,5 +44,15 @@ def turn_scenario():
             events=[GoToStep(index=1)],
             advance=False
         )
+        # .when(HandAction(slot=1))
+        # .then_execution(events=[ConsumeOnClick()])
+        # .then_data_delta(type=ActionType.HAND, slot=1)
+
+        # .tick()
+        # .given_wf_onclick_consumed()
+        # .then_execution(
+        #     events=[PushWorkflow(name=WorkflowName.HAND)]
+        # )
+
 
     ).build()

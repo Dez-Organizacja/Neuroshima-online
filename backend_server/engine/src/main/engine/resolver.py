@@ -1,5 +1,5 @@
 from main.events.data import Event
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.steps.data import StepResult
 from main.systems.passive_systems import PassiveSystems
 from main.workflows.data import WorkflowName
@@ -12,7 +12,7 @@ class Resolver():
         
         if ctx.workflow_instance.name != WorkflowName.GAME:
             return
-        
+
         # print("commiting pending workflow")
         # print(f"pending workflow {ctx.state.pending_workflow}")
         ctx.state.workflow_stack[-1] = ctx.state.pending_workflows[-1]
@@ -24,10 +24,12 @@ class Resolver():
         ctx.state.events_queue.extend(result)
         while ctx.state.events_queue:
             event = ctx.state.events_queue.popleft()
+            # print(f"event {event}")
             if event.recompute_passive:
                 dirty = True    
 
             result = event.apply(ctx) or []
+            # print(f"result {result}")
             ctx.state.events_queue.extend(result)
 
         if dirty:

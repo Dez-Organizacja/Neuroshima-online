@@ -1,6 +1,6 @@
 from main.actions.available.data import AvailableStructure
 from main.actions.available.config import AvailableActionProvider
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.input.data import Button, UserAction
 from main.rules.place import PlacementRules
 from main.tokens.token_factory import TokenFactory
@@ -43,7 +43,7 @@ class AvailableActions:
         #         if PlacementRules.can_discard(token):
         #             actions.buttons = [Button.DISCARD]
 
-        if ctx.state.can_undo(decision_faction) and Button.CANCEL not in actions.buttons:
+        if ctx.undo_system.can_undo() and Button.CANCEL not in actions.buttons:
             actions.buttons.append(Button.CANCEL)
         cls.apply_hand(actions.hand, provider.get_tokens(ctx))
         return actions

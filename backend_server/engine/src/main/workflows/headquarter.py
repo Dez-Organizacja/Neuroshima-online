@@ -1,7 +1,7 @@
 from main.events.data import Event
 from main.events.effects import DrawNamedTokenEffect
 from main.events.flow import StartTurnEvent, EndTurnEvent
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.tokens.data import BoardType
 from main.workflows.base import Workflow
 from main.workflows.data import WorkflowConfig, WorkflowName
@@ -59,7 +59,10 @@ class HeadquarterTurnWorkflow(Workflow[HeadquarterTurnProvider]):
                 self.clear_wf_data,
             ),
             self.build_resolve_step(self.draw_token),
-            self.build_input_step(message="Select your headquarters token."),
+            self.build_input_step(
+                message="Select your headquarters token.",
+                snapshot=True
+            ),
             self.build_push_workflow_step(name=WorkflowName.HAND),
             self.build_resolve_step(self.end_turn_resolve),
             # self.build_end_step()

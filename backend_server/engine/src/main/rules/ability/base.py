@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 
 class AbilityRules(ABC):
     @staticmethod

@@ -1,8 +1,9 @@
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.workflows.base import Workflow
 from main.workflows.providers.movement import PushProvider
 from main.events.effects import MoveEffect, RecomputePassivesEffect
 from main.events.data import Event
+from main.events.flow import ChangeActiveFactionEvent
 from main.workflows.step_builders import BoardSelectionMixin
 
 class PushWorkflow(BoardSelectionMixin, Workflow[PushProvider]):
@@ -14,11 +15,19 @@ class PushWorkflow(BoardSelectionMixin, Workflow[PushProvider]):
     #         resolve_func=self.resolve_push,
     #         wf_finished=True
     #     )
+    @staticmethod
+    def change_faction(ctx : ActionContext):
+        return [
+            ChangeActiveFactionEvent(
+                ctx.rules.get_enemy(ctx.state.factions, ctx.faction)
+            )
+        ]
 
     def _build_steps(self):
         return [
             self.build_source_step(message="Select the repelling unit."),
             self.build_target_step(message="Select the unit being repelled."),
+            self.build_resolve_step(self.change_faction),
             self.build_destination_step(message="Select the repulsion field."),
             self.build_resolve_step(self.resolve_push),
             self.build_end_step(),
@@ -34,7 +43,11 @@ class PushWorkflow(BoardSelectionMixin, Workflow[PushProvider]):
             from_pos=ctx.workflow_data.target_pos,
             to_pos=ctx.workflow_data.destination
         )
-        return [move, RecomputePassivesEffect()]
+        return [
+            ChangeActiveFactionEvent(ctx.state.turn_faction),
+            move,
+            RecomputePassivesEffect(),
+        ]
     
     def get_first_step_index(self, ctx : ActionContext):
         return 1 if ctx.workflow_data.unit_pos else 0

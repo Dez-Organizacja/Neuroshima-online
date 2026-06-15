@@ -1,6 +1,6 @@
 from main.workflows.base import Workflow
 from main.workflows.data import WorkflowConfig
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.events.effects import DrawTokensEffect, DiscardAllEffect, DiscardTokenEffect
 from main.events.flow import TriggerEndGameSequenceEvent
 from main.events.workflow import GoToStep
@@ -45,6 +45,7 @@ class DrawWorkflow(Workflow[DrawProvider]):
             self.build_input_step(
                 can_skip=TurnRules.can_skip_discarding_phase,
                 message="Select a token to discard.",
+                snapshot=True,
             ),
             self.build_resolve_step(self.resolve_discard_phase),
             self.build_end_step(),

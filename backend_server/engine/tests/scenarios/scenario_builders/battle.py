@@ -26,7 +26,7 @@ def build_battle_scenario(
             board(*expected_board),
             hand(factions[0], discard(0)),
             phase(Phase.ENDGAME),
-            workflow(*turn_workflow(factions[1])),
+            workflow(name(WorkflowName.ACTION), index(1)),
             set_faction(factions[1]),
         )
         .build()
@@ -70,7 +70,7 @@ def melee_initiative_boosts_and_sieciarze() -> Scenario:
         unit((1, 3), damage(3)),
     ]
     return build_battle_scenario(factions, setup_board, expected_board)
-
+    
 
 # @ScenarioRegistry.register("battle3")
 # def sieciarz_blocks_attack() -> Scenario:

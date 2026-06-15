@@ -10,7 +10,7 @@ from main.workflows.providers.target import (
     GrenadeProvider
 )
 from main.workflows.data import WorkflowName, WorkflowConfig
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 
 from main.events.data import Event
 from main.attacks.data import TargetedIntent

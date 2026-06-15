@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from main.workflows.data import WorkflowInstance
 from typing import Callable
-from main.state.contex import GameState
+from main.state.context import GameState
 from main.input.data import UserAction
 from main.actions.available.data import AvailableStructure
 from main.workflows.data import WorkflowInstance

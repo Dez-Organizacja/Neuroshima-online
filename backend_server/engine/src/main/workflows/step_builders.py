@@ -5,7 +5,7 @@ from main.steps.config import (
     RepeatStepConfig,
 )
 from main.workflows.data import WorkflowData, WorkflowName, WorkflowConfig
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.events.data import Event
 from main.events.effects import ClearWorkflowDataEffect
 from main.events.flow import CheckGameOverEvent, GameOverEvent
@@ -27,11 +27,14 @@ class StepBuilderMixin:
                 # print(f"RESOLVING FUNCTION {func}")
                 events = func(ctx)
                 # print("CHECKING RESULT EVENTS")
+                # print(f"events: {events}")
                 if events:
                     result.extend(events)
-            return result
+            # print(result)
+            # print("RESOLVING RESOLVE FUNCTIONS FINISHED")
+            return result   
         
-        return ResolveStepConfig(resolve_func, wf_finished=finish)
+        return ResolveStepConfig(resolve_func=resolve_func, wf_finished=finish)
 
     def build_end_game_check_step(self):
         return self.build_resolve_step(lambda ctx : [CheckGameOverEvent()])
@@ -44,12 +47,14 @@ class StepBuilderMixin:
         setter = None, 
         can_skip : Callable[[ActionContext], bool] | None = None,
         message : str = "",
+        snapshot : bool = False,
     ):
         can_skip = can_skip or (lambda ctx : False)
         return WaitingStepConfig(
-            ActionHandler(setter=setter),
+            action_handler=ActionHandler(setter=setter),
             can_skip=can_skip,
             message=message,
+            snapshot=snapshot
         )
     
     @staticmethod
@@ -97,8 +102,12 @@ class StepBuilderMixin:
         return [ClearWorkflowDataEffect()]
 
 class BoardSelectionMixin(StepBuilderMixin):
-    def build_source_step(self, message : str = ""):
-        return self.build_input_step(WorkflowData.set_unit_pos, message=message)
+    def build_source_step(self, message : str = "", snapshot : bool = False):
+        return self.build_input_step(
+            setter=WorkflowData.set_unit_pos, 
+            message=message,
+            snapshot=snapshot,
+        )
 
     def build_destination_step(self, message : str = ""):
         return self.build_input_step(WorkflowData.set_destination, message=message)

@@ -1,17 +1,20 @@
 from main.state.game_state import GameState
 from main.rules.game import GameRules
 from main.state.player_state import PlayerState
+from main.systems.undo import UndoSystem
 
 class ActionContext():
     def __init__(
             self, 
             state : GameState, 
-            rules : GameRules | None = None, 
+            undo_system : UndoSystem | None = None,
+            rules : GameRules | None = None,
         ):
         self.state = state
+        self.undo_system = undo_system or UndoSystem()
         self.rules = rules or GameRules()
         self.consumed_input : bool = False
-        self.decision_faction : str | None = None
+        # self.decision_faction : str | None = None
 
     @property
     def phase(self):

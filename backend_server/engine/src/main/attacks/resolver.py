@@ -62,7 +62,7 @@ class DirectedResolver:
 class AttackResolver:
     @classmethod
     def resolve(cls, attack, board):
-        print(f"RESOLVING ATTACK {attack}")
+        # print(f"RESOLVING ATTACK {attack}")
         match attack:
             case DirectedIntent():
                 expanded = DirectedResolver.resolve(attack, board)

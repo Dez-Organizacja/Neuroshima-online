@@ -4,9 +4,11 @@ from main.board.board import Board
 
 class GameRules():
     @staticmethod
-    def get_enemy(factions : list[str], my_fraction):
+    def get_enemy(factions : list[str], my_faction):
+        # print(f"getting enemy of {my_faction}")
         for faction in factions:
-            if(faction != my_fraction):
+            if(faction != my_faction):
+                # print(f"found enemy {faction}")
                 return faction
 
     @staticmethod

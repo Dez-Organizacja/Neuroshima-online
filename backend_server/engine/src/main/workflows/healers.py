@@ -6,9 +6,9 @@ from main.workflows.providers.healers import HealersProvider
 from main.systems.healing import HealingSystem
 from main.rules.ability.heal import HealRules
 
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.events.workflow import PopWorkflow
-from main.events.flow import SetActiveFaction
+from main.events.flow import ChangeActiveFactionEvent
 
 class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
     def __init__(self, config : WorkflowConfig):
@@ -18,7 +18,7 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
         self.rules = HealRules()
 
     def set_faction(self, ctx : ActionContext):
-        return [SetActiveFaction(self.faction)]
+        return [ChangeActiveFactionEvent(self.faction)]
 
     def check_end_workflow(self, ctx : ActionContext) -> bool:
         return self.rules.is_finished(ctx.board, ctx.faction)
@@ -37,7 +37,7 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
         return not self.rules.can_end(ctx.board, ctx.faction)
 
     def resolve_end_wf(self, ctx : ActionContext):
-        return [SetActiveFaction(ctx.state.turn_faction)]
+        return [ChangeActiveFactionEvent(ctx.state.turn_faction)]
 
     def _build_steps(self):
         return [
@@ -58,7 +58,7 @@ class HealersWorkflow(Workflow[HealersProvider], BoardSelectionMixin):
                 predicate_func=self.break_workflow_check,
                 finish_func=self.resolve_end_wf,
             ),
-            self.build_source_step(message="Select a healer."),
+            self.build_source_step(message="Select a healer.", snapshot=True),
             self.build_target_step(message="Select a unit to heal."),
             self.build_resolve_step(self.resolve),
             self.build_repeat_step(index=0),

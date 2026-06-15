@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from main.input.data import Button
 from typing import Callable
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 
 ButtonsGetter = Callable[[ActionContext], list[Button]]
 PositionsGetter = Callable[[ActionContext], list[tuple[int, int]]]

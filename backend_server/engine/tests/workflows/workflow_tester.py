@@ -2,10 +2,8 @@ from main.workflows.data import  WorkflowInstance
 from main.workflows.factory import WorkflowFactory
 from copy import deepcopy
 from .scenarios.data import Scenario, StepCase
-from main.state.contex import ActionContext
-from main.state.serialization import Serializator
+from main.state.context import ActionContext
 from main.state.game_state import GameState
-from main.utils.diff import Diff
 from main.utils.diff_state import DiffState
 
 class WorkflowTester:
@@ -33,7 +31,7 @@ class WorkflowTester:
         # print(scenario)
         # print("---------------")
         ctx = ActionContext(
-            state=GameState(factions=scenario.factions)
+            state = GameState(factions=scenario.factions)
         )
         ctx.state.workflow_stack.append(
             WorkflowInstance(
@@ -42,6 +40,8 @@ class WorkflowTester:
                 config=scenario.config,
             )
         )
+        ctx.state.turn_faction = ctx.state.factions[0]
+        ctx.state.active_faction = ctx.state.factions[0]
 
         workflow = WorkflowFactory.create(ctx.workflow_instance)
         workflow.build_steps()

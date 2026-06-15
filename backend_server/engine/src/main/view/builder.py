@@ -1,4 +1,4 @@
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.view.state import StateViewBuilder
 from main.view.step import StepViewBuilder
 
@@ -29,5 +29,6 @@ class GameViewBuilder:
             "scores" : self.get_scores(ctx),
             "winner" : ctx.rules.get_winner(ctx.board, ctx.state.factions),
             "LastClickedHex" : self.build_last_clicked_hex_view(ctx.state),
+            "phase"  : ctx.state.phase.value,
             **self.step_view.build_step(ctx).to_dict(),
         }

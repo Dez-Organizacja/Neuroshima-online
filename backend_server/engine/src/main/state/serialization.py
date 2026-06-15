@@ -117,10 +117,10 @@ class Serializator:
 
     @staticmethod
     def from_dict_dataclass(cls, data: dict):
+        # print(f"import {data} to {cls}")
         values = {}
 
         for f in fields(cls):
-
             if f.name in data:
                 value = data[f.name]
                 values[f.name] = Serializator.convert_value(value, f.type)

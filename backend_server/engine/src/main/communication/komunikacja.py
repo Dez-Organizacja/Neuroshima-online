@@ -16,8 +16,8 @@ def new_game():
     #         "error": "Invalid JSON body"
     #     }), 400W
     try:
-        game = Game(data)
-        game.start_game()
+        game = Game()
+        game.start_game(data)
         return flask.jsonify(game.export()), 200
     except Exception as e:
         return flask.jsonify({
@@ -29,7 +29,8 @@ def action():
     data = flask.request.get_json()
     try:
         data = ServerMessage(**data)
-        game = Game(data.gameState)
+        game = Game()
+        game.load(data.gameState)
         game.handle_action(data.userAction)
         return flask.jsonify({
             "messageType": "GAMESTATUSCHANGE_RESPONSE",
@@ -46,10 +47,14 @@ def view():
     try:
         # Java sends { "messageType": "GAMEVIEW_REQUEST", "gameState": {...} }.
         # Also accept raw game-state JSON for easier direct testing.
-        game_state = data.get("gameState", data) if isinstance(data, dict) else data
+        # game_state = data.get("gameState", data) if isinstance(data, dict) else data
+        # game = Game().load(game_state)
+        data = ServerMessage(**data)
+        game = Game()
+        game.load(data.gameState)
         return flask.jsonify({
             "messageType": "GAMEVIEW_RESPONSE",
-            "gameView": Game(game_state).build_user_view()
+            "gameView": game.build_user_view()
         }), 200
     except Exception as e:
         return flask.jsonify({

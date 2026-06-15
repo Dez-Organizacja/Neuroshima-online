@@ -228,6 +228,12 @@ class Board:
             for id, token in self.tokens.items()
         ]
 
+    def is_full(self) -> bool:
+        return all(
+            not self.is_empty(pos)
+            for pos in self.ALL_HEXES
+        )
+
     @staticmethod
     def get_tile_view(tile : Tile):
         return TileView(
@@ -251,10 +257,11 @@ class Board:
         ]
 
     def print_board(self):
-        print("PRINTING BOARD")
+        # print("PRINTING BOARD")
         for tile in self.get_tiles():   
             # print("pos:", tile.pos)
             # print("unit:", tile.unit.get_view())
             print(Serializator.to_dict_dataclass(self.get_tile_view(tile)))
-            print("--------------------\n")
-        print("PRINTING FINISHED BOARD")
+            # print("--------------------\n")
+        # print("PRINTING FINISHED BOARD")
+        

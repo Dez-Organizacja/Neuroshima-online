@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import ClassVar
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.events.data import Effect
 from main.attacks.data import AttackIntent
 from main.workflows.data import WorkflowData

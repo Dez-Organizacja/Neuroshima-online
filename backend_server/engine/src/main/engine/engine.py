@@ -1,5 +1,5 @@
 from random import shuffle
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.workflows.factory import WorkflowFactory
 from main.engine.resolver import Resolver
 from main.events.data import Event
@@ -7,7 +7,7 @@ from main.events.workflow import PushWorkflow
 from main.workflows.data import WorkflowConfig, WorkflowName
 from main.tokens.pile_factory import PileFactory
 from main.steps.step import Step
-from main.input.data import Button, ButtonAction, UserAction
+from main.input.data import Button, ButtonAction, UserAction, ActionType
 from main.input.action_handlers import ButtonHandler
 
 class GameEngine:
@@ -20,6 +20,7 @@ class GameEngine:
 
     @staticmethod
     def _get_step(ctx : ActionContext) -> Step:
+        # print("GET STEP")
         # ctx.print_wf_stack()
         wf = WorkflowFactory.create(ctx.workflow_instance)
         # print(f"current workflow {wf}")
@@ -67,47 +68,37 @@ class GameEngine:
 
 
     @staticmethod
-    def _is_cancel_action(action : UserAction) -> bool:
+    def is_mutating_action(action : UserAction) -> bool:
         return (
-            isinstance(action, ButtonAction)
-            and action.name == Button.CANCEL
+            action.type != ActionType.BUTTON
+            or action.name != Button.CANCEL
         )
 
-    @staticmethod
-    def _get_current_decision_faction(ctx : ActionContext) -> str | None:
-        wf = WorkflowFactory.create(ctx.workflow_instance)
-        return wf.action_provider.get_ui_state(ctx).faction
+    # @staticmethod
+    # def _starts_player_action(ctx : ActionContext, step : Step) -> bool:
+    #     if not step.requires_input:
+    #         return False
 
-    @staticmethod
-    def _starts_player_action(ctx : ActionContext, step : Step) -> bool:
-        if not step.requires_input:
-            return False
+    #     if ctx.workflow_instance.name in {
+    #         WorkflowName.TURN,
+    #         WorkflowName.HEADQUARTER_TURN,
+    #     }:
+    #         return True
 
-        if ctx.workflow_instance.name in {
-            WorkflowName.TURN,
-            WorkflowName.HEADQUARTER_TURN,
-        }:
-            return True
-
-        return (
-            ctx.workflow_instance.name == WorkflowName.DRAW
-            and ctx.workflow_instance.current_step_index == 3
-        )
+    #     return (
+    #         ctx.workflow_instance.name == WorkflowName.DRAW
+    #         and ctx.workflow_instance.current_step_index == 3
+    #     )
 
     def execute_action(self, ctx : ActionContext, action : UserAction):
         print("########################")
         print(f"EXECUTING ACTION {action}")
         print("########################")
-        print(ctx.workflow_instance)
+        # if self.is_mutating_action(action):
         step = self._get_step(ctx)
-        ctx.decision_faction = self._get_current_decision_faction(ctx)
-        if not self._is_cancel_action(action):
-            ctx.state.clear_undo_stack(ctx.decision_faction)
-            if self._starts_player_action(ctx, step):
-                ctx.state.create_undo_snapshot(
-                    workflow_name=ctx.workflow_instance.name,
-                    owner_faction=ctx.decision_faction,
-                )
+        if step.snapshot and self.is_mutating_action(action):
+            ctx.undo_system.create_undo_snapshot(ctx.state)
+        
 
         if ButtonHandler.can_handle(ctx, action):
             self.resolver.execute(ctx, ButtonHandler.handle(ctx, action))

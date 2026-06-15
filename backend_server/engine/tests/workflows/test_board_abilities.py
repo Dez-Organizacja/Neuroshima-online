@@ -2,11 +2,12 @@ from main.engine.engine import GameEngine
 from main.engine.resolver import Resolver
 from main.input.data import BoardAction, RotationAction
 from main.rules.game import GameRules
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.state.game_state import GameState
 from main.view.builder import GameViewBuilder
 from main.workflows.data import WorkflowConfig, WorkflowInstance, WorkflowName
-from main.workflows.providers.turn import TurnProvider
+# from main.workflows.providers.turn import TurnProvider
+from main.workflows.providers.action import ActionProvider
 
 
 def make_ctx() -> ActionContext:
@@ -30,6 +31,7 @@ def test_board_move_ability_moves_selected_unit_and_marks_it_used():
     )
 
     engine = GameEngine(Resolver())
+    engine.run_until_input_required(ctx)
     engine.execute_action(ctx, BoardAction(pos=(1, 1)))
 
     assert ctx.workflow_instance.name == WorkflowName.MOVE
@@ -42,7 +44,7 @@ def test_board_move_ability_moves_selected_unit_and_marks_it_used():
     assert moved.name == "biegacz"
     assert moved.ability_used is True
     assert moved.rotation == 1
-    assert ctx.workflow_instance.name == WorkflowName.TURN
+    assert ctx.workflow_instance.name == WorkflowName.ACTION
 
 
 def test_turn_provider_hides_wired_ability_units():
@@ -50,7 +52,7 @@ def test_turn_provider_hides_wired_ability_units():
     ctx.board.put_token((1, 1), "biegacz", "posterunek")
     ctx.board.get_token((1, 1)).set_wire()
 
-    assert (1, 1) not in TurnProvider().get_available_positions(ctx)
+    assert (1, 1) not in ActionProvider().get_available_positions(ctx)
 
 
 def test_borgo_move_ability_is_visible_in_available_actions_board():
@@ -68,6 +70,8 @@ def test_borgo_move_ability_is_visible_in_available_actions_board():
             config=WorkflowConfig(faction="borgo"),
         )
     )
+    engine = GameEngine(resolver=Resolver())
+    engine.run_until_input_required(ctx)
 
     view = GameViewBuilder().build(ctx)
 

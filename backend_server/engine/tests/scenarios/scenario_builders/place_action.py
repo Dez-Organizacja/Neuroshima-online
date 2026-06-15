@@ -43,7 +43,7 @@ def place_scenario_builder(
         .when(RotationAction(rotation=1))
         .then(
             board(unit(pos, rotate(1))),
-            workflow(*turn_workflow(factions[0])),
+            workflow(name(WorkflowName.ACTION), index(1)),
         )
     ).build()
     

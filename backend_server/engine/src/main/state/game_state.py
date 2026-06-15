@@ -62,7 +62,6 @@ class GameState:
     workflow_stack      : list[WorkflowInstance] = field(default_factory=list)
     
     # --------- others ----------
-    undo_stack          : list[UndoSnapshot] = field(default_factory=list)
     phase               : Phase = Phase.GAME
     last_clicked_hex    : LastClickedHex = field(default_factory=LastClickedHex)
     
@@ -87,40 +86,40 @@ class GameState:
     def add_player(self, faction):
         self.players[faction] = PlayerState()
 
-    def create_undo_snapshot(self, workflow_name : WorkflowName, owner_faction : str) -> None:
-        if not owner_faction:
-            return
+    # def create_undo_snapshot(self, workflow_name : WorkflowName, owner_faction : str) -> None:
+    #     if not owner_faction:
+    #         return
 
-        snapshot = self.to_dict()
-        self.undo_stack.append(
-            UndoSnapshot(
-                workflow_name=workflow_name,
-                owner_faction=owner_faction,
-                snapshot=snapshot,
-            )
-        )
+    #     snapshot = self.to_dict()
+    #     self.undo_stack.append(
+    #         UndoSnapshot(
+    #             workflow_name=workflow_name,
+    #             owner_faction=owner_faction,
+    #             snapshot=snapshot,
+    #         )
+    #     )
 
-    def clear_undo_stack(self, decision_faction : str | None) -> None:
-        if not decision_faction:
-            return
+    # def clear_undo_stack(self, decision_faction : str | None) -> None:
+    #     if not decision_faction:
+    #         return
 
-        if any(snapshot.owner_faction != decision_faction for snapshot in self.undo_stack):
-            self.undo_stack.clear()
+    #     if any(snapshot.owner_faction != decision_faction for snapshot in self.undo_stack):
+    #         self.undo_stack.clear()
 
-    def pop_latest_undo_snapshot(self, decision_faction : str | None) -> dict:
-        if not self.undo_stack:
-            raise ValueError("brak akcji do cofniecia")
+    # def pop_latest_undo_snapshot(self, decision_faction : str | None) -> dict:
+    #     if not self.undo_stack:
+    #         raise ValueError("brak akcji do cofniecia")
 
-        snapshot = self.undo_stack[-1]
-        if decision_faction and snapshot.owner_faction != decision_faction:
-            raise ValueError("nie mozesz cofnac akcji innego gracza")
+    #     snapshot = self.undo_stack[-1]
+    #     if decision_faction and snapshot.owner_faction != decision_faction:
+    #         raise ValueError("nie mozesz cofnac akcji innego gracza")
 
-        self.undo_stack.pop()
-        return snapshot.snapshot
+    #     self.undo_stack.pop()
+    #     return snapshot.snapshot
 
-    def can_undo(self, decision_faction : str | None) -> bool:
-        if not self.undo_stack:
-            return False
+    # def can_undo(self, decision_faction : str | None) -> bool:
+    #     if not self.undo_stack:
+    #         return False
 
-        snapshot = self.undo_stack[-1]
-        return decision_faction is None or snapshot.owner_faction == decision_faction
+    #     snapshot = self.undo_stack[-1]
+    #     return decision_faction is None or snapshot.owner_faction == decision_faction

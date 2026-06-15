@@ -4,7 +4,7 @@ from main.workflows.data import (
     WorkflowName, 
 )
 from main.systems.combat import CombatSystem
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 
 class InitiativeWorkflow(Workflow):
     def __init__(self, config : WorkflowConfig):

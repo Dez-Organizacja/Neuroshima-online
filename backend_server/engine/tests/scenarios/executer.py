@@ -8,6 +8,7 @@ from main.actions.available.data import AvailableStructure
 from main.systems.passive_systems import PassiveSystems
 from main.input.data import Button
 from main.utils.diff_state import DiffState
+from main.state.game_dump import GameDump
 
 class ScenarioExecuter:
     def __init__(self):
@@ -15,9 +16,11 @@ class ScenarioExecuter:
 
     @staticmethod
     def init_game(state : GameState) -> Game:
-        data = Serializator.to_dict_dataclass(state)
+        dump = GameDump(state = Serializator.to_dict_dataclass(state))
+        game = Game()
+        game.load(dump.to_dict())
         # print(data)
-        return Game(data)
+        return game
 
     def execute(self, before_state : GameState, step : StepCase) -> Game:
         print("----------------------------------")
@@ -33,7 +36,7 @@ class ScenarioExecuter:
     @staticmethod
     def compare_av_actions(game : Game, expected_actions : AvailableStructure):
 
-        step_view = StepViewBuilder().build_step(game.build_contex())
+        step_view = StepViewBuilder().build_step(game.build_context())
         result_actions = step_view.available_actions
         if Button.CANCEL not in expected_actions.buttons:
             result_actions.buttons = [
@@ -47,7 +50,10 @@ class ScenarioExecuter:
         scenario.setup.apply(before_state)
         PassiveSystems.compute(before_state.board)
         game = self.init_game(before_state)
-        game.engine.run_until_input_required(game.build_contex())
+        # print("before game state")
+        # print(before_state.workflow_stack)
+        
+        game.engine.run_until_input_required(game.build_context())
         # print(game.state.workflow_stack[-1])
         return game.state
 
@@ -57,6 +63,7 @@ class ScenarioExecuter:
         before_state = self.setup(scenario)
         # print
         # print("before game state")
+        # print(before_state.workflow_stack)
         # before_state.print_game_state()
         # print("----------------")
         

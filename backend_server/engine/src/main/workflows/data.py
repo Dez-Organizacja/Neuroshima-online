@@ -32,6 +32,8 @@ class WorkflowName(Enum):
     DRAW="draw"
     GAMEOVER="gameover"
     ENDGAMESEQUENCE="end_game_sequence"
+    ACTION="action"
+    END_ACTION="end_action"
 
 ABILITY_WORKFLOW_REGISTRY = {
     Ability.MOVE : WorkflowName.MOVE,

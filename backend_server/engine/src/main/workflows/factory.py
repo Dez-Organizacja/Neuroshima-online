@@ -22,6 +22,8 @@ from main.workflows.end_turn_confirm import EndTurnConfirmWorkflow
 from main.workflows.draw import DrawWorkflow
 from main.workflows.endgame import EndGameSequenceWorkflow
 from main.workflows.game_over import GameOverWorkflow
+from main.workflows.action import AcitonWorkflow
+from main.workflows.end_action import EndActionWorkflow
 from main.workflows.base import Workflow
 from dataclasses import dataclass
 
@@ -43,6 +45,9 @@ class WorkflowFactory:
         WorkflowName.BOARD : WorkflowMeta(BoardWorkflow, False),
         WorkflowName.START_BATTLE : WorkflowMeta(StartBattleWorkflow, False),
         WorkflowName.GAMEOVER : WorkflowMeta(GameOverWorkflow, False),
+        WorkflowName.ACTION : WorkflowMeta(AcitonWorkflow, False),
+        WorkflowName.END_ACTION : WorkflowMeta(EndActionWorkflow, False),
+        WorkflowName.END_TURN_CONFIRM : WorkflowMeta(EndTurnConfirmWorkflow, False),
 
         #configurable workflows
         WorkflowName.TURN : WorkflowMeta(TurnWorkflow, True),
@@ -56,7 +61,6 @@ class WorkflowFactory:
         WorkflowName.EXPLOSION : WorkflowMeta(ExpolsionWorkflow, True),
         WorkflowName.INITIATIVE : WorkflowMeta(InitiativeWorkflow, True),
         WorkflowName.DAMAGE_RESOLVE : WorkflowMeta(ResolveDamageWorkflow, True),
-        WorkflowName.END_TURN_CONFIRM : WorkflowMeta(EndTurnConfirmWorkflow, True),
         WorkflowName.DRAW : WorkflowMeta(DrawWorkflow, True),
         WorkflowName.ENDGAMESEQUENCE : WorkflowMeta(EndGameSequenceWorkflow, True),
     }

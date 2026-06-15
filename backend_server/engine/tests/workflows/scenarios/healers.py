@@ -1,10 +1,10 @@
 from main.workflows.data import WorkflowName, WorkflowConfig
 from .builder import ScenarioBuilder
 from .registry import register
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.events.effects import HealEffect, ClearWorkflowDataEffect
 from main.events.workflow import GoToStep, ConsumeOnClick
-from main.events.flow import SetActiveFaction
+from main.events.flow import ChangeActiveFactionEvent
 from main.input.data import ActionType, BoardAction, ButtonAction, Button
 from main.systems.passive_systems import PassiveSystems
 
@@ -27,7 +27,7 @@ def heal_scenario():
         .given(setup_function)
         .then_execution(
             events=[
-                SetActiveFaction(faction="moloch"),
+                ChangeActiveFactionEvent(faction="moloch"),
                 ClearWorkflowDataEffect(),
             ]
         )
@@ -36,27 +36,27 @@ def heal_scenario():
         .given(setup_faction)
 
 
-        # .when(ButtonAction(Button.NO))
-        # .then_execution(events=[ConsumeOnClick()])
-        # .then_data_delta(type=ActionType.BUTTON, button=Button.NO)
+        .when(ButtonAction(Button.NO))
+        .then_execution(events=[ConsumeOnClick()])
+        .then_data_delta(type=ActionType.BUTTON, button=Button.NO)
 
-        # .tick()
-        # .given_wf_onclick_consumed()
+        .tick()
+        .given_wf_onclick_consumed()
 
-        # .when(BoardAction((1, 1)))
-        # .then_data_delta(unit_pos=(1, 1), type=ActionType.BOARD)
+        .when(BoardAction((1, 1)))
+        .then_data_delta(unit_pos=(1, 1), type=ActionType.BOARD)
 
-        # .when(BoardAction((1, 3)))
-        # .then_data_delta(target_pos=(1, 3))
+        .when(BoardAction((1, 3)))
+        .then_data_delta(target_pos=(1, 3))
 
-        # .tick()
-        # .then_execution(
-        #     events=[HealEffect(source_pos=(1, 1), target_pos=(1, 3))]
-        # )
+        .tick()
+        .then_execution(
+            events=[HealEffect(source_pos=(1, 1), target_pos=(1, 3))]
+        )
 
-        # .tick()
-        # .then_execution(
-        #     events=[GoToStep(index=0)],
-        #     advance=False
-        # )
+        .tick()
+        .then_execution(
+            events=[GoToStep(index=0)],
+            advance=False
+        )
     ).build()

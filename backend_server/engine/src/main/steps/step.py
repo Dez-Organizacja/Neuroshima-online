@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.input.data import UserAction
 
 from main.steps.config import (
@@ -8,7 +8,7 @@ from main.steps.config import (
     ResolveStepConfig,
     InitStepConfig,
     WaitingStepConfig,
-    SetStepConfig,
+    # SetStepConfig,
     RepeatStepConfig
 )
 
@@ -37,6 +37,10 @@ class Step(ABC, Generic[C]):
     @abstractmethod
     def requires_input(self) -> bool:
         pass
+
+    @property
+    def snapshot(self) -> bool:
+        return self.config.snapshot
 
     def can_skip(self, ctx : ActionContext) -> bool:
         return False
@@ -81,6 +85,7 @@ class ResolveStep(AutomaticStep[ResolveStepConfig]):
         # print(f"EXECUTING RESOLVE STEP")
         res : list[Event] = self.config.resolve_func(ctx) or []
         # print("FINISHED CONFIG FUNCTION RESOLVING")
+        # print(res)
         if self.config.wf_finished:
             res.append(PopWorkflow())
         #     print("finished workflow effect pushed")

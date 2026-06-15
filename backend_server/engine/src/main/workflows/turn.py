@@ -1,16 +1,16 @@
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.workflows.base import Workflow
-from main.workflows.providers.turn import TurnProvider
+# from main.workflows.providers.turn import TurnProvider
 from main.workflows.data import WorkflowName, WorkflowConfig
 from main.events.data import Event
 from main.events.flow import EndTurnEvent, StartTurnEvent
 from main.rules.turn import TurnRules
 
-class TurnWorkflow(Workflow[TurnProvider]):
+class TurnWorkflow(Workflow): #Workflow[TurnProvider]
     def __init__(self, config : WorkflowConfig):
         self.rules : TurnRules = TurnRules()
         self.config : WorkflowConfig = config
-        super().__init__(action_provider=TurnProvider())
+        # super().__init__(action_provider=TurnProvider())
 
     def start_turn_resolve(self, ctx : ActionContext) -> list[Event]:
         return [
@@ -25,12 +25,12 @@ class TurnWorkflow(Workflow[TurnProvider]):
     def end_turn_resolve(ctx : ActionContext) -> list[Event]:
         return [EndTurnEvent()]
     
-    @staticmethod
-    def dispatch(ctx : ActionContext) -> WorkflowName:
-        if ctx.workflow_data.slot is not None:
-            return WorkflowName.HAND
-        else:
-            return WorkflowName.BOARD
+    # @staticmethod
+    # def dispatch(ctx : ActionContext) -> WorkflowName:
+    #     if ctx.workflow_data.slot is not None:
+    #         return WorkflowName.HAND
+    #     else:
+    #         return WorkflowName.BOARD
 
     def draw_tokens(self, ctx : ActionContext):
         return self.push_workflow(
@@ -44,8 +44,10 @@ class TurnWorkflow(Workflow[TurnProvider]):
                 self.start_turn_resolve,
                 self.draw_tokens,
             ),
-            self.build_resolve_step(self.clear_wf_data),
-            self.build_input_step(message="Select a token or unit action."),
-            self.build_dispatch_step(self.dispatch),
+            self.build_push_workflow_step(WorkflowName.ACTION),
             self.build_repeat_step(index=1),
         ]
+
+            # self.build_resolve_step(self.clear_wf_data),
+            # self.build_input_step(message="Select a token or unit action."),
+            # self.build_dispatch_step(self.dispatch),

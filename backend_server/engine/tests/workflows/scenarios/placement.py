@@ -2,7 +2,7 @@ from main.workflows.data import WorkflowName
 from main.input.data import BoardAction
 from main.events.effects import ClearSelectedHandSlotEffect, DiscardTokenEffect, PlaceEffect
 from main.events.workflow import PopWorkflow, PushWorkflow, ConsumeOnClick
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 
 from .builder import ScenarioBuilder
 from .registry import register

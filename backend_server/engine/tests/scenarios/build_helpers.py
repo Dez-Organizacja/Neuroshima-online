@@ -117,6 +117,7 @@ def config(**data):
 
 def name(name : WorkflowName):
     def apply(workflow : WorkflowInstance):
+        # print(f"name: {name}")
         workflow.name = name
     return apply
 
@@ -143,7 +144,7 @@ def push_workflow(
         *funcs : Callable[[WorkflowInstance], None]
     ):
     def apply(state : GameState):
-        print("PUSH WORKFLOW APPLYING")
+        # print("PUSH WORKFLOW APPLYING")
         # print(type(state))
         state.workflow_stack.append(WorkflowInstance(name=""))
         workflow(*funcs)(state)
@@ -180,7 +181,8 @@ def build_from_hand_action_wfs(
         wf_data_setup_func,
         push_game_wf(factions),
         setup_turn_wf(faction=factions[0]),
-        push_workflow(name(WorkflowName.HAND))
+        push_workflow(name(WorkflowName.ACTION),index(3)),
+        push_workflow(name(WorkflowName.HAND)),
     )
 
 # ----------- Available Actions -----------

@@ -3,7 +3,7 @@ from .data import StepCase, Scenario, SetupFn
 from main.input.data import UserAction
 from main.steps.data import StepResult
 from main.events.data import Event
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 
 
 class ScenarioBuilder:

@@ -1,10 +1,10 @@
 from main.input.data import ActionType, Button
 from typing import Callable
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 from main.events.data import Event
 from main.events.flow import EndTurnEvent, DeleteAbove
 from main.events.effects import ClearWorkflowDataEffect, DiscardTokenEffect
-from main.events.history import RestoreUndoSnapshotEffect
+from main.events.history import UndoEffect
 from main.events.workflow import GoToStep, PushWorkflow
 from main.workflows.data import WorkflowName, WorkflowData, WorkflowConfig
 from main.input.data import(
@@ -43,33 +43,25 @@ class ButtonHandler:
     @button_register(Button.END_TURN)
     def handle_end_turn(ctx : ActionContext) -> list[Event]:
         if ctx.player.hand.size > 0:
-            return [
-                PushWorkflow(
-                    name=WorkflowName.END_TURN_CONFIRM,
-                    config=WorkflowConfig(faction=ctx.faction),
-                )
-            ]
+            return [PushWorkflow(WorkflowName.END_TURN_CONFIRM)]
         return [EndTurnEvent()]
 
 
     @staticmethod
     @button_register(Button.CANCEL)
     def handle_cancel(ctx : ActionContext) -> list[Event]:
-        if not ctx.state.can_undo(ctx.decision_faction):
-            if ctx.workflow_instance.name in {
-                WorkflowName.TURN,
-                WorkflowName.HEADQUARTER_TURN,
-            }:
-                return [GoToStep(ctx.workflow_instance.current_step_index)]
+        # if not ctx.state.can_undo(ctx.decision_faction):
+        #     if ctx.workflow_instance.name in {
+        #         WorkflowName.TURN,
+        #         WorkflowName.HEADQUARTER_TURN,
+        #     }:
+        #         return [GoToStep(ctx.workflow_instance.current_step_index)]
 
-            return [
-                DeleteAbove(name=WorkflowName.TURN),
-                ClearWorkflowDataEffect()
-            ]
-
-        return [
-            RestoreUndoSnapshotEffect(ctx.decision_faction)
-        ]
+        #     return [
+        #         DeleteAbove(name=WorkflowName.TURN),
+        #         ClearWorkflowDataEffect()
+        #     ]
+        return [UndoEffect()]
     
     @staticmethod
     @button_register(Button.DISCARD)

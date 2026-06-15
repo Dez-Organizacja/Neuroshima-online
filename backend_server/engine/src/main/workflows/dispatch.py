@@ -3,7 +3,7 @@ from main.events.data import Event, OnClickData
 from main.events.effects import DiscardTokenEffect
 from main.events.workflow import PushWorkflow, PopWorkflow
 
-from main.state.contex import ActionContext
+from main.state.context import ActionContext
 
 from main.tokens.base import Token
 from main.tokens.data import Ability, TokenType
@@ -81,8 +81,8 @@ class HandWorkflow(DispatchActionWorkflow):
                 PopWorkflow(),
             ]
         
-        else:
-            return [self.next_workflow_push_effect(ctx)]
+        return [self.next_workflow_push_effect(ctx)]
+        
 
     def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
         # print("DISPATCH FUNCTION")
@@ -110,8 +110,8 @@ class BoardWorkflow(DispatchActionWorkflow):
 
     @staticmethod
     def get_active_token(ctx : ActionContext):
-        print("get active token")
-        print(f"workflow data {ctx.workflow_data}")
+        # print("get active token")
+        # print(f"workflow data {ctx.workflow_data}")
         return ctx.board.get_token(ctx.workflow_data.unit_pos)
 
     @staticmethod
