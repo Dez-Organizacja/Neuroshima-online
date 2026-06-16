@@ -131,7 +131,7 @@ class MarkAbilityUsedEffect(Effect):
     def apply(self, ctx: ActionContext):
         # print("MARK ABILITY USED")
         token = ctx.board.get_token(self.pos)
-        token.ability_used = True
+        token.use_ability()
 
 
 @dataclass
@@ -141,7 +141,7 @@ class ResetAbilityUsedEffect(Effect):
     def apply(self, ctx: ActionContext):
         for pos in self.positions:
             token = ctx.board.get_token(pos)
-            token.state.execution.used_ability = False
+            token.state.reset_abitility()
 
 
 # ----------- activation -----------

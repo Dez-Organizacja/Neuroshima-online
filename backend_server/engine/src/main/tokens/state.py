@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from main.tokens.data import TokenRelation
+from main.tokens.data import TokenRelation, Ability
 from main.tokens.config import BoardTokenConfig
 from main.attacks.config import AttackType
 
@@ -13,6 +13,7 @@ class TokenCoreState:
 @dataclass
 class TokenModifiers:
     attack_boosts : dict[AttackType, int] = field(default_factory=dict)
+    from_boost_ability : Ability | None = None
 
     initiatives: list[int] = field(default_factory=list)
     is_used: list[bool] = field(default_factory=list)
@@ -31,6 +32,7 @@ class TokenRelations:
 class TokenExecutionState:
     # clever_initiative: CleverInitiative | None = None
     used_ability : bool = False
+    used_from_boost_ability : bool = False
     used_battle_ability : bool = False
 
 @dataclass
@@ -79,9 +81,14 @@ class BoardTokenState:
         self.modifiers = TokenModifiers()
         self.relations = TokenRelations()
 
+    def reset_abitility(self):
+        self.execution = TokenExecutionState()
+
+
     def reset_boosts(self, config : BoardTokenConfig):
-        self.modifiers = TokenModifiers()
-        self.relations = TokenRelations()
+        # self.modifiers = TokenModifiers()
+        # self.relations = TokenRelations()
+        self.reset_modifiers()
         self.reset_initiatives(config.initiative)
         self.reset_relations(config.boost_target)
         
@@ -91,6 +98,7 @@ class BoardTokenState:
         self.modifiers.is_blocked_to_0 = False
         self.modifiers.initiative_boosts = 0
         self.modifiers.num_of_new = 0
+        self.modifiers.from_boost_ability = None
     
     def reset_initiatives(self, initiatives : list[int]):
         self.modifiers.initiatives = initiatives

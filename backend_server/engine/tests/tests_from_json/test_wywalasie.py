@@ -34,9 +34,11 @@ def wczytaj(name):
 #     #     "type" : "button",
 #     #     "name" : "yes",
 #     # })
-#     # token = game.state.board.get_token((2, 6))
-#     # print(token)
+#     # for instance in game.state.workflow_stack:
+#     #     print(instance.name)
+#     token = game.state.board.get_token((1, 7))
+#     print(token)
 #     # print(game.export())
 #     # v = game.build_user_view()
-#     # print(v["availableActions"])
+#     # print(v["availableActions"]["board"])
 #     assert False

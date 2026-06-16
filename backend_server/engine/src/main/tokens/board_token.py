@@ -9,6 +9,7 @@ from main.state.serialization import Serializator
 from main.attacks.config import AttackConfig, AttackType
 from main.tokens.data import TokenView
 from main.systems.clever_initiative import CleverInitiative
+from main.tokens.data import Ability
 
 @dataclass
 class BoardToken(Token):
@@ -137,6 +138,10 @@ class BoardToken(Token):
     
     # --------- attacks ----------
     @property
+    def execution(self):
+        return self.state.execution
+
+    @property
     def ability_used(self):
         return self.state.execution.used_ability
     
@@ -144,6 +149,30 @@ class BoardToken(Token):
     def ability_used(self, value):
         self.state.execution.used_ability = value
 
+    def get_ability(self) -> Ability | None:
+        return self.config.abilities.ability or self.state.modifiers.from_boost_ability
+
+
+    def use_ability(self) -> None:
+        if (self.execution.used_from_boost_ability is False 
+            and self.state.modifiers.from_boost_ability is not None
+        ):
+            self.execution.used_from_boost_ability = True
+        
+        else:
+            self.execution.used_ability = True
+
+    def can_use_ability(self) -> bool:
+        return (
+            (
+                self.config.abilities.ability is not None
+                and not self.state.execution.used_ability
+            ) or 
+            (
+                self.state.modifiers.from_boost_ability is not None
+                and not self.state.execution.used_from_boost_ability
+            )
+        )
     # --------- save and load ----------
 
     def to_dict(self) -> dict:

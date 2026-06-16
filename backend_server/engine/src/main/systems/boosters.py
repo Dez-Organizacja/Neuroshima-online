@@ -1,5 +1,5 @@
 from main.board.board import Board
-from main.tokens.data import TokenRelation, Boost
+from main.tokens.data import TokenRelation, Boost, Ability
 from main.systems.clever_initiative import CleverInitiative
 from main.attacks.config import AttackType
 
@@ -152,5 +152,9 @@ class BoosterSolver():
     def set_initiative_to_0(self, tokenID):
         self.board.tokens[tokenID].state.modifiers.is_blocked_to_0 = True
     
+    def move_ability(self, tokenID):
+        token = self.board.tokens[tokenID]
+        token.state.modifiers.from_boost_ability = Ability.MOVE
+
     def melee_to_shoot(self, tokenID):
         return NotImplemented

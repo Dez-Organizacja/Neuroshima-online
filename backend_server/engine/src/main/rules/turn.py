@@ -25,7 +25,7 @@ class TurnRules:
         if rules is None:
             return True
 
-        return rules.can_use(ctx, pos)
+        return rules.can_use(ctx, pos) and token.can_use_ability()
     
     @staticmethod
     def end_turn_check(ctx : ActionContext) -> bool:
@@ -49,6 +49,3 @@ class TurnRules:
             TokenFactory.create(hand.get(i), faction).type == TokenType.INSTANT
             for i in range(hand.size)
         ) and hand.size
-    # @staticmethod
-    # def is_hq_placing_turn(ctx : ActionContext):
-    #     return ctx.workflow_instance.config.hq_placing
