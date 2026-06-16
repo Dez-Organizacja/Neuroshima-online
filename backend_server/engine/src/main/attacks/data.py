@@ -1,11 +1,7 @@
-from dataclasses import dataclass
-from enum import Enum
+from dataclasses import dataclass, field
 from main.attacks.properties.data import AttackProperties
-
-class AttackType(Enum):
-    MELEE = "melee"
-    SHOOT = "shoot"
-    GAUSS = "gauss"
+from main.events.data import Effect
+from main.events.animations import Animation
 
 @dataclass
 class TargetedIntent:
@@ -17,7 +13,7 @@ class TargetedIntent:
 
 @dataclass
 class DirectedIntent:
-    attaker_pos : tuple[int, int]
+    attacker_pos : tuple[int, int]
     direction : int
     properties : AttackProperties
     power : int = 1
@@ -25,13 +21,6 @@ class DirectedIntent:
 AttackIntent = TargetedIntent | DirectedIntent
 
 @dataclass
-class AttackConfig:
-    attack_type : AttackType
-    direction : int
-    power : int = 1
-
-@dataclass
-class AttackSpec:
-    attack_type : AttackType
-    directions : list[int]
-    power : int = 1    
+class AttackResult:
+    result      : list[Effect] = field(default_factory=list)
+    animations  : list[Animation] = field(default_factory=list)

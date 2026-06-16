@@ -1,6 +1,6 @@
 from main.tokens.data import TokenType, Boost, Ability, TokenRelation, BattleAbility
 from main.tokens.config import TokenConfig, BoardTokenConfig, BoostInstance
-from main.attacks.data import AttackConfig, AttackType, AttackSpec
+from main.attacks.config import AttackConfig, AttackType, AttackSpec
 
 class TokenConfigBuilder:
     def __init__(self, config : TokenConfig):

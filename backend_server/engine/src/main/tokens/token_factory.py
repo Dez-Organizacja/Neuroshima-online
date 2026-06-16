@@ -1,6 +1,6 @@
 from main.tokens.board_token import BoardToken
 from main.tokens.base import Token
-from main.tokens.data import TokenKey, TokenType
+from main.tokens.data import TokenType
 import main.frakcje.wszystkie_frakcje as allfractions
 from main.tokens.registry import TokenConfigRegistry
 from main.tokens.config import TokenConfigId

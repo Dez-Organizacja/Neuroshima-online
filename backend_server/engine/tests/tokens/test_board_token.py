@@ -4,7 +4,7 @@ from main.tokens.board_token import BoardToken
 from main.tokens.token_factory import TokenFactory
 from main.tokens.data import *
 from main.state.serialization import Serializator
-from main.attacks.data import AttackType
+from main.attacks.config import AttackType
 
 class TestBoardToken:
     def test_board_token1(self):

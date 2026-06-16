@@ -9,12 +9,14 @@ class ActionContext():
             state : GameState, 
             faction_manager : FactionManager,
             undo_system : UndoSystem | None = None,
+            animations : list[int] = []
         ):
         self.state = state
         self.factions = faction_manager 
         self.undo_system = undo_system or UndoSystem()
         self.consumed_input : bool = False
-        # self.decision_faction : str | None = None
+        self.animations = animations
+
 
     @property
     def phase(self):

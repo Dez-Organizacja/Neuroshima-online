@@ -1,10 +1,11 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import ClassVar
 from main.state.context import ActionContext
 from main.events.data import Effect
 from main.attacks.data import AttackIntent
 from main.workflows.data import WorkflowData
 from main.tokens.data import BoardType
+from main.events.animations import WeakenAnimation, DestroyAnimation
 
 # ----------- moving and placing -----------
 
@@ -64,6 +65,7 @@ class DamageEffect(Effect):
     pos : tuple[int, int]
     damage : int = 1
     recompute_passive : ClassVar[bool] = True
+    source : tuple[int, int] | None = None
 
     def apply(self, ctx: ActionContext):
         # print("DAMAGE EFFECT")
@@ -84,13 +86,17 @@ class ResolveUnitsDamageEffect(Effect):
         # print(f"positions {self.positions}")
         for pos in self.positions:
             token = ctx.board.get_token(pos)
-            token.add_damage(sum(token.wounds))
-            token.claer_wounds()
+            wounds = sum(token.wounds)
+            token.add_damage(wounds)
             if not token.is_alive:
                 ctx.board.remove_token(pos)
+                ctx.animations.append(DestroyAnimation(target=pos))
+
+            token.claer_wounds()
+            if wounds > 0:
+                ctx.animations.append(WeakenAnimation(target=pos, damage=wounds))
 
 # ----------- heal -----------
-
 @dataclass
 class HealEffect(Effect):
     source_pos : tuple[int, int]

@@ -1,10 +1,9 @@
 from main.state.context import ActionContext
 from main.board.query import BoardQuery
-from main.board.board import Hex
+from main.board.data import Hex
 from main.rules.predicates import is_empty_at, is_ally, has_ability
 from main.rules.ability.movement import MoveRules, PushRules
 from main.tokens.data import Ability
-from main.workflows.data import WorkflowName
 from main.tokens.hand import Hand
 from main.tokens.data import TokenType
 from main.tokens.token_factory import TokenFactory

@@ -1,14 +1,15 @@
 from typing import TYPE_CHECKING, Any
+from main.tokens.state import BoardTokenState
 
-if TYPE_CHECKING:
-    from main.tokens.board_token import BoardToken
-else:
-    BoardToken = Any
+# if TYPE_CHECKING:
+#     from main.tokens.board_token import BoardToken
+# else:
+#     BoardToken = Any
 
 class CleverInitiative:
     @staticmethod
-    def add_initiative(token: BoardToken) -> None:
-        modif = token.state.modifiers
+    def add_initiative(state : BoardTokenState) -> None:
+        modif = state.modifiers
         if not modif.initiatives:
             return
 
@@ -26,8 +27,8 @@ class CleverInitiative:
         modif.is_basic = [is_basic for _, _, is_basic in data]
 
     @staticmethod
-    def remove_initiative(token: BoardToken) -> None:
-        modif = token.state.modifiers
+    def remove_initiative(state: BoardTokenState) -> None:
+        modif = state.modifiers
         for index in range(len(modif.initiatives) - 1, -1, -1):
             if not modif.is_basic[index]:
                 modif.initiatives.pop(index)
@@ -35,36 +36,36 @@ class CleverInitiative:
                 modif.is_basic.pop(index)
                 return
 
-    @staticmethod
-    def begin_initiative(token: BoardToken) -> None:
-        modif = token.state.modifiers
-        modif.initiatives = list(token.config.initiative)
-        modif.is_used = [False for _ in modif.initiatives]
-        modif.is_basic = [True for _ in modif.initiatives]
-        modif.num_of_old = 0
-        modif.is_blocked_to_0 = False
-        modif.initiative_boosts = 0
-        modif.num_of_new = 0
+    # @staticmethod
+    # def begin_initiative(state : BoardTokenState) -> None:
+    #     modif = state.modifiers
+    #     modif.initiatives = list(token.config.initiative)
+    #     modif.is_used = [False for _ in modif.initiatives]
+    #     modif.is_basic = [True for _ in modif.initiatives]
+    #     modif.num_of_old = 0
+    #     modif.is_blocked_to_0 = False
+    #     modif.initiative_boosts = 0
+    #     modif.num_of_new = 0
 
     @staticmethod
-    def end_booster_faze(token: BoardToken) -> None:
-        modif = token.state.modifiers
+    def end_booster_faze(state: BoardTokenState) -> None:
+        modif = state.modifiers
 
         while modif.num_of_new > modif.num_of_old:
-            CleverInitiative.add_initiative(token)
+            CleverInitiative.add_initiative(state)
             modif.num_of_old += 1
 
         while modif.num_of_old > modif.num_of_new:
-            CleverInitiative.remove_initiative(token)
+            CleverInitiative.remove_initiative(state)
             modif.num_of_old -= 1
 
     @staticmethod
-    def mark_activated(token: BoardToken, initiative: int) -> bool:
-        return CleverInitiative.activate(token, initiative)
+    def mark_activated(state : BoardTokenState, initiative: int) -> bool:
+        return CleverInitiative.activate(state, initiative)
 
     @staticmethod
-    def can_activate(token: BoardToken, initiative: int) -> bool:
-        modif = token.state.modifiers
+    def can_activate(state: BoardTokenState, initiative: int) -> bool:
+        modif = state.modifiers
 
         if initiative < 0:
             return False
@@ -87,11 +88,11 @@ class CleverInitiative:
         )
     
     @staticmethod
-    def activate(token: BoardToken, initiative: int) -> bool:
-        if not CleverInitiative.can_activate(token, initiative):
+    def activate(state: BoardTokenState, initiative: int) -> bool:
+        if not CleverInitiative.can_activate(state, initiative):
             return False
 
-        modif = token.state.modifiers
+        modif = state.modifiers
         target = initiative - modif.initiative_boosts
         for index in range(len(modif.initiatives)):
             if modif.initiatives[index] == target and not modif.is_used[index]:
@@ -101,8 +102,8 @@ class CleverInitiative:
         return False
 
     @staticmethod
-    def to_dict(token: BoardToken) -> dict:
-        modif = token.state.modifiers
+    def to_dict(state : BoardTokenState) -> dict:
+        modif = state.modifiers
         return {
             "initiative": list(modif.initiatives),
             "is_used": list(modif.is_used),
@@ -114,8 +115,8 @@ class CleverInitiative:
         }
 
     @staticmethod
-    def from_dict(token: BoardToken, data: dict) -> None:
-        modif = token.state.modifiers
+    def from_dict(state: BoardTokenState, data: dict) -> None:
+        modif = state.modifiers
         modif.initiatives = list(data.get("initiative", []))
         modif.is_used = list(data.get("is_used", [False for _ in modif.initiatives]))
         modif.is_basic = list(data.get("is_basic", [True for _ in modif.initiatives]))

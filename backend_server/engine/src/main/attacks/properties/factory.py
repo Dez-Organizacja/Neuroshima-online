@@ -1,5 +1,5 @@
 from main.attacks.properties.data import AttackProperties
-from main.attacks.data import AttackType
+from main.attacks.config import AttackType
 
 class AttackPropertiesFactory:
     _REGISTRY : dict[AttackType, AttackProperties] = {}

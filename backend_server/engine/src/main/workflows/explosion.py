@@ -47,7 +47,7 @@ class ExpolsionWorkflow(Workflow):
                 unit=ctx.board.get_token(self.pos),
                 pos=self.pos
             )
-            result.append(EnqueueAttacksEffect(*attacks))
+            result.append(EnqueueAttacksEffect(attacks))
         result.append(ChangeActiveFactionEvent())
 
         return result

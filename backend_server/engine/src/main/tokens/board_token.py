@@ -2,14 +2,13 @@ from dataclasses import dataclass, field
 
 from main.tokens.base import Token
 from main.state.serialization import Serializator
-from main.tokens.clever_initiative import CleverInitiative
-from main.tokens.config import BoardTokenConfig, BoostInstance, Boost
+from main.tokens.config import BoostInstance, Boost
 from main.tokens.state import BoardTokenState
 from copy import deepcopy
 from main.state.serialization import Serializator
-from main.attacks.data import AttackConfig
+from main.attacks.config import AttackConfig, AttackType
 from main.tokens.data import TokenView
-from main.attacks.data import AttackType
+from main.systems.clever_initiative import CleverInitiative
 
 @dataclass
 class BoardToken(Token):
@@ -118,11 +117,11 @@ class BoardToken(Token):
     def clever_initiative(self):
         return self.state.clever_initiative
 
-    def can_activate(self, initiative):
-        return not self.wired and CleverInitiative.can_activate(self, initiative)
+    # def can_activate(self, initiative):
+    #     return not self.wired and CleverInitiative.can_activate(self, initiative)
 
     def mark_activated(self, initiative : int):
-        return CleverInitiative.mark_activated(self, initiative)
+        return CleverInitiative.mark_activated(self.state, initiative)
 
     # --------- attacks ----------
 

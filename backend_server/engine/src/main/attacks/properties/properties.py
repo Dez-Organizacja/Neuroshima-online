@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from main.attacks.targeting.data import TargetingType
-from main.attacks.data import AttackType
+from main.attacks.config import AttackType
 from main.attacks.properties.data import AttackProperties
 from main.attacks.properties.factory import AttackPropertiesFactory
 

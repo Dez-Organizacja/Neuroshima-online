@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from main.board.board import Hex, Board
+from main.board.board import Board
+from main.board.data import Hex
 
 class TargetingStrategy(ABC):
     @staticmethod

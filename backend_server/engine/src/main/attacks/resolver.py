@@ -1,11 +1,10 @@
 from main.events.effects import DamageEffect, DestroyEffect, Effect
+from main.systems.animations import AnimationSystem
 from main.attacks.data import (
-    AttackIntent,
     DirectedIntent,
     TargetedIntent,
+    AttackResult,
 )
-from main.attacks.properties.factory import AttackPropertiesFactory
-from main.attacks.properties.data import AttackProperties
 from main.rules.combat import CombatRules
 from main.board.board import Board, Hex
 from main.attacks.targeting.factory import TargetingFactory
@@ -46,7 +45,7 @@ class DirectedResolver:
         strategy = TargetingFactory.create(attack.properties.targeting_type)
         return strategy.get_targets(
             board=board,
-            attacker_pos=attack.attaker_pos,
+            attacker_pos=attack.attacker_pos,
             direction=attack.direction,
         )
 
@@ -56,6 +55,7 @@ class DirectedResolver:
         # print(f"from {attack.attaker_pos}")
         # print(f"properties: {attack.properties}")
         # print(f"")
+
         return [
             TargetedIntent(
                 target_pos=t,
@@ -69,22 +69,24 @@ class DirectedResolver:
     
 class AttackResolver:
     @classmethod
-    def resolve(cls, attack, board):
+    def resolve(cls, attack, board) -> AttackResult:
         # print(f"RESOLVING ATTACK")
         # print(f"from {attack.}")
+        result = AttackResult()
+        resolver = TargetedResolver(board)
         match attack:
             case DirectedIntent():
                 expanded = DirectedResolver.resolve(attack, board)
+                for t in expanded:  
+                    effects = resolver.resolve(t)
+                    result.result.extend(effects)
+                    result.animations.extend(
+                        AnimationSystem.get_attacks(attack.attacker_pos, effects)
+                    )
 
             case TargetedIntent():
-                expanded = [attack]
+                result.result.extend(resolver.resolve(attack))
 
-
-        result = []
-        resolver = TargetedResolver(board)
-
-        for t in expanded:
             # print(f"targeted to {t.target_pos} of power {t.power}")
-            result.extend(resolver.resolve(t))
 
         return result

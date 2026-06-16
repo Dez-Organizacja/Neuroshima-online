@@ -3,7 +3,7 @@ import json
 from main.main import Game
 from main.state.game_state import GameState
 from main.workflows.data import WorkflowInstance, WorkflowConfig, WorkflowName
-from main.attacks.data import AttackType
+from main.attacks.config import AttackType
 from main.state.game_dump import GameDump
 
 def test_game_state_serialization_roundtrip():

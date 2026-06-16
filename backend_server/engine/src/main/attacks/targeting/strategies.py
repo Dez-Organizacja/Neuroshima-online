@@ -2,7 +2,8 @@ from main.attacks.targeting.base import TargetingStrategy
 from main.attacks.targeting.factory import TargetingFactory
 from main.attacks.targeting.data import TargetingType
 
-from main.board.board import Hex, Board
+from main.board.board import Board
+from main.board.data import Hex
 from main.board.query import BoardQuery
 from main.rules.predicates import adjacent_to, in_line_to, is_enemy_of
 

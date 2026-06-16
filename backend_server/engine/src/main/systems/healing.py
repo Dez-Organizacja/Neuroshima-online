@@ -1,4 +1,5 @@
-from main.board.board import Board, Hex
+from main.board.board import Board
+from main.board.data import Hex
 from main.rules.ability.heal import HealRules
 from main.events.effects import HealEffect
 from main.events.data import Effect

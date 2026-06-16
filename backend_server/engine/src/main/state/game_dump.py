@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 class GameDump:
     state : dict
     undo : list = field(default_factory=list)
+    animations : list[dict] = field(default_factory=list)
 
     @classmethod
     def from_dict(cls, data) -> "GameDump":

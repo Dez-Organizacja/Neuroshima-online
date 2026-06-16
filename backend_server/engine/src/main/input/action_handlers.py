@@ -3,10 +3,10 @@ from typing import Callable
 from main.state.context import ActionContext
 from main.events.data import Event
 from main.events.flow import EndTurnEvent, DeleteAbove
-from main.events.effects import ClearWorkflowDataEffect, DiscardTokenEffect
+from main.events.effects import DiscardTokenEffect
 from main.events.history import UndoEffect
-from main.events.workflow import GoToStep, PushWorkflow
-from main.workflows.data import WorkflowName, WorkflowData, WorkflowConfig
+from main.events.workflow import PushWorkflow
+from main.workflows.data import WorkflowName, WorkflowData
 from main.input.data import(
     BoardAction, 
     UserAction, 

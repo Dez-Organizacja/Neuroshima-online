@@ -1,7 +1,5 @@
 from main.utils.variable import Phase
-from main.tokens.board_token import BoardToken
 from main.board.board import Board
-from main.tokens.data import TokenRelation
 
 class GameRules():
     

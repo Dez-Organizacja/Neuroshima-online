@@ -2,7 +2,7 @@ from main.board.board import Board
 from main.tokens.board_token import BoardToken
 from main.tokens.data import TokenRelation
 from typing import Callable
-from main.board.board import Hex
+from main.board.data import Hex
 from main.rules.faction_manager import FactionManager
 
 predicate_func = Callable[[Board, Hex], bool]

@@ -1,9 +1,10 @@
 from main.board.board import Board
 from main.systems.boosters import BoosterSolver
-from main.attacks.data import AttackType
+from main.attacks.config import AttackType
+from main.rules.combat import CombatRules
 
 def solve_boosters(board: Board) -> None:
-    BoosterSolver(board)
+    BoosterSolver(board)    
 
 
 def place(
@@ -131,8 +132,8 @@ class TestBoosters:
         solve_boosters(board)
 
         assert initiative_boosts(board, (1, 5)) == 1
-        assert target.can_activate(3) is True
-        assert target.can_activate(2) is False
+        assert CombatRules.can_activate(target, 3) is True
+        assert CombatRules.can_activate(target, 2) is False
 
     def test_minus_initiative_targets_enemies_only(self):
         board = Board()
@@ -144,8 +145,8 @@ class TestBoosters:
 
         assert enemy.state.modifiers.initiative_boosts == -1
         assert own.state.modifiers.initiative_boosts == 0
-        assert enemy.can_activate(2) is True
-        assert enemy.can_activate(3) is False
+        assert CombatRules.can_activate(enemy, 2) is True
+        assert CombatRules.can_activate(enemy, 3) is False
 
     def test_steal_boost_makes_enemy_booster_target_enemies(self):
         board = Board()

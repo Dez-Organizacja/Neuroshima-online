@@ -1,4 +1,5 @@
-from main.board.board import Board, Hex
+from main.board.board import Board
+from main.board.data import Hex
 from main.board.query import BoardQuery
 from main.rules.predicates import (
     NOT,
@@ -6,6 +7,7 @@ from main.rules.predicates import (
 )
 from main.events.data import Effect
 from main.events.workflow import PushWorkflow
+from main.events.animations import Animation
 from main.events.effects import (
     ResolveUnitsDamageEffect, 
     ClearPendingAttacksEffect, 
@@ -30,7 +32,10 @@ class HasBoard(Protocol):
 class HasPendingAttacks(Protocol):
     pending_attacks : list[AttackIntent]
 
-class HasCombatCtx(HasBoard, HasPendingAttacks, Protocol):
+class HasAnimations(Protocol):
+    animations : list[Animation]
+
+class HasCombatCtx(HasBoard, HasPendingAttacks, HasAnimations, Protocol):
     pass
 
 class CombatSystem:
@@ -75,10 +80,11 @@ class CombatSystem:
     
     @staticmethod
     def resolve_pending_attacks(ctx : HasCombatCtx) -> list[Effect]:
-            effects = [
-                effect
-                for attack in ctx.pending_attacks
-                for effect in AttackResolver.resolve(attack, ctx.board)
-            ]
-            effects.append(ClearPendingAttacksEffect())
-            return effects
+        effects = []
+        for attack in ctx.pending_attacks:
+            result = AttackResolver.resolve(attack, ctx.board)
+            effects.extend(result.result)
+            ctx.animations.extend(result.animations)
+
+        effects.append(ClearPendingAttacksEffect())
+        return effects

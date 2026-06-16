@@ -7,7 +7,7 @@ def test():
     properties = AttackProperties(targeting_type=TargetingType.ADJACENT)
     state = GameState(factions=["moloch", "borgo"])
     state.pending_attacks.extend([
-        DirectedIntent(attaker_pos=(1, 1), direction=1, properties=properties),
+        DirectedIntent(attacker_pos=(1, 1), direction=1, properties=properties),
         TargetedIntent(target_pos=(1, 3)),
     ])
 

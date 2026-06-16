@@ -1,7 +1,7 @@
 from main.board.board import Board
 from main.tokens.data import TokenRelation, Boost
 from main.systems.clever_initiative import CleverInitiative
-from main.attacks.data import AttackType
+from main.attacks.config import AttackType
 
 class BoosterSolver():
     board: Board
@@ -13,17 +13,22 @@ class BoosterSolver():
         cls(board)
 
     def __init__(self, board: Board) -> None:
+        # print("INITALIZING BOOSTER SOLVER")
         self.board = board
         self.boosts = []
         self.steal_boosts = []
 
         self.kastrando_las_boosten()
+        # print("boosts cleared from board")
 
         self.collect_steal_boosts()
         self.solve_steal_boosts()
+        # print("steal solved")
         # self.refresh_healing_tokens()
 
+
         self.collect_boosts(self.boosts)
+
         self.solve_all()
         self.end_booster_faze()
 
@@ -32,10 +37,12 @@ class BoosterSolver():
             token = self.board.tokens.get(self.board.gen_tokenID(board_hex))
             if token is None:
                 continue
-
-            token.state.reset_modifiers()
-            token.state.relations.real_boost_target = token.config.boost_target
-            CleverInitiative.begin_initiative(token)
+            
+            token.state.reset_boosts(token.config)
+            # token.state.reset_modifiers()
+            # token.state.reset_initiatives(token.config.initiative)
+            # token.state.relations.real_boost_target = token.config.boost_target
+            # CleverInitiative.begin_initiative(token)
 
     # def refresh_healing_tokens(self):
     #     from main.rules.ability.heal import HealRules
@@ -102,25 +109,32 @@ class BoosterSolver():
                 for boost_type in token.boosts.keys():
                     if boost_type == Boost.STEAL_BOOST:
                         continue
+                    print(token)
                     for direction in token.get_boost_directions(boost_type):
                         target_pos = self.board.go(board_hex, direction)
                         if not self.board.on_board(target_pos):
                             continue
+                        print("ok")
                         target_tokenID = self.board.gen_tokenID(target_pos)
                         if self.is_valid_target(target_tokenID, token.state.relations.real_boost_target, token.faction):
                             list_of_boosts.append((target_tokenID, boost_type))
 
     def solve_all(self):
+        print("solve all")
         for tokenID, boost_type in self.boosts:
+            print(f"solving {self.board.tokens[tokenID]}")
+            print(f"boost {boost_type}")
             handler = getattr(self, boost_type.name.lower(), None)
             if handler is not None:
                 handler(tokenID)
 
     def end_booster_faze(self):
         for token in self.board.tokens.values():
-            CleverInitiative.end_booster_faze(token)
+            CleverInitiative.end_booster_faze(token.state)
 
     def melee(self, tokenID):
+        print("melee boost")
+        print(f"to {self.board.tokens[tokenID]}")
         self.board.tokens[tokenID].state.add_attack_boost(AttackType.MELEE, 1)
 
     def shoot(self, tokenID):

@@ -1,5 +1,6 @@
 from main.attacks.data import DirectedIntent
-from main.board.board import Board, Hex
+from main.board.board import Board
+from main.board.data import Hex
 from main.board.query import BoardQuery
 from main.rules.predicates import (
     NOT,
@@ -16,7 +17,7 @@ class CombatRules:
             target_pos : Hex, 
             board : Board
         ) -> bool:
-        attacker = board.get_token(attack.attaker_pos)
+        attacker = board.get_token(attack.attacker_pos)
         target = board.get_token(target_pos)
         return not attacker.is_HQ or not target.is_HQ
     
@@ -24,7 +25,7 @@ class CombatRules:
     def can_activate(unit : BoardToken, initiative : int) -> bool:
         return (
             not unit.wired
-            and CleverInitiative.can_activate(unit, initiative)
+            and CleverInitiative.can_activate(unit.state, initiative)
         )
 
     # @staticmethod

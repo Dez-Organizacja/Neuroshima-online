@@ -1,1 +1,0 @@
-from main.systems.clever_initiative import CleverInitiative

@@ -26,14 +26,14 @@ def wczytaj(name):
 def test1():
     data = wczytaj("zle2.json")
     game = execute(data)
-    game.handle_action({
-        "type" : "button",
-        "name" : "end_turn",
-    })
-    game.handle_action({
-        "type" : "button",
-        "name" : "yes",
-    })
+    # game.handle_action({
+    #     "type" : "button",
+    #     "name" : "end_turn",
+    # })
+    # game.handle_action({
+    #     "type" : "button",
+    #     "name" : "yes",
+    # })
     # print(game.export())
     # print(game.build_user_view())
     assert False

@@ -6,19 +6,8 @@ from main.utils.variable import *
 from dataclasses import dataclass
 from main.state.serialization import Serializator
 from main.tokens.token_factory import TokenFactory
-from main.tokens.data import TokenView
+from main.board.data import Hex, Tile, TileView
 
-Hex = tuple[int, int]
-
-@dataclass
-class Tile:
-    pos : Hex
-    unit : BoardToken 
-
-@dataclass
-class TileView:
-    pos : Hex
-    unit : TokenView
 
 class Board:
     length = 9

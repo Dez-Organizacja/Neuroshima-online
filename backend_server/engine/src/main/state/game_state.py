@@ -4,7 +4,7 @@ from main.state.player_state import PlayerState
 from main.board.board import Board
 from main.events.data import Event
 from main.attacks.data import AttackIntent
-from main.workflows.data import WorkflowData, WorkflowInstance, WorkflowName, UndoSnapshot
+from main.workflows.data import WorkflowData, WorkflowInstance
 from main.state.serialization import Serializator
 from main.utils.variable import Phase
 from main.state.last_clicked_hex import LastClickedHex

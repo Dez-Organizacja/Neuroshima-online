@@ -1,4 +1,4 @@
-from main.events.data import OnClickData, Event
+from main.events.data import Event
 from main.events.effects import DiscardTokenEffect, MarkAbilityUsedEffect
 from main.events.workflow import ConsumeOnClick
 from main.workflows.data import WorkflowInstance

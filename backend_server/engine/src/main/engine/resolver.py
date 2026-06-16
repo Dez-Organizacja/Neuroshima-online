@@ -7,19 +7,20 @@ from main.workflows.data import WorkflowName
 class Resolver():
     @staticmethod
     def _commit_pending_workflow(ctx : ActionContext):
+        print("TRYING TO COMMIT PENDING WORKFLOW")
         if not ctx.state.pending_workflows:
             return
         
+        print(ctx.workflow_instance)
         if ctx.workflow_instance.name != WorkflowName.GAME:
             return
 
-        # print("commiting pending workflow")
-        # print(f"pending workflow {ctx.state.pending_workflows}")
+        print("commiting pending workflow")
+        print(f"pending workflow {ctx.state.pending_workflows}")
         ctx.state.workflow_stack[-1] = ctx.state.pending_workflows[-1]
         ctx.state.pending_workflows.pop()
 
-    @staticmethod
-    def execute(ctx : ActionContext, result : list[Event]):
+    def execute(self, ctx : ActionContext, result : list[Event]):
         dirty = False
         ctx.state.events_queue.extend(result)
         while ctx.state.events_queue:
@@ -34,6 +35,8 @@ class Resolver():
 
         if dirty:
             PassiveSystems.compute(ctx.board)
+
+        self._commit_pending_workflow(ctx)
     
     @staticmethod
     def advance(ctx : ActionContext):
@@ -45,4 +48,3 @@ class Resolver():
             self.advance(ctx)
             
         self.execute(ctx, result.execution_result)
-        self._commit_pending_workflow(ctx)

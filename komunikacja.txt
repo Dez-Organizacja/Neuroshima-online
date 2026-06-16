@@ -16,13 +16,14 @@ dla frontendu:
             }
         ], 
         "hands": {
-            "borgo": {"tokens": ["bitwa", "sztab", "zabojca"]}, 
+            "borgo": {"tokens"animations" : [animacja]": ["bitwa", "sztab", "zabojca"]}, 
             "moloch": {"tokens": ["bitwa", "sztab", "zabojca"]}
         },
         "piles" : {"moloch" : 6, "borgo" : 7},
     },
     "scores" : {"moloch" : 6, "borgo" : 7},
-    "winner" : "moloch" (albo null jeżeli gra sie nie skończyła)
+    "winner" : "moloch" (albo null jeżeli jest remis)
+    "phase"  : "gameover" (lub coś co was nie obchodzi)
     "available_actions": {
         "hand": [true, true, true], 
         "board": [[1, 1], [1, 3]], 

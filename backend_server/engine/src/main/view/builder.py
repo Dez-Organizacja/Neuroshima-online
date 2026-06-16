@@ -2,6 +2,7 @@ from main.state.context import ActionContext
 from main.view.state import StateViewBuilder
 from main.view.step import StepViewBuilder
 from main.rules.game import GameRules
+from main.state.serialization import Serializator
 
 class GameViewBuilder:
     def __init__(self):
@@ -24,6 +25,10 @@ class GameViewBuilder:
             for faction in ctx.state.factions
         }
 
+    @staticmethod
+    def get_animations(ctx : ActionContext) -> dict:
+        return Serializator.auto_to_dict(ctx.animations)
+
     def build(self, ctx : ActionContext) -> dict:
         return {
             "state"  : self.state_view.build(ctx.state),
@@ -31,5 +36,6 @@ class GameViewBuilder:
             "winner" : GameRules.get_winner(ctx.board, ctx.state.factions),
             "LastClickedHex" : self.build_last_clicked_hex_view(ctx.state),
             "phase"  : ctx.state.phase.value,
+            "animations" : self.get_animations(ctx) ,
             **self.step_view.build_step(ctx).to_dict(),
         }
