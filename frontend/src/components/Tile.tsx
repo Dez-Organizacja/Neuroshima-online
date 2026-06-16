@@ -19,6 +19,7 @@ type TileProps = {
     rotation: number;
     sendAction?: (action: ActionData) => void;
     gameState: GameState;
+    clickable?: boolean;
 };
 
 const Tile: React.FC<TileProps> = ({
@@ -33,6 +34,7 @@ const Tile: React.FC<TileProps> = ({
     rotation,
     sendAction,
     gameState,
+    clickable=true,
 }) => {
 
     const Items = [];
@@ -89,15 +91,17 @@ const Tile: React.FC<TileProps> = ({
     if(gameState.view.LastClickedHex !== undefined) {
         console.log("LAST CLICK (CLICKED):");
         console.log(gameState.view.LastClickedHex);
-        if(gameState.view.LastClickedHex.source === "board" && gameState.view.LastClickedHex.pos[0] === poz1 && gameState.view.LastClickedHex.pos[1] === poz2) {
-            Items.push(
-                <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 10} color={"#b0ff97"} opacity={0.7} rotation={Rotation} sendAction={sendAction} gameState={gameState} clickable={false} />
-            )
-        }
-        if(gameState.view.LastClickedHex.source === "hand" && gameState.view.LastClickedHex.slot === poz1 && poz2 === -1) {
-            Items.push(
-                <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 10} color={"#b0ff97"} opacity={0.7} rotation={Rotation} sendAction={sendAction} gameState={gameState} clickable={false} />
-            )
+        if(clickable) {
+            if(gameState.view.LastClickedHex.source === "board" && gameState.view.LastClickedHex.pos[0] === poz1 && gameState.view.LastClickedHex.pos[1] === poz2) {
+                Items.push(
+                    <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 10} color={"#b0ff97"} opacity={0.7} rotation={Rotation} sendAction={sendAction} gameState={gameState} clickable={false} />
+                )
+            }
+            if(gameState.view.LastClickedHex.source === "hand" && gameState.view.LastClickedHex.slot === poz1 && poz2 === -1) {
+                Items.push(
+                    <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size + 10} color={"#b0ff97"} opacity={0.7} rotation={Rotation} sendAction={sendAction} gameState={gameState} clickable={false} />
+                )
+            }
         }
     }
 
@@ -135,7 +139,7 @@ const Tile: React.FC<TileProps> = ({
         // ===== ================ ===== //
 
         Items.push(
-            <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size} color={color} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
+            <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size} color={color} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} clickable={clickable} />
         )
 
         // console.log("POZ: " + poz1 + ", " + poz2 + "    ROT: " + Rotation);
@@ -147,7 +151,7 @@ const Tile: React.FC<TileProps> = ({
         )
     } else {
         Items.push(
-            <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size} color={color} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} />
+            <Hexagon x={x} y={y} poz1={poz1} poz2={poz2} size={size} color={color} opacity={opacity} rotation={Rotation} sendAction={sendAction} gameState={gameState} clickable={clickable} />
         )
         return(
             <div>

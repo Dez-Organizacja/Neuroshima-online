@@ -13,6 +13,13 @@ type BoardCell = {
         ability_used : boolean,
     }
 }
+
+type Animation = 
+    | {type : "attack"; attacker : [number, number]; target : [number, number];}
+    | {type : "wound"; target : [number, number]; wounds : number;}
+    | {type : "destroy"; target : [number, number];}
+    | {type : "weaken"; target : [number, number]; damage : number;}
+
 export type GameState = {
     view : {
         state : {
@@ -44,38 +51,9 @@ export type GameState = {
             pos : [number, number],
             slot : number
         }
+        animations? : Animation[]
     }
 }
-
-// export function useProcesedGameState(){
-//     const {latestMessage} = useGameSocketContext();
-//     const [gameState, setGameState] = useState<GameState | null>(null)
-//     useEffect(() => {
-//         if(!latestMessage){
-//             return;
-//         }
-//         if(latestMessage.messageType === "ACTION_RESPONSE" && latestMessage.gameView){   
-//             setGameState({
-//                 view : latestMessage.gameView as GameState["view"]
-//             });
-//         }
-//         if(latestMessage.messageType === "NEWGAME_RESPONSE" && latestMessage.gameView){
-//             setGameState({
-//                 view : latestMessage.gameView as GameState["view"]
-//             })
-//             if(typeof latestMessage.createdGameId === "string"){
-//                 localStorage.setItem("gameId", latestMessage.createdGameId);
-//             }
-//             return;
-//         }
-//         if (latestMessage.messageType === "ERROR") {
-//             console.error(latestMessage.error);
-//             return;
-//         }
-//     }, [latestMessage]);
-
-//     return { gameState};
-// }
 
 export function useProcesedGameState(){
     const {latestMessage} = useGameSocketContext();

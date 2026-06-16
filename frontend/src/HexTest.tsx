@@ -14,10 +14,14 @@ import { getCurrentFaction } from "./factionStore";
 
 type HexTestProps = {
     gameState: GameState;
+    attackingUnit?: [number, number];
+    targetUnit?: [number, number];
 };
 
 export default function HexTest({
     gameState,
+    attackingUnit,
+    targetUnit,
 }: HexTestProps){
     const { width, height } = GetWindowSize();
     const ScreenWidth = width;
@@ -42,6 +46,8 @@ export default function HexTest({
 
     // const currentfaction = gameState.view.uiState.faction;
     const currentfaction = getCurrentFaction();
+    const ActiveFaction = gameState.view.uiState.faction;
+    const CanMove: boolean = (currentfaction === ActiveFaction);
     if(!currentfaction){
         return <div>No faction found</div>;
     }
@@ -95,10 +101,27 @@ export default function HexTest({
                 Clickable[0] === y &&
                 Clickable[1] === x
             );
-            if(Clickable) Color = "#666666";
+            if(Clickable && CanMove) Color = "#666666";
+
+            // === Animation === //
+            if(attackingUnit) {
+                if(y === attackingUnit[0] && x === attackingUnit[1]) {
+                    Items.push(
+                        <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 25} rotation={30} opacity={0.7} color="#55e900" gameState={gameState} clickable={false} />
+                    )
+                }
+            }
+            if(targetUnit) {
+                if(y === targetUnit[0] && x === targetUnit[1]) {
+                    Items.push(
+                        <Hexagon x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 25} rotation={30} opacity={0.7} color="#e90800" gameState={gameState} clickable={false} />
+                    )
+                }
+            }
+            // === ========= === //
 
             Items.push(
-                <Tile imageName={Path} x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={Rotation + 30} color={Color} opacity={0.1} gameState={gameState} sendAction={sendAction} />
+                <Tile imageName={Path} x={FinalX} y={FinalY} poz1={y} poz2={x} size={Size * 2 + 15} rotation={Rotation + 30} color={Color} opacity={0.1} gameState={gameState} sendAction={sendAction} clickable={CanMove} />
             )
 
             // Items.push(
@@ -129,7 +152,7 @@ export default function HexTest({
 
 
         Items.push(
-            <Tile imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={-1} size={Size * 2 + 15} rotation={30} gameState={gameState} sendAction={sendAction} color="#00aaff" opacity={0.1} />
+            <Tile imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={-1} size={Size * 2 + 15} rotation={30} gameState={gameState} sendAction={sendAction} color="#00aaff" opacity={0.1} clickable={CanMove} />
         )
     }
     // const [enemyfaction, setEnemyfaction] = useState(gameState.view.state.factions[0]);
@@ -150,7 +173,7 @@ export default function HexTest({
         if(TokenName !== undefined) Path = enemyfaction + "/" + TokenName;
 
         Items.push(
-            <Tile imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={999} size={Size * 2 + 15} rotation={30} gameState={gameState} sendAction={sendAction} color="#00aaff" opacity={0.1} />
+            <Tile imageName={Path} x={FinalX} y={FinalY} poz1={Index} poz2={999} size={Size * 2 + 15} rotation={30} gameState={gameState} sendAction={sendAction} color="#00aaff" opacity={0.1} clickable={CanMove} />
         )
     }
     // ======= ========== ======= //
@@ -161,19 +184,21 @@ export default function HexTest({
     let ButtonPoz: number = (height / 16);
     let Ile: number = 0;
 
-    for(const Name of gameState.view.availableActions.buttons) {
-        console.log("BUTTON: " + Name);
-        Items.push(
-            <GameButton x={RightX - Size * 2 - 100} y={ButtonPoz + Ile * (height / 20)} height={height / 20} width={height / 8} text={Name} sendAction={sendAction} gameState={gameState} />
-        )
-        Ile += 1;
+    if(CanMove) {
+        for(const Name of gameState.view.availableActions.buttons) {
+            console.log("BUTTON: " + Name);
+            Items.push(
+                <GameButton x={RightX - Size * 2 - 100} y={ButtonPoz + Ile * (height / 20)} height={height / 20} width={height / 8} text={Name} sendAction={sendAction} gameState={gameState} clickable={CanMove} />
+            )
+            Ile += 1;
+        }
     }
 
     // ===== ======= ===== //
 
     // ===== Message ===== //
     let Text: string = gameState.view.uiState.message;
-    if(Text) {
+    if(Text && CanMove) {
         Items.push(
             <TextBox x={width / 2} y={ButtonPoz} text={Text} />
         );

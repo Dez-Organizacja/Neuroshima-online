@@ -14,12 +14,14 @@ interface GameButtonProps {
     children?: React.ReactNode;
     onClick?: () => void;
     gameState: GameState;
+    clickable?: boolean;
 }
 
-export function ClickButton(text: string, sendAction : ((action : ActionData) => void) | undefined, gameState: GameState | undefined): void {
+export function ClickButton(text: string, sendAction : ((action : ActionData) => void) | undefined, gameState: GameState | undefined, clickable: boolean): void {
 
     // const {sendAction} = useGameSocketContext();
     if(!gameState) return;
+    if(!clickable) return;
     const field = gameState.view.availableActions.buttons.find(field => field === text);
     if(!field) return;
     if(!sendAction){
@@ -44,7 +46,8 @@ export default function GameButton({
     sendAction,
     children,
     onClick,
-    gameState
+    gameState,
+    clickable = true,
 }: GameButtonProps) {
 
     let DisplayText: string = "";
@@ -60,7 +63,7 @@ export default function GameButton({
             className="game-button"
 
             // onClick={onClick}
-            onClick={() => ClickButton(text, sendAction, gameState)}
+            onClick={() => ClickButton(text, sendAction, gameState, clickable)}
 
             style={{
                 left: x,

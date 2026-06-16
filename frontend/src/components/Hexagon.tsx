@@ -22,7 +22,7 @@ type HexagonProps = {
 };
 
 export function ClickCheck(x: number, y: number, gameState : GameState | undefined, sendAction : ((action : ActionData) => void) | undefined, rotation: number, clickable: boolean) : void {
-    if(clickable !== true) return;
+    if(!clickable) return;
     if(y === 999) return;
     if(!gameState){
         return;
