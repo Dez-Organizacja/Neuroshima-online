@@ -71,8 +71,6 @@ class DamageEffect(Effect):
         # print("DAMAGE EFFECT")
         # print(f"pos {self.pos}, damage {self.damage}")
         unit = ctx.board.get_token(self.pos)
-        # if unit is not None and self.damage > 0:
-        #     unit.add_wounds(self.damage)
         if self.damage > 0:
             unit.add_wounds(self.damage)
 
@@ -86,11 +84,14 @@ class ResolveUnitsDamageEffect(Effect):
         # print(f"positions {self.positions}")
         for pos in self.positions:
             token = ctx.board.get_token(pos)
+            # print(f"pos {pos}")
             wounds = sum(token.wounds)
+            # print(f"wounds {wounds}")
             token.add_damage(wounds)
             if not token.is_alive:
                 ctx.board.remove_token(pos)
                 ctx.animations.append(DestroyAnimation(target=pos))
+                continue
 
             token.claer_wounds()
             if wounds > 0:

@@ -9,7 +9,7 @@ units = [
 
     unit.board("biegacz", unit_count=3)
     .hp(1)
-    .attacks(melee(directions=[5]))
+    .attacks(melee(directions=[0]))
     .initiatives([2])
     .ability(Ability.MOVE)
     .build(),

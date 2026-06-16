@@ -7,12 +7,6 @@ unit = Faction("moloch")
 units = [
     unit.HQ(boost=Boost.SHOOT).build(),
 
-    unit.board("klaun", unit_count=1)
-    .hp(2)
-    .attacks(melee(directions=[0, 5]))
-    .initiatives([2])
-    .battle_ability(BattleAbility.EXPLOSIN)
-    .build(),
 
     unit.board("bloker", unit_count=2)
     .hp(3)
@@ -39,6 +33,13 @@ units = [
     )
     .directions_of(armor=[0, 2, 4])
     .initiatives([1])
+    .build(),
+
+    unit.board("klaun", unit_count=1)
+    .hp(2)
+    .attacks(melee(directions=[0, 5]))
+    .initiatives([2])
+    .battle_ability(BattleAbility.EXPLOSIN)
     .build(),
 
     unit.board("lowca", unit_count=2)
@@ -90,6 +91,11 @@ units = [
     .initiatives([2])
     .build(), 
 
+    unit.board("mozg", unit_count=1)
+    .hp(1)
+    .boosts(types=[Boost.SHOOT, Boost.MELEE], directions=[0, 2, 4])
+    .build(),
+
     unit.board("oficer", unit_count=1)
     .hp(1)
     .boosts(types=[Boost.SHOOT], directions=[1, 3, 5])
@@ -100,19 +106,14 @@ units = [
     .boosts(types=[Boost.INITIATIVE], directions=[0, 2, 4])
     .build(),
 
-    unit.board("matka", unit_count=1)
-    .hp(1)
-    .boosts(types=[Boost.NEW_INITIATIVE], directions=[0])
-    .build(),
-
     unit.board("medyk", unit_count=2)
     .hp(1)
     .boosts(types=[Boost.HEAL], directions=[0, 2, 4])
     .build(),
 
-    unit.board("mozg", unit_count=1)
+    unit.board("matka", unit_count=1)
     .hp(1)
-    .boosts(types=[Boost.SHOOT, Boost.MELEE], directions=[0, 2, 4])
+    .boosts(types=[Boost.NEW_INITIATIVE], directions=[0])
     .build(),
 
     unit.instant("bitwa", unit_count=4)

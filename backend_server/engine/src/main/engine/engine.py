@@ -36,10 +36,10 @@ class GameEngine:
             step : Step, 
             action : UserAction | None = None
         ):
-        print("START STEP EXECUTION", step.name)
+        # print("START STEP EXECUTION", step.name)
         # print(f"config {step.config}")
         # print(ctx.print_wf_stack())
-        print(f"top {ctx.workflow_instance.name}")
+        # print(f"top {ctx.workflow_instance.name}")
         if action:
             result = step.execute(ctx, action)
         else:

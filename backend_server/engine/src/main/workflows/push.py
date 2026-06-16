@@ -18,10 +18,9 @@ class PushWorkflow(BoardSelectionMixin, Workflow[PushProvider]):
     #     )
     @staticmethod
     def change_faction(ctx : ActionContext):
+        # print(ctx.fa)
         return [
-            ChangeActiveFactionEvent(
-                ctx.factions.get_enemy(ctx.faction)
-            )
+            ChangeActiveFactionEvent(ctx.factions.get_enemy(ctx.faction))
         ]
 
     def _build_steps(self):

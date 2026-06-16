@@ -109,21 +109,21 @@ class BoosterSolver():
                 for boost_type in token.boosts.keys():
                     if boost_type == Boost.STEAL_BOOST:
                         continue
-                    print(token)
+                    # print(token)
                     for direction in token.get_boost_directions(boost_type):
                         target_pos = self.board.go(board_hex, direction)
                         if not self.board.on_board(target_pos):
                             continue
-                        print("ok")
+                        # print("ok")
                         target_tokenID = self.board.gen_tokenID(target_pos)
                         if self.is_valid_target(target_tokenID, token.state.relations.real_boost_target, token.faction):
                             list_of_boosts.append((target_tokenID, boost_type))
 
     def solve_all(self):
-        print("solve all")
+        # print("solve all")
         for tokenID, boost_type in self.boosts:
-            print(f"solving {self.board.tokens[tokenID]}")
-            print(f"boost {boost_type}")
+            # print(f"solving {self.board.tokens[tokenID]}")
+            # print(f"boost {boost_type}")
             handler = getattr(self, boost_type.name.lower(), None)
             if handler is not None:
                 handler(tokenID)

@@ -7,7 +7,7 @@ from main.workflows.data import WorkflowName
 class Resolver():
     @staticmethod
     def _commit_pending_workflow(ctx : ActionContext):
-        print("TRYING TO COMMIT PENDING WORKFLOW")
+        # print("TRYING TO COMMIT PENDING WORKFLOW")
         if not ctx.state.pending_workflows:
             return
         
@@ -15,8 +15,8 @@ class Resolver():
         if ctx.workflow_instance.name != WorkflowName.GAME:
             return
 
-        print("commiting pending workflow")
-        print(f"pending workflow {ctx.state.pending_workflows}")
+        # print("commiting pending workflow")
+        # print(f"pending workflow {ctx.state.pending_workflows}")
         ctx.state.workflow_stack[-1] = ctx.state.pending_workflows[-1]
         ctx.state.pending_workflows.pop()
 

@@ -76,7 +76,7 @@ units = [
     unit.instant("ruch", unit_count=4)
     .ability(Ability.MOVE)
     .build(),
-
+    
     unit.instant("granat", unit_count=1)
     .ability(Ability.GRENADE)
     .build(),

@@ -23,17 +23,20 @@ def wczytaj(name):
     return ServerMessage(**data)
 
 
-def test1():
-    data = wczytaj("zle2.json")
-    game = execute(data)
-    # game.handle_action({
-    #     "type" : "button",
-    #     "name" : "end_turn",
-    # })
-    # game.handle_action({
-    #     "type" : "button",
-    #     "name" : "yes",
-    # })
-    # print(game.export())
-    # print(game.build_user_view())
-    assert False
+# def test1():
+#     data = wczytaj("zle2.json")
+#     game = execute(data)
+#     # game.handle_action({
+#     #     "type" : "button",
+#     #     "name" : "end_turn",
+#     # })
+#     # game.handle_action({
+#     #     "type" : "button",
+#     #     "name" : "yes",
+#     # })
+#     # token = game.state.board.get_token((2, 6))
+#     # print(token)
+#     # print(game.export())
+#     # v = game.build_user_view()
+#     # print(v["availableActions"])
+#     assert False

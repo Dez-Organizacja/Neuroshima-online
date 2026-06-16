@@ -77,13 +77,11 @@ class PushProvider(WorkflowActionProvider):
         
         return []
     
-    def get_ui_state(self, ctx):
-        if ctx.workflow_data.target_pos and ctx.workflow_data.destination is None:
-            return StepUIState(
-                faction=GameRules.get_enemy(ctx.state.factions, ctx.faction),
-            )
+    # def get_ui_state(self, ctx):
+    #     if ctx.workflow_data.target_pos and ctx.workflow_data.destination is None:
+    #         return StepUIState()
         
-        return super().get_ui_state(ctx)
+    #     return super().get_ui_state(ctx)
     
 class RotateProvider(WorkflowActionProvider):
     def get_available_positions(self, ctx : ActionContext):
