@@ -40,7 +40,7 @@ public class Game {
 
     public void setGameState(JsonNode gameState) {
         this.gameState = gameState;
-        JsonNode currentFactionNode = gameState.get("currentFaction");
+        JsonNode currentFactionNode = gameState.get("state").get("active_faction");
         this.currentFaction = null;
         if(currentFactionNode != null && currentFactionNode.isTextual()) {
             this.currentFaction = currentFactionNode.asText();
