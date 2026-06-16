@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import pl.staszic.neu.game.event.GameRemovedFromRoomEvent;
 import pl.staszic.neu.game.service.GameService;
 import pl.staszic.neu.game.service.GameValidationException;
 import pl.staszic.neu.messages.*;
@@ -242,6 +244,16 @@ public class WebSocketHandler extends TextWebSocketHandler {
         String roomId = gameService.getAffiliation(clientId);
 
         broadcastToRoom(response, roomId);
+    }
+
+    @EventListener
+    public void onGameRemovedFromRoom(GameRemovedFromRoomEvent event) {
+        GameRemovedNotification notification = new GameRemovedNotification();
+        notification.setRoomId(event.roomId());
+        notification.setGameId(event.gameId());
+
+        logger.info("Game {} removed from room {} - notifying players", event.gameId(), event.roomId());
+        broadcastToRoom(notification, event.roomId());
     }
 
     private void broadcastMessage(Object message, String excludeRoomId) {

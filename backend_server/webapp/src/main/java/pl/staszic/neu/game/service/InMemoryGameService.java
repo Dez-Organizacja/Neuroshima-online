@@ -6,10 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import pl.staszic.neu.game.clientData.service.ClientDataException;
 import pl.staszic.neu.game.clientData.service.ClientDataService;
 import pl.staszic.neu.game.clientData.service.model.ClientData;
+import pl.staszic.neu.game.event.GameRemovedFromRoomEvent;
 import pl.staszic.neu.game.model.*;
 import pl.staszic.neu.messages.api.*;
 import pl.staszic.neu.messages.*;
@@ -18,7 +20,6 @@ import pl.staszic.neu.messages.room.*;
 import pl.staszic.neu.rest.service.RestService;
 import pl.staszic.neu.security.repo.StoredUser;
 import pl.staszic.neu.security.repo.UserRepository;
-import pl.staszic.neu.security.repo.repository.UserEntity;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,18 +39,20 @@ public class InMemoryGameService implements GameService {
     private final String gameStateServiceUrl;
     private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
     public InMemoryGameService(
             ClientDataService clientDataService, RestService restService,
             @Value("${game.state-service.url:http://127.0.0.1:5000/api/neuroshima}") String gameStateServiceUrl, ObjectMapper objectMapper,
-            UserRepository userRepository
+            UserRepository userRepository, ApplicationEventPublisher eventPublisher
     ) {
         this.clientDataService = clientDataService;
         this.restService = restService;
         this.gameStateServiceUrl = gameStateServiceUrl;
         this.objectMapper = objectMapper;
         this.userRepository = userRepository;
+        this.eventPublisher = eventPublisher;
     }
     //koniec slabego kodu
 
@@ -133,10 +136,7 @@ public class InMemoryGameService implements GameService {
         try {
             room.removePlayer(clientId);
             affiliations.remove(clientId);
-            if (room.hasActiveGame()) {
-                activeGames.remove(room.getGameId());
-                room.clearGame();
-            }
+            removeActiveGame(room);
             if(room.isEmpty()){
                 activeRooms.remove(request.getRoomId());
             }
@@ -600,9 +600,7 @@ public class InMemoryGameService implements GameService {
             throw new GameValidationException("Game data has no winner" + e.getMessage());
         }
 
-        room.clearGame();
-
-        activeGames.remove(request.getGameId());
+        removeActiveGame(room);
 
         EndGameResponse response = new EndGameResponse();
         response.setClientId(clientId);
@@ -630,14 +628,26 @@ public class InMemoryGameService implements GameService {
             // Klient mogl zostac usuniety z pokoju przez inny przeplyw.
         }
 
-        if (room.hasActiveGame()) {
-            activeGames.remove(room.getGameId());
-            room.clearGame();
-        }
+        removeActiveGame(room);
 
         if(room.isEmpty()){
             activeRooms.remove(roomId);
         }
+    }
+
+    /**
+     * Usuwa aktywną grę z pokoju i publikuje {@link GameRemovedFromRoomEvent},
+     * aby warstwa WebSocket mogła powiadomić graczy. Jedyne miejsce, w którym
+     * gra jest zdejmowana z pokoju – każda ścieżka usunięcia musi przejść tędy.
+     */
+    private void removeActiveGame(Room room) {
+        if (room == null || !room.hasActiveGame()) {
+            return;
+        }
+        String gameId = room.getGameId();
+        activeGames.remove(gameId);
+        room.clearGame();
+        eventPublisher.publishEvent(new GameRemovedFromRoomEvent(room.getRoomId(), gameId));
     }
 
     private boolean isBlank(String value) {
