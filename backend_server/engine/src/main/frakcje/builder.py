@@ -46,7 +46,7 @@ class BoardTokenConfigBuilder(TokenConfigBuilder):
     def boosts(
             self, 
             types : list[Boost], 
-            directions : list[int], 
+            directions : list[int] = [], 
             target : TokenRelation = TokenRelation.OWN,
         ):
         for t in types:

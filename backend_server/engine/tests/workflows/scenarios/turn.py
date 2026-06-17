@@ -1,6 +1,6 @@
 from main.workflows.data import WorkflowName, WorkflowConfig
 from main.input.data import HandAction, ActionType
-from main.events.workflow import PushWorkflow, GoToStep, ConsumeOnClick
+from main.events.workflow import PushWorkflow, GoToStep
 from main.events.effects import (
     ResetAbilityUsedEffect, 
     DrawTokensEffect,

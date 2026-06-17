@@ -16,10 +16,10 @@ class FactionManager:
 
 
     def get_enemy(self, my_faction):
-        print(f"getting enemy of {my_faction}")
+        # print(f"getting enemy of {my_faction}")
         for faction in self.factions:
             if(faction != my_faction):
-                print(f"found enemy {faction}")
+                # print(f"found enemy {faction}")
                 return faction
             
     def get_faction(self, my_faction : str, relation : TokenRelation):

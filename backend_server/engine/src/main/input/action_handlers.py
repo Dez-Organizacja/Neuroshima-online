@@ -50,17 +50,6 @@ class ButtonHandler:
     @staticmethod
     @button_register(Button.CANCEL)
     def handle_cancel(ctx : ActionContext) -> list[Event]:
-        # if not ctx.state.can_undo(ctx.decision_faction):
-        #     if ctx.workflow_instance.name in {
-        #         WorkflowName.TURN,
-        #         WorkflowName.HEADQUARTER_TURN,
-        #     }:
-        #         return [GoToStep(ctx.workflow_instance.current_step_index)]
-
-        #     return [
-        #         DeleteAbove(name=WorkflowName.TURN),
-        #         ClearWorkflowDataEffect()
-        #     ]
         return [UndoEffect()]
     
     @staticmethod

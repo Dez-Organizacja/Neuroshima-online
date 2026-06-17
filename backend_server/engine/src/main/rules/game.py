@@ -36,9 +36,9 @@ class GameRules():
     @classmethod
     def is_game_over(cls, board : Board, factions : str, phase : Phase) -> bool:
         # print("game over checking")
-        print(f"factions {factions}")
+        # print(f"factions {factions}")
         scores = cls.get_scores(board, factions)
-        print(f"scores: {scores}")
+        # print(f"scores: {scores}")
 
         if any(score <= 0 for score in scores):
             return True

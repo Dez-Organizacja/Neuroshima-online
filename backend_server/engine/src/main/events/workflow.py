@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from main.state.context import ActionContext
-from main.events.data import WorkflowEvent
+from main.events.data import WorkflowEvent, OnClickData
 from main.workflows.data import WorkflowConfig, WorkflowName, WorkflowInstance
-
+from typing import Callable
 
 @dataclass
 class PushWorkflow(WorkflowEvent):
@@ -28,6 +28,9 @@ class PushWorkflow(WorkflowEvent):
 
 @dataclass
 class PopWorkflow(WorkflowEvent):
+    # def __init__(cls):
+    #     print(f"INITIALINIG POPWORKFLOW")
+
     def apply(self, ctx: ActionContext):
         print(f"POPWORKFLOW {ctx.workflow_instance.name}")
         ctx.state.workflow_stack.pop(-1)
@@ -52,8 +55,33 @@ class DeleteAbove(WorkflowEvent):
         
 @dataclass
 class ConsumeOnClick(WorkflowEvent):
+    name : WorkflowName
+
     def apply(self, ctx : ActionContext):
-        ctx.workflow_instance.on_click_consumed = True
+        for instance in ctx.state.workflow_stack:
+            if instance.name != self.name:
+                continue
+
+            instance.on_click_consumed = True
+            return
+        # ctx.workflow_instance.on_click_consumed = True
+        raise ValueError(f"no workflow {self.name} on workflow stack")
+
+
+@dataclass
+class SetActionHook(WorkflowEvent):
+    effects : OnClickData
+    name : WorkflowName
+
+    def apply(self, ctx : ActionContext):
+        # print("SET ACTION HOOK")
+        for instance in ctx.state.workflow_stack:
+            if instance.name != self.name:
+                continue
+
+            instance.on_click = self.effects
+            return
+        raise ValueError(f"no workflow {self.name} on workflow stack")
 
 @dataclass
 class EnqueueWorkflow(WorkflowEvent):

@@ -1,20 +1,44 @@
 {
   "messageType" : "GAMESTATUSCHANGE_REQUEST",
-  "timestamp" : "2026-06-17T00:36:04.256401609",
+  "timestamp" : "2026-06-18T00:02:18.135471174",
   "gameState" : {
-    "animations" : [ ],
+    "animations" : [ {
+      "attacker" : [ 3, 5 ],
+      "target" : [ 0, 2 ],
+      "type" : "attack"
+    }, {
+      "target" : [ 0, 2 ],
+      "type" : "wound",
+      "wounds" : 1
+    }, {
+      "attacker" : [ 4, 2 ],
+      "target" : [ 2, 4 ],
+      "type" : "attack"
+    }, {
+      "target" : [ 2, 4 ],
+      "type" : "wound",
+      "wounds" : 1
+    }, {
+      "damage" : 1,
+      "target" : [ 0, 2 ],
+      "type" : "weaken"
+    }, {
+      "damage" : 1,
+      "target" : [ 2, 4 ],
+      "type" : "weaken"
+    } ],
     "state" : {
-      "active_faction" : "hegemonia",
+      "active_faction" : "moloch",
       "board" : [ {
         "pos" : [ 2, 4 ],
         "unit" : {
           "config_id" : {
-            "faction" : "hegemonia",
+            "faction" : "posterunek",
             "name" : "sztab"
           },
           "state" : {
             "core" : {
-              "damage" : 0,
+              "damage" : 1,
               "rotation" : 0,
               "wired" : false,
               "wounds" : [ ]
@@ -41,15 +65,15 @@
           }
         }
       }, {
-        "pos" : [ 1, 3 ],
+        "pos" : [ 0, 2 ],
         "unit" : {
           "config_id" : {
-            "faction" : "borgo",
+            "faction" : "moloch",
             "name" : "sztab"
           },
           "state" : {
             "core" : {
-              "damage" : 0,
+              "damage" : 1,
               "rotation" : 0,
               "wired" : false,
               "wounds" : [ ]
@@ -79,13 +103,13 @@
         "pos" : [ 3, 3 ],
         "unit" : {
           "config_id" : {
-            "faction" : "hegemonia",
-            "name" : "biegacz"
+            "faction" : "moloch",
+            "name" : "klaun"
           },
           "state" : {
             "core" : {
-              "damage" : 0,
-              "rotation" : 4,
+              "damage" : 1,
+              "rotation" : 0,
               "wired" : false,
               "wounds" : [ ]
             },
@@ -95,12 +119,45 @@
               "used_from_boost_ability" : false
             },
             "modifiers" : {
-              "attack_boosts" : {
-                "melee" : 1
-              },
+              "attack_boosts" : { },
               "from_boost_ability" : null,
               "initiative_boosts" : 0,
               "initiatives" : [ 2 ],
+              "is_basic" : [ true ],
+              "is_blocked_to_0" : false,
+              "is_used" : [ true ],
+              "num_of_new" : 0,
+              "num_of_old" : 0
+            },
+            "relations" : {
+              "real_boost_target" : "enemy"
+            }
+          }
+        }
+      }, {
+        "pos" : [ 1, 5 ],
+        "unit" : {
+          "config_id" : {
+            "faction" : "moloch",
+            "name" : "juggernaut"
+          },
+          "state" : {
+            "core" : {
+              "damage" : 1,
+              "rotation" : 3,
+              "wired" : false,
+              "wounds" : [ ]
+            },
+            "execution" : {
+              "used_ability" : false,
+              "used_battle_ability" : false,
+              "used_from_boost_ability" : false
+            },
+            "modifiers" : {
+              "attack_boosts" : { },
+              "from_boost_ability" : null,
+              "initiative_boosts" : 0,
+              "initiatives" : [ 1 ],
               "is_basic" : [ true ],
               "is_blocked_to_0" : false,
               "is_used" : [ false ],
@@ -113,11 +170,46 @@
           }
         }
       }, {
-        "pos" : [ 2, 6 ],
+        "pos" : [ 3, 5 ],
         "unit" : {
           "config_id" : {
-            "faction" : "hegemonia",
-            "name" : "biegacz"
+            "faction" : "posterunek",
+            "name" : "komandos"
+          },
+          "state" : {
+            "core" : {
+              "damage" : 0,
+              "rotation" : 3,
+              "wired" : false,
+              "wounds" : [ ]
+            },
+            "execution" : {
+              "used_ability" : false,
+              "used_battle_ability" : false,
+              "used_from_boost_ability" : false
+            },
+            "modifiers" : {
+              "attack_boosts" : { },
+              "from_boost_ability" : null,
+              "initiative_boosts" : 0,
+              "initiatives" : [ 3, 2 ],
+              "is_basic" : [ true, false ],
+              "is_blocked_to_0" : false,
+              "is_used" : [ false, true ],
+              "num_of_new" : 1,
+              "num_of_old" : 1
+            },
+            "relations" : {
+              "real_boost_target" : "own"
+            }
+          }
+        }
+      }, {
+        "pos" : [ 3, 1 ],
+        "unit" : {
+          "config_id" : {
+            "faction" : "posterunek",
+            "name" : "skoper"
           },
           "state" : {
             "core" : {
@@ -132,12 +224,150 @@
               "used_from_boost_ability" : false
             },
             "modifiers" : {
-              "attack_boosts" : {
-                "melee" : 1
-              },
+              "attack_boosts" : { },
               "from_boost_ability" : null,
               "initiative_boosts" : 0,
-              "initiatives" : [ 2 ],
+              "initiatives" : [ ],
+              "is_basic" : [ ],
+              "is_blocked_to_0" : false,
+              "is_used" : [ ],
+              "num_of_new" : 0,
+              "num_of_old" : 0
+            },
+            "relations" : {
+              "real_boost_target" : "enemy"
+            }
+          }
+        }
+      }, {
+        "pos" : [ 2, 2 ],
+        "unit" : {
+          "config_id" : {
+            "faction" : "moloch",
+            "name" : "dzialkogaussa"
+          },
+          "state" : {
+            "core" : {
+              "damage" : 0,
+              "rotation" : 3,
+              "wired" : false,
+              "wounds" : [ ]
+            },
+            "execution" : {
+              "used_ability" : false,
+              "used_battle_ability" : false,
+              "used_from_boost_ability" : false
+            },
+            "modifiers" : {
+              "attack_boosts" : { },
+              "from_boost_ability" : null,
+              "initiative_boosts" : 0,
+              "initiatives" : [ 1 ],
+              "is_basic" : [ true ],
+              "is_blocked_to_0" : false,
+              "is_used" : [ false ],
+              "num_of_new" : 0,
+              "num_of_old" : 0
+            },
+            "relations" : {
+              "real_boost_target" : "enemy"
+            }
+          }
+        }
+      }, {
+        "pos" : [ 4, 2 ],
+        "unit" : {
+          "config_id" : {
+            "faction" : "moloch",
+            "name" : "cyborg"
+          },
+          "state" : {
+            "core" : {
+              "damage" : 0,
+              "rotation" : 0,
+              "wired" : false,
+              "wounds" : [ ]
+            },
+            "execution" : {
+              "used_ability" : false,
+              "used_battle_ability" : false,
+              "used_from_boost_ability" : false
+            },
+            "modifiers" : {
+              "attack_boosts" : { },
+              "from_boost_ability" : null,
+              "initiative_boosts" : 0,
+              "initiatives" : [ 3 ],
+              "is_basic" : [ true ],
+              "is_blocked_to_0" : false,
+              "is_used" : [ false ],
+              "num_of_new" : 0,
+              "num_of_old" : 0
+            },
+            "relations" : {
+              "real_boost_target" : "enemy"
+            }
+          }
+        }
+      }, {
+        "pos" : [ 4, 6 ],
+        "unit" : {
+          "config_id" : {
+            "faction" : "posterunek",
+            "name" : "medyk"
+          },
+          "state" : {
+            "core" : {
+              "damage" : 0,
+              "rotation" : 5,
+              "wired" : false,
+              "wounds" : [ ]
+            },
+            "execution" : {
+              "used_ability" : false,
+              "used_battle_ability" : false,
+              "used_from_boost_ability" : false
+            },
+            "modifiers" : {
+              "attack_boosts" : { },
+              "from_boost_ability" : null,
+              "initiative_boosts" : 0,
+              "initiatives" : [ ],
+              "is_basic" : [ ],
+              "is_blocked_to_0" : false,
+              "is_used" : [ ],
+              "num_of_new" : 0,
+              "num_of_old" : 0
+            },
+            "relations" : {
+              "real_boost_target" : "own"
+            }
+          }
+        }
+      }, {
+        "pos" : [ 4, 4 ],
+        "unit" : {
+          "config_id" : {
+            "faction" : "posterunek",
+            "name" : "komandos"
+          },
+          "state" : {
+            "core" : {
+              "damage" : 0,
+              "rotation" : 4,
+              "wired" : false,
+              "wounds" : [ ]
+            },
+            "execution" : {
+              "used_ability" : false,
+              "used_battle_ability" : false,
+              "used_from_boost_ability" : false
+            },
+            "modifiers" : {
+              "attack_boosts" : { },
+              "from_boost_ability" : null,
+              "initiative_boosts" : 0,
+              "initiatives" : [ 3 ],
               "is_basic" : [ true ],
               "is_blocked_to_0" : false,
               "is_used" : [ false ],
@@ -151,68 +381,86 @@
         }
       } ],
       "events_queue" : [ ],
-      "factions" : [ "hegemonia", "borgo" ],
+      "factions" : [ "posterunek", "moloch" ],
       "last_clicked_hex" : {
-        "pos" : [ 2, 6 ],
+        "pos" : null,
         "slot" : null,
-        "source" : "board"
+        "source" : null
       },
-      "pending_attacks" : [ ],
+      "pending_attacks" : [ {
+        "attacker_pos" : [ 3, 5 ],
+        "direction" : 5,
+        "power" : 1,
+        "properties" : {
+          "blockable" : true,
+          "targeting_type" : "first in line"
+        }
+      } ],
       "pending_workflows" : [ ],
-      "phase" : "game",
+      "phase" : "endgame",
       "players" : {
-        "borgo" : {
+        "moloch" : {
           "hand" : {
-            "tokens" : [ "nozownik", "nozownik" ]
+            "tokens" : [ ]
           },
-          "pile" : [ "mutek", "zabojca", "nozownik", "nozownik", "mutek", "mutek", "mutek", "zabojca", "mutek" ]
+          "move_range" : 1,
+          "moves_used" : 0,
+          "pile" : [ ]
         },
-        "hegemonia" : {
+        "posterunek" : {
           "hand" : {
-            "tokens" : [ "biegacz", "transport" ]
+            "tokens" : [ ]
           },
-          "pile" : [ "ganger" ]
+          "move_range" : 1,
+          "moves_used" : 0,
+          "pile" : [ "bitwa", "biegacz", "ruch", "ruch", "silacz", "likwidator", "biegacz", "ruch", "bitwa", "komandos", "zwiadowca", "likwidator", "ruch", "ckm", "ruch", "centrumrozpoznania", "pancerzwspomagany", "oficer", "dywersant", "zwiadowca", "medyk", "komandos", "snajper" ]
         }
       },
-      "turn_faction" : "hegemonia",
+      "turn_faction" : "",
       "workflow_data" : {
         "button" : null,
         "destination" : null,
         "rotation" : null,
         "slot" : null,
         "target_pos" : null,
-        "type" : "board",
-        "unit_pos" : [ 2, 6 ]
+        "type" : null,
+        "unit_pos" : null
       },
       "workflow_stack" : [ {
         "config" : {
           "faction" : "",
-          "factions" : [ "hegemonia", "borgo" ],
+          "factions" : [ "moloch", "posterunek" ],
           "hand_limit" : 3,
           "initiative" : null,
-          "on_click" : {
-            "discard_slot" : null,
-            "mark_activated_pos" : null
-          },
-          "pos" : null
-        },
-        "current_step_index" : 5,
-        "name" : "game",
-        "on_click_consumed" : false
-      }, {
-        "config" : {
-          "faction" : "hegemonia",
-          "factions" : [ ],
-          "hand_limit" : 3,
-          "initiative" : null,
-          "on_click" : {
-            "discard_slot" : null,
-            "mark_activated_pos" : null
-          },
           "pos" : null
         },
         "current_step_index" : 2,
-        "name" : "turn",
+        "name" : "end_game_sequence",
+        "on_click" : null,
+        "on_click_consumed" : false
+      }, {
+        "config" : {
+          "faction" : "",
+          "factions" : [ "moloch", "posterunek" ],
+          "hand_limit" : 3,
+          "initiative" : null,
+          "pos" : null
+        },
+        "current_step_index" : 6,
+        "name" : "battle",
+        "on_click" : null,
+        "on_click_consumed" : false
+      }, {
+        "config" : {
+          "faction" : "",
+          "factions" : [ "moloch", "posterunek" ],
+          "hand_limit" : 3,
+          "initiative" : 2,
+          "pos" : null
+        },
+        "current_step_index" : 1,
+        "name" : "initiative",
+        "on_click" : null,
         "on_click_consumed" : false
       }, {
         "config" : {
@@ -220,505 +468,18 @@
           "factions" : [ ],
           "hand_limit" : 3,
           "initiative" : null,
-          "on_click" : {
-            "discard_slot" : null,
-            "mark_activated_pos" : null
-          },
-          "pos" : null
-        },
-        "current_step_index" : 3,
-        "name" : "action",
-        "on_click_consumed" : true
-      }, {
-        "config" : {
-          "faction" : "",
-          "factions" : [ ],
-          "hand_limit" : 3,
-          "initiative" : null,
-          "on_click" : {
-            "discard_slot" : null,
-            "mark_activated_pos" : null
-          },
-          "pos" : null
+          "pos" : [ 3, 3 ]
         },
         "current_step_index" : 1,
-        "name" : "board",
-        "on_click_consumed" : false
-      }, {
-        "config" : {
-          "faction" : "",
-          "factions" : [ ],
-          "hand_limit" : 3,
-          "initiative" : null,
-          "on_click" : {
-            "discard_slot" : null,
-            "mark_activated_pos" : [ 2, 6 ]
-          },
-          "pos" : null
-        },
-        "current_step_index" : 1,
-        "name" : "move",
+        "name" : "explosion",
+        "on_click" : null,
         "on_click_consumed" : false
       } ]
     },
-    "undo" : [ {
-      "active_faction" : "hegemonia",
-      "board" : [ {
-        "pos" : [ 2, 4 ],
-        "unit" : {
-          "config_id" : {
-            "faction" : "hegemonia",
-            "name" : "sztab"
-          },
-          "state" : {
-            "core" : {
-              "damage" : 0,
-              "rotation" : 0,
-              "wired" : false,
-              "wounds" : [ ]
-            },
-            "execution" : {
-              "used_ability" : false,
-              "used_battle_ability" : false,
-              "used_from_boost_ability" : false
-            },
-            "modifiers" : {
-              "attack_boosts" : { },
-              "from_boost_ability" : null,
-              "initiative_boosts" : 0,
-              "initiatives" : [ 0 ],
-              "is_basic" : [ true ],
-              "is_blocked_to_0" : false,
-              "is_used" : [ false ],
-              "num_of_new" : 0,
-              "num_of_old" : 0
-            },
-            "relations" : {
-              "real_boost_target" : "own"
-            }
-          }
-        }
-      }, {
-        "pos" : [ 1, 3 ],
-        "unit" : {
-          "config_id" : {
-            "faction" : "borgo",
-            "name" : "sztab"
-          },
-          "state" : {
-            "core" : {
-              "damage" : 0,
-              "rotation" : 0,
-              "wired" : false,
-              "wounds" : [ ]
-            },
-            "execution" : {
-              "used_ability" : false,
-              "used_battle_ability" : false,
-              "used_from_boost_ability" : false
-            },
-            "modifiers" : {
-              "attack_boosts" : { },
-              "from_boost_ability" : null,
-              "initiative_boosts" : 0,
-              "initiatives" : [ 0 ],
-              "is_basic" : [ true ],
-              "is_blocked_to_0" : false,
-              "is_used" : [ false ],
-              "num_of_new" : 0,
-              "num_of_old" : 0
-            },
-            "relations" : {
-              "real_boost_target" : "own"
-            }
-          }
-        }
-      }, {
-        "pos" : [ 3, 3 ],
-        "unit" : {
-          "config_id" : {
-            "faction" : "hegemonia",
-            "name" : "biegacz"
-          },
-          "state" : {
-            "core" : {
-              "damage" : 0,
-              "rotation" : 4,
-              "wired" : false,
-              "wounds" : [ ]
-            },
-            "execution" : {
-              "used_ability" : false,
-              "used_battle_ability" : false,
-              "used_from_boost_ability" : false
-            },
-            "modifiers" : {
-              "attack_boosts" : {
-                "melee" : 1
-              },
-              "from_boost_ability" : null,
-              "initiative_boosts" : 0,
-              "initiatives" : [ 2 ],
-              "is_basic" : [ true ],
-              "is_blocked_to_0" : false,
-              "is_used" : [ false ],
-              "num_of_new" : 0,
-              "num_of_old" : 0
-            },
-            "relations" : {
-              "real_boost_target" : "own"
-            }
-          }
-        }
-      }, {
-        "pos" : [ 2, 6 ],
-        "unit" : {
-          "config_id" : {
-            "faction" : "hegemonia",
-            "name" : "biegacz"
-          },
-          "state" : {
-            "core" : {
-              "damage" : 0,
-              "rotation" : 0,
-              "wired" : false,
-              "wounds" : [ ]
-            },
-            "execution" : {
-              "used_ability" : false,
-              "used_battle_ability" : false,
-              "used_from_boost_ability" : false
-            },
-            "modifiers" : {
-              "attack_boosts" : {
-                "melee" : 1
-              },
-              "from_boost_ability" : null,
-              "initiative_boosts" : 0,
-              "initiatives" : [ 2 ],
-              "is_basic" : [ true ],
-              "is_blocked_to_0" : false,
-              "is_used" : [ false ],
-              "num_of_new" : 0,
-              "num_of_old" : 0
-            },
-            "relations" : {
-              "real_boost_target" : "own"
-            }
-          }
-        }
-      } ],
-      "events_queue" : [ ],
-      "factions" : [ "hegemonia", "borgo" ],
-      "last_clicked_hex" : {
-        "pos" : null,
-        "slot" : null,
-        "source" : null
-      },
-      "pending_attacks" : [ ],
-      "pending_workflows" : [ ],
-      "phase" : "game",
-      "players" : {
-        "borgo" : {
-          "hand" : {
-            "tokens" : [ "nozownik", "nozownik" ]
-          },
-          "pile" : [ "mutek", "zabojca", "nozownik", "nozownik", "mutek", "mutek", "mutek", "zabojca", "mutek" ]
-        },
-        "hegemonia" : {
-          "hand" : {
-            "tokens" : [ "biegacz", "ganger", "transport" ]
-          },
-          "pile" : [ "ganger" ]
-        }
-      },
-      "turn_faction" : "hegemonia",
-      "workflow_data" : {
-        "button" : null,
-        "destination" : null,
-        "rotation" : null,
-        "slot" : null,
-        "target_pos" : null,
-        "type" : null,
-        "unit_pos" : null
-      },
-      "workflow_stack" : [ {
-        "config" : {
-          "faction" : "",
-          "factions" : [ "hegemonia", "borgo" ],
-          "hand_limit" : 3,
-          "initiative" : null,
-          "on_click" : {
-            "discard_slot" : null,
-            "mark_activated_pos" : null
-          },
-          "pos" : null
-        },
-        "current_step_index" : 5,
-        "name" : "game",
-        "on_click_consumed" : false
-      }, {
-        "config" : {
-          "faction" : "hegemonia",
-          "factions" : [ ],
-          "hand_limit" : 3,
-          "initiative" : null,
-          "on_click" : {
-            "discard_slot" : null,
-            "mark_activated_pos" : null
-          },
-          "pos" : null
-        },
-        "current_step_index" : 1,
-        "name" : "turn",
-        "on_click_consumed" : false
-      }, {
-        "config" : {
-          "faction" : "",
-          "factions" : [ ],
-          "hand_limit" : 3,
-          "initiative" : null,
-          "on_click" : {
-            "discard_slot" : null,
-            "mark_activated_pos" : null
-          },
-          "pos" : null
-        },
-        "current_step_index" : 3,
-        "name" : "draw",
-        "on_click_consumed" : false
-      } ]
-    }, {
-      "active_faction" : "hegemonia",
-      "board" : [ {
-        "pos" : [ 2, 4 ],
-        "unit" : {
-          "config_id" : {
-            "faction" : "hegemonia",
-            "name" : "sztab"
-          },
-          "state" : {
-            "core" : {
-              "damage" : 0,
-              "rotation" : 0,
-              "wired" : false,
-              "wounds" : [ ]
-            },
-            "execution" : {
-              "used_ability" : false,
-              "used_battle_ability" : false,
-              "used_from_boost_ability" : false
-            },
-            "modifiers" : {
-              "attack_boosts" : { },
-              "from_boost_ability" : null,
-              "initiative_boosts" : 0,
-              "initiatives" : [ 0 ],
-              "is_basic" : [ true ],
-              "is_blocked_to_0" : false,
-              "is_used" : [ false ],
-              "num_of_new" : 0,
-              "num_of_old" : 0
-            },
-            "relations" : {
-              "real_boost_target" : "own"
-            }
-          }
-        }
-      }, {
-        "pos" : [ 1, 3 ],
-        "unit" : {
-          "config_id" : {
-            "faction" : "borgo",
-            "name" : "sztab"
-          },
-          "state" : {
-            "core" : {
-              "damage" : 0,
-              "rotation" : 0,
-              "wired" : false,
-              "wounds" : [ ]
-            },
-            "execution" : {
-              "used_ability" : false,
-              "used_battle_ability" : false,
-              "used_from_boost_ability" : false
-            },
-            "modifiers" : {
-              "attack_boosts" : { },
-              "from_boost_ability" : null,
-              "initiative_boosts" : 0,
-              "initiatives" : [ 0 ],
-              "is_basic" : [ true ],
-              "is_blocked_to_0" : false,
-              "is_used" : [ false ],
-              "num_of_new" : 0,
-              "num_of_old" : 0
-            },
-            "relations" : {
-              "real_boost_target" : "own"
-            }
-          }
-        }
-      }, {
-        "pos" : [ 3, 3 ],
-        "unit" : {
-          "config_id" : {
-            "faction" : "hegemonia",
-            "name" : "biegacz"
-          },
-          "state" : {
-            "core" : {
-              "damage" : 0,
-              "rotation" : 4,
-              "wired" : false,
-              "wounds" : [ ]
-            },
-            "execution" : {
-              "used_ability" : false,
-              "used_battle_ability" : false,
-              "used_from_boost_ability" : false
-            },
-            "modifiers" : {
-              "attack_boosts" : {
-                "melee" : 1
-              },
-              "from_boost_ability" : null,
-              "initiative_boosts" : 0,
-              "initiatives" : [ 2 ],
-              "is_basic" : [ true ],
-              "is_blocked_to_0" : false,
-              "is_used" : [ false ],
-              "num_of_new" : 0,
-              "num_of_old" : 0
-            },
-            "relations" : {
-              "real_boost_target" : "own"
-            }
-          }
-        }
-      }, {
-        "pos" : [ 2, 6 ],
-        "unit" : {
-          "config_id" : {
-            "faction" : "hegemonia",
-            "name" : "biegacz"
-          },
-          "state" : {
-            "core" : {
-              "damage" : 0,
-              "rotation" : 0,
-              "wired" : false,
-              "wounds" : [ ]
-            },
-            "execution" : {
-              "used_ability" : false,
-              "used_battle_ability" : false,
-              "used_from_boost_ability" : false
-            },
-            "modifiers" : {
-              "attack_boosts" : {
-                "melee" : 1
-              },
-              "from_boost_ability" : null,
-              "initiative_boosts" : 0,
-              "initiatives" : [ 2 ],
-              "is_basic" : [ true ],
-              "is_blocked_to_0" : false,
-              "is_used" : [ false ],
-              "num_of_new" : 0,
-              "num_of_old" : 0
-            },
-            "relations" : {
-              "real_boost_target" : "own"
-            }
-          }
-        }
-      } ],
-      "events_queue" : [ ],
-      "factions" : [ "hegemonia", "borgo" ],
-      "last_clicked_hex" : {
-        "pos" : null,
-        "slot" : null,
-        "source" : null
-      },
-      "pending_attacks" : [ ],
-      "pending_workflows" : [ ],
-      "phase" : "game",
-      "players" : {
-        "borgo" : {
-          "hand" : {
-            "tokens" : [ "nozownik", "nozownik" ]
-          },
-          "pile" : [ "mutek", "zabojca", "nozownik", "nozownik", "mutek", "mutek", "mutek", "zabojca", "mutek" ]
-        },
-        "hegemonia" : {
-          "hand" : {
-            "tokens" : [ "biegacz", "transport" ]
-          },
-          "pile" : [ "ganger" ]
-        }
-      },
-      "turn_faction" : "hegemonia",
-      "workflow_data" : {
-        "button" : null,
-        "destination" : null,
-        "rotation" : null,
-        "slot" : null,
-        "target_pos" : null,
-        "type" : null,
-        "unit_pos" : null
-      },
-      "workflow_stack" : [ {
-        "config" : {
-          "faction" : "",
-          "factions" : [ "hegemonia", "borgo" ],
-          "hand_limit" : 3,
-          "initiative" : null,
-          "on_click" : {
-            "discard_slot" : null,
-            "mark_activated_pos" : null
-          },
-          "pos" : null
-        },
-        "current_step_index" : 5,
-        "name" : "game",
-        "on_click_consumed" : false
-      }, {
-        "config" : {
-          "faction" : "hegemonia",
-          "factions" : [ ],
-          "hand_limit" : 3,
-          "initiative" : null,
-          "on_click" : {
-            "discard_slot" : null,
-            "mark_activated_pos" : null
-          },
-          "pos" : null
-        },
-        "current_step_index" : 2,
-        "name" : "turn",
-        "on_click_consumed" : false
-      }, {
-        "config" : {
-          "faction" : "",
-          "factions" : [ ],
-          "hand_limit" : 3,
-          "initiative" : null,
-          "on_click" : {
-            "discard_slot" : null,
-            "mark_activated_pos" : null
-          },
-          "pos" : null
-        },
-        "current_step_index" : 1,
-        "name" : "action",
-        "on_click_consumed" : false
-      } ]
-    } ]
+    "undo" : [ ]
   },
   "userAction" : {
-    "type" : "board",
-    "pos" : [ 1, 7 ]
+    "type" : "button",
+    "name" : "yes"
   }
 }

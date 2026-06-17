@@ -68,6 +68,8 @@ def test_borgo_move_ability_is_visible_in_available_actions_board():
         state=state, 
         faction_manager=FactionManager(state.factions)
     )
+    ctx.state.add_player("borgo")
+
     ctx.board.put_token((1, 5), "zabojca", "borgo")
     ctx.state.workflow_stack.append(
         WorkflowInstance(
@@ -82,3 +84,5 @@ def test_borgo_move_ability_is_visible_in_available_actions_board():
     view = GameViewBuilder().build(ctx)
 
     assert view["availableActions"]["board"] == [[1, 5]]
+
+# def test_centrum_rozpoznania_gives_moves_of_range_two():

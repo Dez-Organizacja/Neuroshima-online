@@ -16,7 +16,7 @@ def heal_scenario():
         ctx.board.get_token((1, 3)).add_wounds(1)
         ctx.board.put_token(pos=(1, 1), name="medyk", faction="moloch")
         ctx.board.get_token((1, 1)).set_rotation(1)
-        PassiveSystems.compute(ctx.board)
+        PassiveSystems.compute(ctx.board, ctx.state.players)
 
     def setup_faction(ctx : ActionContext):
         ctx.faction = "moloch"
@@ -37,7 +37,7 @@ def heal_scenario():
 
 
         .when(ButtonAction(Button.NO))
-        .then_execution(events=[ConsumeOnClick()])
+        # .then_execution(events=[ConsumeOnClick()])
         .then_data_delta(type=ActionType.BUTTON, button=Button.NO)
 
         .tick()

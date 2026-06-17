@@ -92,4 +92,4 @@ def steal_boosted_healer_connected_to_own_healer() -> Scenario:
         .available_actions(
             buttons(Button.END_TURN)
         )
-    )
+    ).build()

@@ -9,9 +9,10 @@ class OnClickSystem:
         if wf_instance.on_click_consumed:
             return []
         
-        effects = [ConsumeOnClick()]
+        effects = [ConsumeOnClick(wf_instance.name)]
         # print("RESOLVE ON CLICK")
-        data = wf_instance.config.on_click
+        # print(wf_instance)
+        data = wf_instance.on_click
         # print(f"on click data: {data}")
         if data.discard_slot is not None:
             effects.append(DiscardTokenEffect(data.discard_slot))

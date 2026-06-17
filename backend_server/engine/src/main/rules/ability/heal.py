@@ -51,8 +51,9 @@ class HealRules:
     def get_possible_healers(cls, board : Board):
         return BoardQuery([
             NOT(is_empty_at),
+            predicate_maker(lambda t : not t.wired),
+            predicate_maker(cls.is_healer),
             NOT(predicate_maker(cls.needs_heal)),
-            predicate_maker(cls.is_healer)
         ]).apply(board)
 
 

@@ -27,6 +27,8 @@ class MoveProvider(WorkflowActionProvider):
         return result
 
     def get_available_positions(self, ctx : ActionContext) -> list[tuple[int, int]]:
+        print("get av positons")
+        print(ctx.workflow_data)
         if not ctx.workflow_data.unit_pos:
             return self.get_available_sources(ctx)
         

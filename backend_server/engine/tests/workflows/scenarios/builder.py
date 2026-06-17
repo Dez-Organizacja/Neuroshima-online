@@ -2,7 +2,8 @@ from main.workflows.data import WorkflowData, WorkflowConfig, WorkflowName
 from .data import StepCase, Scenario, SetupFn
 from main.input.data import UserAction
 from main.steps.data import StepResult
-from main.events.data import Event
+from main.events.data import Event, OnClickData
+from main.events.workflow import ConsumeOnClick, SetActionHook
 from main.state.context import ActionContext
 
 
@@ -75,3 +76,18 @@ class ScenarioBuilder:
             config= self.workflow_config,
             steps = self.steps,
         )
+    
+    @staticmethod
+    def consume_action(name : WorkflowName = WorkflowName.HAND):
+        return ConsumeOnClick(name)
+    
+    @staticmethod
+    def add_hook(
+        discard_slot : int | None = None, 
+        mark_activated : tuple[int, int] | None = None
+    ):
+        onclick = OnClickData(
+            discard_slot=discard_slot, 
+            mark_activated_pos=mark_activated
+        )
+        return SetActionHook(effects=onclick, name=WorkflowName.HAND)

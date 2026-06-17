@@ -22,6 +22,7 @@ class ActionProvider(WorkflowActionProvider):
             return []
         
     def get_available_positions(self, ctx : ActionContext):
+        # print("getting positions")
         candidates = BoardQuery([
             is_ally(ctx.faction),
             NOT(token_predicate(lambda t : t.wired))
@@ -30,7 +31,7 @@ class ActionProvider(WorkflowActionProvider):
         return [
             pos for pos in candidates
             if self.rules.can_use_ability(ctx, pos)
-            and ctx.board.get_token(pos).can_use_ability()
+            # and ctx.board.get_token(pos).can_use_ability()
         ]
     
     def get_available_tokens(self, ctx : ActionContext):

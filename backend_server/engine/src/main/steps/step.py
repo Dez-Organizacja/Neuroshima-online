@@ -56,10 +56,10 @@ class WaitingStep(Step[WaitingStepConfig]):
         # print("WAITING STEP")
         self.config.action_handler.handle(ctx, action)
         # print(f"wf instance {ctx.workflow_instance}")
-        result = OnClickSystem.resolve(ctx.workflow_instance)
+        # result = OnClickSystem.resolve(ctx.workflow_instance)
         # print(f"result: {result}")
         # print(f"workflow data {ctx.workflow_data}")
-        return StepResult(execution_result=result)
+        return StepResult()
     
     @property
     def requires_input(self):

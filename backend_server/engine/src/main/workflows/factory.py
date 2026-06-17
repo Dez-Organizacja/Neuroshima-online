@@ -24,6 +24,7 @@ from main.workflows.endgame import EndGameSequenceWorkflow
 from main.workflows.game_over import GameOverWorkflow
 from main.workflows.action import AcitonWorkflow
 from main.workflows.end_action import EndActionWorkflow
+from main.workflows.movement import MovementWorkflow
 from main.workflows.base import Workflow
 from dataclasses import dataclass
 
@@ -48,6 +49,7 @@ class WorkflowFactory:
         WorkflowName.ACTION : WorkflowMeta(AcitonWorkflow, False),
         WorkflowName.END_ACTION : WorkflowMeta(EndActionWorkflow, False),
         WorkflowName.END_TURN_CONFIRM : WorkflowMeta(EndTurnConfirmWorkflow, False),
+        WorkflowName.MOVEMENT : WorkflowMeta(MovementWorkflow, False),
 
         #configurable workflows
         WorkflowName.TURN : WorkflowMeta(TurnWorkflow, True),

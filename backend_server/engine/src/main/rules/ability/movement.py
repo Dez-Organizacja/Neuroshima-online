@@ -1,6 +1,8 @@
-from main.rules.ability.base import AbilityRules
 from main.state.context import ActionContext
 from main.board.query import BoardQuery
+from main.board.data import Hex
+from main.tokens.data import Ability
+from main.rules.ability.base import AbilityRules
 from main.rules.predicates import (
     adjacent_to,
     is_ally, 
@@ -11,6 +13,7 @@ from main.rules.predicates import (
 )
 
 class MoveRules(AbilityRules):
+    ABILITY = Ability.MOVE
     @staticmethod
     def get_sources(ctx : ActionContext):
         candidates = BoardQuery([
@@ -23,18 +26,30 @@ class MoveRules(AbilityRules):
         ]
     
     @staticmethod
-    def get_destinations(ctx : ActionContext, unit_pos):
+    def get_destinations(ctx : ActionContext, unit_pos : Hex):
+        # print("get destinations")
         query = BoardQuery([
             adjacent_to(unit_pos),
             is_empty_at
         ])
         return query.apply(ctx.board) + [unit_pos] 
     
+    # @staticmethod
+    # def can_use(ctx : ActionContext, pos : Hex) -> bool:
+    #     token = ctx.board.get_token(pos)
+    #     return token.get_ability() == Ability.MOVE
+
     @staticmethod
-    def can_use(ctx : ActionContext, pos : tuple[int, int]) -> bool:
-        return not ctx.board.get_token(pos).wired
+    def can_execute(ctx : ActionContext, pos : Hex) -> bool:
+        token = ctx.board.get_token(pos)
+        return (
+            not token.wired
+            and len(MoveRules.get_sources(ctx)) > 0
+            and ctx.state.players[token.faction].has_moves
+        )
     
 class PushRules(AbilityRules):
+    ABILITY = Ability.PUSH
     @staticmethod
     def get_destinations(ctx : ActionContext, pusher_pos, target_pos):
         return BoardQuery([
@@ -65,9 +80,13 @@ class PushRules(AbilityRules):
         ]
 
     @staticmethod
-    def can_use(ctx : ActionContext, pos : tuple[int, int]) -> bool:
+    def can_execute(ctx : ActionContext, pos : Hex) -> bool:
         pusher = ctx.board.get_token(pos)
-        if pusher.wired:
-            return False
+        return (
+            not pusher.wired
+            and len(PushRules.get_targets(ctx, pos)) > 0
+        )
+        # if pusher.wired:
+        #     return False
         
-        return any(PushRules.get_targets(ctx, pos))
+        # return any(PushRules.get_targets(ctx, pos))

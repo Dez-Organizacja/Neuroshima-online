@@ -12,11 +12,11 @@ def start_battle_scenario():
     return (
         ScenarioBuilder(name)
         .when(ButtonAction(name = Button.USE))
-        .then_execution(events=[ConsumeOnClick()])
+        # .then_execution(events=[ConsumeOnClick()])
         .then_data_delta(button=Button.USE, type=ActionType.BUTTON)
 
         .tick()
-        .given_wf_onclick_consumed()
+        # .given_wf_onclick_consumed()
         .then_execution(
             events=[StartBattleEvent()]
         )

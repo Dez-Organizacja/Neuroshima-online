@@ -48,9 +48,9 @@ units = [
     .initiatives([3])
     .build(),
 
-
     unit.board("centrumrozpoznania", unit_count=1)
     .hp(1)
+    .boosts(types=[Boost.MOVE_RANGE])
     .build(),
 
     unit.board("dywersant", unit_count=1)

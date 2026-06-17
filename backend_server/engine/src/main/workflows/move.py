@@ -24,6 +24,7 @@ class MoveWorkflow(BoardSelectionMixin, Workflow[MoveProvider]):
             from_pos=ctx.workflow_data.unit_pos,
             to_pos=ctx.workflow_data.destination
         )
+        
         return [move]
 
     @classmethod

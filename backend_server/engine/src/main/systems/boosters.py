@@ -2,21 +2,26 @@ from main.board.board import Board
 from main.tokens.data import TokenRelation, Boost, Ability
 from main.systems.clever_initiative import CleverInitiative
 from main.attacks.config import AttackType
+from main.state.player_state import PlayerState
 
 class BoosterSolver():
     board: Board
+    players : dict[str, PlayerState]
     boosts: list[tuple[int, Boost]] # (tokenID -> to, boost)]
     steal_boosts: list[tuple[int, Boost]] # (tokenID -> from, boost)]
-    
-    @classmethod
-    def compute(cls, board : Board):
-        cls(board)
+    passive_boosts : list[tuple[str, Boost]] # (faction -> to, boost)
 
-    def __init__(self, board: Board) -> None:
+    @classmethod
+    def compute(cls, board : Board, players : dict[str, PlayerState]):
+        cls(board, players)
+
+    def __init__(self, board: Board, players : dict[str, PlayerState]) -> None:
         # print("INITALIZING BOOSTER SOLVER")
         self.board = board
+        self.players = players
         self.boosts = []
         self.steal_boosts = []
+        self.passive_boosts = []
 
         self.kastrando_las_boosten()
         # print("boosts cleared from board")
@@ -33,6 +38,9 @@ class BoosterSolver():
         self.end_booster_faze()
 
     def kastrando_las_boosten(self):
+        for player_state in self.players.values():
+            player_state.reset_boosts()
+
         for board_hex in self.board.ALL_HEXES:
             token = self.board.tokens.get(self.board.gen_tokenID(board_hex))
             if token is None:
@@ -107,8 +115,18 @@ class BoosterSolver():
             token = self.board.tokens[tokenID]
             if not token.wired:
                 for boost_type in token.boosts.keys():
+                    # print(boost_type)
                     if boost_type == Boost.STEAL_BOOST:
                         continue
+                    
+                    if self.is_passive(boost_type):
+                        # print("passive boost")
+                        # print(boost_type)
+                        for faction in self.players.keys():
+                            relation = token.state.relations.real_boost_target
+                            if self.is_valid_target(tokenID, relation, faction):
+                                self.passive_boosts.append((faction, boost_type))
+
                     # print(token)
                     for direction in token.get_boost_directions(boost_type):
                         target_pos = self.board.go(board_hex, direction)
@@ -121,6 +139,11 @@ class BoosterSolver():
 
     def solve_all(self):
         # print("solve all")
+        for faction, boost_type in self.passive_boosts:
+            handler = getattr(self, boost_type.name.lower(), None)
+            if handler is not None:
+                handler(faction)
+
         for tokenID, boost_type in self.boosts:
             # print(f"solving {self.board.tokens[tokenID]}")
             # print(f"boost {boost_type}")
@@ -128,13 +151,19 @@ class BoosterSolver():
             if handler is not None:
                 handler(tokenID)
 
+    @staticmethod
+    def is_passive(boost_type : Boost):
+        # print("is passive boost")
+        # print(boost_type)
+        return boost_type == Boost.MOVE_RANGE
+
     def end_booster_faze(self):
         for token in self.board.tokens.values():
             CleverInitiative.end_booster_faze(token.state)
 
     def melee(self, tokenID):
-        print("melee boost")
-        print(f"to {self.board.tokens[tokenID]}")
+        # print("melee boost")
+        # print(f"to {self.board.tokens[tokenID]}")
         self.board.tokens[tokenID].state.add_attack_boost(AttackType.MELEE, 1)
 
     def shoot(self, tokenID):
@@ -158,3 +187,6 @@ class BoosterSolver():
 
     def melee_to_shoot(self, tokenID):
         return NotImplemented
+
+    def move_range(self, faction : str):
+        self.players[faction].move_range += 1

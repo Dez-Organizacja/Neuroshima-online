@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from main.events.data import Event, OnClickData
 from main.events.effects import DiscardTokenEffect
-from main.events.workflow import PushWorkflow, PopWorkflow
+from main.events.workflow import PushWorkflow, PopWorkflow, SetActionHook
 
 from main.state.context import ActionContext
 
@@ -40,20 +40,36 @@ class DispatchActionWorkflow(Workflow[WorkflowActionProvider], ABC):
     def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
         pass
 
-    @abstractmethod
-    def resolve_function(self, ctx : ActionContext) -> list[Event]:
-        pass
+    # @abstractmethod
+    # def resolve_function(self, ctx : ActionContext) -> list[Event]:
+    #     pass
 
-    def next_workflow_push_effect(self, ctx : ActionContext) -> PushWorkflow:
-        # print("NEXT WORKFLOW PUSH EFFECT")
-        return PushWorkflow(
-            name=self.dispatch_function(ctx),
-            config=WorkflowConfig(on_click=self.on_click_effects(ctx))
-        )
+    def resolve_function(self, ctx : ActionContext) -> PushWorkflow:
+        print("RESOLVE FUNTION")
+        on_click = self.on_click_effects(ctx)
+        result = []
+        if on_click is not None:
+            result.append(
+                SetActionHook(effects=on_click, name=ctx.workflow_instance.name)
+            )
+        result.append(PushWorkflow(name=self.dispatch_function(ctx)))
+
+        return result
+
+    # def next_workflow_push_effect(self, ctx : ActionContext) -> PushWorkflow:
+    #     # print("NEXT WORKFLOW PUSH EFFECT")
+    #     return PushWorkflow(name=self.dispatch_function(ctx))
+
+    # def set_action_hook(self, ctx : ActionContext) -> SetActionHook:
+    #     return SetActionHook(effects=self.on_click_effects(ctx))
 
     def _build_steps(self):
         return [
-            self.build_resolve_step(self.resolve_function),
+            self.build_resolve_step(
+                self.resolve_function,
+                # self.next_workflow_push_effect,
+                # self.set_action_hook,
+            ),
             self.build_end_step(),   
         ]
 
@@ -72,16 +88,16 @@ class HandWorkflow(DispatchActionWorkflow):
     def is_board_token(token : Token) -> bool:
         return token.type == TokenType.BOARD
 
-    def resolve_function(self, ctx : ActionContext) -> list[Event]:
-        # print("HAND RESOLVE FUNCTION")
-        if ctx.workflow_data.button == Button.DISCARD:
-            # print("REOSLVE DISCARD")
-            return [
-                DiscardTokenEffect(slot=ctx.workflow_data.slot),
-                PopWorkflow(),
-            ]
+    # def resolve_function(self, ctx : ActionContext) -> list[Event]:
+    #     # print("HAND RESOLVE FUNCTION")
+    #     if ctx.workflow_data.button == Button.DISCARD:
+    #         # print("REOSLVE DISCARD")
+    #         return [
+    #             DiscardTokenEffect(slot=ctx.workflow_data.slot),
+    #             PopWorkflow(),
+    #         ]
         
-        return [self.next_workflow_push_effect(ctx)]
+    #     return [self.next_workflow_push_effect(ctx)]
         
 
     def dispatch_function(self, ctx : ActionContext) -> WorkflowName:
@@ -97,11 +113,13 @@ class HandWorkflow(DispatchActionWorkflow):
         return self.get_workflow_for_ability(ability)
 
 
-    def on_click_effects(self, ctx : ActionContext) -> OnClickData:
-        result = OnClickData()
+    def on_click_effects(self, ctx : ActionContext) -> OnClickData | None:
+        print("HAND ON CLICK")
+        # return OnClickData(discard_slot=ctx.workflow_data.slot)
+        # result = OnClickData()
         if not self.is_board_token(self.get_active_token(ctx)):
-            result.discard_slot = ctx.workflow_data.slot 
-        return result
+            return OnClickData(discard_slot=ctx.workflow_data.slot) 
+        return None
         
 
 class BoardWorkflow(DispatchActionWorkflow):
@@ -123,5 +141,5 @@ class BoardWorkflow(DispatchActionWorkflow):
         ability = token.get_ability()
         return self.get_workflow_for_ability(ability)
     
-    def resolve_function(self, ctx):
-        return [self.next_workflow_push_effect(ctx)]
+    # def resolve_function(self, ctx):
+    #     return [self.next_workflow_push_effect(ctx)]

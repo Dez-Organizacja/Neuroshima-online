@@ -63,10 +63,25 @@ def set_wire(state : bool):
         unit.set_wire(state)
     return apply
 
+
 def unit(pos : Hex, *funcs : Callable[[BoardToken], None]):
     def apply(board : Board):
         for func in funcs:
             func(board.get_token(pos))
+    return apply
+
+def use_unit_move_ability(token : BoardToken, is_form_boost : bool = False):
+    if is_form_boost:
+        token.state.execution.used_from_boost_ability = True
+    else:
+        token.state.execution.used_ability = True
+    # def apply()
+
+def move(from_pos : Hex, to_pos : Hex, is_form_boost : bool = False):
+    def apply(board : Board):
+        tokenID = board.gen_tokenID(from_pos)
+        use_unit_move_ability(board.tokens[tokenID])
+        board.where_am_i[tokenID] = to_pos
     return apply
 
 def faction_place(faction : str, *funcs : Callable[[str], Callable[[Board], None]]):
@@ -100,6 +115,13 @@ def draw(cards: list[str]):
 def discard(index: int):
     def apply(hand : Hand):
         hand.remove(index)
+    return apply
+
+# ----------- Player state changes -----------
+
+def used_move(faction : str, mod : int = 1):
+    def apply(state : GameState):
+        state.players[faction].moves_used += mod
     return apply
 
 # ----------- Faction changes -----------
@@ -177,6 +199,13 @@ def wf_data_setup(**data):
             setattr(state.workflow_data, key, value)
     return apply
 
+def setup_action(factions : list[str], start_index : int = 0):
+    return _composed_function(
+        push_game_wf(factions),
+        setup_turn_wf(faction=factions[0]),
+        push_workflow(name(WorkflowName.ACTION), index(start_index)),
+    )
+
 def build_from_hand_action_wfs(
         factions : list[str], 
         wf_data_setup_func : Callable[[GameState], None] | None = None,
@@ -185,9 +214,7 @@ def build_from_hand_action_wfs(
 
     return _composed_function(
         wf_data_setup_func,
-        push_game_wf(factions),
-        setup_turn_wf(faction=factions[0]),
-        push_workflow(name(WorkflowName.ACTION),index(3)),
+        setup_action(factions, start_index=3),
         push_workflow(name(WorkflowName.HAND)),
     )
 

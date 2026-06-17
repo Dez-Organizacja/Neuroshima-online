@@ -5,7 +5,7 @@ from main.events.data import Effect
 from main.attacks.data import AttackIntent
 from main.workflows.data import WorkflowData
 from main.tokens.data import BoardType
-from main.events.animations import WeakenAnimation, DestroyAnimation
+from main.events.animations import WeakenAnimation, DestroyAnimation, WoundAnimation
 
 # ----------- moving and placing -----------
 
@@ -17,6 +17,8 @@ class MoveEffect(Effect):
     def apply(self, ctx: ActionContext):
         ctx.board.move_token(self.from_pos, self.to_pos)
         ctx.workflow_data.set_unit_pos(ctx.workflow_data.destination)
+        ctx.workflow_data.set_destination(None)
+        ctx.player.moves_used += 1
 
 @dataclass
 class RotateEffect(Effect):
@@ -40,6 +42,8 @@ class PlaceEffect(Effect):
             name=self.name,
             faction=self.faction,
         )
+
+# ----------- attack -----------
 
 @dataclass
 class EnqueueAttacksEffect(Effect):
@@ -107,7 +111,10 @@ class HealEffect(Effect):
     def apply(self, ctx : ActionContext):
         healer = ctx.board.get_token(self.source_pos)
         target = ctx.board.get_token(self.target_pos)
-        healer.add_wounds(target.pop_highest_wound())
+        wounds = target.pop_highest_wound()
+        healer.add_wounds(wounds)
+        ctx.animations.append(WoundAnimation(target, -wounds))
+        ctx.animations.append(WoundAnimation(healer, wounds))
 
 # ----------- removing -----------
 
@@ -226,3 +233,8 @@ class RecomputePassivesEffect(Effect):
 
     def apply(self, ctx : ActionContext):
         pass
+
+class ResetActionData(Effect):
+    def apply(self, ctx : ActionContext):
+        for faction_state in ctx.state.players.values():
+            faction_state.reset_execution()

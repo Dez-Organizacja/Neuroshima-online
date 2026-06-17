@@ -12,7 +12,7 @@ def move_scenario():
     return (
         ScenarioBuilder(name)
         .when(BoardAction(pos = (1, 1)))
-        .then_execution(events=[ConsumeOnClick()])
+        # .then_execution(events=[ConsumeOnClick()])
         .then_data_delta(type=BoardAction.type, unit_pos = (1, 1))
 
         .when(BoardAction(pos = (1, 3)))

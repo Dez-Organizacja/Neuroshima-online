@@ -23,7 +23,9 @@ class StepViewBuilder:
         current_step = wf.get_current_step(ctx)
         
         action_provider : P = wf.action_provider
+        # print(f"action provider {action_provider}")
         provider = self.build_av_actions_provider(action_provider)
+        print(provider.get_positions)
         ui_state = action_provider.get_ui_state(ctx)
         if not ui_state.message:
             ui_state.message = current_step.config.message

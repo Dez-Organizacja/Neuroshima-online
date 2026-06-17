@@ -3,8 +3,7 @@ from enum import Enum
 from main.input.data import ActionType
 from main.tokens.data import Ability, BattleAbility
 from main.input.data import Button
-from typing import TypeVar
-from main.events.data import Event, OnClickData
+from main.events.data import OnClickData
 
 Hex = tuple[int, int]
     
@@ -34,9 +33,10 @@ class WorkflowName(Enum):
     ENDGAMESEQUENCE="end_game_sequence"
     ACTION="action"
     END_ACTION="end_action"
+    MOVEMENT="movement"
 
 ABILITY_WORKFLOW_REGISTRY = {
-    Ability.MOVE : WorkflowName.MOVE,
+    Ability.MOVE : WorkflowName.MOVEMENT,
     Ability.BOMB : WorkflowName.BOMB,
     Ability.GRENADE : WorkflowName.GRENADE,
     Ability.SNIPER : WorkflowName.SNIPER,
@@ -95,8 +95,7 @@ class WorkflowData:
 class WorkflowConfig:
     faction : str = ""
     factions : list[str] = field(default_factory=list)
-    on_click : OnClickData = field(default_factory=OnClickData)
-    
+
     initiative : int | None = None
     
     pos : tuple[int, int] | None = None
@@ -109,6 +108,8 @@ class WorkflowInstance:
     current_step_index : int | None = None
     config : WorkflowConfig = field(default_factory=WorkflowConfig)
     on_click_consumed : bool = False
+    on_click : OnClickData | None = None
+
 
 @dataclass
 class UndoSnapshot:

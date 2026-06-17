@@ -41,7 +41,6 @@ def headquarter_turn_scenario():
 
         .when(HandAction(slot=0))
         .given(setup_hand)
-        .then_execution(events=[ConsumeOnClick()])
         .then_data_delta(type=ActionType.HAND, slot=0)
 
         .tick()

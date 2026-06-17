@@ -48,13 +48,15 @@ class ScenarioExecuter:
     def setup(self, scenario : Scenario) -> GameState:
         before_state = GameState(factions=scenario.factions)
         scenario.setup.apply(before_state)
-        PassiveSystems.compute(before_state.board)
+        PassiveSystems.compute(before_state.board, before_state.players)
         game = self.init_game(before_state)
         # print("before game state")
+        # before_state.board.print_board()
         # print(before_state.workflow_stack)
         
-        game.engine.run_until_input_required(game.build_context())
+        # print(game.state.workflow_stack[-2])
         # print(game.state.workflow_stack[-1])
+        game.engine.run_until_input_required(game.build_context())
         return game.state
 
     def run(self, scenario: Scenario):

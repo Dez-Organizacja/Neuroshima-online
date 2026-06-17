@@ -2,9 +2,18 @@ from main.board.board import Board
 from main.systems.boosters import BoosterSolver
 from main.attacks.config import AttackType
 from main.rules.combat import CombatRules
+from main.state.player_state import PlayerState
 
-def solve_boosters(board: Board) -> None:
-    BoosterSolver(board)    
+def solve_boosters(
+        board: Board, 
+        players : dict[str, PlayerState] | None = None
+    ) -> None:
+    default_players = {
+        "posterunek" : PlayerState(),
+        "moloch" : PlayerState()
+    }
+    players = players or default_players
+    BoosterSolver(board, players)    
 
 
 def place(
@@ -173,6 +182,14 @@ class TestBoosters:
 
         assert melee_boosts(board, (2, 6)) == 0
         assert melee_boosts(board, (1, 3)) == 1
+
+    def test_move_range(self):
+        board = Board()
+        players = {"moloch" : PlayerState(), "posterunek" : PlayerState()}
+        place(board, (2, 4), "centrumrozpoznania", "posterunek")
+        
+        solve_boosters(board, players)
+        assert players["posterunek"].move_range == 2
 
     # def test_board_healing_maps_are_refreshed_after_boosters(self):
     #     board = Board()

@@ -23,9 +23,10 @@ class TurnRules:
         token = ctx.board.get_token(pos)
         rules = ABILITY_RULES.get(token.get_ability())
         if rules is None:
-            return True
+            return False
 
-        return rules.can_use(ctx, pos) and token.can_use_ability()
+        print(f"can use ability {token.name} at {pos}")
+        return rules.can_use(ctx, pos)
     
     @staticmethod
     def end_turn_check(ctx : ActionContext) -> bool:

@@ -26,19 +26,12 @@ def wczytaj(name):
 # def test1():
 #     data = wczytaj("zle2.json")
 #     game = execute(data)
-#     # game.handle_action({
-#     #     "type" : "button",
-#     #     "name" : "end_turn",
-#     # })
-#     # game.handle_action({
-#     #     "type" : "button",
-#     #     "name" : "yes",
-#     # })
 #     # for instance in game.state.workflow_stack:
 #     #     print(instance.name)
-#     token = game.state.board.get_token((1, 7))
-#     print(token)
+#     # token = game.state.board.get_token((1, 7))
+#     # print(token)
 #     # print(game.export())
+#     print(game.animations)
 #     # v = game.build_user_view()
 #     # print(v["availableActions"]["board"])
 #     assert False

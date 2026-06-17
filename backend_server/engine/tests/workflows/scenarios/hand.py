@@ -1,9 +1,7 @@
 from .builder import ScenarioBuilder
 from main.workflows.data import WorkflowName, WorkflowConfig
 from main.events.data import OnClickData
-from main.events.workflow import PopWorkflow, PushWorkflow
-from main.events.effects import DiscardTokenEffect
-from main.input.data import ActionType
+from main.events.workflow import PopWorkflow, PushWorkflow, SetActionHook
 from .registry import register
 from main.state.context import ActionContext
 
@@ -64,10 +62,8 @@ def hand_instant_token_with_ability_scenario():
         .given(setup_function)
         .then_execution(
             events=[
-                PushWorkflow(
-                    name=WorkflowName.MOVE, 
-                    config=WorkflowConfig(on_click=OnClickData(discard_slot=0))
-                )
+                ScenarioBuilder.add_hook(discard_slot=0),
+                PushWorkflow(name=WorkflowName.MOVEMENT)
             ]
         )
 

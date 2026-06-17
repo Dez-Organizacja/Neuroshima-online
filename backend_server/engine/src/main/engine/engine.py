@@ -2,13 +2,13 @@ from random import shuffle
 from main.state.context import ActionContext
 from main.workflows.factory import WorkflowFactory
 from main.engine.resolver import Resolver
-from main.events.data import Event
 from main.events.workflow import PushWorkflow
 from main.workflows.data import WorkflowConfig, WorkflowName
 from main.tokens.pile_factory import PileFactory
 from main.steps.step import Step
 from main.input.data import Button, ButtonAction, UserAction, ActionType
 from main.input.action_handlers import ButtonHandler
+from main.systems.on_click import OnClickSystem
 
 class GameEngine:
 
@@ -29,7 +29,15 @@ class GameEngine:
         if ctx.workflow_instance.current_step_index is None:
             wf.start(ctx)
         return wf.get_current_step(ctx)
-    
+
+    def execute_on_click(self, ctx : ActionContext) -> None:
+        for instance in reversed(ctx.state.workflow_stack):
+            if not instance.on_click_consumed and instance.on_click is not None:
+                self.resolver.execute(ctx, OnClickSystem.resolve(instance))
+                return
+                #on click system consumes workflow action
+
+
     def execute_step(
             self, 
             ctx : ActionContext, 
@@ -60,7 +68,6 @@ class GameEngine:
             
             if step.requires_input:
                 break
-
                 # print(f"INPUT NEEDED EXECUTING STEP FINISED")
                 # print(f"workflow instance {ctx.workflow_instance}")
 
@@ -73,23 +80,7 @@ class GameEngine:
             action.type != ActionType.BUTTON
             or action.name != Button.CANCEL
         )
-
-    # @staticmethod
-    # def _starts_player_action(ctx : ActionContext, step : Step) -> bool:
-    #     if not step.requires_input:
-    #         return False
-
-    #     if ctx.workflow_instance.name in {
-    #         WorkflowName.TURN,
-    #         WorkflowName.HEADQUARTER_TURN,
-    #     }:
-    #         return True
-
-    #     return (
-    #         ctx.workflow_instance.name == WorkflowName.DRAW
-    #         and ctx.workflow_instance.current_step_index == 3
-    #     )
-
+    
     def execute_action(self, ctx : ActionContext, action : UserAction):
         print("########################")
         print(f"EXECUTING ACTION {action}")
@@ -104,6 +95,7 @@ class GameEngine:
             self.resolver.execute(ctx, ButtonHandler.handle(ctx, action))
 
         else:
+            self.execute_on_click(ctx)
             self.execute_step(ctx, step=step, action=action)
         
         self.run_until_input_required(ctx)

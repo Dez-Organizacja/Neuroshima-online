@@ -11,7 +11,7 @@ class Resolver():
         if not ctx.state.pending_workflows:
             return
         
-        print(ctx.workflow_instance)
+        # print(ctx.workflow_instance)
         if ctx.workflow_instance.name != WorkflowName.GAME:
             return
 
@@ -34,8 +34,9 @@ class Resolver():
             ctx.state.events_queue.extend(result)
 
         if dirty:
-            PassiveSystems.compute(ctx.board)
+            PassiveSystems.compute(ctx.board, ctx.state.players)
             ctx.animations.extend(ctx.wire_animations.collect(ctx.board))
+
 
         self._commit_pending_workflow(ctx)
     

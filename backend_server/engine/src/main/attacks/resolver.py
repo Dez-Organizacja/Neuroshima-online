@@ -4,6 +4,8 @@ from main.attacks.data import (
     DirectedIntent,
     TargetedIntent,
     AttackResult,
+    TargetResoltion,
+    AttackLog,
 )
 from main.rules.combat import CombatRules
 from main.board.board import Board, Hex
@@ -17,7 +19,7 @@ class TargetedResolver:
     def reverse_direction(direction : int):
         return (direction + 3) % 6
 
-    def reduce_damage(self, attack : TargetedIntent):
+    def reduce_damage(self, attack : TargetedIntent) -> int:
         # print("damage reducing")
         # print(f"blockable {attack.blockable}")
         if attack.blockable and attack.from_direction is not None:
@@ -28,15 +30,20 @@ class TargetedResolver:
 
         return attack.power
     
-    def resolve(self, attack : TargetedIntent) -> list[Effect]:
+    def resolve(self, attack : TargetedIntent) -> TargetResoltion:
+        resolution = TargetResoltion(target_pos=attack.target_pos)
         if attack.destroy:
-            return [DestroyEffect(attack.target_pos)]
+            resolution.effects.append(DestroyEffect(attack.target_pos))
+            return resolution
 
+        # print(f"attack {attack}")
         power = self.reduce_damage(attack)
         # print(f"new power {power}")
-        if power <= 0:
-            return []
-        return [DamageEffect(pos=attack.target_pos, damage=power)]
+        if power > 0:
+            resolution.effects.append(
+                DamageEffect(pos=attack.target_pos, damage=power)
+            )
+        return resolution
 
 
 class DirectedResolver:
@@ -59,6 +66,7 @@ class DirectedResolver:
         return [
             TargetedIntent(
                 target_pos=t,
+                attacker_pos=attack.attacker_pos,
                 power=attack.power,
                 blockable=attack.properties.blockable,
                 from_direction=attack.direction,
@@ -72,21 +80,27 @@ class AttackResolver:
     def resolve(cls, attack, board) -> AttackResult:
         # print(f"RESOLVING ATTACK")
         # print(f"from {attack.}")
-        result = AttackResult()
-        resolver = TargetedResolver(board)
+        expanded = []
+        log = AttackLog()
+
         match attack:
             case DirectedIntent():
+                log.attacker_pos = attack.attacker_pos
                 expanded = DirectedResolver.resolve(attack, board)
-                for t in expanded:  
-                    effects = resolver.resolve(t)
-                    result.result.extend(effects)
-                    result.animations.extend(
-                        AnimationSystem.get_attacks(attack.attacker_pos, effects)
-                    )
 
             case TargetedIntent():
-                result.result.extend(resolver.resolve(attack))
+                expanded = [attack]
 
             # print(f"targeted to {t.target_pos} of power {t.power}")
+
+        result = AttackResult()
+        resolver = TargetedResolver(board)
+
+        for t in expanded:
+            resolution = resolver.resolve(t)
+            result.result.extend(resolution.effects)
+            log.resolved_targets.append(resolution)
+        
+        result.animations.extend(AnimationSystem.get_attacks_animations(log))
 
         return result

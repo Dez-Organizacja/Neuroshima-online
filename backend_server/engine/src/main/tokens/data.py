@@ -62,6 +62,7 @@ class Boost(Enum):
     MOVE_ABILITY = "move_ability"
     HEAL = "heal"
     STEAL_BOOST = "steal_boost"
+    MOVE_RANGE = "move_range"
 
 @dataclass
 class TokenView:

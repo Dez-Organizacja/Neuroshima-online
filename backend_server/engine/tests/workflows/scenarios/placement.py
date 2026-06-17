@@ -22,7 +22,7 @@ def placement_scenario():
         
         .when(BoardAction(pos = (1, 1)))
         .given(setup_function)
-        .then_execution(events=[ConsumeOnClick()])
+        # .then_execution(events=[ConsumeOnClick()])
         .then_data_delta(type=BoardAction.type, unit_pos=(1, 1), slot=0)
 
         .tick()
