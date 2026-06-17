@@ -19,6 +19,7 @@ type Animation =
     | {type : "wound"; target : [number, number]; wounds : number;}
     | {type : "destroy"; target : [number, number];}
     | {type : "weaken"; target : [number, number]; damage : number;}
+    | {type : "set_wire"; target : [number, number]; wired: boolean;}
 
 export type GameState = {
     view : {

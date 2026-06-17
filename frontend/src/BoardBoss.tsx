@@ -108,6 +108,8 @@ export default function Display() {
                 screens.push(
                     <HexTest gameState={States[i]} isAnimation={true} />
                 )
+            } else if(CurrentAnimation.type === "set_wire") {
+                console.log("SET_WIRE " + CurrentAnimation.target[0] + ", " + CurrentAnimation.target[1] + "    i: " + i);
             }
 
             i += 1;
