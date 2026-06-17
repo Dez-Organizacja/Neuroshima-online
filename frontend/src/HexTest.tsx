@@ -11,6 +11,7 @@ import { useProcesedGameState, GameState } from "./Dlaigora";
 import Tile from "./components/Tile"
 import TextBox from "./components/TextBox";
 import { getCurrentFaction } from "./factionStore";
+import RotateButton from "./components/RotateButton";
 
 type HexTestProps = {
     gameState: GameState;
@@ -240,6 +241,18 @@ export default function HexTest({
             <TextBox x={RightX} y={height - (height / 32)} text={"Pile size: " + EnemyPile} />
         </div>
     )
+    // ===== ============== ===== //
+
+
+    // ===== Rotate Buttons ===== //
+    if(CanMove && !isAnimation) {
+        Items.push(
+            <RotateButton x={(width / 2) - (height / 40)} y={height - ButtonPoz} height={height / 20} width={height / 20} text="◀" type="left" />
+        )
+        Items.push(
+            <RotateButton x={(width / 2) + (height / 40)} y={height - ButtonPoz} height={height / 20} width={height / 20} text="▶" type="right" />
+        )
+    }
     // ===== ============== ===== //
 
     // console.log("======");
