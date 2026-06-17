@@ -53,7 +53,7 @@ export default function Display() {
                     structuredClone(ActiveGameState)
                 );
                 screens.push(
-                    <HexTest gameState={States[i]} attackingUnit={CurrentAnimation.attacker} targetUnit={CurrentAnimation.target} />
+                    <HexTest gameState={States[i]} attackingUnit={CurrentAnimation.attacker} targetUnit={CurrentAnimation.target} isAnimation={true} />
                 )
 
             } else if(CurrentAnimation.type === "destroy") {
@@ -70,7 +70,7 @@ export default function Display() {
                     structuredClone(ActiveGameState)
                 );
                 screens.push(
-                    <HexTest gameState={States[i]} />
+                    <HexTest gameState={States[i]} isAnimation={true} />
                 )
 
             } else if(CurrentAnimation.type === "wound") {
@@ -88,7 +88,7 @@ export default function Display() {
                     structuredClone(ActiveGameState)
                 );
                 screens.push(
-                    <HexTest gameState={States[i]} />
+                    <HexTest gameState={States[i]} isAnimation={true} />
                 )
 
             } else if(CurrentAnimation.type === "weaken") {
@@ -106,7 +106,7 @@ export default function Display() {
                     structuredClone(ActiveGameState)
                 );
                 screens.push(
-                    <HexTest gameState={States[i]} />
+                    <HexTest gameState={States[i]} isAnimation={true} />
                 )
             }
 
