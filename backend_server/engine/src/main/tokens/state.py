@@ -104,6 +104,7 @@ class BoardTokenState:
         self.modifiers.initiatives = initiatives
         self.modifiers.is_used = [False for _ in initiatives]
         self.modifiers.is_basic = [True for _ in initiatives]
+        self.modifiers.num_of_old = 0
 
     def reset_relations(self, relation : TokenRelation):
         self.relations.real_boost_target = relation
