@@ -8,6 +8,7 @@ class AnimationType(Enum):
     ATTACK="attack"
     WEAKEN="weaken"
     DESTROY="destroy"
+    SET_WIRE="set_wire"
 
 
 @dataclass
@@ -36,3 +37,9 @@ class WeakenAnimation(Animation):
     target : Hex
     damage : int
     type : AnimationType = field(default=AnimationType.WEAKEN, init=False)
+
+@dataclass
+class SetWireAnimation(Animation):
+    target: Hex
+    wired: bool
+    type: AnimationType = field(default=AnimationType.SET_WIRE, init=False)

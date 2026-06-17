@@ -1,11 +1,19 @@
 from collections import defaultdict
 
 from main.board.board import Board
+from main.board.data import Hex
+from main.tokens.board_token import BoardToken
+from main.events.animations import SetWireAnimation
 
 class Sieciarze:
     def __init__(self, board : Board):
         self.board : Board = board
+        self.logs : list[SetWireAnimation] = []
         # self.kwestia_sieciarzy()
+
+    def set_wire(self, pos : Hex, wire : bool):
+        self.board.get_token(pos).set_wire(wire)
+        self.logs.append(SetWireAnimation(pos, wire))
 
     @classmethod
     def compute(cls, board):
@@ -226,13 +234,15 @@ class Sieciarze:
                 cel = self.board.get_token((i, j))
                 
                 if (cel != None):
-                    cel.set_wire(False)
+                    self.set_wire((i, j), False)
+                    # cel.set_wire(False)
 
         for i in self.status_sieciarzy:
             akt = self.board.get_token(i)
             
             if self.status_sieciarzy[i] != 1:
-                akt.set_wire(True)    
+                # akt.set_wire(True)
+                self.set_wire(i, True)    
                 continue
 
             for kier in akt.get_wire_directions():
@@ -242,7 +252,8 @@ class Sieciarze:
                 if (not self.board.is_valid_target((nx, ny), akt.faction)) or cel.can_wire() == True:
                     continue
 
-                cel.set_wire(True)
+                # cel.set_wire(True)
+                self.set_wire((nx, ny), True)
 
         self.status_sieciarzy = dict(self.status_sieciarzy)
 
