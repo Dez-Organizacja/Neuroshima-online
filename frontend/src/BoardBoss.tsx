@@ -111,6 +111,7 @@ export default function Display() {
                 screens.push(
                     <HexTest gameState={States[i]} isAnimation={true} />
                 )
+                
             } else if(CurrentAnimation.type === "set_wire") {
                 const CurrentIndex = ActiveGameState.view.state.board.findIndex(item =>
                     item.pos[0] === CurrentAnimation.target[0] &&
