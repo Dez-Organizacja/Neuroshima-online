@@ -16,12 +16,14 @@ type HexTestProps = {
     gameState: GameState;
     attackingUnit?: [number, number];
     targetUnit?: [number, number];
+    isAnimation?: boolean;
 };
 
 export default function HexTest({
     gameState,
     attackingUnit,
     targetUnit,
+    isAnimation = false,
 }: HexTestProps){
 
 
@@ -54,7 +56,9 @@ export default function HexTest({
     // const currentfaction = gameState.view.uiState.faction;
     const currentfaction = getCurrentFaction();
     const ActiveFaction = gameState.view.uiState.faction;
-    const CanMove: boolean = (currentfaction === ActiveFaction);
+
+    const CanMove: boolean = ((currentfaction === ActiveFaction) || (isAnimation === true));
+
     if(!currentfaction){
         console.log("RECEIVED NO FACTION");
         return <div>No faction found</div>;

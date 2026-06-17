@@ -22,8 +22,11 @@ export default function Display() {
 
         const screens = [];
 
+        const States: GameState[] = [];
+
         console.log("GAMESTATE RECEIVED - HURAAAAA!");
         console.log(gameState);
+        console.log(prevGameState)
 
         let ActiveGameState: GameState = structuredClone(gameState);
         let LastGameState: GameState = structuredClone(gameState);
@@ -45,21 +48,29 @@ export default function Display() {
             const CurrentAnimation = LastGameState.view.animations[i];
 
             if(CurrentAnimation.type === "attack") {
+                console.log("ATTACK " + CurrentAnimation.target[0] + ", " + CurrentAnimation.target[1] + "    i: " + i)
+                States.push(
+                    structuredClone(ActiveGameState)
+                );
                 screens.push(
-                    <HexTest gameState={ActiveGameState} attackingUnit={CurrentAnimation.attacker} targetUnit={CurrentAnimation.target} />
+                    <HexTest gameState={States[i]} attackingUnit={CurrentAnimation.attacker} targetUnit={CurrentAnimation.target} />
                 )
 
             } else if(CurrentAnimation.type === "destroy") {
                 const IndexToRemove = ActiveGameState.view.state.board.findIndex(item =>
-                    item.pos === LastGameState.view.animations[i].target
+                    item.pos[0] === CurrentAnimation.target[0] &&
+                    item.pos[1] === CurrentAnimation.target[1]
                 );
                 if(IndexToRemove !== -1) {
-                    console.log("DESTROY " + CurrentAnimation);
+                    console.log("DESTROY " + CurrentAnimation.target[0] + ", " + CurrentAnimation.target[1] + "    i: " + i);
                     ActiveGameState.view.state.board.splice(IndexToRemove, 1);
                 }
 
+                States.push(
+                    structuredClone(ActiveGameState)
+                );
                 screens.push(
-                    <HexTest gameState={ActiveGameState} />
+                    <HexTest gameState={States[i]} />
                 )
 
             } else if(CurrentAnimation.type === "wound") {
@@ -73,22 +84,29 @@ export default function Display() {
                     console.log("WOUNDS IN TOTAL: " + ActiveGameState.view.state.board[CIndex].unit.wounds);
                 }
 
+                States.push(
+                    structuredClone(ActiveGameState)
+                );
                 screens.push(
-                    <HexTest gameState={ActiveGameState} />
+                    <HexTest gameState={States[i]} />
                 )
 
             } else if(CurrentAnimation.type === "weaken") {
                 const CurrentIndex = ActiveGameState.view.state.board.findIndex(item =>
-                    item.pos === CurrentAnimation.target
+                    item.pos[0] === CurrentAnimation.target[0] &&
+                    item.pos[1] === CurrentAnimation.target[1]
                 );
                 if(CurrentIndex !== -1) {
-                    console.log("WEAKEN " + CurrentAnimation);
+                    console.log("WEAKEN " + CurrentAnimation.target[0] + ", " + CurrentAnimation.target[1] + "    i: " + i);
                     ActiveGameState.view.state.board[CurrentIndex].unit.wounds = 0;
                     ActiveGameState.view.state.board[CurrentIndex].unit.damage += CurrentAnimation.damage;
                 }
 
+                States.push(
+                    structuredClone(ActiveGameState)
+                );
                 screens.push(
-                    <HexTest gameState={ActiveGameState} />
+                    <HexTest gameState={States[i]} />
                 )
             }
 
