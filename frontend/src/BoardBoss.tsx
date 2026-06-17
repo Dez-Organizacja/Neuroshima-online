@@ -36,6 +36,7 @@ export default function Display() {
         ActiveGameState.view.animations.length = 0;
         ActiveGameState.view.availableActions.board.length = 0;
         ActiveGameState.view.availableActions.hand.length = 0;
+        ActiveGameState.view.state.hands[ActiveGameState.view.uiState.faction] = LastGameState.view.state.hands[ActiveGameState.view.uiState.faction];
 
 
         console.log("----- WHILE -----");
