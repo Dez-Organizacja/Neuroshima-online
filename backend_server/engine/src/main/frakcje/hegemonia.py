@@ -76,8 +76,8 @@ units = [
     
     unit.board("kwatermistrz", unit_count=1)
     .hp(1)
-    .boosts(types=[Boost.MELEE], directions=[0])
-    .boosts(types=[Boost.SHOOT], directions=[0])
+    .boosts(types=[Boost.MELEE], directions=[0, 1, 5])
+    .boosts(types=[Boost.SHOOT], directions=[0, 1, 5])
     .build(),
 
     unit.board("oficer1", unit_count=2)
