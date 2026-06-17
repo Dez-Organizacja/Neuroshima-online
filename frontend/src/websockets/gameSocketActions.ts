@@ -48,6 +48,9 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         if(!username){
             throw new Error("No username found");
         }
+        if(!room){
+            throw new Error("No room found");
+        }
         return sendAWFR({
             messageType : "LEAVEROOM_REQUEST",
             roomId : room,
@@ -101,17 +104,18 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         5000,
     )
     }
-    function sendAction(action : Action){
+    function sendAction(action : Action, czy : boolean = true){
         const gameId = localStorage.getItem("gameId");
         if (!gameId) {
             throw new Error("No gameId found");
         }
-
-        return sendMessage({
-            messageType: "ACTION_REQUEST",
-            gameId: gameId,
-            actionData: action,
-        });
+        if(czy){
+            return sendMessage({
+                messageType: "ACTION_REQUEST",
+                gameId: gameId,
+                actionData: action,
+            });
+        }
     }
     function getRoomListAWFR(){
         return sendAWFR({
@@ -132,6 +136,18 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         5000,
     )
     }
+    function endGameAWFR(){
+        const gameId = localStorage.getItem("gameId");
+        if(!gameId){
+            throw new Error("No gameId found");
+        }
+        return sendAWFR({
+            messageType : "ENDGAME_REQUEST",
+            gameId : gameId,
+        },
+        ["ENDGAME_RESPONSE", "ERROR"],
+        5000)
+    }
 
     return{
         createRoomAWFR,
@@ -143,5 +159,6 @@ export function createGameSocketActions(sendMessage : SendMessage, sendAWFR : Se
         setFactionAWFR,
         getRoomListAWFR,
         setRoomPolicyAWFR,
+        endGameAWFR,
     }
 }

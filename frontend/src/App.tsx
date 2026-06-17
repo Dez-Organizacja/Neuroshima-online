@@ -1,56 +1,108 @@
-import { useState } from "react";
-import React from "react";
+import { useCallback, useState } from "react";
 import LoginScreen from "./Loginscreen";
 import RegisterScreen from "./Registerscreen";
 import MenuScreen from "./Menu";
-import HexTest from "./HexTest";
 import Display from "./BoardBoss";
 import { RoomScreen } from "./WaitingRoom";
 import { GameSocketProvider } from "./websockets/gameSocketContext";
 
+type Screen = "login" | "register" | "menu" | "room" | "game";
+
+const SESSION_KEYS = [
+  "token",
+  "tokenExpiresAt",
+  "username",
+  "clientID",
+  "room",
+  "gameId",
+] as const;
+
+function clearStoredSession() {
+  SESSION_KEYS.forEach((key) => localStorage.removeItem(key));
+}
+
+function hasUsableStoredToken(): boolean {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return false;
+  }
+
+  const expiresAt = localStorage.getItem("tokenExpiresAt");
+  if (!expiresAt) {
+    // Accept tokens created by an older client version. The WebSocket server
+    // will still reject them if they are no longer valid.
+    return true;
+  }
+
+  const expirationTime = Date.parse(expiresAt);
+  if (!Number.isFinite(expirationTime) || expirationTime <= Date.now()) {
+    clearStoredSession();
+    return false;
+  }
+
+  return true;
+}
+
+function getInitialScreen(): Screen {
+  if (!hasUsableStoredToken()) {
+    return "login";
+  }
+
+  // Always restore through the room first. RoomScreen asks the server for the
+  // authoritative room status and gameView, then switches to the board when an
+  // active game exists.
+  return localStorage.getItem("room") ? "room" : "menu";
+}
+
 export default function App() {
-  const [screen, setScreen] = useState<"login" | "register" | "menu" | "room" | "game">("login");
-  function SwitchToLogin(){
+  const [screen, setScreen] = useState<Screen>(getInitialScreen);
+
+  const switchToLogin = useCallback(() => {
     setScreen("login");
-  }
-  function SwitchToRegister(){
+  }, []);
+
+  const switchToRegister = useCallback(() => {
     setScreen("register");
-  }
-  function SwitchToMenu(){
+  }, []);
+
+  const switchToMenu = useCallback(() => {
     setScreen("menu");
-  }
-  function SwitchToRoom(){
+  }, []);
+
+  const switchToRoom = useCallback(() => {
     setScreen("room");
-  }
-  function SwitchToGame(){
+  }, []);
+
+  const switchToGame = useCallback(() => {
     setScreen("game");
-  }
-  // function RenderScreen(){
-  //   if(screen == "login"){
-  //     return <LoginScreen onSwitchToRegister={SwitchToRegister} onAcceptedLogin={SwitchToMenu} />
-  //   }
-  // }
+  }, []);
+
   return (
     <div>
       {screen === "login" ? (
-      <LoginScreen onSwitchToRegister={SwitchToRegister} onAcceptedLogin={SwitchToMenu}></LoginScreen>
-    ): screen === "register" ? (
-      <RegisterScreen onSwitchToLogin={SwitchToLogin}></RegisterScreen>
-    ) : (
-      <GameSocketProvider>
-      {screen === "menu" ?(
-      <MenuScreen onSwitchToWaitingRoom={SwitchToRoom}></MenuScreen>
-    ) : screen === "room" ?(
-      <RoomScreen onSwitchToGame={SwitchToGame} onSwitchToMenu={SwitchToMenu}></RoomScreen>
-    ) : 
-     screen === "game" ?(
-      // <HexTest></HexTest>
-      <Display></Display>
-    ) : (
-      <p>AAAAAA</p>
-    )}
-     </GameSocketProvider>
-    )}
-  </div>
-  )
+        <LoginScreen
+          onSwitchToRegister={switchToRegister}
+          onAcceptedLogin={switchToMenu}
+        />
+      ) : screen === "register" ? (
+        <RegisterScreen onSwitchToLogin={switchToLogin} />
+      ) : (
+        <GameSocketProvider>
+          {screen === "menu" ? (
+            <MenuScreen onSwitchToWaitingRoom={switchToRoom} />
+          ) : screen === "room" ? (
+            <RoomScreen
+              onSwitchToGame={switchToGame}
+              onSwitchToMenu={switchToMenu}
+            />
+          ) : (
+            <Display
+              onSwitchToWaitingRoom={switchToRoom}
+              onSwitchToMenu={switchToMenu}
+            />
+          )}
+        </GameSocketProvider>
+      )}
+    </div>
+  );
 }

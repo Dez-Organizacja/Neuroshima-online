@@ -3,7 +3,7 @@ import Button from "./components/Button";
 import { useGameSocketContext } from "./websockets/gameSocketContext";
 import DisplayPlayerFactions from "./components/DisplayPlayerFactions";
 import { imagesByName } from "./Images";
-import { setCurrentFaction } from "./factionStore";
+import { clearCurrentFaction, setCurrentFaction } from "./factionStore";
 import "./styles/WaitingRoom.css";
 
 type RoomScreenProps = {
@@ -115,6 +115,14 @@ export function RoomScreen({
       setPlayersInRoom(latestMessage.playersInRoom);
       setPlayerFactions(latestMessage.playerFactions);
 
+      // `factionStore` is module memory, so it is reset by a full page refresh.
+      // Restore this player's faction from the server-authoritative room status
+      // before switching back to the active game screen.
+      const restoredFaction = latestMessage.playerFactions[username];
+      if (typeof restoredFaction === "string" && restoredFaction.trim()) {
+        setCurrentFaction(restoredFaction);
+      }
+
       const roomPolicy =
         typeof latestMessage.roomPolicy === "object" &&
         latestMessage.roomPolicy !== null
@@ -141,8 +149,18 @@ export function RoomScreen({
         setVisibility(reportedVisibility);
       }
 
-      if (typeof latestMessage.gameId === "string") {
+      const hasActiveGame =
+        typeof latestMessage.gameId === "string" &&
+        latestMessage.gameId.trim().length > 0 &&
+        typeof latestMessage.gameView === "object" &&
+        latestMessage.gameView !== null;
+
+      if (hasActiveGame) {
+        localStorage.setItem("gameId", latestMessage.gameId as string);
+        setCurrentReply("Previous battle session reclaimed.");
         onSwitchToGame();
+      } else {
+        localStorage.removeItem("gameId");
       }
     }
   }, [latestMessage, onSwitchToGame]);
@@ -152,16 +170,41 @@ export function RoomScreen({
       return;
     }
 
-    void getRoomStatusAWFR().catch((error) => {
-      setCurrentReply(
-        error instanceof Error
-          ? error.message
-          : "Could not load the room policy.",
-      );
-    });
-    // This request should run once when the waiting room gains a connection.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isConnected]);
+    void getRoomStatusAWFR()
+      .then((response) => {
+        if (response.messageType !== "ERROR") {
+          return;
+        }
+
+        const authoritativeRoomId = localStorage.getItem("room")?.trim();
+        const errorMessage =
+          typeof response.error === "string"
+            ? response.error
+            : "Could not restore the previous room.";
+
+        // useGameSocket synchronises localStorage from the server's
+        // CONNECTION envelope before isConnected becomes true. An absent room
+        // therefore means the server confirmed that there is no affiliation.
+        if (!authoritativeRoomId) {
+          localStorage.removeItem("gameId");
+          setCurrentReply("The previous room is no longer available.");
+          onSwitchToMenu();
+          return;
+        }
+
+        // Do not strand an affiliated player on the menu because of a
+        // temporary room-status failure. Keep the room route and allow the
+        // next reconnect/status refresh to recover it.
+        setCurrentReply(`${errorMessage} Your room session is still reserved.`);
+      })
+      .catch((error) => {
+        setCurrentReply(
+          error instanceof Error
+            ? error.message
+            : "Could not restore the previous room.",
+        );
+      });
+  }, [getRoomStatusAWFR, isConnected, onSwitchToMenu]);
 
   async function handleFaction() {
     if (!faction || isSubmittingFaction) {
@@ -207,6 +250,8 @@ export function RoomScreen({
       
       if (response.messageType === "LEAVEROOM_RESPONSE") {
         localStorage.removeItem("room");
+        localStorage.removeItem("gameId");
+        clearCurrentFaction();
         onSwitchToMenu();
       } else if (response.messageType === "ERROR") {
         setCurrentReply(
@@ -478,6 +523,19 @@ export function RoomScreen({
               </span>
             </div>
 
+            <div className="controlled-player" role="status">
+              <span className="controlled-player__mark" aria-hidden="true">
+                You
+              </span>
+              <span className="controlled-player__identity">
+                <span>You control this commander</span>
+                <strong>{username}</strong>
+                <small>
+                  Your faction selection and room actions belong to this player.
+                </small>
+              </span>
+            </div>
+
             <section
               className={`room-policy${isHost ? " is-editable" : ""}`}
               aria-labelledby="room-policy-title"
@@ -539,6 +597,7 @@ export function RoomScreen({
             <DisplayPlayerFactions
               playerFactions={playerFactions ?? {}}
               playersInRoom={playersInRoom}
+              currentUsername={username}
               hostUsername={hostUsername}
               canManageRoom={isHost && Boolean(visibility)}
               isRoomPolicyBusy={isUpdatingRoomPolicy}

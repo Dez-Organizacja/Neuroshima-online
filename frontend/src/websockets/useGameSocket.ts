@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { createGameSocket, type WebSocketMessage } from "./websocketClient";
 import { createGameSocketActions } from "./gameSocketActions";
 
@@ -20,6 +20,7 @@ export function useGameSocket() {
     const [isConnected, setIsConnected] = useState(false);
     const pendingRequestsRef = useRef<PendingRequest[]>([]);
     useEffect(() => {
+        let disposed = false;
         const token = localStorage.getItem("token");
 
         if (!token) {
@@ -30,6 +31,29 @@ export function useGameSocket() {
         const socket = createGameSocket(
             token,
             (serverMessage) => {
+                if (disposed) {
+                    return;
+                }
+
+                if (serverMessage.messageType === "CONNECTION") {
+                    const serverRoomId =
+                        typeof serverMessage.roomId === "string"
+                            ? serverMessage.roomId.trim()
+                            : "";
+
+                    // Reconcile browser state with the authoritative server
+                    // affiliation before room components issue status requests.
+                    if (serverRoomId) {
+                        localStorage.setItem("room", serverRoomId);
+                    } else {
+                        localStorage.removeItem("room");
+                        localStorage.removeItem("gameId");
+                        localStorage.removeItem("faction");
+                    }
+
+                    setIsConnected(true);
+                }
+
                 setLatestMessage(serverMessage);
                 setMessages((previousMessages) => [...previousMessages, serverMessage]);
                 const matchingRequest = pendingRequestsRef.current.find((pending) =>
@@ -45,21 +69,32 @@ export function useGameSocket() {
                 }
             },
             () => {
-            setIsConnected(true);
+                // Wait for the server's CONNECTION envelope before exposing
+                // the socket as ready. That envelope also carries the
+                // authoritative room affiliation used for session reclaim.
             },
             () => {
-            setIsConnected(false);
+                if (!disposed) {
+                    setIsConnected(false);
+                }
             },
             () => {
-            setIsConnected(false);
+                if (!disposed) {
+                    setIsConnected(false);
+                }
             }
         );
         socketReference.current = socket;
 
         return () => {
+            disposed = true;
+            pendingRequestsRef.current.forEach((pending) => {
+                clearTimeout(pending.timeoutId);
+                pending.reject(new Error("WebSocket connection closed"));
+            });
+            pendingRequestsRef.current = [];
             socket.close();
             socketReference.current = null;
-            setIsConnected(false);
         };
     }, []);
 
@@ -101,7 +136,10 @@ export function useGameSocket() {
             });
         },[]
         );
-    const actions = createGameSocketActions(sendMessage, sendAndWaitForResponse);
+    const actions = useMemo(
+        () => createGameSocketActions(sendMessage, sendAndWaitForResponse),
+        [sendMessage, sendAndWaitForResponse],
+    );
 
 return {
     messages,

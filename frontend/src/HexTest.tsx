@@ -11,7 +11,6 @@ import { useProcesedGameState, GameState } from "./Dlaigora";
 import Tile from "./components/Tile"
 import TextBox from "./components/TextBox";
 import { getCurrentFaction } from "./factionStore";
-import RotateButton from "./components/RotateButton";
 
 type HexTestProps = {
     gameState: GameState;
@@ -58,12 +57,15 @@ export default function HexTest({
     const currentfaction = getCurrentFaction();
     const ActiveFaction = gameState.view.uiState.faction;
 
-    let CanMove: boolean = (currentfaction === ActiveFaction);
-    if(isAnimation) CanMove = false;
+    const CanMove: boolean = ((currentfaction === ActiveFaction) || (isAnimation === true));
 
-    if(!currentfaction){
+    if (!currentfaction) {
         console.log("RECEIVED NO FACTION");
-        return <div>No faction found</div>;
+        return (
+            <main style={{ color: "white", padding: "2rem" }}>
+                Restoring your faction…
+            </main>
+        );
     }
     const Items = [];
     // =============== //
@@ -160,7 +162,7 @@ export default function HexTest({
         const FinalY = StartY + i * VerticalSpacing;
         // === Dict check === //
         const Index = (i + 1) / 2;
-        const TokenName = gameState.view.state.hands[currentfaction].tokens[Index];
+        const TokenName = gameState.view.state.hands[currentfaction]?.tokens[Index];
         let Path: string = "undefined/undefined";
         if(TokenName !== undefined) Path = currentfaction + "/" + TokenName;
 
@@ -212,10 +214,7 @@ export default function HexTest({
 
     // ===== Message ===== //
     let Text: string = gameState.view.uiState.message;
-    if(Text && !isAnimation) {
-        if(currentfaction !== gameState.view.uiState.faction) {
-            Text = "Opponent: " + Text;
-        }
+    if(Text && CanMove) {
         Items.push(
             <TextBox x={width / 2} y={ButtonPoz} text={Text} />
         );
@@ -241,18 +240,6 @@ export default function HexTest({
             <TextBox x={RightX} y={height - (height / 32)} text={"Pile size: " + EnemyPile} />
         </div>
     )
-    // ===== ============== ===== //
-
-
-    // ===== Rotate Buttons ===== //
-    if(CanMove && !isAnimation && gameState.view.uiState.mode === "rotation") {
-        Items.push(
-            <RotateButton x={(width / 2) - (height / 40)} y={height - ButtonPoz} height={height / 20} width={height / 20} text="◀" type="left" />
-        )
-        Items.push(
-            <RotateButton x={(width / 2) + (height / 40)} y={height - ButtonPoz} height={height / 20} width={height / 20} text="▶" type="right" />
-        )
-    }
     // ===== ============== ===== //
 
     // console.log("======");

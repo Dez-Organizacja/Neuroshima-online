@@ -12,7 +12,7 @@ export default function DevBoardApp() {
 //     setScreen("register");
 //   }
 
-  return (
+  // return (
     // <div>
     //   {screen === "login" ? (
     //   <LoginScreen onSwitchToRegister={SwitchToRegister} />
@@ -21,6 +21,6 @@ export default function DevBoardApp() {
     // )}
     // </div>
     // <HexTest />
-    HexTest()
-  );
+    // HexTest()
+  // );
 }
