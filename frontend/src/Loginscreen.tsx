@@ -34,8 +34,29 @@ export default function LoginScreen({
     try {
       const data = await Login(username.trim(), password, apiUrl("/api/auth/login"));
       if (data.token) {
+        const normalizedUsername = username.trim();
+        const previousUsername = localStorage.getItem("username");
+
+        // Room/game ids belong to the account that created them.
+        if (
+          previousUsername &&
+          previousUsername.toLocaleLowerCase() !==
+            normalizedUsername.toLocaleLowerCase()
+        ) {
+          localStorage.removeItem("room");
+          localStorage.removeItem("gameId");
+          localStorage.removeItem("clientID");
+        }
+
         localStorage.setItem("token", data.token);
-        localStorage.setItem("username", username.trim());
+        localStorage.setItem("username", normalizedUsername);
+
+        if (typeof data.expiresAt === "string") {
+          localStorage.setItem("tokenExpiresAt", data.expiresAt);
+        } else {
+          localStorage.removeItem("tokenExpiresAt");
+        }
+
         onAcceptedLogin();
       } else {
         setError("The command network did not return an access token.");

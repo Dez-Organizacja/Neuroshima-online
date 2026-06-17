@@ -52,24 +52,44 @@ public class WebSocketHandler extends TextWebSocketHandler {
             return;
         }
 
-        // Tłumaczymy techniczną sesję na konkretnego użytkownika
-        String sessionId = session.getId();
+        // Use the authenticated username as the stable player id. A technical
+        // WebSocket session id changes on every refresh and cannot be used to
+        // reclaim a room or an active game.
         String username = user.getUsername();
+        String clientId = username;
 
-        session.getAttributes().put("clientId", sessionId);
+        session.getAttributes().put("clientId", clientId);
         session.getAttributes().put("username", username);
 
-        sessionRegistry.register(sessionId, session);
-        gameService.registerClientUsername(sessionId, username); // ← Przekazujemy username do serwisu gry
+        WebSocketSession previousSession = sessionRegistry.register(clientId, session);
+        gameService.registerClientUsername(clientId, username);
+
+        // A second connection for the same account replaces the old socket.
+        // The registry's conditional unregister prevents the old close event
+        // from removing this new connection.
+        if (previousSession != null
+                && previousSession != session
+                && previousSession.isOpen()) {
+            previousSession.close(CloseStatus.NORMAL);
+        }
+
+        String affiliatedRoomId = gameService.getAffiliation(clientId);
 
         Map<String, Object> connectionMessage = new HashMap<>();
         connectionMessage.put("messageType", "CONNECTION");
-        connectionMessage.put("clientId", sessionId);
+        connectionMessage.put("clientId", clientId);
         connectionMessage.put("username", username);
+        // The server is authoritative about session reclaim. The browser may
+        // have lost or cleared localStorage while this player is still kept in
+        // a room during the reconnect grace period.
+        connectionMessage.put("roomId", affiliatedRoomId);
+        connectionMessage.put("sessionReclaimed", affiliatedRoomId != null);
         connectionMessage.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
-        connectionMessage.put("message", "Connected");
+        connectionMessage.put("message", affiliatedRoomId == null
+                ? "Connected"
+                : "Connected; room session reclaimed");
 
-        logger.info("Authenticated client {} connected as session: {}", username, sessionId);
+        logger.info("Authenticated client {} connected with stable clientId={}", username, clientId);
         sendJson(session, connectionMessage);
     }
 
@@ -116,9 +136,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String clientId = (String) session.getAttributes().get("clientId");
         String roomId = gameService.getAffiliation(clientId);
-        sessionRegistry.unregister(clientId);
-        gameService.handleClientDisconnect(clientId);
-        broadcastRoomStatus(roomId);
+        boolean removedCurrentSession = sessionRegistry.unregister(clientId, session);
+        if (removedCurrentSession) {
+            gameService.handleClientDisconnect(clientId);
+            broadcastRoomStatus(roomId);
+        }
 
         Map<String, Object> disconnectionMessage = new HashMap<>();
         disconnectionMessage.put("messageType", "DISCONNECTION");

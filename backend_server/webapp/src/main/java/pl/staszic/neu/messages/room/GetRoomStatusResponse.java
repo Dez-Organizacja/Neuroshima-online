@@ -1,6 +1,7 @@
 package pl.staszic.neu.messages.room;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import pl.staszic.neu.game.model.RoomPolicyView;
 
 import java.util.Map;
@@ -24,6 +25,9 @@ public class GetRoomStatusResponse extends RoomScopedWebSocketMessage {
 
     @JsonProperty("roomPolicy")
     private RoomPolicyView roomPolicyView;
+
+    @JsonProperty("gameView")
+    private JsonNode gameView;
 
     public GetRoomStatusResponse() {
         super(TYPE);
@@ -66,5 +70,13 @@ public class GetRoomStatusResponse extends RoomScopedWebSocketMessage {
 
     public void setRoomPolicyView(RoomPolicyView roomPolicyView) {
         this.roomPolicyView = roomPolicyView;
+    }
+
+    public JsonNode getGameView() {
+        return gameView;
+    }
+
+    public void setGameView(JsonNode gameView) {
+        this.gameView = gameView;
     }
 }
