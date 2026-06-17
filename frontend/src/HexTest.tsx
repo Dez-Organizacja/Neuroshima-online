@@ -245,7 +245,7 @@ export default function HexTest({
 
 
     // ===== Rotate Buttons ===== //
-    if(CanMove && !isAnimation) {
+    if(CanMove && !isAnimation && gameState.view.uiState.mode === "rotation") {
         Items.push(
             <RotateButton x={(width / 2) - (height / 40)} y={height - ButtonPoz} height={height / 20} width={height / 20} text="◀" type="left" />
         )
