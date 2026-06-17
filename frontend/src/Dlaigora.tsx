@@ -51,7 +51,7 @@ export type GameState = {
             pos : [number, number],
             slot : number
         }
-        animations? : Animation[]
+        animations : Animation[]
     }
 }
 

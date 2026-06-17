@@ -86,11 +86,11 @@ const Tile: React.FC<TileProps> = ({
     if(imageName === "undefined/undefined") opacity = 0.5;
 
 
-    console.log("LAST CLICK (" + poz1 + ", " + poz2 + "):");
-    console.log(gameState.view.LastClickedHex);
+    // console.log("LAST CLICK (" + poz1 + ", " + poz2 + "):");
+    // console.log(gameState.view.LastClickedHex);
     if(gameState.view.LastClickedHex !== undefined) {
-        console.log("LAST CLICK (CLICKED):");
-        console.log(gameState.view.LastClickedHex);
+        // console.log("LAST CLICK (CLICKED):");
+        // console.log(gameState.view.LastClickedHex);
         if(clickable) {
             if(gameState.view.LastClickedHex.source === "board" && gameState.view.LastClickedHex.pos[0] === poz1 && gameState.view.LastClickedHex.pos[1] === poz2) {
                 Items.push(

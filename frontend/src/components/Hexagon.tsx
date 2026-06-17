@@ -42,11 +42,11 @@ export function ClickCheck(x: number, y: number, gameState : GameState | undefin
             rotation: ((rotation - 30) / 60)
         };
 
-        console.log("ROTATION SENT: " + ((rotation - 30) / 60));
+        // console.log("ROTATION SENT: " + ((rotation - 30) / 60));
 
         sendAction(action);
     } else if(y === -1) {
-        console.log("CLICK: " + x + " --HAND");
+        // console.log("CLICK: " + x + " --HAND");
 
         if(gameState.view.availableActions.hand[x]) {
             console.log("Click accepted (hand) : ", { x, y });

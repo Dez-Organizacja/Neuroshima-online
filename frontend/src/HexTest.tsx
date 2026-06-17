@@ -23,6 +23,12 @@ export default function HexTest({
     attackingUnit,
     targetUnit,
 }: HexTestProps){
+
+
+    console.log("---DISPLAYED---");
+    console.log(gameState);
+
+
     const { width, height } = GetWindowSize();
     const ScreenWidth = width;
     const ScreenHeight = height;
@@ -40,6 +46,7 @@ export default function HexTest({
     const { sendAction } = useGameSocketContext();
     // const { gameState, prevGameState} = useProcesedGameState(); // =========== WAZNA LINIA
     if (!gameState) {
+        console.log("RECEIVED NULL");
         return <div>Loading game...</div>;
     }
     // if (!prevGameState) {}
@@ -49,6 +56,7 @@ export default function HexTest({
     const ActiveFaction = gameState.view.uiState.faction;
     const CanMove: boolean = (currentfaction === ActiveFaction);
     if(!currentfaction){
+        console.log("RECEIVED NO FACTION");
         return <div>No faction found</div>;
     }
     const Items = [];
@@ -56,11 +64,11 @@ export default function HexTest({
 
     
                 // =================== Testowanie inputu =================== //
-                console.log(gameState.view.uiState.message);
+                // console.log(gameState.view.uiState.message);
 
-                console.log(gameState.view.state.board);
+                // console.log(gameState.view.state.board);
 
-                console.log(gameState.view.state.hands[currentfaction]?.tokens ?? []);
+                // console.log(gameState.view.state.hands[currentfaction]?.tokens ?? []);
                 // =================== ================= =================== //
 
 
@@ -89,7 +97,7 @@ export default function HexTest({
             if (field) {
                 Path = field.unit.faction + "/" + field.unit.name;
                 Rotation = field.unit.rotation * 60;
-                console.log("{" + y + ", " + x +  "}  " + Path + "     R: " + Rotation);
+                // console.log("{" + y + ", " + x +  "}  " + Path + "     R: " + Rotation);
 
                 // Items.push(
                 //     <Image imageName={Path} x={FinalX} y={FinalY} poz1={y} poz2={x} height={((Size * 2 + 15) * 0.866)} rotation={30 + Rotation} gameState={gameState} />
@@ -231,6 +239,13 @@ export default function HexTest({
     // console.log("======");
 
     // =================== ================= =================== //
+
+    if(Items.length === 0) {
+        console.log("FAILED - EMPTY ITEMS")
+    } else {
+        console.log("SUCCESS - DISPLAYED: ");
+        console.log(gameState);
+    }
 
     return (
         <div className="canvas">
