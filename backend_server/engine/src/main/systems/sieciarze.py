@@ -17,7 +17,9 @@ class Sieciarze:
 
     @classmethod
     def compute(cls, board):
-        cls(board).kwestia_sieciarzy()
+        solver = cls(board)
+        solver.kwestia_sieciarzy()
+        return solver.logs
 
     def dfs1(self, akt):
         self.odw.add(akt)

@@ -34,8 +34,8 @@ class Resolver():
             ctx.state.events_queue.extend(result)
 
         if dirty:
-            PassiveSystems.compute(ctx.board, ctx.state.players)
-            ctx.animations.extend(ctx.wire_animations.collect(ctx.board))
+            wire_logs = PassiveSystems.compute(ctx.board, ctx.state.players)
+            ctx.animations.extend(ctx.wire_animations.collect(ctx.board, wire_logs))
 
 
         self._commit_pending_workflow(ctx)

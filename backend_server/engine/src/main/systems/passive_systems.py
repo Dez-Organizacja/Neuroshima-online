@@ -7,5 +7,6 @@ class PassiveSystems:
     @staticmethod
     def compute(board : Board, players : dict[str, PlayerState]):
         print("PASSIVE SYSTEMS RECOMPUTING")
-        Sieciarze.compute(board)
+        wire_logs = Sieciarze.compute(board)
         BoosterSolver.compute(board, players)
+        return wire_logs
