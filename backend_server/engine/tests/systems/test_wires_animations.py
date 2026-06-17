@@ -30,5 +30,5 @@ def test_resolver_adds_wire_animations_after_passive_recompute():
 
     assert ctx.board.get_token((2, 6)).wired is True
     assert len(wire_animations) == 1
-    assert wire_animations[0].pos == (2, 6)
+    assert wire_animations[0].target == (2, 6)
     assert wire_animations[0].wired is True

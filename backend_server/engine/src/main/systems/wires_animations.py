@@ -7,7 +7,7 @@ from main.events.animations import Animation
 
 @dataclass
 class SetWireAnimation(Animation):
-    pos: Hex
+    target: Hex
     wired: bool
     type: str = field(default="set_wire", init=False)
 
@@ -37,7 +37,7 @@ class WiresAnimationSystem:
             if before_wired == after_wired:
                 continue
 
-            result.append(SetWireAnimation(pos=pos, wired=after_wired))
+            result.append(SetWireAnimation(target=pos, wired=after_wired))
 
         return result
 
