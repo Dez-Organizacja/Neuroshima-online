@@ -32,7 +32,9 @@ export default function Image({
         field.pos[1] === poz2
     )
     if(field) {
-        if(field.unit.damage !== 0 && field.unit.name !== "sztab") imageName = imageName + "_" + field.unit.damage;
+        if(imageName !== "inne/rana2") {
+            if(field.unit.damage !== 0 && field.unit.name !== "sztab") imageName = imageName + "_" + field.unit.damage;
+        }
     }
 
     const imageSrc = imagesByName[imageName]

@@ -34,6 +34,8 @@ export default function Display() {
 
         // === Czyszczenie prev animacji === //
         ActiveGameState.view.animations.length = 0;
+        ActiveGameState.view.availableActions.board.length = 0;
+        ActiveGameState.view.availableActions.hand.length = 0;
 
 
         console.log("----- WHILE -----");

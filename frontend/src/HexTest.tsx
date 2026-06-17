@@ -57,7 +57,8 @@ export default function HexTest({
     const currentfaction = getCurrentFaction();
     const ActiveFaction = gameState.view.uiState.faction;
 
-    const CanMove: boolean = ((currentfaction === ActiveFaction) || (isAnimation === true));
+    let CanMove: boolean = (currentfaction === ActiveFaction);
+    if(isAnimation) CanMove = false;
 
     if(!currentfaction){
         console.log("RECEIVED NO FACTION");
