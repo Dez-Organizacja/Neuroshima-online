@@ -109,7 +109,21 @@ export default function Display() {
                     <HexTest gameState={States[i]} isAnimation={true} />
                 )
             } else if(CurrentAnimation.type === "set_wire") {
-                console.log("SET_WIRE " + CurrentAnimation.target[0] + ", " + CurrentAnimation.target[1] + "    i: " + i);
+                const CurrentIndex = ActiveGameState.view.state.board.findIndex(item =>
+                    item.pos[0] === CurrentAnimation.target[0] &&
+                    item.pos[1] === CurrentAnimation.target[1]
+                );
+                if(CurrentIndex !== -1) {
+                    console.log("SET_WIRE " + CurrentAnimation.target[0] + ", " + CurrentAnimation.target[1] + "    i: " + i);
+                    ActiveGameState.view.state.board[CurrentIndex].unit.wired = CurrentAnimation.wired;
+                }
+
+                States.push(
+                    structuredClone(ActiveGameState)
+                );
+                screens.push(
+                    <HexTest gameState={States[i]} isAnimation={true} />
+                )
             }
 
             i += 1;
