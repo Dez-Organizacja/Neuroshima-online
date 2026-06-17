@@ -113,6 +113,7 @@ export default function Display() {
                 )
 
             } else if(CurrentAnimation.type === "set_wire") {
+
                 
                 const CurrentIndex = ActiveGameState.view.state.board.findIndex(item =>
                     item.pos[0] === CurrentAnimation.target[0] &&
