@@ -210,7 +210,10 @@ export default function HexTest({
 
     // ===== Message ===== //
     let Text: string = gameState.view.uiState.message;
-    if(Text && CanMove) {
+    if(Text && !isAnimation) {
+        if(currentfaction !== gameState.view.uiState.faction) {
+            Text = "Opponent: " + Text;
+        }
         Items.push(
             <TextBox x={width / 2} y={ButtonPoz} text={Text} />
         );
