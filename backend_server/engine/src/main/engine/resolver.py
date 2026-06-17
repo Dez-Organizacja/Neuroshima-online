@@ -35,6 +35,7 @@ class Resolver():
 
         if dirty:
             PassiveSystems.compute(ctx.board)
+            ctx.animations.extend(ctx.wire_animations.collect(ctx.board))
 
         self._commit_pending_workflow(ctx)
     

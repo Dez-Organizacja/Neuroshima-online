@@ -2,6 +2,7 @@ from main.state.game_state import GameState
 from main.rules.faction_manager import FactionManager
 from main.state.player_state import PlayerState
 from main.systems.undo import UndoSystem
+from main.systems.wires_animations import WireAnimationTracker
 
 class ActionContext():
     def __init__(
@@ -16,6 +17,7 @@ class ActionContext():
         self.undo_system = undo_system or UndoSystem()
         self.consumed_input : bool = False
         self.animations = animations
+        self.wire_animations = WireAnimationTracker(self.board)
 
 
     @property
