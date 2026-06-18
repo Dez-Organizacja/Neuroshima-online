@@ -221,10 +221,6 @@ export default function Display({onSwitchToMenu, onSwitchToWaitingRoom} : BoardB
         };
     }, [gameState]);
 
-    if (!gameState || AllScreens.length === 0) {
-        return null;
-    }
-
     useEffect(() => {
         if (!gameState || gameState.view.phase !== "gameover") {
             return;
@@ -260,6 +256,9 @@ export default function Display({onSwitchToMenu, onSwitchToWaitingRoom} : BoardB
         );
     }
     
+    if (!gameState || AllScreens.length === 0) {
+        return null;
+    }
 
     return <>{AllScreens[currentIndex]}</>;
 
