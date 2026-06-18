@@ -5,7 +5,7 @@ from main.events.data import Effect
 from main.attacks.data import AttackIntent
 from main.workflows.data import WorkflowData
 from main.tokens.data import BoardType
-from main.events.animations import WeakenAnimation, DestroyAnimation, WoundAnimation
+from main.events.animations import WeakenAnimation, DestroyAnimation, WoundAnimation, RotationAnimation
 
 # ----------- moving and placing -----------
 
@@ -28,6 +28,7 @@ class RotateEffect(Effect):
 
     def apply(self, ctx: ActionContext):
         ctx.board.get_token(self.pos).set_rotation(self.rotation)
+        ctx.animations.append(RotationAnimation(self.pos, self.rotation))
 
 @dataclass
 class PlaceEffect(Effect):

@@ -8,6 +8,7 @@ class AnimationType(Enum):
     ATTACK="attack"
     WEAKEN="weaken"
     DESTROY="destroy"
+    ROTATION="rotation"
 
 
 @dataclass
@@ -36,3 +37,9 @@ class WeakenAnimation(Animation):
     target : Hex
     damage : int
     type : AnimationType = field(default=AnimationType.WEAKEN, init=False)
+
+@dataclass
+class RotationAnimation(Animation):
+    target : Hex
+    rotation : int
+    type : AnimationType = field(default_factory=AnimationType.ROTATION, init=False)
