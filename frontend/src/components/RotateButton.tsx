@@ -47,7 +47,7 @@ export default function RotateButton({
 }: RotateButtonProps) {
     return (
             <div
-                className="game-button"
+                className="game-button rotate-button"
     
                 // onClick={onClick}
                 onClick={() => ClickButton(text, type, clickable)}

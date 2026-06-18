@@ -470,6 +470,12 @@
   background: rgba(193, 91, 73, 0.075);
 }
 
+.auth-feedback.is-success {
+  border-left-color: var(--auth-success);
+  color: #c5ddb0;
+  background: rgba(130, 164, 103, 0.085);
+}
+
 .auth-feedback__icon {
   width: 22px;
   height: 22px;

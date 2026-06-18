@@ -3,6 +3,7 @@ import { imagesByName } from "../Images";
 type DisplayPlayerFactionsProps = {
   playerFactions: Record<string, string | null>;
   playersInRoom?: string[];
+  currentUsername?: string;
   hostUsername?: string;
   canManageRoom?: boolean;
   isRoomPolicyBusy?: boolean;
@@ -17,6 +18,7 @@ function displayFactionName(faction: string) {
 export default function DisplayPlayerFactions({
   playerFactions,
   playersInRoom = Object.keys(playerFactions),
+  currentUsername,
   hostUsername,
   canManageRoom = false,
   isRoomPolicyBusy = false,
@@ -47,11 +49,14 @@ export default function DisplayPlayerFactions({
           ? imagesByName[`${faction}/sztab`]
           : undefined;
         const isHost = Boolean(hostUsername && player === hostUsername);
+        const isCurrentPlayer = Boolean(currentUsername && player === currentUsername);
         const isPendingHost = pendingHostUsername === player;
 
         return (
           <div
-            className={`player-row${isHost ? " is-host" : ""}`}
+            className={`player-row${isHost ? " is-host" : ""}${
+              isCurrentPlayer ? " is-current-player" : ""
+            }`}
             key={player}
           >
             <span className="player-row__number">0{index + 1}</span>
@@ -69,6 +74,9 @@ export default function DisplayPlayerFactions({
             <span className="player-row__identity">
               <span className="player-row__name-line">
                 <strong>{player}</strong>
+                {isCurrentPlayer && (
+                  <span className="player-row__you-badge">You</span>
+                )}
                 {isHost ? (
                   <span className="player-row__host-badge">
                     <span aria-hidden="true">◆</span>

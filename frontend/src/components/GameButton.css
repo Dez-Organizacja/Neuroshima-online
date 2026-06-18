@@ -1,38 +1,86 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@500;600;700&display=swap");
+
 .game-button {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgba(242, 210, 123, 0.52);
+  color: #12150f;
+  background:
+    linear-gradient(135deg, #f2d27b 0%, #b38637 100%);
+  clip-path: polygon(
+    8px 0,
+    100% 0,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0 100%,
+    0 8px
+  );
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.28),
+    inset 0 1px rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: clamp(0.78rem, 1.5vw, 1.08rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  user-select: none;
+  white-space: nowrap;
+  transition:
+    transform 150ms ease,
+    filter 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
 
-    position: absolute;
+.game-button::before {
+  position: absolute;
+  inset: 1px;
+  border: 1px solid rgba(17, 20, 15, 0.18);
+  content: "";
+  pointer-events: none;
+  clip-path: inherit;
+}
 
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    cursor: pointer;
-
-    user-select: none;
-
-    border: 3px solid #d10606;
-
-    background-color: #222;
-
-    color: white;
-
-    font-size: 24px;
-
-    font-weight: bold;
-
-    transition: 0.15s;
+.game-button::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -40%;
+  width: 34%;
+  content: "";
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  transform: skewX(-18deg);
+  transition: left 220ms ease;
 }
 
 .game-button:hover {
+  transform: translateY(-2px) scale(1.03);
+  border-color: rgba(255, 230, 158, 0.88);
+  filter: brightness(1.08);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.32),
+    0 0 20px rgba(215, 180, 91, 0.18),
+    inset 0 1px rgba(255, 255, 255, 0.3);
+}
 
-    background-color: #444;
-
-    transform: scale(1.05);
+.game-button:hover::after {
+  left: 106%;
 }
 
 .game-button:active {
+  transform: translateY(0) scale(0.98);
+  filter: brightness(0.98);
+}
 
-    transform: scale(0.95);
+@media (prefers-reduced-motion: reduce) {
+  .game-button,
+  .game-button::after {
+    transition-duration: 0.01ms !important;
+  }
 }

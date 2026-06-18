@@ -686,9 +686,9 @@
   font-family: "Barlow Condensed", Impact, sans-serif;
   font-size: clamp(1.25rem, 2vw, 1.65rem);
   font-weight: 700;
-  letter-spacing: 0.055em;
+  letter-spacing: 0.025em;
   text-overflow: ellipsis;
-  text-transform: uppercase;
+  text-transform: none;
   white-space: nowrap;
 }
 

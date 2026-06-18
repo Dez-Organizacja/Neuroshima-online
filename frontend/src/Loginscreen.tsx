@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./components/Button";
 import TextInput from "./components/TekstInput";
 import { Login } from "./features/auth/Login";
@@ -21,8 +21,17 @@ export default function LoginScreen({
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
 
-  
+  useEffect(() => {
+    const registrationMessage = localStorage.getItem("registrationSuccessMessage");
+
+    if (registrationMessage) {
+      setNotice(registrationMessage);
+      localStorage.removeItem("registrationSuccessMessage");
+    }
+  }, []);
+
   async function handleLogin() {
     if (!username.trim() || !password || isSubmitting) {
       return;
@@ -30,6 +39,7 @@ export default function LoginScreen({
 
     setIsSubmitting(true);
     setError("");
+    setNotice("");
 
     try {
       const data = await Login(username.trim(), password, apiUrl("/api/auth/login"));
@@ -169,14 +179,16 @@ export default function LoginScreen({
             </div>
 
             <div
-              className={`auth-feedback${error ? " is-error" : ""}`}
+              className={`auth-feedback${error ? " is-error" : notice ? " is-success" : ""}`}
               role={error ? "alert" : "status"}
             >
               <span className="auth-feedback__icon" aria-hidden="true">
-                {error ? "!" : "i"}
+                {error ? "!" : notice ? "✓" : "i"}
               </span>
               <span>
-                {error || "Credentials are required to access the network."}
+                {error ||
+                  notice ||
+                  "Credentials are required to access the network."}
               </span>
             </div>
 

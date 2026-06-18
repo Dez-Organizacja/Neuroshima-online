@@ -1,38 +1,23 @@
-.game-button {
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&display=swap");
 
-    position: absolute;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    cursor: pointer;
-
-    user-select: none;
-
-    border: 3px solid #d10606;
-
-    background-color: #222;
-
-    color: white;
-
-    font-size: 24px;
-
-    font-weight: bold;
-
-    transition: 0.15s;
+.rotate-button {
+  border-color: rgba(130, 164, 103, 0.58);
+  color: #f0ead8;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.13), transparent 34%),
+    linear-gradient(145deg, #38482d 0%, #10160f 100%);
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.32),
+    0 0 16px rgba(130, 164, 103, 0.15),
+    inset 0 1px rgba(255, 255, 255, 0.12);
+  font-size: clamp(0.95rem, 2vw, 1.35rem);
 }
 
-.game-button:hover {
-
-    background-color: #444;
-
-    transform: scale(1.05);
-}
-
-.game-button:active {
-
-    transform: scale(0.95);
+.rotate-button:hover {
+  border-color: rgba(186, 218, 151, 0.86);
+  filter: brightness(1.12);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.35),
+    0 0 20px rgba(130, 164, 103, 0.24),
+    inset 0 1px rgba(255, 255, 255, 0.18);
 }

@@ -167,9 +167,11 @@ export default function RegisterScreen({
     setError("");
 
     try {
+      const registeredUsername = username.trim();
+
       await Register(
         {
-          username: username.trim(),
+          username: registeredUsername,
           password,
           ...(captchaRequired
             ? {
@@ -179,6 +181,11 @@ export default function RegisterScreen({
             : {}),
         },
         apiUrl("/api/auth/register"),
+      );
+
+      localStorage.setItem(
+        "registrationSuccessMessage",
+        `Profile "${registeredUsername}" was created successfully. You can log in now.`,
       );
 
       onSwitchToLogin();
