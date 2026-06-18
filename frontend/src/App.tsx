@@ -48,9 +48,6 @@ function getInitialScreen(): Screen {
     return "login";
   }
 
-  // Always restore through the room first. RoomScreen asks the server for the
-  // authoritative room status and gameView, then switches to the board when an
-  // active game exists.
   return localStorage.getItem("room") ? "room" : "menu";
 }
 

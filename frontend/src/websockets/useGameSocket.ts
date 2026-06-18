@@ -23,6 +23,38 @@ function clearStoredSession() {
     SESSION_KEYS.forEach((key) => localStorage.removeItem(key));
 }
 
+function clearStoredRoom() {
+    localStorage.removeItem("clientID");
+    localStorage.removeItem("room");
+    localStorage.removeItem("gameId");
+    localStorage.removeItem("faction");
+}
+
+function synchroniseConnectionMessage(serverMessage: WebSocketMessage) {
+    if (serverMessage.messageType !== "CONNECTION") {
+        return;
+    }
+
+    if (typeof serverMessage.clientId === "string") {
+        localStorage.setItem("clientID", serverMessage.clientId);
+    }
+
+    if (typeof serverMessage.username === "string") {
+        localStorage.setItem("username", serverMessage.username);
+    }
+
+    const serverRoomId =
+        typeof serverMessage.roomId === "string"
+            ? serverMessage.roomId.trim()
+            : "";
+
+    if (serverRoomId) {
+        localStorage.setItem("room", serverRoomId);
+    } else {
+        clearStoredRoom();
+    }
+}
+
 export function useGameSocket() {
     const socketReference = useRef<WebSocket | null>(null);
 
@@ -53,6 +85,7 @@ export function useGameSocket() {
         const socket = createGameSocket(
             token,
             (serverMessage) => {
+                synchroniseConnectionMessage(serverMessage);
                 setLatestMessage(serverMessage);
                 setMessages((previousMessages) => [...previousMessages, serverMessage]);
                 const matchingRequest = pendingRequestsRef.current.find((pending) =>
@@ -71,10 +104,10 @@ export function useGameSocket() {
                 opened = true;
                 setIsConnected(true);
             },
-            () => {
+            (event) => {
                 setIsConnected(false);
 
-                if (!intentionallyClosed && !opened) {
+                if (!intentionallyClosed && (!opened || event.code === 1008)) {
                     clearBadSession();
                 }
             },

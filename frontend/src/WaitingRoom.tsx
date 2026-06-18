@@ -182,11 +182,16 @@ export function RoomScreen({
             ? response.error
             : "Could not restore the previous room.";
 
-        // useGameSocket synchronises localStorage from the server's
-        // CONNECTION envelope before isConnected becomes true. An absent room
-        // therefore means the server confirmed that there is no affiliation.
-        if (!authoritativeRoomId) {
+        const staleRoomError =
+          !authoritativeRoomId ||
+          /room does not exist|not a member|not in a room|room id is null or empty/i.test(
+            errorMessage,
+          );
+
+        if (staleRoomError) {
+          localStorage.removeItem("room");
           localStorage.removeItem("gameId");
+          clearCurrentFaction();
           setCurrentReply("The previous room is no longer available.");
           onSwitchToMenu();
           return;
