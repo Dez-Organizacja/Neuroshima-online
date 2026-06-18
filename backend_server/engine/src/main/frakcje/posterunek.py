@@ -69,7 +69,7 @@ units = [
 
     unit.board("oficer", unit_count=1)
     .hp(1)
-    .boosts(types=[Boost.SHOOT], directions=[0, 1, 2, 3, 4, 5])
+    .boosts(types=[Boost.SHOOT], directions=[0, 1, 2, 3, 4,    5])
     .build(),
 
     unit.board("skoper", unit_count=1)

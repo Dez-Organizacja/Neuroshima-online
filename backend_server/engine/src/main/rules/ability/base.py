@@ -21,7 +21,11 @@ class AbilityRules(ABC):
     @classmethod
     def has_ability(cls, ctx : ActionContext, pos : Hex):
         token = ctx.board.get_token(pos)
-        return token.get_ability() == cls.ABILITY
+        print(token.get_ability())
+        return (
+            token.get_ability() == cls.ABILITY
+            and token.has_unused_ability()
+        )
         
     @staticmethod
     def can_execute(ctx : ActionContext, pos):
@@ -29,7 +33,7 @@ class AbilityRules(ABC):
 
     @classmethod
     def can_use(cls, ctx : ActionContext, pos : Hex):
-        # print(f"can use {}")
+        # print(f"check can use {cls.ABILITY} at {pos}")
         return (
             cls.has_ability(ctx, pos)
             and cls.can_execute(ctx, pos)

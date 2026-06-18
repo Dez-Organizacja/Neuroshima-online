@@ -162,7 +162,7 @@ class BoardToken(Token):
         else:
             self.execution.used_ability = True
 
-    def can_use_ability(self) -> bool:
+    def has_unused_ability(self) -> bool:
         return (
             (
                 self.config.abilities.ability is not None

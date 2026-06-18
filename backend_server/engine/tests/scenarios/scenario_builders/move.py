@@ -62,4 +62,15 @@ def test_centrum_rozpoznania_gives_move_of_range_2():
             positions((4, 2)),
             buttons()
         )
+
+        .when(RotationAction(rotation=0))
+        .then(
+            workflow(name(WorkflowName.ACTION), index(1)),
+            board(unit((4, 2), rotate(0))),
+            used_move("posterunek", -2)
+        )
+        .available_actions(
+            positions(),
+            buttons(Button.END_TURN )
+        )
     ).build()

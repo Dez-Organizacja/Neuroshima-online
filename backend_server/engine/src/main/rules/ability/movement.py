@@ -42,6 +42,7 @@ class MoveRules(AbilityRules):
     @staticmethod
     def can_execute(ctx : ActionContext, pos : Hex) -> bool:
         token = ctx.board.get_token(pos)
+        # print("")
         return (
             not token.wired
             and len(MoveRules.get_sources(ctx)) > 0

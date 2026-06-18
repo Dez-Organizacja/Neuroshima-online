@@ -236,5 +236,6 @@ class RecomputePassivesEffect(Effect):
 
 class ResetActionData(Effect):
     def apply(self, ctx : ActionContext):
+        print("RESET ACTION DATA")
         for faction_state in ctx.state.players.values():
             faction_state.reset_execution()
