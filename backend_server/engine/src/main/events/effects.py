@@ -113,8 +113,8 @@ class HealEffect(Effect):
         target = ctx.board.get_token(self.target_pos)
         wounds = target.pop_highest_wound()
         healer.add_wounds(wounds)
-        ctx.animations.append(WoundAnimation(target, -wounds))
-        ctx.animations.append(WoundAnimation(healer, wounds))
+        ctx.animations.append(WoundAnimation(self.target_pos, -wounds))
+        ctx.animations.append(WoundAnimation(self.source_pos, wounds))
 
 # ----------- removing -----------
 
