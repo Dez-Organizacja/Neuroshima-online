@@ -38,6 +38,7 @@ export type GameState = {
             [key : string] : number
         }
         winner : string
+        phase: string
         availableActions : {
             hand : boolean[]
             board : [number, number][]
