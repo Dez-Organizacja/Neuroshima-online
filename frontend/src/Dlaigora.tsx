@@ -57,34 +57,86 @@ export type GameState = {
     }
 }
 
-export function useProcesedGameState(){
-    const {latestMessage} = useGameSocketContext();
-    const [prevGameState, setPrevGameState] = useState<GameState | null>(null);
-    const [gameState, setGameState] = useState<GameState | null>(null);
-    useEffect(() => {
-        if(!latestMessage){
-            return;
-        }
-        if(latestMessage.messageType === "ACTION_RESPONSE" && latestMessage.gameView){
-            setPrevGameState(gameState);   
-            setGameState({
-                view : latestMessage.gameView as GameState["view"]
-            });
-        }
-        if(latestMessage.messageType === "NEWGAME_RESPONSE" && latestMessage.gameView){
-            setGameState({
-                view : latestMessage.gameView as GameState["view"]
-            })
-            if(typeof latestMessage.createdGameId === "string"){
-                localStorage.setItem("gameId", latestMessage.createdGameId);
-            }
-            return;
-        }
-        if (latestMessage.messageType === "ERROR") {
-            console.error(latestMessage.error);
-            return;
-        }
-    }, [latestMessage]);
+function extractGameView(value: unknown): GameState["view"] | null {
+  if (typeof value !== "object" || value === null) {
+    return null;
+  }
 
-    return {gameState, prevGameState};
+  const record = value as Record<string, unknown>;
+  const candidate =
+    typeof record.view === "object" && record.view !== null
+      ? (record.view as Record<string, unknown>)
+      : record;
+
+  if (
+    typeof candidate.phase !== "string" ||
+    typeof candidate.state !== "object" ||
+    candidate.state === null ||
+    typeof candidate.scores !== "object" ||
+    candidate.scores === null
+  ) {
+    return null;
+  }
+  return {
+    ...candidate,
+    animations: Array.isArray(candidate.animations)
+      ? candidate.animations
+      : [],
+  } as GameState["view"];
+}
+
+export function useProcesedGameState() {
+  const { latestMessage } = useGameSocketContext();
+  const [prevGameState, setPrevGameState] = useState<GameState | null>(null);
+  const [gameState, setGameState] = useState<GameState | null>(null);
+
+  useEffect(() => {
+    if (!latestMessage) {
+      return;
+    }
+
+    const hasRestoredGameView =
+      latestMessage.messageType === "GETROOMSTATUS_RESPONSE" &&
+      typeof latestMessage.gameView === "object" &&
+      latestMessage.gameView !== null;
+
+    if (
+      latestMessage.messageType === "ACTION_RESPONSE" ||
+      latestMessage.messageType === "NEWGAME_RESPONSE" ||
+      hasRestoredGameView
+    ) {
+      const view = extractGameView(latestMessage.gameView);
+      if (!view) {
+        console.error("Server returned an invalid gameView", latestMessage);
+        return;
+      }
+
+      setGameState((currentGameState) => {
+        setPrevGameState(currentGameState);
+        return { view };
+      });
+
+      if (
+        latestMessage.messageType === "NEWGAME_RESPONSE" &&
+        typeof latestMessage.createdGameId === "string"
+      ) {
+        localStorage.setItem("gameId", latestMessage.createdGameId);
+      }
+
+      if (
+        latestMessage.messageType === "GETROOMSTATUS_RESPONSE" &&
+        typeof latestMessage.gameId === "string" &&
+        latestMessage.gameId.trim()
+      ) {
+        localStorage.setItem("gameId", latestMessage.gameId);
+      }
+      return;
+    }
+
+    if (latestMessage.messageType === "ERROR") {
+      console.error(latestMessage.error);
+    }
+  }, [latestMessage]);
+
+  return { gameState, prevGameState };
 }

@@ -2,8 +2,17 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useGameSocketContext } from "./websockets/gameSocketContext"; 
 import { useProcesedGameState, GameState } from "./Dlaigora";
 import HexTest from "./HexTest";
+import ScoreBoard from "./Score";
 
-export default function Display() {
+const ANIMATION_FRAME_MS = 750;
+const SCOREBOARD_DELAY_MS = 2_000;
+
+type BoardBossProps = {
+  onSwitchToMenu: () => void;
+  onSwitchToWaitingRoom: () => void;
+};
+
+export default function Display({onSwitchToMenu, onSwitchToWaitingRoom} : BoardBossProps) {
     const { gameState, prevGameState} = useProcesedGameState();
 
     // const AllScreens = [];
@@ -51,6 +60,19 @@ export default function Display() {
             }
         }
 
+        if(LastGameState.view.animations[0] !== undefined) {
+            const RAnimation = LastGameState.view.animations[0];
+            if(LastGameState.view.animations[0].type === "rotation") {
+                const RIndex = ActiveGameState.view.state.board.findIndex(field =>
+                    field.pos[0] === RAnimation.target[0] &&
+                    field.pos[1] === RAnimation.target[1]
+                )
+                if(RIndex !== -1) {
+                    ActiveGameState.view.state.board[RIndex].unit.rotation = LastGameState.view.animations[0].rotation;
+                    LastGameState.view.animations.splice(0, 1);
+                }
+            }
+        }
 
         console.log("----- WHILE -----");
 
@@ -165,10 +187,11 @@ export default function Display() {
     // Wyswietlanie z odstepami
 
     const [currentIndex, setCurrentIndex] = useState(0);
-
+    const [showScoreboard, setShowScoreboard] = useState(false);
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     useEffect(() => {
+        setShowScoreboard(false);
         if (AllScreens.length === 0) return;
 
         setCurrentIndex(0);
@@ -198,6 +221,40 @@ export default function Display() {
         };
     }, [gameState]);
 
+    useEffect(() => {
+        if (!gameState || gameState.view.phase !== "gameover") {
+            return;
+        }
+
+        if (AllScreens.length === 0) {
+            return;
+        }
+
+        const animationFinished =
+            currentIndex >= AllScreens.length - 1;
+
+        if (!animationFinished) {
+            return;
+        }
+
+        const timeoutId = window.setTimeout(() => {
+            setShowScoreboard(true);
+        }, SCOREBOARD_DELAY_MS);
+
+        return () => {
+            window.clearTimeout(timeoutId);
+        };
+    }, [gameState, currentIndex, AllScreens.length]);
+
+    if (showScoreboard && gameState.view.phase === "gameover") {
+        return (
+        <ScoreBoard
+            onSwitchToMenu={onSwitchToMenu}
+            onSwitchToWaitingRoom={onSwitchToWaitingRoom}
+            gameView={gameState.view}
+        />
+        );
+    }
     if (!gameState || AllScreens.length === 0) {
         return null;
     }

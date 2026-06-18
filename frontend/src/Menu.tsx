@@ -104,13 +104,30 @@ export default function MenuScreen({
   const username = localStorage.getItem("username") ?? "Commander";
 
   useEffect(() => {
-    if (
-      latestMessage?.messageType === "CONNECTION" &&
-      typeof latestMessage.clientId === "string"
-    ) {
+    if (latestMessage?.messageType !== "CONNECTION") {
+      return;
+    }
+
+    if (typeof latestMessage.clientId === "string") {
       localStorage.setItem("clientID", latestMessage.clientId);
     }
-  }, [latestMessage]);
+
+    const serverRoomId =
+      typeof latestMessage.roomId === "string"
+        ? latestMessage.roomId.trim()
+        : "";
+
+    // A menu restored from stale/missing browser state must not allow the
+    // player to join another room while the server still has an affiliation.
+    if (serverRoomId) {
+      localStorage.setItem("room", serverRoomId);
+      setFeedback({
+        message: `Reclaiming active room ${serverRoomId}…`,
+        tone: "neutral",
+      });
+      onSwitchToWaitingRoom();
+    }
+  }, [latestMessage, onSwitchToWaitingRoom]);
 
   async function handleRefresh(quiet = false) {
       if (!isConnected || isRefreshingRooms) {

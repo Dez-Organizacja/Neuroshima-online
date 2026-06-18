@@ -10,12 +10,21 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSocketSessionRegistry {
     private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
-    public void register(String clientId, WebSocketSession session) {
-        sessions.put(clientId, session);
+    /**
+     * Registers the current socket for a stable player id and returns the
+     * previously registered socket, if one existed.
+     */
+    public WebSocketSession register(String clientId, WebSocketSession session) {
+        return sessions.put(clientId, session);
     }
 
-    public void unregister(String clientId) {
-        sessions.remove(clientId);
+    /**
+     * Removes the mapping only when it still points at this exact socket.
+     * This prevents an old socket closing during a refresh from unregistering
+     * the replacement socket that has already connected.
+     */
+    public boolean unregister(String clientId, WebSocketSession session) {
+        return sessions.remove(clientId, session);
     }
 
     public int getActiveConnectionsCount() {
@@ -26,4 +35,3 @@ public class WebSocketSessionRegistry {
         return sessions;
     }
 }
-
