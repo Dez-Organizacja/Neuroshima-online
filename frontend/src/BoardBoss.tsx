@@ -37,11 +37,12 @@ export default function Display() {
         ActiveGameState.view.availableActions.board.length = 0;
         ActiveGameState.view.availableActions.hand.length = 0;
         ActiveGameState.view.state.hands[ActiveGameState.view.uiState.faction] = LastGameState.view.state.hands[ActiveGameState.view.uiState.faction];
-        if(LastGameState.view.animations[0]) {
+        if(LastGameState.view.animations[0] !== undefined) {
+            const RAnimation = LastGameState.view.animations[0];
             if(LastGameState.view.animations[0].type === "rotation") {
                 const RIndex = ActiveGameState.view.state.board.findIndex(field =>
-                    field.pos[0] === ActiveGameState.view.animations[0].target[0] &&
-                    field.pos[1] === ActiveGameState.view.animations[0].target[1]
+                    field.pos[0] === RAnimation.target[0] &&
+                    field.pos[1] === RAnimation.target[1]
                 )
                 if(RIndex !== -1) {
                     ActiveGameState.view.state.board[RIndex].unit.rotation = LastGameState.view.animations[0].rotation;
