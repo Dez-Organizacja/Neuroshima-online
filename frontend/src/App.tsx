@@ -15,6 +15,7 @@ const SESSION_KEYS = [
   "clientID",
   "room",
   "gameId",
+  "faction",
 ] as const;
 
 function clearStoredSession() {
@@ -29,9 +30,8 @@ function hasUsableStoredToken(): boolean {
 
   const expiresAt = localStorage.getItem("tokenExpiresAt");
   if (!expiresAt) {
-    // Accept tokens created by an older client version. The WebSocket server
-    // will still reject them if they are no longer valid.
-    return true;
+    clearStoredSession();
+    return false;
   }
 
   const expirationTime = Date.parse(expiresAt);

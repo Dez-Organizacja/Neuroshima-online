@@ -1,33 +1,40 @@
 import { gameWebSocketUrl } from "../config";
+
 export type WebSocketMessage = {
     messageType : string;
     [key: string] : unknown;
 }
+
 export function createGameSocket(
     token : string,
     onMessage : (message: WebSocketMessage) => void,
     onOpen?: () => void,
-    onClose?: () => void,
-    onError?: () => void
+    onClose?: (event: CloseEvent) => void,
+    onError?: (event: Event) => void
 ){
-    let url = gameWebSocketUrl(token);
-    const socket = new WebSocket(url)
+    const url = gameWebSocketUrl(token);
+    const socket = new WebSocket(url);
+
     socket.onopen = () => {
-    console.log("WebSocket connected");
+        console.log("WebSocket connected");
         onOpen?.();
     };
+
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         console.log("WebSocket message:", data);
         onMessage(data);
     };
-    socket.onerror = () => {
+
+    socket.onerror = (event) => {
         console.log("WebSocket error");
-        onError?.();
+        onError?.(event);
     };
-    socket.onclose = () => {
+
+    socket.onclose = (event) => {
         console.log("WebSocket closed");
-        onClose?.();
+        onClose?.(event);
     };
+
     return socket;
 }

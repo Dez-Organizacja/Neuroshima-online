@@ -33,12 +33,19 @@ export default function LoginScreen({
 
     try {
       const data = await Login(username.trim(), password, apiUrl("/api/auth/login"));
-      if (data.token) {
+      if (data.token && data.expiresAt) {
         localStorage.setItem("token", data.token);
-        localStorage.setItem("username", username.trim());
+        localStorage.setItem("tokenExpiresAt", data.expiresAt);
+        localStorage.setItem("username", data.username ?? username.trim());
+
+        localStorage.removeItem("clientID");
+        localStorage.removeItem("room");
+        localStorage.removeItem("gameId");
+        localStorage.removeItem("faction");
+
         onAcceptedLogin();
       } else {
-        setError("The command network did not return an access token.");
+        setError("The command network did not return a valid access token.");
       }
     } catch (loginError) {
       setError(

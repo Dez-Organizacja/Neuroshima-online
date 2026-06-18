@@ -5,9 +5,4 @@ import App from "./App";
 import DevBoardApp from "./DevBoardApp";
 import "./styles/Global.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App/>
-    {/* <DevBoardApp /> */}
-  </React.StrictMode>
-);
+ReactDOM.createRoot(document.getElementById("root")!).render(<App/>);

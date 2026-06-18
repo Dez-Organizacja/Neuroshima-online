@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { createGameSocket, type WebSocketMessage } from "./websocketClient";
 import { createGameSocketActions } from "./gameSocketActions";
 
@@ -9,16 +9,31 @@ type PendingRequest = {
     timeoutId: number;
 };
 
+const SESSION_KEYS = [
+    "token",
+    "tokenExpiresAt",
+    "username",
+    "clientID",
+    "room",
+    "gameId",
+    "faction",
+] as const;
+
+function clearStoredSession() {
+    SESSION_KEYS.forEach((key) => localStorage.removeItem(key));
+}
+
 export function useGameSocket() {
     const socketReference = useRef<WebSocket | null>(null);
 
     const [messages, setMessages] = useState<WebSocketMessage[]>([]);
     const [latestMessage, setLatestMessage] = useState<WebSocketMessage | null>(
-    null
-);  
+        null
+    );
 
     const [isConnected, setIsConnected] = useState(false);
     const pendingRequestsRef = useRef<PendingRequest[]>([]);
+
     useEffect(() => {
         const token = localStorage.getItem("token");
 
@@ -26,18 +41,26 @@ export function useGameSocket() {
             console.log("No token found");
             return;
         }
-        
+
+        let intentionallyClosed = false;
+        let opened = false;
+
+        const clearBadSession = () => {
+            clearStoredSession();
+            window.location.reload();
+        };
+
         const socket = createGameSocket(
             token,
             (serverMessage) => {
                 setLatestMessage(serverMessage);
                 setMessages((previousMessages) => [...previousMessages, serverMessage]);
                 const matchingRequest = pendingRequestsRef.current.find((pending) =>
-                pending.expectedTypes.includes(serverMessage.messageType)
+                    pending.expectedTypes.includes(serverMessage.messageType)
                 );
 
                 if (matchingRequest) {
-                    clearTimeout(matchingRequest.timeoutId);    
+                    clearTimeout(matchingRequest.timeoutId);
                     pendingRequestsRef.current = pendingRequestsRef.current.filter(
                         (pending) => pending !== matchingRequest
                     );
@@ -45,18 +68,24 @@ export function useGameSocket() {
                 }
             },
             () => {
-            setIsConnected(true);
+                opened = true;
+                setIsConnected(true);
             },
             () => {
-            setIsConnected(false);
+                setIsConnected(false);
+
+                if (!intentionallyClosed && !opened) {
+                    clearBadSession();
+                }
             },
             () => {
-            setIsConnected(false);
+                setIsConnected(false);
             }
         );
         socketReference.current = socket;
 
         return () => {
+            intentionallyClosed = true;
             socket.close();
             socketReference.current = null;
             setIsConnected(false);
@@ -73,6 +102,7 @@ export function useGameSocket() {
 
         socket.send(JSON.stringify(message));
     }, []);
+
     const sendAndWaitForResponse = useCallback((
             request: WebSocketMessage,
             expectedTypes: string[],
@@ -101,7 +131,11 @@ export function useGameSocket() {
             });
         },[]
         );
-    const actions = createGameSocketActions(sendMessage, sendAndWaitForResponse);
+
+    const actions = useMemo(
+        () => createGameSocketActions(sendMessage, sendAndWaitForResponse),
+        [sendMessage, sendAndWaitForResponse],
+    );
 
 return {
     messages,
