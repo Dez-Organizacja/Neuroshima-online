@@ -28,7 +28,9 @@ class RotateEffect(Effect):
 
     def apply(self, ctx: ActionContext):
         ctx.board.get_token(self.pos).set_rotation(self.rotation)
-        ctx.animations.append(RotationAnimation(self.pos, self.rotation))
+        ctx.animations.append(
+            RotationAnimation(target=self.pos, rotation=self.rotation)
+        )
 
 @dataclass
 class PlaceEffect(Effect):

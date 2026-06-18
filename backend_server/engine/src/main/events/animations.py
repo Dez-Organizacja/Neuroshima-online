@@ -42,4 +42,4 @@ class WeakenAnimation(Animation):
 class RotationAnimation(Animation):
     target : Hex
     rotation : int
-    type : AnimationType = field(default_factory=AnimationType.ROTATION, init=False)
+    type : AnimationType = field(default=AnimationType.ROTATION, init=False)
