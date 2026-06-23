@@ -97,6 +97,8 @@ class BoosterSolver():
                     if not self.board.on_board(target_pos):
                         continue
                     target_tokenID = self.board.gen_tokenID(target_pos)
+                    if target_tokenID is not None and self.board.tokens[target_tokenID].is_HQ:
+                        continue
                     if self.is_valid_target(target_tokenID, token.state.relations.real_boost_target, token.faction):
                         self.steal_boosts.append((target_tokenID, Boost.STEAL_BOOST))
 

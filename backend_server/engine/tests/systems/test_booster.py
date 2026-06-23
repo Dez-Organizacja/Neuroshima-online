@@ -40,6 +40,10 @@ def melee_boosts(board: Board, pos: tuple[int, int]) -> int:
     return token_at(board, pos).get_attack_boost(AttackType.MELEE)
 
 
+def shoot_boosts(board: Board, pos: tuple[int, int]) -> int:
+    return token_at(board, pos).get_attack_boost(AttackType.SHOOT)
+
+
 def initiatives(board: Board, pos: tuple[int, int]) -> list[int]:
     return token_at(board, pos).state.modifiers.initiatives
 
@@ -168,6 +172,16 @@ class TestBoosters:
 
         assert melee_boosts(board, (2, 6)) == 1
         assert melee_boosts(board, (1, 3)) == 0
+
+    def test_steal_boost_does_not_affect_enemy_hq(self):
+        board = Board()
+        place(board, (2, 4), "skoper", "posterunek")
+        place(board, (1, 5), "sztab", "moloch")
+        place(board, (2, 6), "komandos", "posterunek")
+
+        solve_boosters(board)
+
+        assert shoot_boosts(board, (2, 6)) == 0
 
     def test_stolen_boost_target_resets_after_stealer_is_removed(self):
         board = Board()

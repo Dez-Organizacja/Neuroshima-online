@@ -77,7 +77,7 @@ class CleverInitiative:
 
         if initiative == 0:
             return any(
-                value <= 0 and not is_used
+                value + modif.initiative_boosts <= 0 and not is_used
                 for value, is_used in zip(modif.initiatives, modif.is_used)
             )
 
